@@ -6,6 +6,25 @@ My experiment project for NeLua and ImGui / CImGui libraries.
 
 Now work in progress.
 
+
+### Prerequisites
+
+---
+1. Winodws OS 10 or later
+1. Install [MSys2/MinGW](https://www.msys2.org/) 
+1. Install [NeLua](https://nelua.io/installing/)
+1. Install libraries
+
+   ```sh
+   pacman -S mingw-w64-x86_64-glfw 
+   ```
+
+1. Other tools
+
+   ```sh
+   pacman -S make
+   ```
+
 ### Build and run
 
 ---

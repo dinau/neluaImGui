@@ -19,6 +19,7 @@ NELUA_CACHE = .neluacache
 OPT += --cache-dir $(NELUA_CACHE)
 
 # Optimize level is -O2, strip debug symbols("-Wl,-s")
+
 CFLAGS += -I$(CIMGUI_DIR) -I$(IMGUI_DIR) -DIMGUI_IMPL_API="extern \"C\" __declspec(dllexport)"
 
 NELUA_CFLAGS += --cflags="-O2           \
@@ -26,6 +27,7 @@ NELUA_CFLAGS += --cflags="-O2           \
 					      -I$(IMGUI_DIR)/backends \
 				 	      -I$(IMGUI_DIR)          \
 				 	      -I$(CIMGUI_DIR)         \
+                -mwindows               \
 					      "
 BACKENDS_OBJS += $(BUILD_DIR)/imgui_impl_opengl3.o \
 								 $(BUILD_DIR)/imgui_impl_glfw.o

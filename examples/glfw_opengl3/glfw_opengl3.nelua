@@ -29,21 +29,21 @@ local main = function()
 
   local context = igCreateContext()
   ImGui_ImplGlfw_InitForOpenGL(glfwWin, true)
-  local glsl_version:cstring <comptime> = "#version 130"
+  local glsl_version:cstring <comptime> = "#version 330"
   ImGui_ImplOpenGL3_Init(glsl_version)
 
   local showDemoWindow = true
   local showFirstWindow = true
   local fval:cfloat = 0.5
-  local showWindowDelay = 2
+  local showWindowDelay = 1
   local counter = 0
   local sBuf:string = string.create(100)
   local clearColor: [3]cfloat = {0.25,0.65,0.85}
 
   while glfwWindowShouldClose(glfwWin) == 0 do
     glfwPollEvents()
-    -- # start imgui frame
-    ImGui_ImplOpenGL3_NewFrame()
+
+    ImGui_ImplOpenGL3_NewFrame() -- # start imgui frame
     ImGui_ImplGlfw_NewFrame()
     igNewFrame()
 
