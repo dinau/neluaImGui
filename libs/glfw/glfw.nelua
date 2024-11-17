@@ -1,0 +1,468 @@
+##[[
+cinclude '<GLFW/glfw3.h>'
+if ccinfo.is_windows then
+  linklib 'glfw3'
+  linklib 'opengl32'
+  linklib 'gdi32'
+  linklib 'user32'
+  linklib 'kernel32'
+else
+  linklib 'glfw'
+  linklib 'GL'
+end
+]]
+global GLFWglproc: type <cimport,nodecl> = @function(): void
+global GLFWmonitor: type <cimport,nodecl,forwarddecl> = @record{}
+global GLFWwindow: type <cimport,nodecl,forwarddecl> = @record{}
+global GLFWcursor: type <cimport,nodecl,forwarddecl> = @record{}
+global GLFWerrorfun: type <cimport,nodecl> = @function(cint, cstring): void
+global GLFWwindowposfun: type <cimport,nodecl> = @function(*GLFWwindow, cint, cint): void
+global GLFWwindowsizefun: type <cimport,nodecl> = @function(*GLFWwindow, cint, cint): void
+global GLFWwindowclosefun: type <cimport,nodecl> = @function(*GLFWwindow): void
+global GLFWwindowrefreshfun: type <cimport,nodecl> = @function(*GLFWwindow): void
+global GLFWwindowfocusfun: type <cimport,nodecl> = @function(*GLFWwindow, cint): void
+global GLFWwindowiconifyfun: type <cimport,nodecl> = @function(*GLFWwindow, cint): void
+global GLFWwindowmaximizefun: type <cimport,nodecl> = @function(*GLFWwindow, cint): void
+global GLFWframebuffersizefun: type <cimport,nodecl> = @function(*GLFWwindow, cint, cint): void
+global GLFWwindowcontentscalefun: type <cimport,nodecl> = @function(*GLFWwindow, float32, float32): void
+global GLFWmousebuttonfun: type <cimport,nodecl> = @function(*GLFWwindow, cint, cint, cint): void
+global GLFWcursorposfun: type <cimport,nodecl> = @function(*GLFWwindow, float64, float64): void
+global GLFWcursorenterfun: type <cimport,nodecl> = @function(*GLFWwindow, cint): void
+global GLFWscrollfun: type <cimport,nodecl> = @function(*GLFWwindow, float64, float64): void
+global GLFWkeyfun: type <cimport,nodecl> = @function(*GLFWwindow, cint, cint, cint, cint): void
+global GLFWcharfun: type <cimport,nodecl> = @function(*GLFWwindow, cuint): void
+global GLFWcharmodsfun: type <cimport,nodecl> = @function(*GLFWwindow, cuint, cint): void
+global GLFWdropfun: type <cimport,nodecl> = @function(*GLFWwindow, cint, *cstring): void
+global GLFWmonitorfun: type <cimport,nodecl> = @function(*GLFWmonitor, cint): void
+global GLFWjoystickfun: type <cimport,nodecl> = @function(cint, cint): void
+global GLFWvidmode: type <cimport,nodecl> = @record{
+  width: cint,
+  height: cint,
+  redBits: cint,
+  greenBits: cint,
+  blueBits: cint,
+  refreshRate: cint
+}
+global GLFWgammaramp: type <cimport,nodecl> = @record{
+  red: *cushort,
+  green: *cushort,
+  blue: *cushort,
+  size: cuint
+}
+global GLFWimage: type <cimport,nodecl> = @record{
+  width: cint,
+  height: cint,
+  pixels: *cuchar
+}
+global GLFWgamepadstate: type <cimport,nodecl> = @record{
+  buttons: [15]cuchar,
+  axes: [6]float32
+}
+global function glfwInit(): cint <cimport,nodecl> end
+global function glfwTerminate(): void <cimport,nodecl> end
+global function glfwInitHint(hint: cint, value: cint): void <cimport,nodecl> end
+global function glfwGetVersion(major: *cint, minor: *cint, rev: *cint): void <cimport,nodecl> end
+global function glfwGetVersionString(): cstring <cimport,nodecl> end
+global function glfwGetError(description: *cstring): cint <cimport,nodecl> end
+global function glfwSetErrorCallback(callback: GLFWerrorfun): GLFWerrorfun <cimport,nodecl> end
+global function glfwGetMonitors(count: *cint): **GLFWmonitor <cimport,nodecl> end
+global function glfwGetPrimaryMonitor(): *GLFWmonitor <cimport,nodecl> end
+global function glfwGetMonitorPos(monitor: *GLFWmonitor, xpos: *cint, ypos: *cint): void <cimport,nodecl> end
+global function glfwGetMonitorWorkarea(monitor: *GLFWmonitor, xpos: *cint, ypos: *cint, width: *cint, height: *cint): void <cimport,nodecl> end
+global function glfwGetMonitorPhysicalSize(monitor: *GLFWmonitor, widthMM: *cint, heightMM: *cint): void <cimport,nodecl> end
+global function glfwGetMonitorContentScale(monitor: *GLFWmonitor, xscale: *float32, yscale: *float32): void <cimport,nodecl> end
+global function glfwGetMonitorName(monitor: *GLFWmonitor): cstring <cimport,nodecl> end
+global function glfwSetMonitorUserPointer(monitor: *GLFWmonitor, pointer: pointer): void <cimport,nodecl> end
+global function glfwGetMonitorUserPointer(monitor: *GLFWmonitor): pointer <cimport,nodecl> end
+global function glfwSetMonitorCallback(callback: GLFWmonitorfun): GLFWmonitorfun <cimport,nodecl> end
+global function glfwGetVideoModes(monitor: *GLFWmonitor, count: *cint): *GLFWvidmode <cimport,nodecl> end
+global function glfwGetVideoMode(monitor: *GLFWmonitor): *GLFWvidmode <cimport,nodecl> end
+global function glfwSetGamma(monitor: *GLFWmonitor, gamma: float32): void <cimport,nodecl> end
+global function glfwGetGammaRamp(monitor: *GLFWmonitor): *GLFWgammaramp <cimport,nodecl> end
+global function glfwSetGammaRamp(monitor: *GLFWmonitor, ramp: *GLFWgammaramp): void <cimport,nodecl> end
+global function glfwDefaultWindowHints(): void <cimport,nodecl> end
+global function glfwWindowHint(hint: cint, value: cint): void <cimport,nodecl> end
+global function glfwWindowHintString(hint: cint, value: cstring): void <cimport,nodecl> end
+global function glfwCreateWindow(width: cint, height: cint, title: cstring, monitor: *GLFWmonitor, share: *GLFWwindow): *GLFWwindow <cimport,nodecl> end
+global function glfwDestroyWindow(window: *GLFWwindow): void <cimport,nodecl> end
+global function glfwWindowShouldClose(window: *GLFWwindow): cint <cimport,nodecl> end
+global function glfwSetWindowShouldClose(window: *GLFWwindow, value: cint): void <cimport,nodecl> end
+global function glfwSetWindowTitle(window: *GLFWwindow, title: cstring): void <cimport,nodecl> end
+global function glfwSetWindowIcon(window: *GLFWwindow, count: cint, images: *GLFWimage): void <cimport,nodecl> end
+global function glfwGetWindowPos(window: *GLFWwindow, xpos: *cint, ypos: *cint): void <cimport,nodecl> end
+global function glfwSetWindowPos(window: *GLFWwindow, xpos: cint, ypos: cint): void <cimport,nodecl> end
+global function glfwGetWindowSize(window: *GLFWwindow, width: *cint, height: *cint): void <cimport,nodecl> end
+global function glfwSetWindowSizeLimits(window: *GLFWwindow, minwidth: cint, minheight: cint, maxwidth: cint, maxheight: cint): void <cimport,nodecl> end
+global function glfwSetWindowAspectRatio(window: *GLFWwindow, numer: cint, denom: cint): void <cimport,nodecl> end
+global function glfwSetWindowSize(window: *GLFWwindow, width: cint, height: cint): void <cimport,nodecl> end
+global function glfwGetFramebufferSize(window: *GLFWwindow, width: *cint, height: *cint): void <cimport,nodecl> end
+global function glfwGetWindowFrameSize(window: *GLFWwindow, left: *cint, top: *cint, right: *cint, bottom: *cint): void <cimport,nodecl> end
+global function glfwGetWindowContentScale(window: *GLFWwindow, xscale: *float32, yscale: *float32): void <cimport,nodecl> end
+global function glfwGetWindowOpacity(window: *GLFWwindow): float32 <cimport,nodecl> end
+global function glfwSetWindowOpacity(window: *GLFWwindow, opacity: float32): void <cimport,nodecl> end
+global function glfwIconifyWindow(window: *GLFWwindow): void <cimport,nodecl> end
+global function glfwRestoreWindow(window: *GLFWwindow): void <cimport,nodecl> end
+global function glfwMaximizeWindow(window: *GLFWwindow): void <cimport,nodecl> end
+global function glfwShowWindow(window: *GLFWwindow): void <cimport,nodecl> end
+global function glfwHideWindow(window: *GLFWwindow): void <cimport,nodecl> end
+global function glfwFocusWindow(window: *GLFWwindow): void <cimport,nodecl> end
+global function glfwRequestWindowAttention(window: *GLFWwindow): void <cimport,nodecl> end
+global function glfwGetWindowMonitor(window: *GLFWwindow): *GLFWmonitor <cimport,nodecl> end
+global function glfwSetWindowMonitor(window: *GLFWwindow, monitor: *GLFWmonitor, xpos: cint, ypos: cint, width: cint, height: cint, refreshRate: cint): void <cimport,nodecl> end
+global function glfwGetWindowAttrib(window: *GLFWwindow, attrib: cint): cint <cimport,nodecl> end
+global function glfwSetWindowAttrib(window: *GLFWwindow, attrib: cint, value: cint): void <cimport,nodecl> end
+global function glfwSetWindowUserPointer(window: *GLFWwindow, pointer: pointer): void <cimport,nodecl> end
+global function glfwGetWindowUserPointer(window: *GLFWwindow): pointer <cimport,nodecl> end
+global function glfwSetWindowPosCallback(window: *GLFWwindow, callback: GLFWwindowposfun): GLFWwindowposfun <cimport,nodecl> end
+global function glfwSetWindowSizeCallback(window: *GLFWwindow, callback: GLFWwindowsizefun): GLFWwindowsizefun <cimport,nodecl> end
+global function glfwSetWindowCloseCallback(window: *GLFWwindow, callback: GLFWwindowclosefun): GLFWwindowclosefun <cimport,nodecl> end
+global function glfwSetWindowRefreshCallback(window: *GLFWwindow, callback: GLFWwindowrefreshfun): GLFWwindowrefreshfun <cimport,nodecl> end
+global function glfwSetWindowFocusCallback(window: *GLFWwindow, callback: GLFWwindowfocusfun): GLFWwindowfocusfun <cimport,nodecl> end
+global function glfwSetWindowIconifyCallback(window: *GLFWwindow, callback: GLFWwindowiconifyfun): GLFWwindowiconifyfun <cimport,nodecl> end
+global function glfwSetWindowMaximizeCallback(window: *GLFWwindow, callback: GLFWwindowmaximizefun): GLFWwindowmaximizefun <cimport,nodecl> end
+global function glfwSetFramebufferSizeCallback(window: *GLFWwindow, callback: GLFWframebuffersizefun): GLFWframebuffersizefun <cimport,nodecl> end
+global function glfwSetWindowContentScaleCallback(window: *GLFWwindow, callback: GLFWwindowcontentscalefun): GLFWwindowcontentscalefun <cimport,nodecl> end
+global function glfwPollEvents(): void <cimport,nodecl> end
+global function glfwWaitEvents(): void <cimport,nodecl> end
+global function glfwWaitEventsTimeout(timeout: float64): void <cimport,nodecl> end
+global function glfwPostEmptyEvent(): void <cimport,nodecl> end
+global function glfwGetInputMode(window: *GLFWwindow, mode: cint): cint <cimport,nodecl> end
+global function glfwSetInputMode(window: *GLFWwindow, mode: cint, value: cint): void <cimport,nodecl> end
+global function glfwRawMouseMotionSupported(): cint <cimport,nodecl> end
+global function glfwGetKeyName(key: cint, scancode: cint): cstring <cimport,nodecl> end
+global function glfwGetKeyScancode(key: cint): cint <cimport,nodecl> end
+global function glfwGetKey(window: *GLFWwindow, key: cint): cint <cimport,nodecl> end
+global function glfwGetMouseButton(window: *GLFWwindow, button: cint): cint <cimport,nodecl> end
+global function glfwGetCursorPos(window: *GLFWwindow, xpos: *float64, ypos: *float64): void <cimport,nodecl> end
+global function glfwSetCursorPos(window: *GLFWwindow, xpos: float64, ypos: float64): void <cimport,nodecl> end
+global function glfwCreateCursor(image: *GLFWimage, xhot: cint, yhot: cint): *GLFWcursor <cimport,nodecl> end
+global function glfwCreateStandardCursor(shape: cint): *GLFWcursor <cimport,nodecl> end
+global function glfwDestroyCursor(cursor: *GLFWcursor): void <cimport,nodecl> end
+global function glfwSetCursor(window: *GLFWwindow, cursor: *GLFWcursor): void <cimport,nodecl> end
+global function glfwSetKeyCallback(window: *GLFWwindow, callback: GLFWkeyfun): GLFWkeyfun <cimport,nodecl> end
+global function glfwSetCharCallback(window: *GLFWwindow, callback: GLFWcharfun): GLFWcharfun <cimport,nodecl> end
+global function glfwSetCharModsCallback(window: *GLFWwindow, callback: GLFWcharmodsfun): GLFWcharmodsfun <cimport,nodecl> end
+global function glfwSetMouseButtonCallback(window: *GLFWwindow, callback: GLFWmousebuttonfun): GLFWmousebuttonfun <cimport,nodecl> end
+global function glfwSetCursorPosCallback(window: *GLFWwindow, callback: GLFWcursorposfun): GLFWcursorposfun <cimport,nodecl> end
+global function glfwSetCursorEnterCallback(window: *GLFWwindow, callback: GLFWcursorenterfun): GLFWcursorenterfun <cimport,nodecl> end
+global function glfwSetScrollCallback(window: *GLFWwindow, callback: GLFWscrollfun): GLFWscrollfun <cimport,nodecl> end
+global function glfwSetDropCallback(window: *GLFWwindow, callback: GLFWdropfun): GLFWdropfun <cimport,nodecl> end
+global function glfwJoystickPresent(jid: cint): cint <cimport,nodecl> end
+global function glfwGetJoystickAxes(jid: cint, count: *cint): *float32 <cimport,nodecl> end
+global function glfwGetJoystickButtons(jid: cint, count: *cint): *cuchar <cimport,nodecl> end
+global function glfwGetJoystickHats(jid: cint, count: *cint): *cuchar <cimport,nodecl> end
+global function glfwGetJoystickName(jid: cint): cstring <cimport,nodecl> end
+global function glfwGetJoystickGUID(jid: cint): cstring <cimport,nodecl> end
+global function glfwSetJoystickUserPointer(jid: cint, pointer: pointer): void <cimport,nodecl> end
+global function glfwGetJoystickUserPointer(jid: cint): pointer <cimport,nodecl> end
+global function glfwJoystickIsGamepad(jid: cint): cint <cimport,nodecl> end
+global function glfwSetJoystickCallback(callback: GLFWjoystickfun): GLFWjoystickfun <cimport,nodecl> end
+global function glfwUpdateGamepadMappings(string: cstring): cint <cimport,nodecl> end
+global function glfwGetGamepadName(jid: cint): cstring <cimport,nodecl> end
+global function glfwGetGamepadState(jid: cint, state: *GLFWgamepadstate): cint <cimport,nodecl> end
+global function glfwSetClipboardString(window: *GLFWwindow, string: cstring): void <cimport,nodecl> end
+global function glfwGetClipboardString(window: *GLFWwindow): cstring <cimport,nodecl> end
+global function glfwGetTime(): float64 <cimport,nodecl> end
+global function glfwSetTime(time: float64): void <cimport,nodecl> end
+global function glfwGetTimerValue(): uint64 <cimport,nodecl> end
+global function glfwGetTimerFrequency(): uint64 <cimport,nodecl> end
+global function glfwMakeContextCurrent(window: *GLFWwindow): void <cimport,nodecl> end
+global function glfwGetCurrentContext(): *GLFWwindow <cimport,nodecl> end
+global function glfwSwapBuffers(window: *GLFWwindow): void <cimport,nodecl> end
+global function glfwSwapInterval(interval: cint): void <cimport,nodecl> end
+global function glfwExtensionSupported(extension: cstring): cint <cimport,nodecl> end
+global function glfwGetProcAddress(procname: cstring): GLFWglproc <cimport,nodecl> end
+global function glfwVulkanSupported(): cint <cimport,nodecl> end
+global function glfwGetRequiredInstanceExtensions(count: *uint32): *cstring <cimport,nodecl> end
+global GLFW_VERSION_MAJOR: cint <cimport,nodecl,const>
+global GLFW_VERSION_MINOR: cint <cimport,nodecl,const>
+global GLFW_VERSION_REVISION: cint <cimport,nodecl,const>
+global GLFW_TRUE: cint <comptime> = 1
+global GLFW_FALSE: cint <comptime> = 0
+global GLFW_RELEASE: cint <comptime> = 0
+global GLFW_PRESS: cint <comptime> = 1
+global GLFW_REPEAT: cint <comptime> = 2
+global GLFW_HAT_CENTERED: cint <comptime> = 0
+global GLFW_HAT_UP: cint <comptime> = 1
+global GLFW_HAT_RIGHT: cint <comptime> = 2
+global GLFW_HAT_DOWN: cint <comptime> = 4
+global GLFW_HAT_LEFT: cint <comptime> = 8
+global GLFW_HAT_RIGHT_UP: cint <cimport,nodecl,const>
+global GLFW_HAT_RIGHT_DOWN: cint <cimport,nodecl,const>
+global GLFW_HAT_LEFT_UP: cint <cimport,nodecl,const>
+global GLFW_HAT_LEFT_DOWN: cint <cimport,nodecl,const>
+global GLFW_KEY_UNKNOWN: cint <comptime> = -1
+global GLFW_KEY_SPACE: cint <comptime> = 32
+global GLFW_KEY_APOSTROPHE: cint <comptime> = 39
+global GLFW_KEY_COMMA: cint <comptime> = 44
+global GLFW_KEY_MINUS: cint <comptime> = 45
+global GLFW_KEY_PERIOD: cint <comptime> = 46
+global GLFW_KEY_SLASH: cint <comptime> = 47
+global GLFW_KEY_0: cint <comptime> = 48
+global GLFW_KEY_1: cint <comptime> = 49
+global GLFW_KEY_2: cint <comptime> = 50
+global GLFW_KEY_3: cint <comptime> = 51
+global GLFW_KEY_4: cint <comptime> = 52
+global GLFW_KEY_5: cint <comptime> = 53
+global GLFW_KEY_6: cint <comptime> = 54
+global GLFW_KEY_7: cint <comptime> = 55
+global GLFW_KEY_8: cint <comptime> = 56
+global GLFW_KEY_9: cint <comptime> = 57
+global GLFW_KEY_SEMICOLON: cint <comptime> = 59
+global GLFW_KEY_EQUAL: cint <comptime> = 61
+global GLFW_KEY_A: cint <comptime> = 65
+global GLFW_KEY_B: cint <comptime> = 66
+global GLFW_KEY_C: cint <comptime> = 67
+global GLFW_KEY_D: cint <comptime> = 68
+global GLFW_KEY_E: cint <comptime> = 69
+global GLFW_KEY_F: cint <comptime> = 70
+global GLFW_KEY_G: cint <comptime> = 71
+global GLFW_KEY_H: cint <comptime> = 72
+global GLFW_KEY_I: cint <comptime> = 73
+global GLFW_KEY_J: cint <comptime> = 74
+global GLFW_KEY_K: cint <comptime> = 75
+global GLFW_KEY_L: cint <comptime> = 76
+global GLFW_KEY_M: cint <comptime> = 77
+global GLFW_KEY_N: cint <comptime> = 78
+global GLFW_KEY_O: cint <comptime> = 79
+global GLFW_KEY_P: cint <comptime> = 80
+global GLFW_KEY_Q: cint <comptime> = 81
+global GLFW_KEY_R: cint <comptime> = 82
+global GLFW_KEY_S: cint <comptime> = 83
+global GLFW_KEY_T: cint <comptime> = 84
+global GLFW_KEY_U: cint <comptime> = 85
+global GLFW_KEY_V: cint <comptime> = 86
+global GLFW_KEY_W: cint <comptime> = 87
+global GLFW_KEY_X: cint <comptime> = 88
+global GLFW_KEY_Y: cint <comptime> = 89
+global GLFW_KEY_Z: cint <comptime> = 90
+global GLFW_KEY_LEFT_BRACKET: cint <comptime> = 91
+global GLFW_KEY_BACKSLASH: cint <comptime> = 92
+global GLFW_KEY_RIGHT_BRACKET: cint <comptime> = 93
+global GLFW_KEY_GRAVE_ACCENT: cint <comptime> = 96
+global GLFW_KEY_WORLD_1: cint <comptime> = 161
+global GLFW_KEY_WORLD_2: cint <comptime> = 162
+global GLFW_KEY_ESCAPE: cint <comptime> = 256
+global GLFW_KEY_ENTER: cint <comptime> = 257
+global GLFW_KEY_TAB: cint <comptime> = 258
+global GLFW_KEY_BACKSPACE: cint <comptime> = 259
+global GLFW_KEY_INSERT: cint <comptime> = 260
+global GLFW_KEY_DELETE: cint <comptime> = 261
+global GLFW_KEY_RIGHT: cint <comptime> = 262
+global GLFW_KEY_LEFT: cint <comptime> = 263
+global GLFW_KEY_DOWN: cint <comptime> = 264
+global GLFW_KEY_UP: cint <comptime> = 265
+global GLFW_KEY_PAGE_UP: cint <comptime> = 266
+global GLFW_KEY_PAGE_DOWN: cint <comptime> = 267
+global GLFW_KEY_HOME: cint <comptime> = 268
+global GLFW_KEY_END: cint <comptime> = 269
+global GLFW_KEY_CAPS_LOCK: cint <comptime> = 280
+global GLFW_KEY_SCROLL_LOCK: cint <comptime> = 281
+global GLFW_KEY_NUM_LOCK: cint <comptime> = 282
+global GLFW_KEY_PRINT_SCREEN: cint <comptime> = 283
+global GLFW_KEY_PAUSE: cint <comptime> = 284
+global GLFW_KEY_F1: cint <comptime> = 290
+global GLFW_KEY_F2: cint <comptime> = 291
+global GLFW_KEY_F3: cint <comptime> = 292
+global GLFW_KEY_F4: cint <comptime> = 293
+global GLFW_KEY_F5: cint <comptime> = 294
+global GLFW_KEY_F6: cint <comptime> = 295
+global GLFW_KEY_F7: cint <comptime> = 296
+global GLFW_KEY_F8: cint <comptime> = 297
+global GLFW_KEY_F9: cint <comptime> = 298
+global GLFW_KEY_F10: cint <comptime> = 299
+global GLFW_KEY_F11: cint <comptime> = 300
+global GLFW_KEY_F12: cint <comptime> = 301
+global GLFW_KEY_F13: cint <comptime> = 302
+global GLFW_KEY_F14: cint <comptime> = 303
+global GLFW_KEY_F15: cint <comptime> = 304
+global GLFW_KEY_F16: cint <comptime> = 305
+global GLFW_KEY_F17: cint <comptime> = 306
+global GLFW_KEY_F18: cint <comptime> = 307
+global GLFW_KEY_F19: cint <comptime> = 308
+global GLFW_KEY_F20: cint <comptime> = 309
+global GLFW_KEY_F21: cint <comptime> = 310
+global GLFW_KEY_F22: cint <comptime> = 311
+global GLFW_KEY_F23: cint <comptime> = 312
+global GLFW_KEY_F24: cint <comptime> = 313
+global GLFW_KEY_F25: cint <comptime> = 314
+global GLFW_KEY_KP_0: cint <comptime> = 320
+global GLFW_KEY_KP_1: cint <comptime> = 321
+global GLFW_KEY_KP_2: cint <comptime> = 322
+global GLFW_KEY_KP_3: cint <comptime> = 323
+global GLFW_KEY_KP_4: cint <comptime> = 324
+global GLFW_KEY_KP_5: cint <comptime> = 325
+global GLFW_KEY_KP_6: cint <comptime> = 326
+global GLFW_KEY_KP_7: cint <comptime> = 327
+global GLFW_KEY_KP_8: cint <comptime> = 328
+global GLFW_KEY_KP_9: cint <comptime> = 329
+global GLFW_KEY_KP_DECIMAL: cint <comptime> = 330
+global GLFW_KEY_KP_DIVIDE: cint <comptime> = 331
+global GLFW_KEY_KP_MULTIPLY: cint <comptime> = 332
+global GLFW_KEY_KP_SUBTRACT: cint <comptime> = 333
+global GLFW_KEY_KP_ADD: cint <comptime> = 334
+global GLFW_KEY_KP_ENTER: cint <comptime> = 335
+global GLFW_KEY_KP_EQUAL: cint <comptime> = 336
+global GLFW_KEY_LEFT_SHIFT: cint <comptime> = 340
+global GLFW_KEY_LEFT_CONTROL: cint <comptime> = 341
+global GLFW_KEY_LEFT_ALT: cint <comptime> = 342
+global GLFW_KEY_LEFT_SUPER: cint <comptime> = 343
+global GLFW_KEY_RIGHT_SHIFT: cint <comptime> = 344
+global GLFW_KEY_RIGHT_CONTROL: cint <comptime> = 345
+global GLFW_KEY_RIGHT_ALT: cint <comptime> = 346
+global GLFW_KEY_RIGHT_SUPER: cint <comptime> = 347
+global GLFW_KEY_MENU: cint <comptime> = 348
+global GLFW_KEY_LAST: cint <comptime> = GLFW_KEY_MENU
+global GLFW_MOD_SHIFT: cint <comptime> = 0x0001
+global GLFW_MOD_CONTROL: cint <comptime> = 0x0002
+global GLFW_MOD_ALT: cint <comptime> = 0x0004
+global GLFW_MOD_SUPER: cint <comptime> = 0x0008
+global GLFW_MOD_CAPS_LOCK: cint <comptime> = 0x0010
+global GLFW_MOD_NUM_LOCK: cint <comptime> = 0x0020
+global GLFW_MOUSE_BUTTON_1: cint <comptime> = 0
+global GLFW_MOUSE_BUTTON_2: cint <comptime> = 1
+global GLFW_MOUSE_BUTTON_3: cint <comptime> = 2
+global GLFW_MOUSE_BUTTON_4: cint <comptime> = 3
+global GLFW_MOUSE_BUTTON_5: cint <comptime> = 4
+global GLFW_MOUSE_BUTTON_6: cint <comptime> = 5
+global GLFW_MOUSE_BUTTON_7: cint <comptime> = 6
+global GLFW_MOUSE_BUTTON_8: cint <comptime> = 7
+global GLFW_MOUSE_BUTTON_LAST: cint <comptime> = GLFW_MOUSE_BUTTON_8
+global GLFW_MOUSE_BUTTON_LEFT: cint <comptime> = GLFW_MOUSE_BUTTON_1
+global GLFW_MOUSE_BUTTON_RIGHT: cint <comptime> = GLFW_MOUSE_BUTTON_2
+global GLFW_MOUSE_BUTTON_MIDDLE: cint <comptime> = GLFW_MOUSE_BUTTON_3
+global GLFW_JOYSTICK_1: cint <comptime> = 0
+global GLFW_JOYSTICK_2: cint <comptime> = 1
+global GLFW_JOYSTICK_3: cint <comptime> = 2
+global GLFW_JOYSTICK_4: cint <comptime> = 3
+global GLFW_JOYSTICK_5: cint <comptime> = 4
+global GLFW_JOYSTICK_6: cint <comptime> = 5
+global GLFW_JOYSTICK_7: cint <comptime> = 6
+global GLFW_JOYSTICK_8: cint <comptime> = 7
+global GLFW_JOYSTICK_9: cint <comptime> = 8
+global GLFW_JOYSTICK_10: cint <comptime> = 9
+global GLFW_JOYSTICK_11: cint <comptime> = 10
+global GLFW_JOYSTICK_12: cint <comptime> = 11
+global GLFW_JOYSTICK_13: cint <comptime> = 12
+global GLFW_JOYSTICK_14: cint <comptime> = 13
+global GLFW_JOYSTICK_15: cint <comptime> = 14
+global GLFW_JOYSTICK_16: cint <comptime> = 15
+global GLFW_JOYSTICK_LAST: cint <comptime> = GLFW_JOYSTICK_16
+global GLFW_GAMEPAD_BUTTON_A: cint <comptime> = 0
+global GLFW_GAMEPAD_BUTTON_B: cint <comptime> = 1
+global GLFW_GAMEPAD_BUTTON_X: cint <comptime> = 2
+global GLFW_GAMEPAD_BUTTON_Y: cint <comptime> = 3
+global GLFW_GAMEPAD_BUTTON_LEFT_BUMPER: cint <comptime> = 4
+global GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER: cint <comptime> = 5
+global GLFW_GAMEPAD_BUTTON_BACK: cint <comptime> = 6
+global GLFW_GAMEPAD_BUTTON_START: cint <comptime> = 7
+global GLFW_GAMEPAD_BUTTON_GUIDE: cint <comptime> = 8
+global GLFW_GAMEPAD_BUTTON_LEFT_THUMB: cint <comptime> = 9
+global GLFW_GAMEPAD_BUTTON_RIGHT_THUMB: cint <comptime> = 10
+global GLFW_GAMEPAD_BUTTON_DPAD_UP: cint <comptime> = 11
+global GLFW_GAMEPAD_BUTTON_DPAD_RIGHT: cint <comptime> = 12
+global GLFW_GAMEPAD_BUTTON_DPAD_DOWN: cint <comptime> = 13
+global GLFW_GAMEPAD_BUTTON_DPAD_LEFT: cint <comptime> = 14
+global GLFW_GAMEPAD_BUTTON_LAST: cint <comptime> = GLFW_GAMEPAD_BUTTON_DPAD_LEFT
+global GLFW_GAMEPAD_BUTTON_CROSS: cint <comptime> = GLFW_GAMEPAD_BUTTON_A
+global GLFW_GAMEPAD_BUTTON_CIRCLE: cint <comptime> = GLFW_GAMEPAD_BUTTON_B
+global GLFW_GAMEPAD_BUTTON_SQUARE: cint <comptime> = GLFW_GAMEPAD_BUTTON_X
+global GLFW_GAMEPAD_BUTTON_TRIANGLE: cint <comptime> = GLFW_GAMEPAD_BUTTON_Y
+global GLFW_GAMEPAD_AXIS_LEFT_X: cint <comptime> = 0
+global GLFW_GAMEPAD_AXIS_LEFT_Y: cint <comptime> = 1
+global GLFW_GAMEPAD_AXIS_RIGHT_X: cint <comptime> = 2
+global GLFW_GAMEPAD_AXIS_RIGHT_Y: cint <comptime> = 3
+global GLFW_GAMEPAD_AXIS_LEFT_TRIGGER: cint <comptime> = 4
+global GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER: cint <comptime> = 5
+global GLFW_GAMEPAD_AXIS_LAST: cint <comptime> = GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER
+global GLFW_NO_ERROR: cint <comptime> = 0
+global GLFW_NOT_INITIALIZED: cint <comptime> = 0x00010001
+global GLFW_NO_CURRENT_CONTEXT: cint <comptime> = 0x00010002
+global GLFW_INVALID_ENUM: cint <comptime> = 0x00010003
+global GLFW_INVALID_VALUE: cint <comptime> = 0x00010004
+global GLFW_OUT_OF_MEMORY: cint <comptime> = 0x00010005
+global GLFW_API_UNAVAILABLE: cint <comptime> = 0x00010006
+global GLFW_VERSION_UNAVAILABLE: cint <comptime> = 0x00010007
+global GLFW_PLATFORM_ERROR: cint <comptime> = 0x00010008
+global GLFW_FORMAT_UNAVAILABLE: cint <comptime> = 0x00010009
+global GLFW_NO_WINDOW_CONTEXT: cint <comptime> = 0x0001000a
+global GLFW_FOCUSED: cint <comptime> = 0x00020001
+global GLFW_ICONIFIED: cint <comptime> = 0x00020002
+global GLFW_RESIZABLE: cint <comptime> = 0x00020003
+global GLFW_VISIBLE: cint <comptime> = 0x00020004
+global GLFW_DECORATED: cint <comptime> = 0x00020005
+global GLFW_AUTO_ICONIFY: cint <comptime> = 0x00020006
+global GLFW_FLOATING: cint <comptime> = 0x00020007
+global GLFW_MAXIMIZED: cint <comptime> = 0x00020008
+global GLFW_CENTER_CURSOR: cint <comptime> = 0x00020009
+global GLFW_TRANSPARENT_FRAMEBUFFER: cint <comptime> = 0x0002000a
+global GLFW_HOVERED: cint <comptime> = 0x0002000b
+global GLFW_FOCUS_ON_SHOW: cint <comptime> = 0x0002000c
+global GLFW_RED_BITS: cint <comptime> = 0x00021001
+global GLFW_GREEN_BITS: cint <comptime> = 0x00021002
+global GLFW_BLUE_BITS: cint <comptime> = 0x00021003
+global GLFW_ALPHA_BITS: cint <comptime> = 0x00021004
+global GLFW_DEPTH_BITS: cint <comptime> = 0x00021005
+global GLFW_STENCIL_BITS: cint <comptime> = 0x00021006
+global GLFW_ACCUM_RED_BITS: cint <comptime> = 0x00021007
+global GLFW_ACCUM_GREEN_BITS: cint <comptime> = 0x00021008
+global GLFW_ACCUM_BLUE_BITS: cint <comptime> = 0x00021009
+global GLFW_ACCUM_ALPHA_BITS: cint <comptime> = 0x0002100a
+global GLFW_AUX_BUFFERS: cint <comptime> = 0x0002100b
+global GLFW_STEREO: cint <comptime> = 0x0002100c
+global GLFW_SAMPLES: cint <comptime> = 0x0002100d
+global GLFW_SRGB_CAPABLE: cint <comptime> = 0x0002100e
+global GLFW_REFRESH_RATE: cint <comptime> = 0x0002100f
+global GLFW_DOUBLEBUFFER: cint <comptime> = 0x00021010
+global GLFW_CLIENT_API: cint <comptime> = 0x00022001
+global GLFW_CONTEXT_VERSION_MAJOR: cint <comptime> = 0x00022002
+global GLFW_CONTEXT_VERSION_MINOR: cint <comptime> = 0x00022003
+global GLFW_CONTEXT_REVISION: cint <comptime> = 0x00022004
+global GLFW_CONTEXT_ROBUSTNESS: cint <comptime> = 0x00022005
+global GLFW_OPENGL_FORWARD_COMPAT: cint <comptime> = 0x00022006
+global GLFW_OPENGL_DEBUG_CONTEXT: cint <comptime> = 0x00022007
+global GLFW_OPENGL_PROFILE: cint <comptime> = 0x00022008
+global GLFW_CONTEXT_RELEASE_BEHAVIOR: cint <comptime> = 0x00022009
+global GLFW_CONTEXT_NO_ERROR: cint <comptime> = 0x0002200a
+global GLFW_CONTEXT_CREATION_API: cint <comptime> = 0x0002200b
+global GLFW_SCALE_TO_MONITOR: cint <comptime> = 0x0002200c
+global GLFW_COCOA_RETINA_FRAMEBUFFER: cint <comptime> = 0x00023001
+global GLFW_COCOA_FRAME_NAME: cint <comptime> = 0x00023002
+global GLFW_COCOA_GRAPHICS_SWITCHING: cint <comptime> = 0x00023003
+global GLFW_X11_CLASS_NAME: cint <comptime> = 0x00024001
+global GLFW_X11_INSTANCE_NAME: cint <comptime> = 0x00024002
+global GLFW_NO_API: cint <comptime> = 0
+global GLFW_OPENGL_API: cint <comptime> = 0x00030001
+global GLFW_OPENGL_ES_API: cint <comptime> = 0x00030002
+global GLFW_NO_ROBUSTNESS: cint <comptime> = 0
+global GLFW_NO_RESET_NOTIFICATION: cint <comptime> = 0x00031001
+global GLFW_LOSE_CONTEXT_ON_RESET: cint <comptime> = 0x00031002
+global GLFW_OPENGL_ANY_PROFILE: cint <comptime> = 0
+global GLFW_OPENGL_CORE_PROFILE: cint <comptime> = 0x00032001
+global GLFW_OPENGL_COMPAT_PROFILE: cint <comptime> = 0x00032002
+global GLFW_CURSOR: cint <comptime> = 0x00033001
+global GLFW_STICKY_KEYS: cint <comptime> = 0x00033002
+global GLFW_STICKY_MOUSE_BUTTONS: cint <comptime> = 0x00033003
+global GLFW_LOCK_KEY_MODS: cint <comptime> = 0x00033004
+global GLFW_RAW_MOUSE_MOTION: cint <comptime> = 0x00033005
+global GLFW_CURSOR_NORMAL: cint <comptime> = 0x00034001
+global GLFW_CURSOR_HIDDEN: cint <comptime> = 0x00034002
+global GLFW_CURSOR_DISABLED: cint <comptime> = 0x00034003
+global GLFW_ANY_RELEASE_BEHAVIOR: cint <comptime> = 0
+global GLFW_RELEASE_BEHAVIOR_FLUSH: cint <comptime> = 0x00035001
+global GLFW_RELEASE_BEHAVIOR_NONE: cint <comptime> = 0x00035002
+global GLFW_NATIVE_CONTEXT_API: cint <comptime> = 0x00036001
+global GLFW_EGL_CONTEXT_API: cint <comptime> = 0x00036002
+global GLFW_OSMESA_CONTEXT_API: cint <comptime> = 0x00036003
+global GLFW_ARROW_CURSOR: cint <comptime> = 0x00036001
+global GLFW_IBEAM_CURSOR: cint <comptime> = 0x00036002
+global GLFW_CROSSHAIR_CURSOR: cint <comptime> = 0x00036003
+global GLFW_HAND_CURSOR: cint <comptime> = 0x00036004
+global GLFW_HRESIZE_CURSOR: cint <comptime> = 0x00036005
+global GLFW_VRESIZE_CURSOR: cint <comptime> = 0x00036006
+global GLFW_CONNECTED: cint <comptime> = 0x00040001
+global GLFW_DISCONNECTED: cint <comptime> = 0x00040002
+global GLFW_JOYSTICK_HAT_BUTTONS: cint <comptime> = 0x00050001
+global GLFW_COCOA_CHDIR_RESOURCES: cint <comptime> = 0x00051001
+global GLFW_COCOA_MENUBAR: cint <comptime> = 0x00051002
+global GLFW_DONT_CARE: cint <comptime> = -1
