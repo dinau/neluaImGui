@@ -9,6 +9,7 @@ global ImGuiContext = @record{}
 global ImDrawData = @record{}
 global ImGuiInputTextCallbackData = @record{}
 global ImVec2 = @record{x: cfloat, y: cfloat}
+global ImVec4 = @record{x: cfloat, y: cfloat, z: cfloat, w: cfloat}
 global ImGuiIO = @record{Framerate: cfloat}
 global ImGuiWindowFlags = cint
 global ImGuiInputTextFlags = cint
@@ -16,8 +17,11 @@ global ImGuiSliderFlags = cint
 global ImGuiColorEditFlags = cint
 global ImGuiHoveredFlags = cint
 global ImGuiHoveredFlags_DelayShort = 1 << 15
+global ImTextureID = uint64
 
 --- Functions
+-- CIMGUI_API void igImage(ImTextureID user_texture_id,const ImVec2 image_size,const ImVec2 uv0,const ImVec2 uv1,const ImVec4 tint_col,const ImVec4 border_col);
+global function igImage(user_texture_id: ImTextureID ,image_size: ImVec2, uv0: ImVec2, uv1: ImVec2, tint_col: ImVec4, border_col: ImVec4) <cimport> end
 global function igGET_FLT_MAX(): cfloat <cimport> end
 global function igGET_FLT_MIN(): cfloat <cimport> end
 

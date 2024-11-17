@@ -33,12 +33,15 @@ BACKENDS_OBJS += $(BUILD_DIR)/imgui_impl_opengl3.o \
 								 $(BUILD_DIR)/imgui_impl_glfw.o
 C_OBJS        += $(BUILD_DIR)/tentativeCode.o
 
-LDFLAGS += --ldflags="-static -L$(BUILD_DIR) $(BACKENDS_OBJS) $(C_OBJS) -lcimgui -lstdc++ -limm32"
+RES += res/imguin64.res
+LDFLAGS += --ldflags="-static -L$(BUILD_DIR) $(BACKENDS_OBJS) $(C_OBJS)  $(RES) -lcimgui -lstdc++ -limm32"
 
 OPT += $(NELUA_CFLAGS)
 OPT += $(LDFLAGS)
-OPT += -L $(LIBS_DIR)/nelua/glfw \
-       -L $(LIBS_DIR)/nelua/imgui
+OPT += -L $(LIBS_DIR)/nelua/glfw  \
+       -L $(LIBS_DIR)/nelua/imgui \
+       -L $(LIBS_DIR)/nelua/stb  \
+       -L ../utils
 #OPT += --no-cache
 #OPT += --verbose
 
