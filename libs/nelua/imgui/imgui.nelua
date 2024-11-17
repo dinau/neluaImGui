@@ -1,0 +1,60 @@
+##[[
+linklib 'cimgui'
+]]
+require 'glad' -- GLAD must be required before GLFW!
+require 'glfw'
+
+global ImFontAtlas = @record{}
+global ImGuiContext = @record{}
+global ImDrawData = @record{}
+global ImGuiInputTextCallbackData = @record{}
+global ImVec2 = @record{x: cfloat, y: cfloat}
+global ImGuiIO = @record{Framerate: cfloat}
+global ImGuiWindowFlags = cint
+global ImGuiInputTextFlags = cint
+global ImGuiSliderFlags = cint
+global ImGuiColorEditFlags = cint
+global ImGuiHoveredFlags = cint
+global ImGuiHoveredFlags_DelayShort = 1 << 15
+
+--- Functions
+global function igGET_FLT_MAX(): cfloat <cimport> end
+global function igGET_FLT_MIN(): cfloat <cimport> end
+
+global function igPlotLines_FloatPtr(label:cstring
+                                    ,values: *cfloat
+                                    ,values_count:  cint
+                                    ,values_offset: cint
+                                    ,overlay_text:  cstring
+                                    ,scale_min:     cfloat
+                                    ,scale_max:     cfloat
+                                    ,graph_size:    ImVec2
+                                    ,stride:        cint) <cimport> end
+global function igGetTime(): float64 <cimport> end
+global function igBeginTooltip(): boolean <cimport> end
+global function igEndTooltip(): boolean <cimport> end
+global function igIsItemHovered(flags: ImGuiHoveredFlags ): boolean <cimport> end
+global function igColorEdit3(label: cstring, col: *cfloat,flags: ImGuiColorEditFlags ): boolean <cimport> end
+global function igSliderFloat(label: cstring ,v: *cfloat,v_min: cfloat,v_max: cfloat,format: cstring,flags: ImGuiSliderFlags ): boolean <cimport> end
+global function igCheckbox(label: cstring, v: *boolean): boolean <cimport> end
+global function igInputTextWithHint(label: cstring, hint: cstring ,buf: cstring ,buf_size: isize,flags: ImGuiInputTextFlags, Icallback: function(data: *ImGuiInputTextCallbackData): cint ,user_data: *void): boolean <cimport> end
+global function igGetIO(): *ImGuiIO <cimport> end
+global function igButton(label: cstring,size: ImVec2 ): boolean <cimport> end
+global function igGetVersion(): cstring <cimport> end
+global function igSameLine(offset_from_start_x: cfloat,spacing: cfloat) <cimport> end
+global function igText(fmt: cstring <const>, ...: cvarargs) <cimport> end
+global function igBegin(name: cstring <const>, p_open: *boolean ,flags: ImGuiWindowFlags ): boolean <cimport> end
+global function igCreateContext(shared_font_atlas: *ImFontAtlas): *ImGuiContext <cimport> end
+global function igDestroyContext(ctx: *ImGuiContext) <cimport> end
+global function igEnd(): void <cimport> end
+global function igGetDrawData(): *ImDrawData <cimport> end
+global function igNewFrame() <cimport> end
+global function igRender() <cimport> end
+global function igShowDemoWindow(p_open: *boolean) <cimport> end
+global function ImGui_ImplGlfw_InitForOpenGL(window: *GLFWwindow, install_callbacks: boolean): boolean <cimport> end
+global function ImGui_ImplGlfw_NewFrame() <cimport> end
+global function ImGui_ImplGlfw_Shutdown() <cimport> end
+global function ImGui_ImplOpenGL3_Init(glsl_version:cstring <const>): boolean <cimport> end
+global function ImGui_ImplOpenGL3_NewFrame() <cimport> end
+global function ImGui_ImplOpenGL3_RenderDrawData(draw_data: *ImDrawData) <cimport> end
+global function ImGui_ImplOpenGL3_Shutdown() <cimport> end

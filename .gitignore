@@ -1,3 +1,7 @@
 *.o
 *.exe
 .neluacache/
+.nimcache/
+*.a
+.build/
+*.dll

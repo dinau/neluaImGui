@@ -1,0 +1,121 @@
+require'imgui'
+require'string'
+require'math'
+
+global function getFramerate(): cfloat <cimport> end
+
+local MainWinWidth <const>  = 1024
+local MainWinHeight <const> =  800
+
+local main = function()
+  glfwInit()
+  glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE)
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3)
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3)
+  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE)
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE)
+  glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE)
+
+  local glfwWin= glfwCreateWindow(MainWinWidth, MainWinHeight, "ImGui with Nelua ", nilptr, nilptr)
+  if not glfwWin then
+    error "Could not create window"
+  end
+  glfwMakeContextCurrent(glfwWin)
+  glfwSwapInterval(1) -- # Enable vsync
+  if gladLoadGL(glfwGetProcAddress) == 0 then
+    error 'Could not initialize GLAD'
+  end
+  print('OpenGL loaded:', (@cstring)(glGetString(GL_VERSION)))
+
+  local context = igCreateContext()
+  ImGui_ImplGlfw_InitForOpenGL(glfwWin, true)
+  local glsl_version:cstring <comptime> = "#version 130"
+  ImGui_ImplOpenGL3_Init(glsl_version)
+
+  local showDemoWindow = true
+  local showFirstWindow = true
+  local fval:cfloat = 0.5
+  local showWindowDelay = 2
+  local counter = 0
+  local sBuf:string = string.create(100)
+  local clearColor: [3]cfloat = {0.25,0.65,0.85}
+
+  while glfwWindowShouldClose(glfwWin) == 0 do
+    glfwPollEvents()
+    -- # start imgui frame
+    ImGui_ImplOpenGL3_NewFrame()
+    ImGui_ImplGlfw_NewFrame()
+    igNewFrame()
+
+    if showDemoWindow then
+      igShowDemoWindow(&showDemoWindow)
+    end
+    if igBegin("Nelua: Dear ImGui test", &showFirstWindow, 0) then
+      local s = "GLFW v" .. tostring(glfwGetVersionString())
+      --s = ICON_FA_COMMENT & " " & s
+      igText(s)
+      s = "OpenGL v" .. tostring((@cstring)(glGetString(GL_VERSION)))
+      --s = ICON_FA_COMMENT_SMS & " " & s
+      igText(s)
+      -- igText(ICON_FA_COMMENT_DOTS & " Dear ImGui");  igSameLine(0, -1.0)
+      igText("Dear ImGui")  igSameLine(0, -1.0)
+      igText(igGetVersion())
+      -- igText(ICON_FA_COMMENT_MEDICAL & " Nim-");  igSameLine(0, 0)
+      igText(_VERSION)
+      igInputTextWithHint("InputText" ,"Input text here" ,sBuf, #sBuf, 0, nilptr, nilptr)
+      s = "Input result:" .. sBuf
+      igText(s)
+
+      if igButton("Open file", ImVec2{0, 0}) then
+
+      end
+      igSameLine(0.0, -1.0)
+      if igIsItemHovered(ImGuiHoveredFlags_DelayShort) and igBeginTooltip() then
+        igText("[Open file]")
+        local ary: [7]cfloat = {0.6, 0.1, 1.0, 0.5, 0.92, 0.1, 0.2}
+        igPlotLines_FloatPtr("Curve", &ary, 7, 0, "Overlay string",igGET_FLT_MIN(), igGET_FLT_MAX(), ImVec2{0,0}, #cfloat)
+        igText("Sin(time) = %.2f", math.sin(igGetTime()));
+        igEndTooltip()
+      end
+
+      igCheckbox("Demo window", &showDemoWindow)
+      -- igCheckbox("Another window", &showAnotherWindow)
+      igSliderFloat("Float", &fval, 0.0, 1.0, "%.3f", 0)
+      igColorEdit3("Background color", &clearColor, 0)
+
+      if igButton("Button", ImVec2{0, 0}) then
+        counter = counter + 1
+      end
+      igSameLine(0.0, -1.0)
+      igText("counter = %d", counter)
+      igText("Application average %.3f ms/frame (%.1f FPS)", (1000.0 / getFramerate()), getFramerate())
+
+      igEnd()
+    end
+
+    igRender()
+    glClearColor(clearColor[0], clearColor[1], clearColor[2], 1.0)
+    glClear(GL_COLOR_BUFFER_BIT)
+    ImGui_ImplOpenGL3_RenderDrawData(igGetDrawData())
+
+    glfwSwapBuffers(glfwWin)
+
+    if showWindowDelay > 0 then
+      showWindowDelay = showWindowDelay - 1
+    elseif showWindowDelay == 0 then
+      showWindowDelay = -1
+      glfwShowWindow(glfwWin)
+    end
+
+  end
+
+  ImGui_ImplOpenGL3_Shutdown()
+  ImGui_ImplGlfw_Shutdown()
+  igDestroyContext(context)
+  glfwDestroyWindow(glfwWin)
+  glfwTerminate()
+
+end
+
+
+main()
