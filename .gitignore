@@ -5,3 +5,5 @@
 *.a
 .build/
 *.dll
+*.nim
+*.save

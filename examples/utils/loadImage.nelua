@@ -3,106 +3,113 @@ require'glfw'
 require'stb_image'
 require'io'
 
-global GLuint = uint32
+global GLuint  = uint32
+global GLuByte = uint8
 
 global function fileExists(name:string)
    local f = io.open(name, "r")
    return f ~= nil and io.close(f)
 end
---[=[
 
-# Refer to:
-#   OpenGLでの描画内容の画像化と保存(2012-11-07)
-#     https://npal-shared.hatenablog.com/entry/20121107/1352284053
+--
+-- # Refer to:
+-- #   OpenGLでの描画内容の画像化と保存(2012-11-07)
+-- #     https://npal-shared.hatenablog.com/entry/20121107/1352284053
 
-type
-  loadSaveError = object of CatchableError
+----------------------------
+--- loadTextureFromBuffer()
+----------------------------
+require 'allocators.default'
 
-#------------------------
-# loadTextureFromBuffer()
-#------------------------
-proc loadTextureFromBuffer*(textureID: var uint32, xs, ys, imageWidth, imageHeight:int) =
-  const comp = RGBA
-  if 1 > imageWidth or 1 > imageHeight :
-    raise newException(loadSaveError, "Error!: Rect of image is mismatch")
-  var
-    texBuffer =  newSeq[GLuByte](imageWidth * imageHeight * comp)
-    dataBuffer = newSeq[GLuByte](imageWidth * imageHeight * comp)
+global loadReq = false
 
-  # Specify OpenGL buffer to be read, 'GL_FRONT': Front buffer, 'GL_BACK': Back buffer
-  glReadBuffer( GL_BACK )
-  # Read form OpenGL buffer and save to local buffer
-  glReadPixels( xs.GLint, ys.GLint,      # x,y position (left down) at start //0 or getCurrentWidth() - 1
-                imageWidth.GLsizei, imageHeight.GLsizei, # width, height to be read
-                GL_RGBA,                 # Read type
-                GL_UNSIGNED_BYTE,        # Save type
-                texBuffer[0].addr)       # Pointer to pixel data
+global loadTextureFromBuffer = function(pTextureID: *GLuint, xs: cint, ys: cint, imageWidth: cint, imageHeight: cint)
+  local  comp = STBI_rgb_alpha
+  if 1 > imageWidth or 1 > imageHeight then
+    error("Error!: Rect of image is mismatch")
+  end
+  local sz = imageWidth * imageHeight * comp
+  local pTexBuffer =  (@*GLuByte)(default_allocator:alloc(sz))
+  defer delete(pTexBuffer) end
+  local pDataBuffer = (@*GLuByte)(default_allocator:alloc(sz))
+  defer delete(pDataBuffer) end
 
-  when true:
-    # Fix upside-down of image
-    let widthStep = comp * imageWidth
-    var n = 0
-    for y in 0..<imageHeight:
-      for x in 0..<imageWidth:
-        dataBuffer[ ( imageHeight - y - 1 ) * widthStep + (x * comp) + comp - 4 ] = texBuffer[n + comp - 4] # copy R
-        dataBuffer[ ( imageHeight - y - 1 ) * widthStep + (x * comp) + comp - 3 ] = texBuffer[n + comp - 3] # copy G
-        dataBuffer[ ( imageHeight - y - 1 ) * widthStep + (x * comp) + comp - 2 ] = texBuffer[n + comp - 2] # copy B
-        dataBuffer[ ( imageHeight - y - 1 ) * widthStep + (x * comp) + comp - 1 ] = texBuffer[n + comp - 1] # copy A
-        inc(n,comp)
+  glReadBuffer( GL_BACK ) -- # Specify OpenGL buffer to be read, 'GL_FRONT': Front buffer, 'GL_BACK': Back buffer
+  -- # Read form OpenGL buffer and save to local buffer
+  glReadPixels( xs, ys,                  -- # x,y position (left down) at start //0 or getCurrentWidth() - 1
+                imageWidth, imageHeight, -- # width, height to be read
+                GL_RGBA,                 -- # Read type
+                GL_UNSIGNED_BYTE,        -- # Save type
+                pTexBuffer)              -- # Pointer to pixel data
 
-  # Setup filtering parameters for display
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR.GLint)
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR.GLint)
-  # This is required on WebGL for non power-of-two textures
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE.GLint)
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE.GLint)
+    -- # Fix upside-down of image
+    local widthStep = comp * imageWidth
+    local n = 0
+    for y=0,<imageHeight do
+      for x=0,<imageWidth do
+        $((@*GLuByte)(((@usize)(pDataBuffer) + (( imageHeight - y - 1 ) * widthStep + (x * comp) + comp - 4 ) ))) = $((@*GLuByte)(((@usize)(pTexBuffer) + (n + comp - 4) )))
+        $((@*GLuByte)(((@usize)(pDataBuffer) + (( imageHeight - y - 1 ) * widthStep + (x * comp) + comp - 3 ) ))) = $((@*GLuByte)(((@usize)(pTexBuffer) + (n + comp - 3) )))
+        $((@*GLuByte)(((@usize)(pDataBuffer) + (( imageHeight - y - 1 ) * widthStep + (x * comp) + comp - 2 ) ))) = $((@*GLuByte)(((@usize)(pTexBuffer) + (n + comp - 2) )))
+        $((@*GLuByte)(((@usize)(pDataBuffer) + (( imageHeight - y - 1 ) * widthStep + (x * comp) + comp - 1 ) ))) = $((@*GLuByte)(((@usize)(pTexBuffer) + (n + comp - 1) )))
+        n = n + comp
+      end
+    end
 
-  # Upload pixels into texture
-  #if defined(GL_UNPACK_ROW_LENGTH) && !defined(__EMSCRIPTEN__)
-  # TODO
+  --# Setup filtering parameters for display
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+  --# This is required on WebGL for non power-of-two textures
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
+
+  --# Upload pixels into texture
+  --#if defined(GL_UNPACK_ROW_LENGTH) && !defined(__EMSCRIPTEN__)
+  --# TODO
   glPixelStorei(GL_UNPACK_ROW_LENGTH, 0)
-  #endif
+  --#endif
 
-  # Create a OpenGL texture identifier
-  var loadReq{.global.}:bool
-  if textureID == 0:
-    glGenTextures(1, addr textureID)
+  --# Create a OpenGL texture identifier
+  if $pTextureID == 0 then
+    glGenTextures(1, pTextureID)
     loadReq = true
+  end
 
-  glBindTexture(GL_TEXTURE_2D, textureID)
+  glBindTexture(GL_TEXTURE_2D, $pTextureID)
 
-  # Load texture
-  var err:int
-  if loadReq:
+  -- # Load texture
+  local err: integer
+  if loadReq then
     loadReq = false
-    glTexImage2D(GL_TEXTURE_2D          # target
-                 , 0                    # level
-                 , GL_RGBA.GLint        # internal format
-                 , imageWidth.GLSizei   # widht
-                 , imageHeight.GLsizei  # height
-                 , 0                    # [Border]: 0: Not have border  1: Have border
-                                        # https://stackoverflow.com/questions/913801/what-does-border-mean-in-the-glteximage2d-function
-                 , GL_RGBA              # format
-                 , GL_UNSIGNED_BYTE     # type
-                 , dataBuffer[0].addr)  # *pixels
-    err = glGetError().int
-    if err != 0:
-      raise newException(loadSaveError, fmt"Error!: [0x{err:X}]: glTexImage2D()")
-
-  # Update texture
-  glTexSubImage2D(GL_TEXTURE_2D          # target
-                  , 0.GLint              # level
-                  , 0.Glint, 0.GLint     # x,y offset
-                  , imageWidth.GLsizei
-                  , imageHeight.GLsizei
-                  , GL_RGBA              #, GL_UNSIGNED_INT_8_8_8_8_REV  # is Fast than GL_UNSIGNED_BYTE ?
+    glTexImage2D(GL_TEXTURE_2D          -- # target
+                 , 0                    -- # level
+                 , GL_RGBA              -- # internal format
+                 , imageWidth           -- # widht
+                 , imageHeight          -- # height
+                 , 0                    -- # [Border]: 0: Not have border  1: Have border
+                                        -- # https://stackoverflow.com/questions/913801/what-does-border-mean-in-the-glteximage2d-function
+                 , GL_RGBA              -- # format
+                 , GL_UNSIGNED_BYTE     -- # type
+                 , pDataBuffer)         -- # *pixels
+    err = glGetError()
+    if err ~= 0 then
+      error(string.format("Error!: [0x%X]:  in glTexImage2D()", err))
+    end
+  end
+  -- # Update texture
+  glTexSubImage2D(GL_TEXTURE_2D          -- # target
+                  , 0                    -- # level
+                  , 0, 0                 -- # x,y offset
+                  , imageWidth
+                  , imageHeight
+                  , GL_RGBA              -- #, GL_UNSIGNED_INT_8_8_8_8_REV  # is Fast than GL_UNSIGNED_BYTE ?
                   , GL_UNSIGNED_BYTE
-                  , dataBuffer[0].addr)
-  err = glGetError().int
-  if err != 0:
-    raise newException(loadSaveError, fmt"Error! [0x{err:X}]: glTexSubImage2D()")
+                  , pDataBuffer)
+  err = glGetError()
+  if err ~= 0 then
+    error(string.format("Error! [0x%X}]: glTexSubImage2D()", err))
+  end
+end
 
-]=]
 ------------------------
 --- loadTextureFromFile
 ------------------------
@@ -148,69 +155,3 @@ global function LoadTitleBarIcon(window: *GLFWwindow, iconName:string)
     glfwSetWindowIcon(window, 0, nilptr)
   end
 end
-
---[=[
-#--------------
-# Test program     Run as: nim r loadImage.nim
-#--------------
-when isMainModule:
-  import std/[strutils,os]
-  import nimgl/[glfw]
-  const ImageName = "../glfw_opengl3_image_load/fuji-400.jpg"
-  if not fileExists(ImageName):
-    echo "Error!: Image file not found: ", ImageName
-    quit 1
-  proc main() =
-    var
-      image_width, image_height: int
-      image_texture: GLuint
-      glfwWin: GLFWWindow
-
-    doAssert glfwInit()
-    defer: glfwTerminate()
-    glfwWindowHint(GLFWContextVersionMajor, 3)
-    glfwWindowHint(GLFWContextVersionMinor, 3)
-    glfwWindowHint(GLFWOpenglForwardCompat, GLFW_TRUE)
-    glfwWindowHint(GLFWOpenglProfile, GLFW_OPENGL_CORE_PROFILE)
-    glfwWindowHint(GLFWResizable, GLFW_FALSE)
-    glfwWindowHint(GLFWVisible, GLFW_FALSE)
-    # OpenGL init
-
-    const windowWidth = 500
-    glfwWin = glfwCreateWindow(windowWidth, 200, "If you see brown window and title bar icon, it is OK")
-    if glfwWin.isNil:
-      quit(-1)
-    glfwWin.makeContextCurrent()
-    defer: glfwWin.destroyWindow()
-    #
-    doAssert glInit()
-    #---------------------
-    # Load image
-    #---------------------
-    let ret = loadTextureFromFile(ImageName, image_texture, image_width, image_height)
-    if ret:
-      echo "Load ok [ $# ]:  width: $#  height: $#" % [ImageName, $image_width, $image_height]
-    else:
-      echo "Error: ", Imagename
-      quit 1
-    setWindowSize(glfwWin, windowWidth, image_height.int32)
-    showWindow(glfwWin)
-    glfwSwapInterval(1) # Enable vsync
-
-    #---------------------
-    # Load title bar icon
-    #---------------------
-    var IconName = os.joinPath(os.getAppDir(),"../glfw_opengl3/res/img/n.png")
-    LoadTileBarIcon(glfwWin, IconName)
-
-    while not glfwWin.windowShouldClose:
-      glfwPollEvents()
-      # render
-      glClearColor(0.5f, 0.3f, 0.2f, 1f)
-      glClear(GL_COLOR_BUFFER_BIT)
-      glfwWin.swapBuffers()
-  #------
-  # main
-  #------
-  main()
-]=]

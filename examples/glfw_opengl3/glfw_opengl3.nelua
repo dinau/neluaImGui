@@ -1,13 +1,32 @@
-require'imgui'
 require'string'
 require'math'
+--
+require'imgui'
 require'loadImage'
+require'saveImage'
+require'utils'
+require'IconsFontAwesome6'
 
-global function getFramerate(): cfloat <cimport> end
+--- External functions
+local function getFramerate(): cfloat <cimport> end      -- frim utils/tentativeCode.c
+local function setupFonts() <cimport> end                -- from utils/setupFonts.c
 
+--- Initial Window size
 local MainWinWidth <const>  = 1024
 local MainWinHeight <const> =  800
 
+--- Constants
+local SaveImageName = "ImageSaved"
+
+--- Global vars
+local imageExt:string
+local recImageFormat = @record{kind: string, ext:string}
+local imageFormatTbl : [4]recImageFormat = {{"JPEG 90%",".jpg"}, {"PNG",".png"}, {"BMP",".bmp"}, {"TGA",".tga"}}
+local cbItemIndex = 0
+
+---------
+--- main
+---------
 local main = function()
   glfwInit()
   glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE)
@@ -40,13 +59,15 @@ local main = function()
   local glsl_version:cstring <comptime> = "#version 330"
   ImGui_ImplOpenGL3_Init(glsl_version)
 
+  setupFonts()
+
   ---------------
   --- Load image
   ---------------
   local textureId: GLuint
   local textureWidth:  int32 = 0
   local textureHeight: int32 = 0
-  local ImageName = "space-400.jpg"
+  local ImageName = "parrots-400.png"
   if fileExists(ImageName) then
     if not loadTextureFromFile(ImageName, &textureId, &textureWidth, &textureHeight) then
       print("Error!: Image load error:  ", ImageName)
@@ -62,7 +83,11 @@ local main = function()
   local showWindowDelay = 1
   local counter = 0
   local sBuf:string = string.create(100)
+  sBuf[1] = 0
   local clearColor: [3]cfloat = {0.25,0.65,0.85}
+
+  local zoomTextureID: GLuint = 0  -- # Must be == 0 at first
+  defer glDeleteTextures(1, &zoomTextureID) end
 
   while glfwWindowShouldClose(glfwWin) == 0 do
     glfwPollEvents()
@@ -74,32 +99,34 @@ local main = function()
     if showDemoWindow then
       igShowDemoWindow(&showDemoWindow)
     end
+
     if igBegin("Nelua: Dear ImGui test", &showFirstWindow, 0) then
+      defer igEnd() end
       local s = "GLFW v" .. tostring(glfwGetVersionString())
-      --s = ICON_FA_COMMENT & " " & s
+      s = ICON_FA_COMMENT .. " " .. s
       igText(s)
       s = "OpenGL v" .. tostring((@cstring)(glGetString(GL_VERSION)))
-      --s = ICON_FA_COMMENT_SMS & " " & s
+      s = ICON_FA_COMMENT_SMS .. " " .. s
       igText(s)
-      -- igText(ICON_FA_COMMENT_DOTS & " Dear ImGui");  igSameLine(0, -1.0)
+      igText(ICON_FA_COMMENT_DOTS .. " Dear ImGui")   igSameLine(0, -1.0)
       igText("Dear ImGui")  igSameLine(0, -1.0)
       igText(igGetVersion())
-      -- igText(ICON_FA_COMMENT_MEDICAL & " Nim-");  igSameLine(0, 0)
+      igText(ICON_FA_COMMENT_MEDICAL .. " ")   igSameLine(0, 0)
       igText(_VERSION)
       igInputTextWithHint("InputText" ,"Input text here" ,sBuf, #sBuf, 0, nilptr, nilptr)
       s = "Input result:" .. sBuf
       igText(s)
 
       if igButton("Open file", ImVec2{0, 0}) then
-
       end
+
       igSameLine(0.0, -1.0)
       if igIsItemHovered(ImGuiHoveredFlags_DelayShort) and igBeginTooltip() then
+        defer igEndTooltip() end
         igText("[Open file]")
         local ary: [7]cfloat = {0.6, 0.1, 1.0, 0.5, 0.92, 0.1, 0.2}
         igPlotLines_FloatPtr("Curve", &ary, 7, 0, "Overlay string",igGET_FLT_MIN(), igGET_FLT_MAX(), ImVec2{0,0}, #cfloat)
         igText("Sin(time) = %.2f", math.sin(igGetTime()));
-        igEndTooltip()
       end
 
       igCheckbox("Demo window", &showDemoWindow)
@@ -107,26 +134,77 @@ local main = function()
       igSliderFloat("Float", &fval, 0.0, 1.0, "%.3f", 0)
       igColorEdit3("Background color", &clearColor, 0)
 
-      if igButton("Button", ImVec2{0, 0}) then
-        counter = counter + 1
+      -- Save button for capturing window image
+      igPushID_Int(0)
+      igPushStyleColor_Vec4(ImGuiCol_enum.ImGuiCol_Button,        ImVec4{0.7, 0.7, 0.0, 1.0})
+      igPushStyleColor_Vec4(ImGuiCol_enum.ImGuiCol_ButtonHovered, ImVec4{0.8, 0.8, 0.0, 1.0})
+      igPushStyleColor_Vec4(ImGuiCol_enum.ImGuiCol_ButtonActive,  ImVec4{0.9, 0.9, 0.0, 1.0})
+      igPushStyleColor_Vec4(ImGuiCol_enum.ImGuiCol_Text,          ImVec4{0.0, 0.0, 0.0, 1.0})
+
+      -- Image save button
+      imageExt = imageFormatTbl[cbItemIndex].ext
+      local svName = string.format("%s_%05d%s", SaveImageName, counter,imageExt)
+      if igButton("Save window image", ImVec2{0, 0}) then
+        local wkSize = getMainViewport_WorkSize()
+        saveImage(svName,0, 0, wkSize.x, wkSize.y, 3)  --- Save Image !
       end
+      igPopStyleColor(4)
+      igPopID()
+
+      -- Show tooltip help
+      setTooltip(string.format("Save to %s" , svName))
+      counter = counter + 1
       igSameLine(0.0, -1.0)
+
+      -- ComboBox: Select save image format
+      igSetNextItemWidth(100)
+      if igBeginCombo("##", imageFormatTbl[cbItemIndex].kind, 0) then
+        defer igEndCombo() end
+        for n,val in ipairs(imageFormatTbl) do
+          local is_selected = (cbItemIndex == n)
+          if igSelectable_BoolPtr(val.kind, &is_selected, 0, ImVec2{0.0, 0.0}) then
+            if is_selected then
+              igSetItemDefaultFocus()
+            end
+            cbItemIndex = n
+          end
+        end
+      end
+      setTooltip("Select image format")
       igText("counter = %d", counter)
+
       igText("Application average %.3f ms/frame (%.1f FPS)", (1000.0 / getFramerate()), getFramerate())
 
-      igEnd()
+      igSeparatorText(ICON_FA_WRENCH .. " Icon font test ")
+      igText(ICON_FA_TRASH_CAN .. " Trash")
+      igText(ICON_FA_MAGNIFYING_GLASS_PLUS ..
+        " " .. ICON_FA_POWER_OFF ..
+        " " .. ICON_FA_MICROPHONE ..
+        " " .. ICON_FA_MICROCHIP ..
+        " " .. ICON_FA_VOLUME_HIGH ..
+        " " .. ICON_FA_SCISSORS ..
+        " " .. ICON_FA_SCREWDRIVER_WRENCH ..
+        " " .. ICON_FA_BLOG)
     end
-      -- # Show image load window
+
+    -- # Show image load window
     if igBegin("Image load test", nilptr, 0) then
+      defer igEnd() end
       -- # Load image
       local size = ImVec2{textureWidth, textureHeight}
       local uv0  = ImVec2{0, 0}
       local uv1  = ImVec2{1, 1}
       local tint_col = ImVec4{1, 1, 1, 1}
       local border_col = ImVec4{0, 0, 0, 0}
+      local imageBoxPosTop:ImVec2
+      local imageBoxPosEnd:ImVec2
+      igGetCursorScreenPos(&imageBoxPosTop) -- # Get absolute pos.
       igImage(textureId, size, uv0, uv1, tint_col, border_col)
-
-      igEnd()
+      igGetCursorScreenPos(&imageBoxPosEnd) -- # Get absolute pos.
+      -- #
+      if igIsItemHovered(ImGuiHoveredFlags_DelayNone) then
+        zoomGlass(&zoomTextureID, textureWidth, imageBoxPosTop, imageBoxPosEnd)
+      end
     end
 
     igRender()
@@ -142,7 +220,6 @@ local main = function()
       showWindowDelay = -1
       glfwShowWindow(glfwWin)
     end
-
   end
 
   ImGui_ImplOpenGL3_Shutdown()
@@ -152,6 +229,5 @@ local main = function()
   glfwTerminate()
 
 end
-
 
 main()
