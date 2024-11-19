@@ -1,0 +1,199 @@
+require'string'
+require'math'
+--
+require'imgui'
+require'loadImage'
+require'saveImage'
+require'utils'
+require'IconsFontAwesome6'
+require'iconFontTblDef'
+
+--- External functions
+local function getFramerate(): cfloat <cimport> end      -- frim utils/tentativeCode.c
+local function setupFonts() <cimport> end                -- from utils/setupFonts.c
+
+--- Initial Window size
+local MainWinWidth <const>  = 1024
+local MainWinHeight <const> =  800
+
+--- Constants
+local SaveImageName = "ImageSaved"
+
+--- Global vars
+
+---------
+--- main
+---------
+local main = function()
+  glfwInit()
+  glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE)
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3)
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3)
+  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE)
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE)
+  glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE)
+
+  local glfwWin = glfwCreateWindow(MainWinWidth, MainWinHeight, "ImGui with Nelua ", nilptr, nilptr)
+  if not glfwWin then
+    error "Could not create window"
+  end
+  glfwMakeContextCurrent(glfwWin)
+  glfwSwapInterval(1) -- # Enable vsync
+
+  ------------------------
+  --- Load title bar icon
+  ------------------------
+  local IconName = "res/img/n.png"
+  LoadTitleBarIcon(glfwWin, IconName)
+
+  if gladLoadGL(glfwGetProcAddress) == 0 then
+    error 'Could not initialize GLAD'
+  end
+  print('OpenGL loaded:', (@cstring)(glGetString(GL_VERSION)))
+
+  local context = igCreateContext()
+  ImGui_ImplGlfw_InitForOpenGL(glfwWin, true)
+  local glsl_version:cstring <comptime> = "#version 330"
+  ImGui_ImplOpenGL3_Init(glsl_version)
+
+  setupFonts()
+
+  ---------------
+  --- Load image
+  ---------------
+  local textureId: GLuint
+  local textureWidth:  int32 = 0
+  local textureHeight: int32 = 0
+  local ImageName = "parrots-400.png"
+  if fileExists(ImageName) then
+    if not loadTextureFromFile(ImageName, &textureId, &textureWidth, &textureHeight) then
+      print("Error!: Image load error:  ", ImageName)
+    end
+  else
+    print("Error!: Image file not found  error:  ", ImageName)
+  end
+  defer glDeleteTextures(1, &textureId) end
+
+  local showDemoWindow = true
+  local showIconFontViewWindow = true
+  local showFirstWindow = true
+  local fval:cfloat = 0.5
+  local showWindowDelay = 1
+  local counter = 0
+  local sBuf:string = string.create(100)
+  sBuf[1] = 0
+  local clearColor: [3]cfloat = {0.25,0.65,0.85}
+  local item_current:cint = 0
+
+  local listBoxTextureID: GLuint = 0  --# Must be == 0 at first
+  defer glDeleteTextures(1, &listBoxTextureID) end
+
+  while glfwWindowShouldClose(glfwWin) == 0 do
+    glfwPollEvents()
+
+    ImGui_ImplOpenGL3_NewFrame() -- # start imgui frame
+    ImGui_ImplGlfw_NewFrame()
+    igNewFrame()
+
+    if showDemoWindow then
+      igShowDemoWindow(&showDemoWindow)
+    end
+
+    if igBegin("Nelua: Dear ImGui test", &showFirstWindow, 0) then
+      defer igEnd() end
+      local s = "GLFW v" .. tostring(glfwGetVersionString())
+      s = ICON_FA_COMMENT .. " " .. s
+      igText(s)
+      s = "OpenGL v" .. tostring((@cstring)(glGetString(GL_VERSION)))
+      s = ICON_FA_COMMENT_SMS .. " " .. s
+      igText(s)
+      igText(ICON_FA_COMMENT_DOTS .. " Dear ImGui")   igSameLine(0, -1.0)
+      igText("Dear ImGui")  igSameLine(0, -1.0)
+      igText(igGetVersion())
+      igText(ICON_FA_COMMENT_MEDICAL .. " ")   igSameLine(0, 0)
+      igText(_VERSION)
+      igSameLine(0.0, -1.0)
+      if igIsItemHovered(ImGuiHoveredFlags_DelayShort) and igBeginTooltip() then
+        defer igEndTooltip() end
+        igText("[Open file]")
+        local ary: [7]cfloat = {0.6, 0.1, 1.0, 0.5, 0.92, 0.1, 0.2}
+        igPlotLines_FloatPtr("Curve", &ary, 7, 0, "Overlay string",igGET_FLT_MIN(), igGET_FLT_MAX(), ImVec2{0,0}, #cfloat)
+        igText("Sin(time) = %.2f", math.sin(igGetTime()));
+      end
+      igCheckbox("Demo window", &showDemoWindow)
+      -- igCheckbox("Another window", &showAnotherWindow)
+      igSliderFloat("Float", &fval, 0.0, 1.0, "%.3f", 0)
+      igColorEdit3("Background color", &clearColor, 0)
+      igText("counter = %d", counter)
+      igText("Application average %.3f ms/frame (%.1f FPS)", (1000.0 / getFramerate()), getFramerate())
+    end
+
+    if showIconFontViewWindow then
+      if igBegin("Icon Font Viewer", &showIconFontViewWindow, 0) then
+        defer igEnd() end
+        --local iconFontTbl : [2]cstring = {"a ICON_FA_A", "b ICON_FA_B"}
+        igSeparatorText(ICON_FA_FONT_AWESOME .. " Icon font view: " .. tostring(#iconFontTbl) .. " icons")
+        -- #
+        local listBoxWidth = 320              -- # The value must be 2^n
+        do
+          igText("No.[%4d]", item_current)      igSameLine(0,-1.0)
+          sBuf = iconFontTbl[item_current]
+          if igButton(ICON_FA_COPY .. " Copy to", ImVec2{0,0}) then
+            local r, seqStr = string.match(sBuf,".+(ICON.+)$")
+            if r then
+              igSetClipboardText(seqStr[1])
+            end
+          end
+          setTooltip("Clipboard") -- # Show tooltip help
+        end
+        -- # Show ListBox header
+        igSetNextItemWidth(listBoxWidth)
+        igInputText("##", sBuf, #sBuf, ImGuiTextFlags_None, nilptr, nilptr)
+
+        -- # Show ListBox main
+        local listBoxPosTop:ImVec2
+        local listBoxPosEnd:ImVec2
+        igNewLine()
+        igGetCursorScreenPos(&listBoxPosTop) --# Get absolute pos.
+        igSetNextItemWidth(listBoxWidth)
+
+        igListBox_Str_arr("##"
+                          , &item_current
+                          , (@cstring)(&iconFontTbl)
+                          , #iconFontTbl, 34)
+        igGetCursorScreenPos(&listBoxPosEnd) --# Get absolute pos.
+
+        -- # Show magnifying glass (Zoom in Toolchip)
+        if igIsItemHovered(ImGuiHoveredFlags_DelayNone) then
+          local MousePos = getIO_MousePos()
+          if (MousePos.x - listBoxPosTop.x ) < 50 then
+            zoomGlass(&listBoxTextureID, listBoxWidth, listBoxPosTop, listBoxPosEnd )
+          end
+        end
+
+      end -- igBegin("Icon Font Viewer"...) end
+    end -- showIconFontViewWindow end
+
+    igRender()
+    glClearColor(clearColor[0], clearColor[1], clearColor[2], 1.0)
+    glClear(GL_COLOR_BUFFER_BIT)
+    ImGui_ImplOpenGL3_RenderDrawData(igGetDrawData())
+
+    glfwSwapBuffers(glfwWin)
+
+    if showWindowDelay > 0 then
+      showWindowDelay = showWindowDelay - 1
+    elseif showWindowDelay == 0 then
+      showWindowDelay = -1
+      glfwShowWindow(glfwWin)
+    end
+  end -- while end
+
+  ImGui_ImplOpenGL3_Shutdown()
+  ImGui_ImplGlfw_Shutdown()
+  igDestroyContext(context)
+  glfwDestroyWindow(glfwWin)
+  glfwTerminate()
+end -- main() end
+
+main()
