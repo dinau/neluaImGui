@@ -2,7 +2,9 @@
 #
 EXAMPLE_DIRS := \
 							examples/glfw_opengl3 \
-							examples/iconFontViewer
+							examples/iconFontViewer \
+							examples/sdl2_opengl3
+
 ifeq ($(OS),Windows_NT)
 	#EXAMPLE_DIRS +=  examples/sdl3_opengl3
 endif

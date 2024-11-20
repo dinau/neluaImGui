@@ -1,0 +1,7 @@
+require'glad'
+
+-- OpenGL
+global function ImGui_ImplOpenGL3_Init(glsl_version:cstring <const>): boolean <cimport> end
+global function ImGui_ImplOpenGL3_NewFrame() <cimport> end
+global function ImGui_ImplOpenGL3_RenderDrawData(draw_data: *ImDrawData) <cimport> end
+global function ImGui_ImplOpenGL3_Shutdown() <cimport> end

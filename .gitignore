@@ -7,3 +7,5 @@
 *.dll
 *.nim
 *.save
+README.html
+org.html

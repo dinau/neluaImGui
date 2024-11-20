@@ -1,8 +1,8 @@
 ##[[
 linklib 'cimgui'
 ]]
-require 'glad' -- GLAD must be required before GLFW!
-require 'glfw'
+-- require 'glad' -- GLAD must be required before GLFW!
+-- require 'glfw'
 
 --- Constant value
 global ImGuiHoveredFlags_DelayNone   = 1 << 14
@@ -11,6 +11,8 @@ global ImGuiHoveredFlags_DelayNormal = 1 << 16
 global ImGuiTextFlags_None = 0
 
 --- Struct type
+
+global ImGuiStyle = @record{}
 global ImFont= @record{}
 global ImFontConfig = @record{}
 global ImFontAtlas = @record{}
@@ -67,13 +69,6 @@ global function igGetDrawData(): *ImDrawData <cimport> end
 global function igNewFrame() <cimport> end
 global function igRender() <cimport> end
 global function igShowDemoWindow(p_open: *boolean) <cimport> end
-global function ImGui_ImplGlfw_InitForOpenGL(window: *GLFWwindow, install_callbacks: boolean): boolean <cimport> end
-global function ImGui_ImplGlfw_NewFrame() <cimport> end
-global function ImGui_ImplGlfw_Shutdown() <cimport> end
-global function ImGui_ImplOpenGL3_Init(glsl_version:cstring <const>): boolean <cimport> end
-global function ImGui_ImplOpenGL3_NewFrame() <cimport> end
-global function ImGui_ImplOpenGL3_RenderDrawData(draw_data: *ImDrawData) <cimport> end
-global function ImGui_ImplOpenGL3_Shutdown() <cimport> end
 global function ImFontAtlas_AddFontDefault(atlas: *ImFontAtlas, font_cfg: *ImFontConfig): *ImFont <cimport> end
 global function ImFontAtlas_AddFontFromFileTTF(atlas: *ImFontAtlas,filename: cstring, size_pixels: cfloat, font_cfg: *ImFontConfig, glyph_ranges: *ImWchar): *ImFont <cimport> end
 global function ImFontConfig_ImFontConfig(): *ImFontConfig <cimport> end
@@ -155,3 +150,7 @@ global ImGuiCol_enum =  @enum{
     ImGuiCol_ModalWindowDimBg,
     ImGuiCol_COUNT,
 }
+
+global function igStyleColorsDark   (dst: *ImGuiStyle) <cimport> end
+global function igStyleColorsLight  (dst: *ImGuiStyle) <cimport> end
+global function igStyleColorsClassic(dst: *ImGuiStyle) <cimport> end

@@ -4,13 +4,10 @@
 
 RES += res/nelua64.res
 
-STATIC_OPT = -static
-
 BACKENDS_OBJS += $(BUILD_DIR)/imgui_impl_opengl3.o \
-								 $(BUILD_DIR)/imgui_impl_glfw.o
+								 $(BUILD_DIR)/imgui_impl_sdl2.o
 
-CPPOPT += -DCIMGUI_USE_OPENGL3 -DCIMGUI_USE_GLFW
-
+CPPOPT += $(shell pkgconf --cflags sdl2)
 
 
 include ../makefile.common.mk

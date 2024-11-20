@@ -1,4 +1,4 @@
---require'glad'
+require'glad'
 require'glfw'
 require'stb_image'
 require'io'

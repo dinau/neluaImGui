@@ -5,7 +5,7 @@
   - [Prerequisites](#prerequisites)
   - [Build and run](#build-and-run)
   - [Examples](#examples)
-    - [glfw_opengl3](#glfw_opengl3)
+    - [glfw_opengl3, sdl2_opengl3](#glfw_opengl3-sdl2_opengl3)
     - [iconFontViewer](#iconfontviewer)
   - [My tools version](#my-tools-version)
   - [History](#history)
@@ -30,7 +30,7 @@ Now work in progress.
 1. Install libraries
 
    ```sh
-   pacman -S mingw-w64-x86_64-glfw 
+   pacman -S mingw-w64-x86_64-{glfw,pkgconf,SDL2,SDL2_image}
    ```
 
 1. Other tools
@@ -64,12 +64,14 @@ Now work in progress.
 
 ---
 
-##### glfw_opengl3
+##### glfw_opengl3, sdl2_opengl3
 
 1. Icon fonts
 1. Image loader
 1. Image saving [jpg, bmp, png, tga]
 1. Magnifying glass  
+1. glfw_opengl3: Static link [^dllWindows]
+1. sdl2_opengl3: Dynamic link
 
    ![glfw_opengl3.png](img/glfw_opengl3.png)
 
@@ -77,8 +79,11 @@ Now work in progress.
 
 1. Icon fonts
 1. Magnifying glass  
+1. Static link [^dllWindows]
 
    ![iconFontViewer.png](img/iconFontViewer.png)
+
+[^dllWindows]: Only Windows executables (without .dll dependencies)
 
 #### My tools version
 
@@ -99,11 +104,11 @@ Now work in progress.
 
 ---
 
-| Language             | Project                                                                                                                                         |
-| -------------------: | :----------------------------------------------------------------:                                                                              |
-| **Nim**              | [ImGuin](https://github.com/dinau/imguin), [Nimgl_test](https://github.com/dinau/nimgl_test), [Nim_implot](https://github.com/dinau/nim_implot) |
-| **Lua**              | [LuaJITImGui](https://github.com/dinau/luajitImGui)                                                                                             |
-| **Python**           | [DearPyGui for 32bit WindowsOS Binary](https://github.com/dinau/DearPyGui32/tree/win32)                                                         |
-| **Zig**, C lang.     | [Dear_Bindings_Build](https://github.com/dinau/dear_bindings_build)                                                                             |
-| **Zig**              | [ImGuinZ](https://github.com/dinau/imguinz)                                                                                                     |
-| **NeLua**            | [NeLuaImGui](https://github.com/dinau/neluaImGui)                                                                                                     |
+| Language             |          | Project                                                                                                                                         |
+| -------------------: | :---:    | :----------------------------------------------------------------:                                                                              |
+| **Nim**              | Compiler | [ImGuin](https://github.com/dinau/imguin), [Nimgl_test](https://github.com/dinau/nimgl_test), [Nim_implot](https://github.com/dinau/nim_implot) |
+| **Lua**              | Script   | [LuaJITImGui](https://github.com/dinau/luajitImGui)                                                                                             |
+| **Python**           | Script   | [DearPyGui for 32bit WindowsOS Binary](https://github.com/dinau/DearPyGui32/tree/win32)                                                         |
+| **Zig**, C lang.     | Compiler | [Dear_Bindings_Build](https://github.com/dinau/dear_bindings_build)                                                                             |
+| **Zig**              | Compiler | [ImGuinZ](https://github.com/dinau/imguinz)                                                                                                     |
+| **NeLua**            | Compiler | [NeLuaImGui](https://github.com/dinau/neluaImGui)                                                                                               |

@@ -14,18 +14,17 @@ ifneq ($(SHOW_CONSOLE),true)
 	HIDE_CONSOLE = -mwindows
 endif
 
-OPT += --no-cache
-
+#OPT += --no-cache
 
 BUILD_DIR    = .build
 LIBS_DIR     = ../../libs
 CIMGUI_DIR   = $(LIBS_DIR)/cimgui
-IMGUI_DIR    = $(LIBS_DIR)/cimgui/imgui
+IMGUI_DIR    = $(CIMGUI_DIR)/imgui
 UTILS_DIR    = ../utils
 FONTICON_DIR = $(UTILS_DIR)/fonticon
 
 # Specify C compiler
-#OPT += --cc clang           # clang or tcc
+#OPT += --cc clang           # clang or gcc or zig cc ?
 
 # Set cache folder
 NELUA_CACHE = .neluacache
@@ -51,25 +50,25 @@ NELUA_CFLAGS += --cflags="-O2           \
 C_OBJS        += $(BUILD_DIR)/tentativeCode.o \
                  $(BUILD_DIR)/setupFonts.o
 
-RES += res/imguin64.res
-LDFLAGS += --ldflags="-static -L$(BUILD_DIR) $(BACKENDS_OBJS) $(C_OBJS)  $(RES) -lcimgui -lstdc++ -limm32"
+NELUA_LDFLAGS += --ldflags="-L$(BUILD_DIR) $(BACKENDS_OBJS) $(C_OBJS) $(RES) $(STATIC_OPT) -lcimgui -lstdc++ -limm32 "
 
 OPT += $(NELUA_CFLAGS)
-OPT += $(LDFLAGS)
+OPT += $(NELUA_LDFLAGS)
+
 # Nelua libs dir
-OPT += -L $(LIBS_DIR)/nelua/glfw  \
-       -L $(LIBS_DIR)/nelua/imgui \
-       -L $(LIBS_DIR)/nelua/stb   \
-       -L ../utils/fontIcon       \
+OPT += -L $(LIBS_DIR)/nelua/glfw   \
+       -L $(LIBS_DIR)/nelua/imgui  \
+       -L $(LIBS_DIR)/nelua/stb    \
+       -L $(LIBS_DIR)/nelua/sdl2   \
+       -L ../utils/fontIcon        \
        -L ../utils
-#OPT += --no-cache
-#OPT += --verbose
 
 VPATH = $(CIMGUI_DIR)          \
 				:$(IMGUI_DIR)          \
 				:$(IMGUI_DIR)/backends \
 	      :$(UTILS_DIR)
 
+# ImGui / CImGui objs
 OBJS =  $(BUILD_DIR)/cimgui.o
 OBJS += $(BUILD_DIR)/imgui.o
 OBJS += $(BUILD_DIR)/imgui_draw.o
@@ -78,9 +77,9 @@ OBJS += $(BUILD_DIR)/imgui_tables.o
 OBJS += $(BUILD_DIR)/imgui_widgets.o
 AR := ar -rc
 
-CPPOPT += -DIMGUI_IMPL_API="extern \"C\" __declspec(dllexport)"
-CPPOPT += $(CXXGLAGS) -I$(IMGUI_DIR)/backends -I$(IMGUI_DIR)
 CPPOPT += -O2 -fno-exceptions -fno-rtti
+CPPOPT += -DIMGUI_IMPL_API="extern \"C\" __declspec(dllexport)"
+CPPOPT += -I$(IMGUI_DIR)/backends -I$(IMGUI_DIR)
 CPPOPT += -DIMGUI_ENABLE_WIN32_DEFAULT_IME_FUNCTIONS
 CPPOPT += -DImDrawIdx="unsigned int"
 

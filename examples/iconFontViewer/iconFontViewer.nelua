@@ -2,6 +2,8 @@ require'string'
 require'math'
 --
 require'imgui'
+require'imgui_backend_opengl3'
+require'imgui_backend_glfw'
 require'loadImage'
 require'saveImage'
 require'utils'
@@ -9,7 +11,7 @@ require'IconsFontAwesome6'
 require'iconFontTblDef'
 
 --- External functions
-local function getFramerate(): cfloat <cimport> end      -- frim utils/tentativeCode.c
+local function getFramerate(): cfloat <cimport> end      -- from utils/tentativeCode.c
 local function setupFonts() <cimport> end                -- from utils/setupFonts.c
 
 --- Initial Window size
@@ -26,6 +28,7 @@ local SaveImageName = "ImageSaved"
 ---------
 local main = function()
   glfwInit()
+  defer glfwTerminate()  end
   glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE)
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3)
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3)
@@ -37,6 +40,8 @@ local main = function()
   if not glfwWin then
     error "Could not create window"
   end
+  defer glfwDestroyWindow(glfwWin) end
+
   glfwMakeContextCurrent(glfwWin)
   glfwSwapInterval(1) -- # Enable vsync
 
@@ -52,9 +57,14 @@ local main = function()
   print('OpenGL loaded:', (@cstring)(glGetString(GL_VERSION)))
 
   local context = igCreateContext()
+  defer igDestroyContext(context) end
+
   ImGui_ImplGlfw_InitForOpenGL(glfwWin, true)
+  defer ImGui_ImplGlfw_Shutdown() end
+
   local glsl_version:cstring <comptime> = "#version 330"
   ImGui_ImplOpenGL3_Init(glsl_version)
+  defer ImGui_ImplOpenGL3_Shutdown() end
 
   setupFonts()
 
@@ -78,7 +88,7 @@ local main = function()
   local showIconFontViewWindow = true
   local showFirstWindow = true
   local fval:cfloat = 0.5
-  local showWindowDelay = 1
+  local showWindowDelay = 1 -- TODO : Avoid flickering window at start up.
   local counter = 0
   local sBuf:string = string.create(100)
   sBuf[1] = 0
@@ -88,6 +98,9 @@ local main = function()
   local listBoxTextureID: GLuint = 0  --# Must be == 0 at first
   defer glDeleteTextures(1, &listBoxTextureID) end
 
+  --------------------
+  --- Main while loop
+  --------------------
   while glfwWindowShouldClose(glfwWin) == 0 do
     glfwPollEvents()
 
@@ -108,7 +121,6 @@ local main = function()
       s = ICON_FA_COMMENT_SMS .. " " .. s
       igText(s)
       igText(ICON_FA_COMMENT_DOTS .. " Dear ImGui")   igSameLine(0, -1.0)
-      igText("Dear ImGui")  igSameLine(0, -1.0)
       igText(igGetVersion())
       igText(ICON_FA_COMMENT_MEDICAL .. " ")   igSameLine(0, 0)
       igText(_VERSION)
@@ -121,7 +133,6 @@ local main = function()
         igText("Sin(time) = %.2f", math.sin(igGetTime()));
       end
       igCheckbox("Demo window", &showDemoWindow)
-      -- igCheckbox("Another window", &showAnotherWindow)
       igSliderFloat("Float", &fval, 0.0, 1.0, "%.3f", 0)
       igColorEdit3("Background color", &clearColor, 0)
       igText("counter = %d", counter)
@@ -131,7 +142,6 @@ local main = function()
     if showIconFontViewWindow then
       if igBegin("Icon Font Viewer", &showIconFontViewWindow, 0) then
         defer igEnd() end
-        --local iconFontTbl : [2]cstring = {"a ICON_FA_A", "b ICON_FA_B"}
         igSeparatorText(ICON_FA_FONT_AWESOME .. " Icon font view: " .. tostring(#iconFontTbl) .. " icons")
         -- #
         local listBoxWidth = 320              -- # The value must be 2^n
@@ -146,6 +156,7 @@ local main = function()
           end
           setTooltip("Clipboard") -- # Show tooltip help
         end
+
         -- # Show ListBox header
         igSetNextItemWidth(listBoxWidth)
         igInputText("##", sBuf, #sBuf, ImGuiTextFlags_None, nilptr, nilptr)
@@ -187,13 +198,8 @@ local main = function()
       showWindowDelay = -1
       glfwShowWindow(glfwWin)
     end
-  end -- while end
+  end -- main while loop end
 
-  ImGui_ImplOpenGL3_Shutdown()
-  ImGui_ImplGlfw_Shutdown()
-  igDestroyContext(context)
-  glfwDestroyWindow(glfwWin)
-  glfwTerminate()
 end -- main() end
 
 main()

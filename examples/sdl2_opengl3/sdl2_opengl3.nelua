@@ -1,9 +1,14 @@
+##[[
+linklib 'SDL2'
+]]
 require'string'
 require'math'
+require'os'
 --
+require'sdl2'
 require'imgui'
 require'imgui_backend_opengl3'
-require'imgui_backend_glfw'
+require'imgui_backend_sdl2'
 require'loadImage'
 require'saveImage'
 require'utils'
@@ -30,50 +35,59 @@ local cbItemIndex = 0
 --- main
 ---------
 local main = function()
-  glfwInit()
-  defer glfwTerminate()  end
-  glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE)
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3)
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3)
-  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE)
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE)
-  glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE)
-
-  local glfwWin = glfwCreateWindow(MainWinWidth, MainWinHeight, "ImGui with Nelua ", nilptr, nilptr)
-  if not glfwWin then
-    error "Could not create window"
+  if 0 ~= SDL_Init(SDL_INIT_VIDEO + SDL_INIT_TIMER + SDL_INIT_GAMECONTROLLER) then
+    print("SDL2 initialization failed")
+    os.exit(1)
   end
-  defer glfwDestroyWindow(glfwWin) end
+  if SDL_TRUE ~= SDL_SetHint("SDL_RENDER_SCALE_QUALITY", "2") then
+    print("Linear texture filtering could not be enabled")
+    os.exit(1)
+  end
+  SDL_GL_SetAttribute(SDL_GLattr.SDL_GL_CONTEXT_FLAGS, 0)
+  SDL_GL_SetAttribute(SDL_GLattr.SDL_GL_CONTEXT_PROFILE_MASK, SDL_GLprofile.SDL_GL_CONTEXT_PROFILE_CORE)
+  SDL_GL_SetAttribute(SDL_GLattr.SDL_GL_CONTEXT_MAJOR_VERSION, 3)
+  SDL_GL_SetAttribute(SDL_GLattr.SDL_GL_CONTEXT_MINOR_VERSION, 3)
 
-  glfwMakeContextCurrent(glfwWin)
-  glfwSwapInterval(1) -- # Enable vsync
+  SDL_GL_SetAttribute(SDL_GLattr.SDL_GL_DOUBLEBUFFER, 1);
+  SDL_GL_SetAttribute(SDL_GLattr.SDL_GL_DEPTH_SIZE, 24);
+  SDL_GL_SetAttribute(SDL_GLattr.SDL_GL_STENCIL_SIZE, 8);
 
-  ------------------------
-  --- Load title bar icon
-  ------------------------
-  local IconName = "res/img/n.png"
-  LoadTitleBarIcon(glfwWin, IconName)
+  local flags = SDL_WINDOW_HIDDEN + SDL_WINDOW_OPENGL + SDL_WINDOW_RESIZABLE + SDL_WINDOW_ALLOW_HIGHDPI
+  local window = SDL_CreateWindow("ImGui with Nelua",
+                                  SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,  -- x,y
+                                  MainWinWidth, MainWinHeight                      -- w,h
+                                  ,flags)                                          -- flags
+  if 0 == window then
+    print("Window could not be created")
+    os.exit(1)
+  end
+  defer SDL_DestroyWindow(window) end
+  SDL_ShowWindow(window)
 
-  if gladLoadGL(glfwGetProcAddress) == 0 then
+  local gl_context = SDL_GL_CreateContext(window)
+  defer SDL_GL_DeleteContext(gl_context) end
+
+  SDL_GL_MakeCurrent(window, gl_context)
+  SDL_GL_SetSwapInterval(1)
+
+  -- # Setup imgui
+  igCreateContext()
+  defer igDestroyContext() end
+
+  if gladLoadGL((@function(cstring): function(): void)(SDL_GL_GetProcAddress)) == 0 then
     error 'Could not initialize GLAD'
   end
-  print('OpenGL loaded:', (@cstring)(glGetString(GL_VERSION)))
 
-  local context = igCreateContext()
-  defer igDestroyContext(context) end
-
-  ImGui_ImplGlfw_InitForOpenGL(glfwWin, true)
-  defer ImGui_ImplGlfw_Shutdown() end
-
-  local glsl_version:cstring <comptime> = "#version 330"
+  local glsl_version: cstring = "#version 330"  --# OpenGL 3.3
+  ImGui_ImplSDL2_InitForOpenGL(window , gl_context)
+  defer ImGui_ImplSDL2_Shutdown() end
   ImGui_ImplOpenGL3_Init(glsl_version)
   defer ImGui_ImplOpenGL3_Shutdown() end
 
+  igStyleColorsDark()
+  -- igStyleColorsClassic()
+
   setupFonts()
-
-  --igStyleColorsDark()
-  igStyleColorsClassic()
-
 
   ---------------
   --- Load image
@@ -91,6 +105,7 @@ local main = function()
   end
   defer glDeleteTextures(1, &textureId) end
 
+
   local showDemoWindow = true
   local showFirstWindow = true
   local fval:cfloat = 0.5
@@ -106,20 +121,33 @@ local main = function()
   --------------------
   --- Main while loop
   --------------------
-  while glfwWindowShouldClose(glfwWin) == 0 do
-    glfwPollEvents()
+  local xQuit = false
+  while not xQuit do
+    local event: SDL_Event
+    while SDL_PollEvent(&event) ~= 0 do
+      ImGui_ImplSDL2_ProcessEvent(&event)
+      if event.type== SDL_QUIT then
+        xQuit = true
+      end
+      if event.type == SDL_WINDOWEVENT and event.window.event == SDL_WINDOWEVENT_CLOSE and event.window.windowID == SDL_GetWindowID(window) then
+        xQuit = true
+      end
+    end
 
-    ImGui_ImplOpenGL3_NewFrame() -- # start imgui frame
-    ImGui_ImplGlfw_NewFrame()
+    ImGui_ImplOpenGL3_NewFrame() -- # Start ImGui frame
+    ImGui_ImplSDL2_NewFrame()
     igNewFrame()
 
+    --- ImGui GUI promgram start
     if showDemoWindow then
       igShowDemoWindow(&showDemoWindow)
     end
 
     if igBegin("Nelua: Dear ImGui test", &showFirstWindow, 0) then
       defer igEnd() end
-      local s = "GLFW v" .. tostring(glfwGetVersionString())
+      local ver: SDL_version
+      SDL_GetVersion(&ver)
+      local s = "SDL v" .. string.format("%d.%d.%d",ver.major, ver.minor, ver.patch)
       s = ICON_FA_COMMENT .. " " .. s
       igText(s)
       s = "OpenGL v" .. tostring((@cstring)(glGetString(GL_VERSION)))
@@ -222,21 +250,15 @@ local main = function()
       end
     end
 
+    --- ImGui GUI program end
+
     igRender()
+    glViewport(0, 0, MainWinWidth, MainWinHeight)
     glClearColor(clearColor[0], clearColor[1], clearColor[2], 1.0)
     glClear(GL_COLOR_BUFFER_BIT)
     ImGui_ImplOpenGL3_RenderDrawData(igGetDrawData())
-
-    glfwSwapBuffers(glfwWin)
-
-    if showWindowDelay > 0 then
-      showWindowDelay = showWindowDelay - 1
-    elseif showWindowDelay == 0 then
-      showWindowDelay = -1
-      glfwShowWindow(glfwWin)
-    end
+    SDL_GL_SwapWindow(window)
   end -- main while loop end
-
 end -- main() end
 
 main()
