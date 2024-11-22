@@ -4,7 +4,7 @@
 
 RES += res/nelua64.res
 
-DEP_NELUA = iconFontTblDef.nelua
+DEPS_NELUA = iconFontTblDef.nelua
 
 STATIC_OPT = -static
 

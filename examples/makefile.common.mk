@@ -83,15 +83,19 @@ CPPOPT += -I$(IMGUI_DIR)/backends -I$(IMGUI_DIR)
 CPPOPT += -DIMGUI_ENABLE_WIN32_DEFAULT_IME_FUNCTIONS
 CPPOPT += -DImDrawIdx="unsigned int"
 
-all: $(BUILD_DIR) $(TARGET)$(EXE)
+DEPS_NELUA += $(wildcard $(UTILS_DIR)/*.nlua )
 
 DEPS_ALL += $(TARGET).nelua \
-						$(DEP_NELUA) \
+						$(DEPS_NELUA) \
 						$(BUILD_DIR)/libcimgui.a \
 					 	$(BACKENDS_OBJS) \
 						$(C_OBJS) \
 						Makefile \
 						$(LIBS_DIR)/nelua/imgui/imgui.nelua
+
+all: $(BUILD_DIR) $(TARGET)$(EXE)
+
+
 
 $(TARGET)$(EXE): $(DEPS_ALL)
 	nelua  $(OPT) -o $@ $<
