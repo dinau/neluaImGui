@@ -15,7 +15,9 @@ BACKENDS_OBJS += $(BUILD_DIR)/imgui_impl_opengl3.o \
 
 include ../makefile.common.mk
 
+PHONY: gen
 
+gen: iconFontTblDef.nelua
 
-iconFontTblDef.nelua: makeIconFontTblDef.nims
-	-nim $<
+iconFontTblDef.nelua: makeIconFontTblDef.lua
+	lua54 $<

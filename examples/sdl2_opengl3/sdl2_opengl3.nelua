@@ -62,7 +62,6 @@ local main = function()
     os.exit(1)
   end
   defer SDL_DestroyWindow(window) end
-  SDL_ShowWindow(window)
 
   local gl_context = SDL_GL_CreateContext(window)
   defer SDL_GL_DeleteContext(gl_context) end
@@ -258,6 +257,13 @@ local main = function()
     glClear(GL_COLOR_BUFFER_BIT)
     ImGui_ImplOpenGL3_RenderDrawData(igGetDrawData())
     SDL_GL_SwapWindow(window)
+
+    if showWindowDelay > 0 then
+      showWindowDelay = showWindowDelay - 1
+    elseif showWindowDelay == 0 then
+      showWindowDelay = -1
+      SDL_ShowWindow(window)
+    end
   end -- main while loop end
 end -- main() end
 

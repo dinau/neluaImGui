@@ -7,15 +7,17 @@
   - [Examples](#examples)
     - [glfw_opengl3, sdl2_opengl3](#glfw_opengl3-sdl2_opengl3)
     - [iconFontViewer](#iconfontviewer)
+  - [SDL2 / GLFW / STB headers for Nelua](#sdl2--glfw--stb-headers-for-nelua)
   - [My tools version](#my-tools-version)
   - [History](#history)
-  - [Similar project](#similar-project)
+  - [Other project](#other-project)
+  - [SDL Game tutorial Platfromer project](#sdl-game-tutorial-platfromer-project)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ### NeluaImGui
 
-ImGui / CImGui wrapper for NeLua language
+ImGui / CImGui with NeLua language
 
 My experiment project for NeLua and ImGui / CImGui libraries.
 
@@ -73,7 +75,7 @@ Now work in progress.
 1. glfw_opengl3: Static link [^dllWindows]
 1. sdl2_opengl3: Dynamic link
 
-   ![glfw_opengl3.png](img/glfw_opengl3.png)
+   ![glfw_opengl3.png](https://github.com/dinau/neluaImGui/raw/main/img/glfw_opengl3.png)
 
 ##### iconFontViewer 
 
@@ -81,9 +83,16 @@ Now work in progress.
 1. Magnifying glass  
 1. Static link [^dllWindows]
 
-   ![iconFontViewer.png](img/iconFontViewer.png)
+   ![iconFontViewer.png](https://github.com/dinau/neluaImGui/raw/main/img/iconFontViewer.png)
 
 [^dllWindows]: Only Windows executables (without .dll dependencies)
+
+
+#### SDL2 / GLFW / STB headers for Nelua
+
+---
+
+These header files [libs/nelua/glfw](libs/nelua/glfw), [libs/nelua/sdl2](libs/nelua/sdl2), [libs/nelua/stb](libs/nelua/stb) have thankfully been copied form [nelua-decl libraries project](https://github.com/edubart/nelua-decl).
 
 #### My tools version
 
@@ -100,7 +109,7 @@ Now work in progress.
 
 - Started project at 2024/11 from NeLua-0.2.0-dev : ImGui/CImGui 1.91.4
 
-#### Similar project
+#### Other ImGui / CImGui project
 
 ---
 
@@ -108,7 +117,19 @@ Now work in progress.
 | -------------------: | :---:    | :----------------------------------------------------------------:                                                                              |
 | **Nim**              | Compiler | [ImGuin](https://github.com/dinau/imguin), [Nimgl_test](https://github.com/dinau/nimgl_test), [Nim_implot](https://github.com/dinau/nim_implot) |
 | **Lua**              | Script   | [LuaJITImGui](https://github.com/dinau/luajitImGui)                                                                                             |
-| **Python**           | Script   | [DearPyGui for 32bit WindowsOS Binary](https://github.com/dinau/DearPyGui32/tree/win32)                                                         |
 | **Zig**, C lang.     | Compiler | [Dear_Bindings_Build](https://github.com/dinau/dear_bindings_build)                                                                             |
 | **Zig**              | Compiler | [ImGuinZ](https://github.com/dinau/imguinz)                                                                                                     |
 | **NeLua**            | Compiler | [NeLuaImGui](https://github.com/dinau/neluaImGui)                                                                                               |
+| **Python**           | Script   | [DearPyGui for 32bit WindowsOS Binary](https://github.com/dinau/DearPyGui32/tree/win32)                                                         |
+
+#### SDL game tutorial Platfromer project
+
+---
+
+![ald](https://github.com/dinau/nelua-platformer/raw/main/img/game.png)
+
+| Language             |          | Project                                                            |
+| -------------------: | :---:    | :----------------------------------------------------------------: |
+| **Nim**              | Compiler | [Nim-Platformer](https://github.com/dinau/nim-platformer)          |
+| **LuaJIT**           | Script   | [LuaJIT-Platformer](https://github.com/dinau/luajit-platformer)    |
+| **Nelua**            | Compiler | [NeLua-Platformer](https://github.com/dinau/nelua-platformer)      |

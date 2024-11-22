@@ -123,6 +123,9 @@ r: run
 clean:
 	@-rm -f *$(EXE)
 	@-rm -fr $(NELUA_CACHE) $(BUILD_DIR)
-
+upx:
+	upx --lzma $(TARGET)$(EXE)
+dupx:
+	upx -d $(TARGET)$(EXE)
 
 -include $(BUILD_DIR)/*.d
