@@ -7,6 +7,34 @@ RES += res/nelua64.res
 BACKENDS_OBJS += $(BUILD_DIR)/imgui_impl_opengl3.o \
 								 $(BUILD_DIR)/imgui_impl_sdl2.o
 
+#STATIC = true
+
+ifeq ($(STATIC),true)
+  STATIC_OPT += -static -lSDL2 \
+                        -lgdi32 \
+                        -ladvapi32 \
+                        -lcomdlg32 \
+                        -ldinput8 \
+                        -ldxerr8 \
+                        -ldxguid \
+                        -lgdi32 \
+                        -lhid \
+                        -lkernel32 \
+                        -lole32 \
+                        -loleaut32 \
+                        -lsetupapi \
+                        -lshell32 \
+                        -luser32 \
+                        -luuid \
+                        -lversion \
+                        -lwinmm \
+                        -lwinspool \
+                        -lws2_32 \
+                        -lopengl32 \
+                        -lshell32 \
+                        -luser32
+endif
+
 CPPOPT += $(shell pkgconf --cflags sdl2)
 
 
