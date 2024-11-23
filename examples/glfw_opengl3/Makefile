@@ -2,14 +2,15 @@
 
 #SHOW_CONSOLE = true
 
-RES += res/nelua64.res
 
-STATIC_OPT = -static
 
 BACKENDS_OBJS += $(BUILD_DIR)/imgui_impl_opengl3.o \
 								 $(BUILD_DIR)/imgui_impl_glfw.o
 
-CPPOPT += -DCIMGUI_USE_OPENGL3 -DCIMGUI_USE_GLFW
+ifeq ($(OS),Windows_NT)
+	RES += res/nelua64.res
+	STATIC_OPT = -static
+endif
 
 
 

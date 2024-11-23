@@ -8,11 +8,12 @@ endif
 
 ifeq ($(OS),Windows_NT)
 	EXE = .exe
+	ifneq ($(SHOW_CONSOLE),true)
+		HIDE_CONSOLE = -mwindows
+	endif
+	IMM32LIB = -limm32
 endif
 
-ifneq ($(SHOW_CONSOLE),true)
-	HIDE_CONSOLE = -mwindows
-endif
 
 #OPT += --no-cache
 
@@ -36,9 +37,16 @@ C_INCS += -I$(CIMGUI_DIR) \
 					-I$(UTILS_DIR)  \
 					-I$(FONTICON_DIR)
 
+ifeq ($(OS),Windows_NT)
+	API_PREFIX = -DIMGUI_IMPL_API="extern \"C\" __declspec(dllexport)"
+else
+	API_PREFIX = -DIMGUI_IMPL_API="extern \"C\""
+endif
+
 CFLAGS += $(C_INCS) \
-          -DIMGUI_IMPL_API="extern \"C\" __declspec(dllexport)" \
+          $(API_PREFIX) \
           -MMD -MP
+
 
 NELUA_CFLAGS += --cflags="-O2           \
 				 	      -Wl,-s                  \
@@ -49,8 +57,8 @@ NELUA_CFLAGS += --cflags="-O2           \
 					      "
 C_OBJS        += $(BUILD_DIR)/tentativeCode.o \
                  $(BUILD_DIR)/setupFonts.o
-
-NELUA_LDFLAGS += --ldflags="-L$(BUILD_DIR) $(BACKENDS_OBJS) $(C_OBJS) $(RES) $(STATIC_OPT) -lcimgui -lstdc++ -limm32 "
+LINUX_LIB_DIR = /usr/lib/x86_64-linux-gnu
+NELUA_LDFLAGS += --ldflags="-L$(LINUX_LIB_DIR)  -L$(BUILD_DIR) $(BACKENDS_OBJS) $(C_OBJS) $(RES) $(STATIC_OPT) -lcimgui -lstdc++ $(IMM32LIB) "
 
 OPT += $(NELUA_CFLAGS)
 OPT += $(NELUA_LDFLAGS)
@@ -60,7 +68,7 @@ OPT += -L $(LIBS_DIR)/nelua/glfw   \
        -L $(LIBS_DIR)/nelua/imgui  \
        -L $(LIBS_DIR)/nelua/stb    \
        -L $(LIBS_DIR)/nelua/sdl2   \
-       -L ../utils/fontIcon        \
+       -L ../utils/fonticon        \
        -L ../utils
 
 VPATH = $(CIMGUI_DIR)          \
@@ -78,7 +86,7 @@ OBJS += $(BUILD_DIR)/imgui_widgets.o
 AR := ar -rc
 
 CPPOPT += -O2 -fno-exceptions -fno-rtti
-CPPOPT += -DIMGUI_IMPL_API="extern \"C\" __declspec(dllexport)"
+CPPOPT += $(API_PREFIX)
 CPPOPT += -I$(IMGUI_DIR)/backends -I$(IMGUI_DIR)
 CPPOPT += -DIMGUI_ENABLE_WIN32_DEFAULT_IME_FUNCTIONS
 CPPOPT += -DImDrawIdx="unsigned int"
@@ -93,8 +101,8 @@ DEPS_ALL += $(TARGET).nelua \
 						Makefile \
 						$(LIBS_DIR)/nelua/imgui/imgui.nelua
 
-all: $(BUILD_DIR) $(TARGET)$(EXE)
 
+all: $(BUILD_DIR) $(TARGET)$(EXE)
 
 
 $(TARGET)$(EXE): $(DEPS_ALL)
@@ -117,7 +125,7 @@ $(BUILD_DIR)/%.o:%.cpp Makefile
 	@echo $<
 	@$(CXX) -c -O2 $(CPPOPT) -o $@ $<
 
-PHONY: run clean
+PHONY: run clean r upx dupx
 
 run: all
 	./$(TARGET)$(EXE)
@@ -125,8 +133,9 @@ run: all
 r: run
 
 clean:
-	@-rm -f *$(EXE)
+	@-rm -f $(TARGET)$(EXE)
 	@-rm -fr $(NELUA_CACHE) $(BUILD_DIR)
+
 upx:
 	upx --lzma $(TARGET)$(EXE)
 dupx:

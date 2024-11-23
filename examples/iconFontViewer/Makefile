@@ -2,15 +2,16 @@
 
 #SHOW_CONSOLE = true
 
-RES += res/nelua64.res
-
 DEPS_NELUA = iconFontTblDef.nelua
 
-STATIC_OPT = -static
 
 BACKENDS_OBJS += $(BUILD_DIR)/imgui_impl_opengl3.o \
 								 $(BUILD_DIR)/imgui_impl_glfw.o
 
+ifeq ($(OS),Windows_NT)
+	RES += res/nelua64.res
+	STATIC_OPT = -static
+endif
 
 
 include ../makefile.common.mk

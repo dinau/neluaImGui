@@ -26,20 +26,35 @@ Now work in progress.
 #### Prerequisites
 
 ---
-1. Windows OS 10 or later
-1. Install [MSys2/MinGW](https://www.msys2.org/) 
-1. Install [NeLua](https://nelua.io/installing/)
-1. Install libraries
 
-   ```sh
-   pacman -S mingw-w64-x86_64-{glfw,pkgconf,SDL2,SDL2_image}
-   ```
+- Install [MSys2/MinGW](https://www.msys2.org/) 
+- Install [NeLua](https://nelua.io/installing/)
+- Windows OS 10 or later
+   1. Install libraries
+   
+      ```sh
+      pacman -S mingw-w64-x86_64-{glfw,pkgconf,SDL2,SDL2_image}
+      ```
+   
+   1. Other tools
+   
+      ```sh
+      pacman -S make
+      ```
 
-1. Other tools
+- Linux mint 22 ( or Ubuntu / Debian families ?)  
+   1. Install libraries
 
-   ```sh
-   pacman -S make
-   ```
+      ```sh
+      $ sudo apt install xorg-dev libopengl-dev libgl1-mesa-dev
+      ```
+
+      and for glfw3 and sdl2,
+
+      ```sh
+      $ sudo apt install libglfw3 libglfw3-dev
+      $ sudo apt install libsdl2-dev
+      ```
 
 #### Build and run
 
