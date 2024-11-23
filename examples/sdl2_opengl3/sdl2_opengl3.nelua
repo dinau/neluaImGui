@@ -90,7 +90,7 @@ local main = function()
   local textureId: GLuint
   local textureWidth:  int32 = 0
   local textureHeight: int32 = 0
-  local ImageName = "parrots-400.png"
+  local ImageName = "airplane-400.png"
   if fileExists(ImageName) then
     if not loadTextureFromFile(ImageName, &textureId, &textureWidth, &textureHeight) then
       print("Error!: Image load error:  ", ImageName)

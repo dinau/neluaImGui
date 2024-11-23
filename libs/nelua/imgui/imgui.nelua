@@ -1,14 +1,12 @@
 ##[[
 linklib 'cimgui'
 ]]
--- require 'glad' -- GLAD must be required before GLFW!
--- require 'glfw'
 
 --- Constant value
-global ImGuiHoveredFlags_DelayNone   = 1 << 14
-global ImGuiHoveredFlags_DelayShort  = 1 << 15
-global ImGuiHoveredFlags_DelayNormal = 1 << 16
-global ImGuiTextFlags_None = 0
+global ImGuiHoveredFlags_DelayNone:cint <comptime>   = 1 << 14
+global ImGuiHoveredFlags_DelayShort:cint <comptime>  = 1 << 15
+global ImGuiHoveredFlags_DelayNormal:cint <comptime> = 1 << 16
+global ImGuiTextFlags_None:cint <comptime> = 0
 
 --- Struct type
 
