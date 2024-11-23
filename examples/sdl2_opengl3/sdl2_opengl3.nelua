@@ -1,7 +1,3 @@
-##[[
-linklib 'SDL2'
-]]
-require'string'
 require'math'
 require'os'
 --
