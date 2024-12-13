@@ -7,11 +7,12 @@
   - [Examples](#examples)
     - [glfw_opengl3, sdl2_opengl3](#glfw_opengl3-sdl2_opengl3)
     - [iconFontViewer](#iconfontviewer)
+    - [glfw_opengl3_jp](#glfw_opengl3_jp)
   - [SDL2 / GLFW / STB headers for Nelua](#sdl2--glfw--stb-headers-for-nelua)
   - [My tools version](#my-tools-version)
   - [History](#history)
-  - [Other project](#other-project)
-  - [SDL Game tutorial Platfromer project](#sdl-game-tutorial-platfromer-project)
+  - [Other ImGui / CImGui project](#other-imgui--cimgui-project)
+  - [SDL game tutorial Platfromer project](#sdl-game-tutorial-platfromer-project)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -27,19 +28,13 @@ Now work in progress.
 
 ---
 
-- Install [MSys2/MinGW](https://www.msys2.org/) 
+- Install [MSys2/MinGW](https://www.msys2.org/) (Windows OS)
 - Install [NeLua](https://nelua.io/installing/)
 - Windows OS 10 or later
    1. Install libraries
    
       ```sh
       pacman -S mingw-w64-x86_64-{glfw,pkgconf,SDL2,SDL2_image}
-      ```
-   
-   1. Other tools
-   
-      ```sh
-      pacman -S make
       ```
 
 - Linux mint 22 ( or Ubuntu / Debian families ?)  
@@ -55,6 +50,12 @@ Now work in progress.
       $ sudo apt install libglfw3 libglfw3-dev
       $ sudo apt install libsdl2-dev
       ```
+
+ - Other tools
+   
+   ```sh
+   pacman -S make
+   ```
 
 #### Build and run
 
@@ -83,9 +84,13 @@ Now work in progress.
 
 ##### glfw_opengl3, sdl2_opengl3
 
+---
+
+[glfw_opengl3.nelua](examples/glfw_opengl3/glfw_opengl3.nelua), 
+[sdl2_opengl3.nelua](examples/sdl2_opengl3/sdl2_opengl3.nelua)
+
 1. Icon fonts
-1. Image loader
-1. Image saving [jpg, bmp, png, tga]
+1. Image loader and saving [jpg, bmp, png, tga]
 1. Magnifying glass  
 1. glfw_opengl3: Static link [^dllWindows]
 1. sdl2_opengl3: Dynamic link
@@ -94,6 +99,10 @@ Now work in progress.
 
 ##### iconFontViewer 
 
+---
+
+[iconFontViewer.nelua](examples/iconFontViewer/iconFontviewer.nelua) 
+
 1. Icon fonts
 1. Magnifying glass  
 1. Static link [^dllWindows]
@@ -101,6 +110,16 @@ Now work in progress.
    ![iconFontViewer.png](https://github.com/dinau/neluaImGui/raw/main/img/iconFontViewer.png)
 
 [^dllWindows]: Only Windows executables (without .dll dependencies)
+
+##### glfw_opengl3_jp
+
+---
+
+Showing multibyte fonts(UTF-8, CJK fonts) and IME(Input method)
+
+[glfw_opengl3_jp.nelua](examples/glfw_opengl3_jp/glfw_opengl3_jp.nelua) 
+
+![glfw_opengl3_jp.png](https://github.com/dinau/neluaImGui/raw/main/img/glfw_opengl3_jp.png)
 
 
 #### SDL2 / GLFW / STB headers for Nelua
@@ -141,10 +160,11 @@ These header files [libs/nelua/glfw](libs/nelua/glfw), [libs/nelua/sdl2](libs/ne
 
 ---
 
-![ald](https://github.com/dinau/nelua-platformer/raw/main/img/game.png)
+![alt](https://github.com/dinau/nelua-platformer/raw/main/img/platformer-nelua-sdl2.gif)
 
 | Language             |          | Project                                                            |
 | -------------------: | :---:    | :----------------------------------------------------------------: |
 | **Nim**              | Compiler | [Nim-Platformer](https://github.com/dinau/nim-platformer)          |
 | **LuaJIT**           | Script   | [LuaJIT-Platformer](https://github.com/dinau/luajit-platformer)    |
 | **Nelua**            | Compiler | [NeLua-Platformer](https://github.com/dinau/nelua-platformer)      |
+| **Zig**              | Compiler | [Zig-Platformer](https://github.com/dinau/zig-platformer)          |

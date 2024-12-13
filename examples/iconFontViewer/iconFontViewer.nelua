@@ -48,7 +48,7 @@ local main = function()
   ------------------------
   --- Load title bar icon
   ------------------------
-  local IconName = "res/img/n.png"
+  local IconName = "res/img/nl.png"
   LoadTitleBarIcon(glfwWin, IconName)
 
   if gladLoadGL(glfwGetProcAddress) == 0 then
@@ -112,7 +112,7 @@ local main = function()
       igShowDemoWindow(&showDemoWindow)
     end
 
-    if igBegin("Nelua: Dear ImGui test", &showFirstWindow, 0) then
+    do igBegin("Nelua: Dear ImGui test", &showFirstWindow, 0)
       defer igEnd() end
       local s = "GLFW v" .. tostring(glfwGetVersionString())
       s = ICON_FA_COMMENT .. " " .. s
@@ -140,7 +140,8 @@ local main = function()
     end
 
     if showIconFontViewWindow then
-      if igBegin("Icon Font Viewer", &showIconFontViewWindow, 0) then
+      do
+        igBegin("Icon Font Viewer", &showIconFontViewWindow, 0)
         defer igEnd() end
         igSeparatorText(ICON_FA_FONT_AWESOME .. " Icon font view: " .. tostring(#iconFontTbl) .. " icons")
         -- #

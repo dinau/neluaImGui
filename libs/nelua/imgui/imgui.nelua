@@ -17,9 +17,9 @@ global ImFontAtlas = @record{}
 global ImGuiContext = @record{}
 global ImDrawData = @record{}
 global ImGuiInputTextCallbackData = @record{}
-global ImVec2 = @record{x: cfloat, y: cfloat}
-global ImVec4 = @record{x: cfloat, y: cfloat, z: cfloat, w: cfloat}
-global ImGuiIO = @record{Framerate: cfloat}
+global ImVec2 = @record{x: float32, y: float32}
+global ImVec4 = @record{x: float32, y: float32, z: float32, w: float32}
+global ImGuiIO = @record{Framerate: float32}
 
 --- Type defs
 global ImGuiWindowFlags = cint
@@ -35,29 +35,29 @@ global ImGuiSelectableFlags = cint
 
 --- Functions
 global function igImage(user_texture_id: ImTextureID ,image_size: ImVec2, uv0: ImVec2, uv1: ImVec2, tint_col: ImVec4, border_col: ImVec4) <cimport> end
-global function igGET_FLT_MAX(): cfloat <cimport> end
-global function igGET_FLT_MIN(): cfloat <cimport> end
+global function igGET_FLT_MAX(): float32 <cimport> end
+global function igGET_FLT_MIN(): float32 <cimport> end
 global function igPlotLines_FloatPtr(label:cstring
-                                    ,values: *cfloat
+                                    ,values: *float32
                                     ,values_count:  cint
                                     ,values_offset: cint
                                     ,overlay_text:  cstring
-                                    ,scale_min:     cfloat
-                                    ,scale_max:     cfloat
+                                    ,scale_min:     float32
+                                    ,scale_max:     float32
                                     ,graph_size:    ImVec2
                                     ,stride:        cint) <cimport> end
 global function igGetTime(): float64 <cimport> end
 global function igBeginTooltip(): boolean <cimport> end
 global function igEndTooltip(): boolean <cimport> end
 global function igIsItemHovered(flags: ImGuiHoveredFlags ): boolean <cimport> end
-global function igColorEdit3(label: cstring, col: *cfloat,flags: ImGuiColorEditFlags ): boolean <cimport> end
-global function igSliderFloat(label: cstring ,v: *cfloat,v_min: cfloat,v_max: cfloat,format: cstring,flags: ImGuiSliderFlags ): boolean <cimport> end
+global function igColorEdit3(label: cstring, col: *float32,flags: ImGuiColorEditFlags ): boolean <cimport> end
+global function igSliderFloat(label: cstring ,v: *float32,v_min: float32,v_max: float32,format: cstring,flags: ImGuiSliderFlags ): boolean <cimport> end
 global function igCheckbox(label: cstring, v: *boolean): boolean <cimport> end
 global function igInputTextWithHint(label: cstring, hint: cstring ,buf: cstring ,buf_size: isize,flags: ImGuiInputTextFlags, callback: function(data: *ImGuiInputTextCallbackData): cint ,user_data: *void): boolean <cimport> end
 global function igGetIO(): *ImGuiIO <cimport> end
 global function igButton(label: cstring,size: ImVec2 ): boolean <cimport> end
 global function igGetVersion(): cstring <cimport> end
-global function igSameLine(offset_from_start_x: cfloat,spacing: cfloat) <cimport> end
+global function igSameLine(offset_from_start_x: float32,spacing: float32) <cimport> end
 global function igText(fmt: cstring <const>, ...: cvarargs) <cimport> end
 global function igBegin(name: cstring <const>, p_open: *boolean ,flags: ImGuiWindowFlags ): boolean <cimport> end
 global function igCreateContext(shared_font_atlas: *ImFontAtlas): *ImGuiContext <cimport> end
@@ -68,7 +68,7 @@ global function igNewFrame() <cimport> end
 global function igRender() <cimport> end
 global function igShowDemoWindow(p_open: *boolean) <cimport> end
 global function ImFontAtlas_AddFontDefault(atlas: *ImFontAtlas, font_cfg: *ImFontConfig): *ImFont <cimport> end
-global function ImFontAtlas_AddFontFromFileTTF(atlas: *ImFontAtlas,filename: cstring, size_pixels: cfloat, font_cfg: *ImFontConfig, glyph_ranges: *ImWchar): *ImFont <cimport> end
+global function ImFontAtlas_AddFontFromFileTTF(atlas: *ImFontAtlas,filename: cstring, size_pixels: float32, font_cfg: *ImFontConfig, glyph_ranges: *ImWchar): *ImFont <cimport> end
 global function ImFontConfig_ImFontConfig(): *ImFontConfig <cimport> end
 global function igSeparatorText(label: cstring) <cimport> end
 global function igGetCursorScreenPos(pOut: *ImVec2) <cimport> end
@@ -77,7 +77,7 @@ global function igPushID_Int(int_id: cint) <cimport> end
 global function igPushStyleColor_Vec4(idx: ImGuiCol ,col: ImVec4 ) <cimport> end
 global function igPopStyleColor(count: cint) <cimport> end
 global function igPopID() <cimport> end
-global function igSetNextItemWidth(item_width: cfloat) <cimport> end
+global function igSetNextItemWidth(item_width: float32) <cimport> end
 global function igBeginCombo(label: cstring,preview_value: cstring, flags: ImGuiComboFlags ): boolean <cimport> end
 global function igSelectable_BoolPtr(label: cstring,p_selected: *boolean, flags: ImGuiSelectableFlags , size: ImVec2): boolean <cimport> end
 global function igSetItemDefaultFocus() <cimport> end

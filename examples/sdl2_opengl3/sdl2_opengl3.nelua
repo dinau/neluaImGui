@@ -137,7 +137,8 @@ local main = function()
       igShowDemoWindow(&showDemoWindow)
     end
 
-    if igBegin("Nelua: Dear ImGui test", &showFirstWindow, 0) then
+    do
+      igBegin("Nelua: Dear ImGui test", &showFirstWindow, 0)
       defer igEnd() end
       local ver: SDL_version
       SDL_GetVersion(&ver)
@@ -225,7 +226,8 @@ local main = function()
     end
 
     -- # Show image load window
-    if igBegin("Image load test", nilptr, 0) then
+    do
+      igBegin("Image load test", nilptr, 0)
       defer igEnd() end
       -- # Load image
       local size = ImVec2{textureWidth, textureHeight}
