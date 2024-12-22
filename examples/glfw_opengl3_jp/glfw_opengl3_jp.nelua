@@ -50,7 +50,7 @@ local main = function()
   ------------------------
   --- Load title bar icon
   ------------------------
-  local IconName = "res/img/nl.png"
+  local IconName = "res/img/icon_jp.png"
   LoadTitleBarIcon(glfwWin, IconName)
 
   if gladLoadGL(glfwGetProcAddress) == 0 then
@@ -116,8 +116,7 @@ local main = function()
       igShowDemoWindow(&showDemoWindow)
     end
 
-    do
-      igBegin("Nelua: Dear ImGui test", &showFirstWindow, 0)
+    do igBegin("Nelua: Dear ImGui test タイトル漢字", &showFirstWindow, 0)
       defer igEnd() end
       local s = "GLFW v" .. tostring(glfwGetVersionString())
       s = ICON_FA_COMMENT .. " " .. s
@@ -129,25 +128,25 @@ local main = function()
       igText(igGetVersion())
       igText(ICON_FA_COMMENT_MEDICAL .. " ")   igSameLine(0, 0)
       igText(_VERSION)
-      igInputTextWithHint("InputText" ,"Input text here" ,sBuf, #sBuf, 0, nilptr, nilptr)
-      s = "Input result:" .. sBuf
+      igInputTextWithHint("日本語入力テスト" ,"ここに日本語を入力" ,sBuf, #sBuf, 0, nilptr, nilptr)
+      s = "入力結果: " .. sBuf
       igText(s)
 
-      if igButton("Open file", ImVec2{0, 0}) then
+      if igButton("ファイルを開く", ImVec2{0, 0}) then
       end
 
       igSameLine(0.0, -1.0)
       if igIsItemHovered(ImGuiHoveredFlags_DelayShort) and igBeginTooltip() then
         defer igEndTooltip() end
-        igText("[Open file]")
+        igText("[ファイルオープン]")
         local ary: [7]cfloat = {0.6, 0.1, 1.0, 0.5, 0.92, 0.1, 0.2}
-        igPlotLines_FloatPtr("Curve", &ary, 7, 0, "Overlay string",igGET_FLT_MIN(), igGET_FLT_MAX(), ImVec2{0,0}, #cfloat)
-        igText("Sin(time) = %.2f", math.sin(igGetTime()));
+        igPlotLines_FloatPtr("曲線", &ary, 7, 0, "オーバーレイ文字",igGET_FLT_MIN(), igGET_FLT_MAX(), ImVec2{0,0}, #cfloat)
+        igText("正弦波(time) = %.2f", math.sin(igGetTime()));
       end
 
-      igCheckbox("Demo window", &showDemoWindow)
-      igSliderFloat("Float", &fval, 0.0, 1.0, "%.3f", 0)
-      igColorEdit3("Background color", &clearColor, 0)
+      igCheckbox("デモ ウインドウ", &showDemoWindow)
+      igSliderFloat("浮動小数", &fval, 0.0, 1.0, "%.3f", 0)
+      igColorEdit3("背景色変更", &clearColor, 0)
 
       -- Save button for capturing window image
       igPushID_Int(0)
@@ -159,7 +158,7 @@ local main = function()
       -- Image save button
       imageExt = imageFormatTbl[cbItemIndex].ext
       local svName = string.format("%s_%05d%s", SaveImageName, counter,imageExt)
-      if igButton("Save window image", ImVec2{0, 0}) then
+      if igButton("画面の画像を保存", ImVec2{0, 0}) then
         local wkSize = getMainViewport_WorkSize()
         saveImage(svName,0, 0, wkSize.x, wkSize.y, 3)  --- Save Image !
       end
@@ -167,7 +166,7 @@ local main = function()
       igPopID()
 
       -- Show tooltip help
-      setTooltip(string.format("Save to %s" , svName))
+      setTooltip(string.format("保存名: %s" , svName))
       counter = counter + 1
       igSameLine(0.0, -1.0)
 
@@ -185,13 +184,13 @@ local main = function()
           end
         end
       end
-      setTooltip("Select image format")
-      igText("counter = %d", counter)
+      setTooltip("保存形式の選択")
+      igText("計数 = %d", counter)
 
-      igText("Application average %.3f ms/frame (%.1f FPS)", (1000.0 / getFramerate()), getFramerate())
+      igText("フレームレート %.3f ms/frame (%.1f FPS)", (1000.0 / getFramerate()), getFramerate())
 
       igSeparatorText(ICON_FA_WRENCH .. " Icon font test ")
-      igText(ICON_FA_TRASH_CAN .. " Trash")
+      igText(ICON_FA_TRASH_CAN .. " ゴミ箱")
       igText(ICON_FA_MAGNIFYING_GLASS_PLUS ..
         " " .. ICON_FA_POWER_OFF ..
         " " .. ICON_FA_MICROPHONE ..
@@ -203,8 +202,7 @@ local main = function()
     end
 
     -- # Show image load window
-    do
-      igBegin("Image load test", nilptr, 0)
+    do igBegin("画像ロードテスト", nilptr, 0)
       defer igEnd() end
       -- # Load image
       local size = ImVec2{textureWidth, textureHeight}

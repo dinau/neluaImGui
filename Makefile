@@ -2,6 +2,7 @@
 #
 EXAMPLE_DIRS := \
 							examples/glfw_opengl3 \
+							examples/glfw_opengl3_jp \
 							examples/iconFontViewer \
 							examples/sdl2_opengl3
 

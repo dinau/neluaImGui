@@ -15,7 +15,7 @@ local function setupFonts() <cimport> end                -- from utils/setupFont
 
 --- Initial Window size
 local MainWinWidth <const>  = 1024
-local MainWinHeight <const> =  800
+local MainWinHeight <const> =  900
 
 --- Constants
 local SaveImageName = "ImageSaved"
