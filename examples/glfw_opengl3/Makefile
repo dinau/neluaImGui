@@ -1,6 +1,6 @@
 #DEBUG_BUILD = true
 
-SHOW_CONSOLE = true
+#SHOW_CONSOLE = true
 
 
 

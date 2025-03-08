@@ -1,4 +1,5 @@
 require'io'
+require'IconsFontAwesome6'
 
 global function getMainViewport_WorkSize():ImVec2  <cimport> end
 global function getIO_MousePos():ImVec2  <cimport> end
@@ -52,6 +53,7 @@ global zoomGlass = function(pTextureID: *GLuint, itemWidth: int32, itemPosTop:Im
     local uv1 = ImVec2{(region_x + region_sz) / my_tex_w, (region_y + region_sz) / my_tex_h}
     local tint_col   = ImVec4{ 1.0, 1.0, 1.0, 1.0}  -- #// No tint
     local border_col = ImVec4{0.22, 0.56, 0.22, 1.0} -- # Green
+    igText(ICON_FA_MAGNIFYING_GLASS ..  " 4 x")
     igImage($pTextureID, ImVec2{region_sz * zoom, region_sz * zoom}, uv0, uv1, tint_col, border_col)
   end
 end

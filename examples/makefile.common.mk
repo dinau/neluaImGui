@@ -102,8 +102,10 @@ DEPS_ALL += $(TARGET).nelua \
 						$(LIBS_DIR)/nelua/imgui/imgui.nelua
 
 
-all: $(BUILD_DIR) $(TARGET)$(EXE)
+all: ver  $(BUILD_DIR) $(TARGET)$(EXE)
 
+ver:
+	@nelua -v
 
 $(TARGET)$(EXE): $(DEPS_ALL)
 	nelua  $(OPT) -o $@ $<
@@ -118,11 +120,11 @@ $(BUILD_DIR)/libcimgui.a:$(OBJS) Makefile
 	@$(AR) $@ $(OBJS)
 
 $(BUILD_DIR)/%.o:%.c Makefile
-	@echo $<
+	@echo [$(CC) ] $<
 	@$(CC) -c -O2 $(CFLAGS) -o $@ $<
 
 $(BUILD_DIR)/%.o:%.cpp Makefile
-	@echo $<
+	@echo [$(CXX)]  $<
 	@$(CXX) -c -O2 $(CPPOPT) -o $@ $<
 
 PHONY: run clean r upx dupx

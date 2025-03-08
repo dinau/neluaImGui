@@ -25,6 +25,7 @@ local imageExt:string
 local recImageFormat = @record{kind: string, ext:string}
 local imageFormatTbl : [4]recImageFormat = {{"JPEG 90%",".jpg"}, {"PNG",".png"}, {"BMP",".bmp"}, {"TGA",".tga"}}
 local cbItemIndex = 0
+local versions : [][2]int32 = {{4, 6} ,{4, 5} ,{4, 4} ,{4, 3} ,{4, 2} ,{4, 1} ,{4, 0} ,{3, 3} }
 
 ---------
 --- main
@@ -38,23 +39,31 @@ local main = function()
     print("Linear texture filtering could not be enabled")
     os.exit(1)
   end
-  SDL_GL_SetAttribute(SDL_GLattr.SDL_GL_CONTEXT_FLAGS, 0)
-  SDL_GL_SetAttribute(SDL_GLattr.SDL_GL_CONTEXT_PROFILE_MASK, SDL_GLprofile.SDL_GL_CONTEXT_PROFILE_CORE)
-  SDL_GL_SetAttribute(SDL_GLattr.SDL_GL_CONTEXT_MAJOR_VERSION, 3)
-  SDL_GL_SetAttribute(SDL_GLattr.SDL_GL_CONTEXT_MINOR_VERSION, 3)
+  local window: *SDL_Window = nilptr
+  local glsl_version:cstring -- = "#version 330"
+  for _, ver in ipairs(versions) do
+    SDL_GL_SetAttribute(SDL_GLattr.SDL_GL_CONTEXT_FLAGS, 0)
+    SDL_GL_SetAttribute(SDL_GLattr.SDL_GL_CONTEXT_PROFILE_MASK, SDL_GLprofile.SDL_GL_CONTEXT_PROFILE_CORE)
+    SDL_GL_SetAttribute(SDL_GLattr.SDL_GL_CONTEXT_MAJOR_VERSION, ver[0])
+    SDL_GL_SetAttribute(SDL_GLattr.SDL_GL_CONTEXT_MINOR_VERSION, ver[1])
 
-  SDL_GL_SetAttribute(SDL_GLattr.SDL_GL_DOUBLEBUFFER, 1);
-  SDL_GL_SetAttribute(SDL_GLattr.SDL_GL_DEPTH_SIZE, 24);
-  SDL_GL_SetAttribute(SDL_GLattr.SDL_GL_STENCIL_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GLattr.SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GLattr.SDL_GL_DEPTH_SIZE, 24);
+    SDL_GL_SetAttribute(SDL_GLattr.SDL_GL_STENCIL_SIZE, 8);
 
-  local flags = SDL_WINDOW_HIDDEN + SDL_WINDOW_OPENGL + SDL_WINDOW_RESIZABLE + SDL_WINDOW_ALLOW_HIGHDPI
-  local window = SDL_CreateWindow("ImGui with Nelua",
-                                  SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,  -- x,y
-                                  MainWinWidth, MainWinHeight                      -- w,h
-                                  ,flags)                                          -- flags
-  if 0 == window then
+    local flags = SDL_WINDOW_HIDDEN + SDL_WINDOW_OPENGL + SDL_WINDOW_RESIZABLE + SDL_WINDOW_ALLOW_HIGHDPI
+    window = SDL_CreateWindow("ImGui with Nelua",
+                                    SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,  -- x,y
+                                    MainWinWidth, MainWinHeight                      -- w,h
+                                    ,flags)                                          -- flags
+    if nilptr ~= window then
+      glsl_version = "#version " .. tostring( ver[0] * 100 + ver[1] * 10)
+      break
+    end
+  end
+  if nilptr == window then
     print("Window could not be created")
-    os.exit(1)
+    os.exit(false)
   end
   defer SDL_DestroyWindow(window) end
 
@@ -72,7 +81,6 @@ local main = function()
     error 'Could not initialize GLAD'
   end
 
-  local glsl_version: cstring = "#version 330"  --# OpenGL 3.3
   ImGui_ImplSDL2_InitForOpenGL(window , gl_context)
   defer ImGui_ImplSDL2_Shutdown() end
   ImGui_ImplOpenGL3_Init(glsl_version)

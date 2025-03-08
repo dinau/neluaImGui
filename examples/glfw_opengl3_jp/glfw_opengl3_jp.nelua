@@ -1,3 +1,4 @@
+require 'os'
 require'math'
 --
 require'imgui'
@@ -24,6 +25,7 @@ local imageExt:string
 local recImageFormat = @record{kind: string, ext:string}
 local imageFormatTbl : [4]recImageFormat = {{"JPEG 90%",".jpg"}, {"PNG",".png"}, {"BMP",".bmp"}, {"TGA",".tga"}}
 local cbItemIndex = 0
+local versions : [][2]int32 = {{4, 6} ,{4, 5} ,{4, 4} ,{4, 3} ,{4, 2} ,{4, 1} ,{4, 0} ,{3, 3} }
 
 ---------
 --- main
@@ -31,16 +33,25 @@ local cbItemIndex = 0
 local main = function()
   glfwInit()
   defer glfwTerminate()  end
+  local glfwWin: *GLFWwindow = nilptr
+  local glsl_version:cstring -- = "#version 330"
+  for _, ver in ipairs(versions) do
   glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE)
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3)
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3)
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, ver[0])
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, ver[1])
   glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE)
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE)
   glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE)
 
-  local glfwWin = glfwCreateWindow(MainWinWidth, MainWinHeight, "ImGui with Nelua ", nilptr, nilptr)
-  if not glfwWin then
-    error "Could not create window"
+    glfwWin = glfwCreateWindow(MainWinWidth, MainWinHeight, "ImGui with Nelua ", nilptr, nilptr)
+    if nilptr ~= glfwWin then
+      glsl_version = "#version " .. tostring( ver[0] * 100 + ver[1] * 10)
+      break
+    end
+  end
+  if nilptr == glfwWin then
+    print("Could not create window")
+    os.exit(false)
   end
   defer glfwDestroyWindow(glfwWin) end
 
