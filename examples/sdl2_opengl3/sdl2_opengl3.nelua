@@ -1,7 +1,7 @@
 require'math'
 require'os'
 --
-require'imgui'
+require'cimgui'
 require'imgui_backend_opengl3'
 require'imgui_backend_sdl2'
 require'loadImage'
@@ -120,6 +120,8 @@ local main = function()
   local zoomTextureID: GLuint = 0  -- # Must be == 0 at first
   defer glDeleteTextures(1, &zoomTextureID) end
 
+  local pio = igGetIO()
+
   --------------------
   --- Main while loop
   --------------------
@@ -182,10 +184,10 @@ local main = function()
 
       -- Save button for capturing window image
       igPushID_Int(0)
-      igPushStyleColor_Vec4(ImGuiCol_enum.ImGuiCol_Button,        ImVec4{0.7, 0.7, 0.0, 1.0})
-      igPushStyleColor_Vec4(ImGuiCol_enum.ImGuiCol_ButtonHovered, ImVec4{0.8, 0.8, 0.0, 1.0})
-      igPushStyleColor_Vec4(ImGuiCol_enum.ImGuiCol_ButtonActive,  ImVec4{0.9, 0.9, 0.0, 1.0})
-      igPushStyleColor_Vec4(ImGuiCol_enum.ImGuiCol_Text,          ImVec4{0.0, 0.0, 0.0, 1.0})
+      igPushStyleColor_Vec4(ImGuiCol_Button,        ImVec4{0.7, 0.7, 0.0, 1.0})
+      igPushStyleColor_Vec4(ImGuiCol_ButtonHovered, ImVec4{0.8, 0.8, 0.0, 1.0})
+      igPushStyleColor_Vec4(ImGuiCol_ButtonActive,  ImVec4{0.9, 0.9, 0.0, 1.0})
+      igPushStyleColor_Vec4(ImGuiCol_Text,          ImVec4{0.0, 0.0, 0.0, 1.0})
 
       -- Image save button
       imageExt = imageFormatTbl[cbItemIndex].ext
@@ -219,7 +221,7 @@ local main = function()
       setTooltip("Select image format")
       igText("counter = %d", counter)
 
-      igText("Application average %.3f ms/frame (%.1f FPS)", (1000.0 / getFramerate()), getFramerate())
+      igText("Application average %.3f ms/frame (%.1f FPS)", (1000.0 / pio.Framerate), pio.Framerate)
 
       igSeparatorText(ICON_FA_WRENCH .. " Icon font test ")
       igText(ICON_FA_TRASH_CAN .. " Trash")

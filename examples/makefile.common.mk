@@ -48,20 +48,28 @@ CFLAGS += $(C_INCS) \
           -MMD -MP
 
 
-NELUA_CFLAGS += --cflags="-O2           \
-				 	      -Wl,-s                  \
-					      -I$(IMGUI_DIR)/backends \
-				 	      -I$(IMGUI_DIR)          \
-				 	      -I$(CIMGUI_DIR)         \
-                $(HIDE_CONSOLE)         \
-					      "
-C_OBJS        += $(BUILD_DIR)/tentativeCode.o \
-                 $(BUILD_DIR)/setupFonts.o
-LINUX_LIB_DIR = /usr/lib/x86_64-linux-gnu
-NELUA_LDFLAGS += --ldflags="-L$(LINUX_LIB_DIR)  -L$(BUILD_DIR) $(BACKENDS_OBJS) $(C_OBJS) $(RES) $(STATIC_OPT) -lcimgui -lstdc++ $(IMM32LIB) "
+NELUA_CFLAGS += -O2
+NELUA_CFLAGS += -Wl,-s
+NELUA_CFLAGS += -I$(IMGUI_DIR)/backends
+NELUA_CFLAGS += -I$(IMGUI_DIR)
+NELUA_CFLAGS += -I$(CIMGUI_DIR)
+NELUA_CFLAGS += $(HIDE_CONSOLE)
 
-OPT += $(NELUA_CFLAGS)
-OPT += $(NELUA_LDFLAGS)
+C_OBJS        += $(BUILD_DIR)/setupFonts.o
+LINUX_LIB_DIR = /usr/lib/x86_64-linux-gnu
+
+NELUA_LDFLAGS += -L$(LINUX_LIB_DIR)
+NELUA_LDFLAGS += -L$(BUILD_DIR)
+NELUA_LDFLAGS += $(BACKENDS_OBJS)
+NELUA_LDFLAGS += $(C_OBJS)
+NELUA_LDFLAGS += $(RES)
+NELUA_LDFLAGS += $(STATIC_OPT)
+NELUA_LDFLAGS += -lcimgui
+NELUA_LDFLAGS += -lstdc++
+NELUA_LDFLAGS += $(IMM32LIB)
+
+OPT += --cflags="$(NELUA_CFLAGS)"
+OPT += --ldflags="$(NELUA_LDFLAGS)"
 
 # Nelua libs dir
 OPT += -L $(LIBS_DIR)/nelua/glfw   \
@@ -99,7 +107,7 @@ DEPS_ALL += $(TARGET).nelua \
 					 	$(BACKENDS_OBJS) \
 						$(C_OBJS) \
 						Makefile \
-						$(LIBS_DIR)/nelua/imgui/imgui.nelua
+						$(LIBS_DIR)/nelua/imgui/cimgui.nelua
 
 
 all: ver  $(BUILD_DIR) $(TARGET)$(EXE)
@@ -108,7 +116,7 @@ ver:
 	@nelua -v
 
 $(TARGET)$(EXE): $(DEPS_ALL)
-	nelua  $(OPT) -o $@ $<
+	nelua $(OPT) -o $@ $<
 	@strip $(TARGET)$(EXE)
 	@ls -lks $(TARGET)$(EXE)
 

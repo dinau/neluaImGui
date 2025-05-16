@@ -1,0 +1,32 @@
+##[==[
+cflags '-DCIMGUI_DEFINE_ENUMS_AND_STRUCTS'
+--cdefine 'CIMGUI_DEFINE_ENUMS_AND_STRUCTS'
+cinclude 'cimgui.h'
+
+-- import Nelua Decl plugin and filesystem utils.
+local nldecl = require 'nelua.plugins.nldecl'
+local fs = require 'nelua.utils.fs'
+
+-- Generate nelua bindings file. (It will be always regenerated)
+--if not fs.isfile('sdl2-bindings.nelua') then
+  nldecl.generate_bindings_file{
+    defines = {'CIMGUI_DEFINE_ENUMS_AND_STRUCTS'
+               ,'bool _Bool'
+               ,'IMGUI_IMPL_API "extern \"C\" __declspec(dllexport)"'
+               ,'ImDrawIdx unsigned int'
+              },
+    output_file = 'libs/nelua/imgui/cimgui.nelua',
+    -- what C file we should generate bindings for and parse?
+    parse_includes = {'cimgui.h'},
+    -- what symbol name prefix should we import from that file?
+    include_names = {'^ig','^Im'},
+    include_dirs = {'libs/cimgui'}
+  }
+--end
+
+if ccinfo.is_windows then
+  --linklib 'mingw32'
+end
+]==]
+
+print("Generated [libs/imgui/cimgui.nelua]")

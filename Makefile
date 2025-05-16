@@ -30,3 +30,13 @@ define def_make
 endef
 
 MAKEFLAGS += --no-print-directory
+
+# Generate libs/nelua/imgui/cimgui.nelua
+CFLAGS += -Ilibs/cimgui
+OPT += --cflags="$(CFLAGS)"
+gen:
+	nelua $(OPT) genCimguiBind.nelua
+	@cat libs/nelua/imgui/cimgui_header.lua > tmp.nelua
+	@cat libs/nelua/imgui/cimgui.nelua >> tmp.nelua
+	@mv -f tmp.nelua libs/nelua/imgui/cimgui.nelua
+	@rm -f tmp.nelua

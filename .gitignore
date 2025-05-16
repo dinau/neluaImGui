@@ -1,5 +1,8 @@
 *.o
 *.exe
+00glfw_opengl3_new/
+libs/mjson/
+imspinner/
 .neluacache/
 .nimcache/
 *.a

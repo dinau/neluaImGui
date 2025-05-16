@@ -1,7 +1,7 @@
 require 'os'
 require'math'
 --
-require'imgui'
+require'cimgui'
 require'imgui_backend_opengl3'
 require'imgui_backend_glfw'
 require'loadImage'
@@ -10,7 +10,6 @@ require'utils'
 require'IconsFontAwesome6'
 
 --- External functions
-local function getFramerate(): cfloat <cimport> end      -- from utils/tentativeCode.c
 local function setupFonts() <cimport> end                -- from utils/setupFonts.c
 
 --- Initial Window size
@@ -36,12 +35,12 @@ local main = function()
   local glfwWin: *GLFWwindow = nilptr
   local glsl_version:cstring -- = "#version 330"
   for _, ver in ipairs(versions) do
-  glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE)
+    glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, ver[0])
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, ver[1])
-  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE)
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE)
-  glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE)
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE)
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE)
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE)
 
     glfwWin = glfwCreateWindow(MainWinWidth, MainWinHeight, "ImGui with Nelua ", nilptr, nilptr)
     if nilptr ~= glfwWin then
@@ -113,6 +112,8 @@ local main = function()
   local zoomTextureID: GLuint = 0  -- # Must be == 0 at first
   defer glDeleteTextures(1, &zoomTextureID) end
 
+  local pio = igGetIO()
+
   --------------------
   --- Main while loop
   --------------------
@@ -161,10 +162,10 @@ local main = function()
 
       -- Save button for capturing window image
       igPushID_Int(0)
-      igPushStyleColor_Vec4(ImGuiCol_enum.ImGuiCol_Button,        ImVec4{0.7, 0.7, 0.0, 1.0})
-      igPushStyleColor_Vec4(ImGuiCol_enum.ImGuiCol_ButtonHovered, ImVec4{0.8, 0.8, 0.0, 1.0})
-      igPushStyleColor_Vec4(ImGuiCol_enum.ImGuiCol_ButtonActive,  ImVec4{0.9, 0.9, 0.0, 1.0})
-      igPushStyleColor_Vec4(ImGuiCol_enum.ImGuiCol_Text,          ImVec4{0.0, 0.0, 0.0, 1.0})
+      igPushStyleColor_Vec4(ImGuiCol_Button,        ImVec4{0.7, 0.7, 0.0, 1.0})
+      igPushStyleColor_Vec4(ImGuiCol_ButtonHovered, ImVec4{0.8, 0.8, 0.0, 1.0})
+      igPushStyleColor_Vec4(ImGuiCol_ButtonActive,  ImVec4{0.9, 0.9, 0.0, 1.0})
+      igPushStyleColor_Vec4(ImGuiCol_Text,          ImVec4{0.0, 0.0, 0.0, 1.0})
 
       -- Image save button
       imageExt = imageFormatTbl[cbItemIndex].ext
@@ -198,7 +199,7 @@ local main = function()
       setTooltip("保存形式の選択")
       igText("計数 = %d", counter)
 
-      igText("フレームレート %.3f ms/frame (%.1f FPS)", (1000.0 / getFramerate()), getFramerate())
+      igText("フレームレート %.3f ms/frame (%.1f FPS)", (1000.0 / pio.Framerate), pio.Framerate)
 
       igSeparatorText(ICON_FA_WRENCH .. " Icon font test ")
       igText(ICON_FA_TRASH_CAN .. " ゴミ箱")

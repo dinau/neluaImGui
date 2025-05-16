@@ -1,5 +1,6 @@
 require'io'
 require'IconsFontAwesome6'
+require'cimgui'
 
 global function getMainViewport_WorkSize():ImVec2  <cimport> end
 global function getIO_MousePos():ImVec2  <cimport> end

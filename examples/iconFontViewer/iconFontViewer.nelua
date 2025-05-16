@@ -2,7 +2,7 @@ require 'os'
 require'string'
 require'math'
 --
-require'imgui'
+require'cimgui'
 require'imgui_backend_opengl3'
 require'imgui_backend_glfw'
 require'loadImage'
@@ -12,7 +12,6 @@ require'IconsFontAwesome6'
 require'iconFontTblDef'
 
 --- External functions
-local function getFramerate(): cfloat <cimport> end      -- from utils/tentativeCode.c
 local function setupFonts() <cimport> end                -- from utils/setupFonts.c
 
 --- Initial Window size
@@ -113,6 +112,8 @@ local main = function()
   local listBoxTextureID: GLuint = 0  --# Must be == 0 at first
   defer glDeleteTextures(1, &listBoxTextureID) end
 
+  local pio = igGetIO()
+
   --------------------
   --- Main while loop
   --------------------
@@ -151,7 +152,7 @@ local main = function()
       igSliderFloat("Float", &fval, 0.0, 1.0, "%.3f", 0)
       igColorEdit3("Background color", &clearColor, 0)
       igText("counter = %d", counter)
-      igText("Application average %.3f ms/frame (%.1f FPS)", (1000.0 / getFramerate()), getFramerate())
+      igText("Application average %.3f ms/frame (%.1f FPS)", (1000.0 / pio.Framerate), pio.Framerate)
     end
 
     if showIconFontViewWindow then
@@ -175,7 +176,7 @@ local main = function()
 
         -- # Show ListBox header
         igSetNextItemWidth(listBoxWidth)
-        igInputText("##", sBuf, #sBuf, ImGuiTextFlags_None, nilptr, nilptr)
+        igInputText("##inputtext1", sBuf, #sBuf, ImGuiTextFlags_None, nilptr, nilptr)
 
         -- # Show ListBox main
         local listBoxPosTop:ImVec2
@@ -184,9 +185,9 @@ local main = function()
         igGetCursorScreenPos(&listBoxPosTop) --# Get absolute pos.
         igSetNextItemWidth(listBoxWidth)
 
-        igListBox_Str_arr("##"
+        igListBox_Str_arr("##listbox1"
                           , &item_current
-                          , (@cstring)(&iconFontTbl)
+                          , &iconFontTbl[0]
                           , #iconFontTbl, 34)
         igGetCursorScreenPos(&listBoxPosEnd) --# Get absolute pos.
 

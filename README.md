@@ -55,7 +55,7 @@ ImGui / CImGui 1.91.8 (2025/03)
 - C/C++ Compiler  
 GCC
 
-#### Build and run
+#### Build and run on Windows OS
 
 ---
 
@@ -64,7 +64,7 @@ GCC
    ```sh
    git clone --recurse-submodules https://github.com/dinau/neluaImGui
    ```
-1. Go to one of the examples folder,
+1. Open **MSys2 console** and go to one of the examples folder ,
 
    ```sh
    cd neluaImGui/examples/glfw_opengl3
