@@ -5,13 +5,14 @@
   - [Prerequisites](#prerequisites)
   - [Build and run on Windows OS](#build-and-run-on-windows-os)
   - [Examples](#examples)
+    - [imGuiToggleDemo](#imguitoggledemo)
     - [imKnobsDemo](#imknobsdemo)
     - [imSpinnerDemo](#imspinnerdemo)
     - [glfw_opengl3, sdl2_opengl3](#glfw_opengl3-sdl2_opengl3)
     - [iconFontViewer](#iconfontviewer)
     - [glfw_opengl3_jp](#glfw_opengl3_jp)
   - [SDL2 / GLFW / STB headers for Nelua](#sdl2--glfw--stb-headers-for-nelua)
-  - [Available librares list](#available-librares-list)
+  - [Available libraries list at this moment](#available-libraries-list-at-this-moment)
   - [My tools version](#my-tools-version)
   - [History](#history)
   - [Other ImGui / CImGui project](#other-imgui--cimgui-project)
@@ -81,6 +82,14 @@ GCC
 
 ---
 
+##### imGuiToggleDemo
+
+---
+
+[imGuiToggleDemo.nelua](examples/imGuiToggleDemo/imGuiToggleDemo.nelua) 
+
+![alt](img/imGuiToggle.png)
+
 ##### imKnobsDemo
 
 ---
@@ -143,7 +152,7 @@ Showing multibyte fonts(UTF-8, CJK fonts) and IME(Input method)
 
 These header files [libs/nelua/glfw](libs/nelua/glfw), [libs/nelua/sdl2](libs/nelua/sdl2), [libs/nelua/stb](libs/nelua/stb) have thankfully been copied form [nelua-decl libraries project](https://github.com/edubart/nelua-decl).
 
-#### Available librares list at this moment
+#### Available libraries list at this moment
 
 ---
 
@@ -156,7 +165,7 @@ Library name / C lang. wrapper
 - [ ] [ImGuizmo](https://github.com/CedricGuillemet/ImGuizmo) / [CImGuizmo](https://github.com/cimgui/cimguizmo)
 - [x] [ImGui-Knobs](https://github.com/altschuler/imgui-knobs) / [CImGui-Knobs](https://github.com/dinau/imguin/tree/main/src/imguin/private/cimgui-knobs) (2025/05)
 - [ ] [ImGuiFileDialog](https://github.com/aiekick/ImGuiFileDialog) / [CImGuiFileDialog](https://github.com/dinau/CImGuiFileDialog)
-- [ ] [ImGui_Toggle](https://github.com/cmdwtf/imgui_toggle) / [CimGui_Toggle](https://github.com/dinau/cimgui_toggle)
+- [x] [ImGui_Toggle](https://github.com/cmdwtf/imgui_toggle) / [CimGui_Toggle](https://github.com/dinau/cimgui_toggle) (2025/05)
 - [x] [ImSpinner](https://github.com/dalerank/imspinner) / [CImSpinner](https://github.com/dinau/cimspinner) (2025/05)
 - [ ] [ImGuiColorTextEdit](https://github.com/santaclose/ImGuiColorTextEdit) / [cimCTE](https://github.com/cimgui/cimCTE)
 - [ ] [ImGui_Markdown](https://github.com/enkisoftware/imgui_markdown) 

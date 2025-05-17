@@ -1,0 +1,210 @@
+require 'os'
+require'math'
+--
+require'cimgui'
+require'imgui_backend_opengl3'
+require'imgui_backend_glfw'
+require'loadImage'
+require'utils'
+require'IconsFontAwesome6'
+--
+require'imtoggle'
+##[=[
+cinclude "cimgui_toggle.h"
+]=]
+
+--- External functions
+local function setupFonts() <cimport> end                -- from utils/setupFonts.c
+
+--- Initial Window size
+local MainWinWidth <const>  = 1024
+local MainWinHeight <const> =  900
+
+--- Constants
+
+--- Global vars
+local versions : [][2]int32 = {{4, 6} ,{4, 5} ,{4, 4} ,{4, 3} ,{4, 2} ,{4, 1} ,{4, 0} ,{3, 3} }
+
+---------
+--- main
+---------
+local main = function()
+  glfwInit()
+  defer glfwTerminate()  end
+  local glfwWin: *GLFWwindow = nilptr
+  local glsl_version:cstring -- = "#version 330"
+  for _, ver in ipairs(versions) do
+    glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE)
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, ver[0])
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, ver[1])
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE)
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE)
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE)
+
+    glfwWin = glfwCreateWindow(MainWinWidth, MainWinHeight, "ImGui with Nelua 2025/05", nilptr, nilptr)
+    if nilptr ~= glfwWin then
+      glsl_version = "#version " .. tostring( ver[0] * 100 + ver[1] * 10)
+      break
+    end
+  end
+  if nilptr == glfwWin then
+    print("Could not create window")
+    os.exit(false)
+  end
+  defer glfwDestroyWindow(glfwWin) end
+
+  glfwMakeContextCurrent(glfwWin)
+  glfwSwapInterval(1) -- # Enable vsync
+
+  ------------------------
+  --- Load title bar icon
+  ------------------------
+  local IconName = "res/img/nl.png"
+  LoadTitleBarIcon(glfwWin, IconName)
+
+  if gladLoadGL(glfwGetProcAddress) == 0 then
+    error 'Could not initialize GLAD'
+  end
+  print('OpenGL loaded:', (@cstring)(glGetString(GL_VERSION)))
+
+  local context = igCreateContext()
+  defer igDestroyContext(context) end
+
+  ImGui_ImplGlfw_InitForOpenGL(glfwWin, true)
+  defer ImGui_ImplGlfw_Shutdown() end
+
+  ImGui_ImplOpenGL3_Init(glsl_version)
+  defer ImGui_ImplOpenGL3_Shutdown() end
+
+  setupFonts()
+
+  --igStyleColorsDark()
+  igStyleColorsClassic()
+
+  local showDemoWindow = false
+  local showInfoWindow = true
+  local showWindowDelay = 1 -- TODO : Avoid flickering window at start up.
+  local clearColor: [3]cfloat = {0.25,0.65,0.85}
+
+  local pio = igGetIO()
+
+  local green        = ImVec4{0.16, 0.66, 0.45, 1.0}
+  local green_hover  = ImVec4{0.0,   1.0, 0.57, 1.0}
+  local green_shadow = ImVec4{0.0,   1.0,  0.0, 0.4}
+  local sz =  ImVec2{0.0, 0.0}
+  local sThemeClassic = "Theme: Classic"
+  local sThemeLight = "Theme: Light"
+  local values: []boolean = { true, true, true, true, true, true, true, true }
+  local sTheme = sThemeClassic
+
+  --------------------
+  --- Main while loop
+  --------------------
+  while glfwWindowShouldClose(glfwWin) == 0 do
+    glfwPollEvents()
+
+    ImGui_ImplOpenGL3_NewFrame() -- # start imgui frame
+    ImGui_ImplGlfw_NewFrame()
+    igNewFrame()
+
+    if showDemoWindow then
+      igShowDemoWindow(&showDemoWindow)
+    end
+
+    --------------------------
+    -- Show information window
+    --------------------------
+    do
+      igBegin("Nelua: Dear ImGui info", &showInfoWindow, 0)
+      defer igEnd() end
+      local s = "GLFW v" .. tostring(glfwGetVersionString())
+      s = ICON_FA_COMMENT .. " " .. s
+      igText(s)
+      s = "OpenGL v" .. tostring((@cstring)(glGetString(GL_VERSION)))
+      s = ICON_FA_COMMENT_SMS .. " " .. s
+      igText(s)
+      igText(ICON_FA_COMMENT_DOTS .. " Dear ImGui")   igSameLine(0, -1.0)
+      igText(igGetVersion())
+      igText(ICON_FA_COMMENT_MEDICAL .. " ")   igSameLine(0, 0)
+      igText(_VERSION)
+
+      igCheckbox("Demo window", &showDemoWindow)
+      igColorEdit3("Background color", &clearColor, 0)
+
+      igText("Application average %.3f ms/frame (%.1f FPS)", (1000.0 / pio.Framerate), pio.Framerate)
+    end
+
+    --------------------------
+    --- Show ImGui-Knobs demo
+    --------------------------
+    do
+      igBegin ("ImGui_Toggle with Nelua lang. " .. ICON_FA_CAT, nilptr, 0)
+      defer igEnd() end
+      --
+      local value_index = 0
+      if Toggle("##toggle1", &values[value_index], sz) then
+        if values[value_index] then
+          sTheme = sThemeClassic
+          igStyleColorsClassic()
+        else
+          sTheme = sThemeLight
+          igStyleColorsLight()
+        end
+      end
+      igSameLine(0.0, -1.0)
+      igText("%s", sTheme)
+      igSeparator()
+      value_index = value_index + 1
+      --
+      Toggle("Default Toggle", &values[value_index], sz)
+      igSameLine(0.0, -1.0)
+      value_index = value_index + 1
+      --
+      ToggleAnim("Animated Toggle", &values[value_index], ImGuiToggleFlags_Animated, 1.0, sz)
+      value_index = value_index + 1
+      -- This toggle draws a simple border around it's frame and knob
+      ToggleAnim("Bordered Knob", &values[value_index], ImGuiToggleFlags_Bordered, 1.0, sz)
+      igSameLine(0.0, -1.0)
+      value_index = value_index + 1
+      do
+        igPushStyleColor_Vec4(ImGuiCol_BorderShadow, green_shadow)
+        ToggleAnim("Shadowed Knob", &values[value_index], ImGuiToggleFlags_Shadowed, 1.0, sz)
+        value_index = value_index + 1
+        --
+        ToggleAnim("Bordered + Shadowed Knob", &values[value_index], ImGuiToggleFlags_Bordered | ImGuiToggleFlags_Shadowed, 1.0, sz)
+        value_index = value_index + 1
+        igPopStyleColor(1)
+      end
+      -- This toggle uses stack-pushed style colors to change the way it displays
+      igPushStyleColor_Vec4(ImGuiCol_Button, green)
+      igPushStyleColor_Vec4(ImGuiCol_ButtonHovered, green_hover)
+      Toggle("Green Toggle", &values[value_index], sz)
+      igSameLine(0.0, -1.0)
+      igPopStyleColor(2)
+        value_index = value_index + 1
+      --
+      ToggleFlag("Toggle with A11y Labels", &values[value_index], ImGuiToggleFlags_A11y, sz)
+      value_index = value_index + 1
+      --
+       igNewLine()
+       igText("Application average %.3f ms/frame (%.1f FPS)", (1000.0 / pio.Framerate), pio.Framerate)
+    end
+
+    igRender()
+    glClearColor(clearColor[0], clearColor[1], clearColor[2], 1.0)
+    glClear(GL_COLOR_BUFFER_BIT)
+    ImGui_ImplOpenGL3_RenderDrawData(igGetDrawData())
+
+    glfwSwapBuffers(glfwWin)
+
+    if showWindowDelay > 0 then
+      showWindowDelay = showWindowDelay - 1
+    elseif showWindowDelay == 0 then
+      showWindowDelay = -1
+      glfwShowWindow(glfwWin)
+    end
+  end -- main while loop end
+
+end -- main() end
+
+main()

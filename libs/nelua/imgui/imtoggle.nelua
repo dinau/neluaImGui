@@ -1,0 +1,101 @@
+global ImOffsetRect: type <cimport,nodecl> = @record{
+  __unnamed1: union{
+    Offsets: [4]float32,
+    __unnamed2: record{
+      Top: float32,
+      Left: float32,
+      Bottom: float32,
+      Right: float32
+    }
+  }
+}
+global ImVec2: type <cimport,nodecl,forwarddecl> = @record{}
+ImVec2 = @record{
+  x: float32,
+  y: float32
+}
+global ImVec4: type <cimport,nodecl,forwarddecl> = @record{}
+ImVec4 = @record{
+  x: float32,
+  y: float32,
+  z: float32,
+  w: float32
+}
+global ImGuiTogglePalette: type <cimport,nodecl> = @record{
+  Knob: ImVec4,
+  KnobHover: ImVec4,
+  Frame: ImVec4,
+  FrameHover: ImVec4,
+  FrameBorder: ImVec4,
+  FrameShadow: ImVec4,
+  KnobBorder: ImVec4,
+  KnobShadow: ImVec4,
+  A11yGlyph: ImVec4
+}
+global ImGuiToggleConfig: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiToggleStateConfig: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiToggleFlags: type <cimport,nodecl> = @cint
+global ImGuiToggleA11yStyle: type <cimport,nodecl> = @cint
+global ImGuiToggleFlags_: type <cimport,nodecl,using,ctypedef'ImGuiToggleFlags_'> = @enum(cint){
+  ImGuiToggleFlags_None = 0,
+  ImGuiToggleFlags_Animated = 1,
+  ImGuiToggleFlags_BorderedFrame = 8,
+  ImGuiToggleFlags_BorderedKnob = 16,
+  ImGuiToggleFlags_ShadowedFrame = 32,
+  ImGuiToggleFlags_ShadowedKnob = 64,
+  ImGuiToggleFlags_A11y = 256,
+  ImGuiToggleFlags_Bordered = 24,
+  ImGuiToggleFlags_Shadowed = 96,
+  ImGuiToggleFlags_Default = 0
+}
+global ImGuiToggleA11yStyle_: type <cimport,nodecl,using,ctypedef'ImGuiToggleA11yStyle_'> = @enum(cint){
+  ImGuiToggleA11yStyle_Label = 0,
+  ImGuiToggleA11yStyle_Glyph = 1,
+  ImGuiToggleA11yStyle_Dot = 2,
+  ImGuiToggleA11yStyle_Default = 0
+}
+ImGuiToggleStateConfig = @record{
+  FrameBorderThickness: float32,
+  FrameShadowThickness: float32,
+  KnobBorderThickness: float32,
+  KnobShadowThickness: float32,
+  Label: cstring,
+  KnobInset: ImOffsetRect,
+  KnobOffset: ImVec2,
+  Palette: *ImGuiTogglePalette
+}
+ImGuiToggleConfig = @record{
+  Flags: ImGuiToggleFlags,
+  A11yStyle: ImGuiToggleFlags,
+  AnimationDuration: float32,
+  FrameRounding: float32,
+  KnobRounding: float32,
+  WidthRatio: float32,
+  Size: ImVec2,
+  On: ImGuiToggleStateConfig,
+  Off: ImGuiToggleStateConfig
+}
+global function Toggle(label: cstring, v: *boolean, size: ImVec2): boolean <cimport,nodecl> end
+global function ToggleFlag(label: cstring, v: *boolean, flags: ImGuiToggleFlags, size: ImVec2): boolean <cimport,nodecl> end
+global function ToggleAnim(label: cstring, v: *boolean, flags: ImGuiToggleFlags, animation_duration: float32, size: ImVec2): boolean <cimport,nodecl> end
+global function ToggleCfg(label: cstring, v: *boolean, config: ImGuiToggleConfig): boolean <cimport,nodecl> end
+global function ToggleRound(label: cstring, v: *boolean, flags: ImGuiToggleFlags, frame_rounding: float32, knob_rounding: float32, size: ImVec2): boolean <cimport,nodecl> end
+global function ToggleAnimRound(label: cstring, v: *boolean, flags: ImGuiToggleFlags, animation_duration: float32, frame_rounding: float32, knob_rounding: float32, size: ImVec2): boolean <cimport,nodecl> end
+global ImGuiToggleConstants_Phi: float32 <comptime> = 1.618033988749895
+global ImGuiToggleConstants_DiameterToRadiusRatio: float32 <comptime> = 0.5
+global ImGuiToggleConstants_AnimationDurationDisabled: float32 <comptime> = 0.0
+global ImGuiToggleConstants_AnimationDurationDefault: float32 <comptime> = 0.1
+global ImGuiToggleConstants_AnimationDurationMinimum: float32 <comptime> = 0.0
+global ImGuiToggleConstants_FrameRoundingDefault: float32 <comptime> = 1.0
+global ImGuiToggleConstants_FrameRoundingMinimum: float32 <comptime> = 0.0
+global ImGuiToggleConstants_FrameRoundingMaximum: float32 <comptime> = 1.0
+global ImGuiToggleConstants_KnobRoundingDefault: float32 <comptime> = 1.0
+global ImGuiToggleConstants_KnobRoundingMinimum: float32 <comptime> = 0.0
+global ImGuiToggleConstants_KnobRoundingMaximum: float32 <comptime> = 1.0
+global ImGuiToggleConstants_WidthRatioDefault: float32 <comptime> = 1.618033988749895
+global ImGuiToggleConstants_WidthRatioMinimum: float32 <comptime> = 1.0
+global ImGuiToggleConstants_WidthRatioMaximum: float32 <comptime> = 10.0
+global ImGuiToggleConstants_KnobInsetMinimum: float32 <comptime> = -100.0
+global ImGuiToggleConstants_KnobInsetMaximum: float32 <comptime> = 100.0
+global ImGuiToggleConstants_BorderThicknessDefault: float32 <comptime> = 1.0
+global ImGuiToggleConstants_ShadowThicknessDefault: float32 <comptime> = 2.0
