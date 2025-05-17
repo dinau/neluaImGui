@@ -1,0 +1,2460 @@
+global FILE: type <cimport,nodecl,cincomplete> = @record{}
+global ImDrawChannel: type <cimport,nodecl,forwarddecl> = @record{}
+global ImDrawCmd: type <cimport,nodecl,forwarddecl> = @record{}
+global ImDrawData: type <cimport,nodecl,forwarddecl> = @record{}
+global ImDrawList: type <cimport,nodecl,forwarddecl> = @record{}
+global ImDrawListSharedData: type <cimport,nodecl,forwarddecl> = @record{}
+global ImDrawListSplitter: type <cimport,nodecl,forwarddecl> = @record{}
+global ImDrawVert: type <cimport,nodecl,forwarddecl> = @record{}
+global ImFont: type <cimport,nodecl,forwarddecl> = @record{}
+global ImFontAtlas: type <cimport,nodecl,forwarddecl> = @record{}
+global ImFontBuilderIO: type <cimport,nodecl,forwarddecl> = @record{}
+global ImFontConfig: type <cimport,nodecl,forwarddecl> = @record{}
+global ImFontGlyph: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiContext: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiIO: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiKeyData: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiListClipper: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiMultiSelectIO: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiPayload: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiPlatformIO: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiPlatformImeData: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiPlatformMonitor: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiSelectionRequest: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiSizeCallbackData: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiStorage: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiStoragePair: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiStyle: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiTableSortSpecs: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiTableColumnSortSpecs: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiTextBuffer: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiViewport: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiWindowClass: type <cimport,nodecl,forwarddecl> = @record{}
+global ImRect: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiTextIndex: type <cimport,nodecl,forwarddecl> = @record{}
+global ImDrawDataBuilder: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiBoxSelectState: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiColorMod: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiContextHook: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiDeactivatedItemData: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiDockContext: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiDockRequest: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiDockNode: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiDockNodeSettings: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiErrorRecoveryState: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiGroupData: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiInputTextState: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiLastItemData: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiMenuColumns: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiMultiSelectState: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiMultiSelectTempData: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiNavItemData: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiMetricsConfig: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiNextWindowData: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiNextItemData: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiOldColumnData: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiOldColumns: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiPopupData: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiSettingsHandler: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiStyleMod: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiTabBar: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiTabItem: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiTable: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiTableHeaderData: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiTableColumn: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiTableInstanceData: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiTableTempData: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiTreeNodeStackData: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiTypingSelectState: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiTypingSelectRequest: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiWindow: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiWindowDockStyle: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiWindowTempData: type <cimport,nodecl,forwarddecl> = @record{}
+global ImStbTexteditState: type <cimport,nodecl,forwarddecl> = @record{}
+global ImVec2: type <cimport,nodecl,forwarddecl> = @record{}
+ImVec2 = @record{
+  x: float32,
+  y: float32
+}
+global ImVec4: type <cimport,nodecl,forwarddecl> = @record{}
+ImVec4 = @record{
+  x: float32,
+  y: float32,
+  z: float32,
+  w: float32
+}
+global ImGuiDir: type <cimport,nodecl,using> = @enum(cint){
+  ImGuiDir_None = -1,
+  ImGuiDir_Left = 0,
+  ImGuiDir_Right = 1,
+  ImGuiDir_Up = 2,
+  ImGuiDir_Down = 3,
+  ImGuiDir_COUNT = 4
+}
+global ImGuiSortDirection: type <cimport,nodecl,using> = @enum(cint){
+  ImGuiSortDirection_None = 0,
+  ImGuiSortDirection_Ascending = 1,
+  ImGuiSortDirection_Descending = 2
+}
+global ImGuiKey: type <cimport,nodecl,using> = @enum(cint){
+  ImGuiKey_None = 0,
+  ImGuiKey_NamedKey_BEGIN = 512,
+  ImGuiKey_Tab = 512,
+  ImGuiKey_LeftArrow = 513,
+  ImGuiKey_RightArrow = 514,
+  ImGuiKey_UpArrow = 515,
+  ImGuiKey_DownArrow = 516,
+  ImGuiKey_PageUp = 517,
+  ImGuiKey_PageDown = 518,
+  ImGuiKey_Home = 519,
+  ImGuiKey_End = 520,
+  ImGuiKey_Insert = 521,
+  ImGuiKey_Delete = 522,
+  ImGuiKey_Backspace = 523,
+  ImGuiKey_Space = 524,
+  ImGuiKey_Enter = 525,
+  ImGuiKey_Escape = 526,
+  ImGuiKey_LeftCtrl = 527,
+  ImGuiKey_LeftShift = 528,
+  ImGuiKey_LeftAlt = 529,
+  ImGuiKey_LeftSuper = 530,
+  ImGuiKey_RightCtrl = 531,
+  ImGuiKey_RightShift = 532,
+  ImGuiKey_RightAlt = 533,
+  ImGuiKey_RightSuper = 534,
+  ImGuiKey_Menu = 535,
+  ImGuiKey_0 = 536,
+  ImGuiKey_1 = 537,
+  ImGuiKey_2 = 538,
+  ImGuiKey_3 = 539,
+  ImGuiKey_4 = 540,
+  ImGuiKey_5 = 541,
+  ImGuiKey_6 = 542,
+  ImGuiKey_7 = 543,
+  ImGuiKey_8 = 544,
+  ImGuiKey_9 = 545,
+  ImGuiKey_A = 546,
+  ImGuiKey_B = 547,
+  ImGuiKey_C = 548,
+  ImGuiKey_D = 549,
+  ImGuiKey_E = 550,
+  ImGuiKey_F = 551,
+  ImGuiKey_G = 552,
+  ImGuiKey_H = 553,
+  ImGuiKey_I = 554,
+  ImGuiKey_J = 555,
+  ImGuiKey_K = 556,
+  ImGuiKey_L = 557,
+  ImGuiKey_M = 558,
+  ImGuiKey_N = 559,
+  ImGuiKey_O = 560,
+  ImGuiKey_P = 561,
+  ImGuiKey_Q = 562,
+  ImGuiKey_R = 563,
+  ImGuiKey_S = 564,
+  ImGuiKey_T = 565,
+  ImGuiKey_U = 566,
+  ImGuiKey_V = 567,
+  ImGuiKey_W = 568,
+  ImGuiKey_X = 569,
+  ImGuiKey_Y = 570,
+  ImGuiKey_Z = 571,
+  ImGuiKey_F1 = 572,
+  ImGuiKey_F2 = 573,
+  ImGuiKey_F3 = 574,
+  ImGuiKey_F4 = 575,
+  ImGuiKey_F5 = 576,
+  ImGuiKey_F6 = 577,
+  ImGuiKey_F7 = 578,
+  ImGuiKey_F8 = 579,
+  ImGuiKey_F9 = 580,
+  ImGuiKey_F10 = 581,
+  ImGuiKey_F11 = 582,
+  ImGuiKey_F12 = 583,
+  ImGuiKey_F13 = 584,
+  ImGuiKey_F14 = 585,
+  ImGuiKey_F15 = 586,
+  ImGuiKey_F16 = 587,
+  ImGuiKey_F17 = 588,
+  ImGuiKey_F18 = 589,
+  ImGuiKey_F19 = 590,
+  ImGuiKey_F20 = 591,
+  ImGuiKey_F21 = 592,
+  ImGuiKey_F22 = 593,
+  ImGuiKey_F23 = 594,
+  ImGuiKey_F24 = 595,
+  ImGuiKey_Apostrophe = 596,
+  ImGuiKey_Comma = 597,
+  ImGuiKey_Minus = 598,
+  ImGuiKey_Period = 599,
+  ImGuiKey_Slash = 600,
+  ImGuiKey_Semicolon = 601,
+  ImGuiKey_Equal = 602,
+  ImGuiKey_LeftBracket = 603,
+  ImGuiKey_Backslash = 604,
+  ImGuiKey_RightBracket = 605,
+  ImGuiKey_GraveAccent = 606,
+  ImGuiKey_CapsLock = 607,
+  ImGuiKey_ScrollLock = 608,
+  ImGuiKey_NumLock = 609,
+  ImGuiKey_PrintScreen = 610,
+  ImGuiKey_Pause = 611,
+  ImGuiKey_Keypad0 = 612,
+  ImGuiKey_Keypad1 = 613,
+  ImGuiKey_Keypad2 = 614,
+  ImGuiKey_Keypad3 = 615,
+  ImGuiKey_Keypad4 = 616,
+  ImGuiKey_Keypad5 = 617,
+  ImGuiKey_Keypad6 = 618,
+  ImGuiKey_Keypad7 = 619,
+  ImGuiKey_Keypad8 = 620,
+  ImGuiKey_Keypad9 = 621,
+  ImGuiKey_KeypadDecimal = 622,
+  ImGuiKey_KeypadDivide = 623,
+  ImGuiKey_KeypadMultiply = 624,
+  ImGuiKey_KeypadSubtract = 625,
+  ImGuiKey_KeypadAdd = 626,
+  ImGuiKey_KeypadEnter = 627,
+  ImGuiKey_KeypadEqual = 628,
+  ImGuiKey_AppBack = 629,
+  ImGuiKey_AppForward = 630,
+  ImGuiKey_GamepadStart = 631,
+  ImGuiKey_GamepadBack = 632,
+  ImGuiKey_GamepadFaceLeft = 633,
+  ImGuiKey_GamepadFaceRight = 634,
+  ImGuiKey_GamepadFaceUp = 635,
+  ImGuiKey_GamepadFaceDown = 636,
+  ImGuiKey_GamepadDpadLeft = 637,
+  ImGuiKey_GamepadDpadRight = 638,
+  ImGuiKey_GamepadDpadUp = 639,
+  ImGuiKey_GamepadDpadDown = 640,
+  ImGuiKey_GamepadL1 = 641,
+  ImGuiKey_GamepadR1 = 642,
+  ImGuiKey_GamepadL2 = 643,
+  ImGuiKey_GamepadR2 = 644,
+  ImGuiKey_GamepadL3 = 645,
+  ImGuiKey_GamepadR3 = 646,
+  ImGuiKey_GamepadLStickLeft = 647,
+  ImGuiKey_GamepadLStickRight = 648,
+  ImGuiKey_GamepadLStickUp = 649,
+  ImGuiKey_GamepadLStickDown = 650,
+  ImGuiKey_GamepadRStickLeft = 651,
+  ImGuiKey_GamepadRStickRight = 652,
+  ImGuiKey_GamepadRStickUp = 653,
+  ImGuiKey_GamepadRStickDown = 654,
+  ImGuiKey_MouseLeft = 655,
+  ImGuiKey_MouseRight = 656,
+  ImGuiKey_MouseMiddle = 657,
+  ImGuiKey_MouseX1 = 658,
+  ImGuiKey_MouseX2 = 659,
+  ImGuiKey_MouseWheelX = 660,
+  ImGuiKey_MouseWheelY = 661,
+  ImGuiKey_ReservedForModCtrl = 662,
+  ImGuiKey_ReservedForModShift = 663,
+  ImGuiKey_ReservedForModAlt = 664,
+  ImGuiKey_ReservedForModSuper = 665,
+  ImGuiKey_NamedKey_END = 666,
+  ImGuiMod_None = 0,
+  ImGuiMod_Ctrl = 4096,
+  ImGuiMod_Shift = 8192,
+  ImGuiMod_Alt = 16384,
+  ImGuiMod_Super = 32768,
+  ImGuiMod_Mask_ = 61440,
+  ImGuiKey_NamedKey_COUNT = 154
+}
+global ImGuiMouseSource: type <cimport,nodecl,using> = @enum(cint){
+  ImGuiMouseSource_Mouse = 0,
+  ImGuiMouseSource_TouchScreen = 1,
+  ImGuiMouseSource_Pen = 2,
+  ImGuiMouseSource_COUNT = 3
+}
+ImGuiTableSortSpecs = @record{
+  Specs: *ImGuiTableColumnSortSpecs,
+  SpecsCount: cint,
+  SpecsDirty: boolean
+}
+ImGuiTableColumnSortSpecs = @record{
+  ColumnUserID: cuint,
+  ColumnIndex: cshort,
+  SortOrder: cshort,
+  SortDirection: ImGuiSortDirection
+}
+ImGuiStyle = @record{
+  Alpha: float32,
+  DisabledAlpha: float32,
+  WindowPadding: ImVec2,
+  WindowRounding: float32,
+  WindowBorderSize: float32,
+  WindowMinSize: ImVec2,
+  WindowTitleAlign: ImVec2,
+  WindowMenuButtonPosition: ImGuiDir,
+  ChildRounding: float32,
+  ChildBorderSize: float32,
+  PopupRounding: float32,
+  PopupBorderSize: float32,
+  FramePadding: ImVec2,
+  FrameRounding: float32,
+  FrameBorderSize: float32,
+  ItemSpacing: ImVec2,
+  ItemInnerSpacing: ImVec2,
+  CellPadding: ImVec2,
+  TouchExtraPadding: ImVec2,
+  IndentSpacing: float32,
+  ColumnsMinSpacing: float32,
+  ScrollbarSize: float32,
+  ScrollbarRounding: float32,
+  GrabMinSize: float32,
+  GrabRounding: float32,
+  LogSliderDeadzone: float32,
+  TabRounding: float32,
+  TabBorderSize: float32,
+  TabMinWidthForCloseButton: float32,
+  TabBarBorderSize: float32,
+  TabBarOverlineSize: float32,
+  TableAngledHeadersAngle: float32,
+  TableAngledHeadersTextAlign: ImVec2,
+  ColorButtonPosition: ImGuiDir,
+  ButtonTextAlign: ImVec2,
+  SelectableTextAlign: ImVec2,
+  SeparatorTextBorderSize: float32,
+  SeparatorTextAlign: ImVec2,
+  SeparatorTextPadding: ImVec2,
+  DisplayWindowPadding: ImVec2,
+  DisplaySafeAreaPadding: ImVec2,
+  DockingSeparatorSize: float32,
+  MouseCursorScale: float32,
+  AntiAliasedLines: boolean,
+  AntiAliasedLinesUseTex: boolean,
+  AntiAliasedFill: boolean,
+  CurveTessellationTol: float32,
+  CircleTessellationMaxError: float32,
+  Colors: [58]ImVec4,
+  HoverStationaryDelay: float32,
+  HoverDelayShort: float32,
+  HoverDelayNormal: float32,
+  HoverFlagsForTooltipMouse: cint,
+  HoverFlagsForTooltipNav: cint
+}
+ImGuiKeyData = @record{
+  Down: boolean,
+  DownDuration: float32,
+  DownDurationPrev: float32,
+  AnalogValue: float32
+}
+global ImVector_ImWchar: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *cushort
+}
+ImGuiIO = @record{
+  ConfigFlags: cint,
+  BackendFlags: cint,
+  DisplaySize: ImVec2,
+  DeltaTime: float32,
+  IniSavingRate: float32,
+  IniFilename: cstring,
+  LogFilename: cstring,
+  UserData: pointer,
+  Fonts: *ImFontAtlas,
+  FontGlobalScale: float32,
+  FontAllowUserScaling: boolean,
+  FontDefault: *ImFont,
+  DisplayFramebufferScale: ImVec2,
+  ConfigNavSwapGamepadButtons: boolean,
+  ConfigNavMoveSetMousePos: boolean,
+  ConfigNavCaptureKeyboard: boolean,
+  ConfigNavEscapeClearFocusItem: boolean,
+  ConfigNavEscapeClearFocusWindow: boolean,
+  ConfigNavCursorVisibleAuto: boolean,
+  ConfigNavCursorVisibleAlways: boolean,
+  ConfigDockingNoSplit: boolean,
+  ConfigDockingWithShift: boolean,
+  ConfigDockingAlwaysTabBar: boolean,
+  ConfigDockingTransparentPayload: boolean,
+  ConfigViewportsNoAutoMerge: boolean,
+  ConfigViewportsNoTaskBarIcon: boolean,
+  ConfigViewportsNoDecoration: boolean,
+  ConfigViewportsNoDefaultParent: boolean,
+  MouseDrawCursor: boolean,
+  ConfigMacOSXBehaviors: boolean,
+  ConfigInputTrickleEventQueue: boolean,
+  ConfigInputTextCursorBlink: boolean,
+  ConfigInputTextEnterKeepActive: boolean,
+  ConfigDragClickToInputText: boolean,
+  ConfigWindowsResizeFromEdges: boolean,
+  ConfigWindowsMoveFromTitleBarOnly: boolean,
+  ConfigWindowsCopyContentsWithCtrlC: boolean,
+  ConfigScrollbarScrollByPage: boolean,
+  ConfigMemoryCompactTimer: float32,
+  MouseDoubleClickTime: float32,
+  MouseDoubleClickMaxDist: float32,
+  MouseDragThreshold: float32,
+  KeyRepeatDelay: float32,
+  KeyRepeatRate: float32,
+  ConfigErrorRecovery: boolean,
+  ConfigErrorRecoveryEnableAssert: boolean,
+  ConfigErrorRecoveryEnableDebugLog: boolean,
+  ConfigErrorRecoveryEnableTooltip: boolean,
+  ConfigDebugIsDebuggerPresent: boolean,
+  ConfigDebugHighlightIdConflicts: boolean,
+  ConfigDebugBeginReturnValueOnce: boolean,
+  ConfigDebugBeginReturnValueLoop: boolean,
+  ConfigDebugIgnoreFocusLoss: boolean,
+  ConfigDebugIniSettings: boolean,
+  BackendPlatformName: cstring,
+  BackendRendererName: cstring,
+  BackendPlatformUserData: pointer,
+  BackendRendererUserData: pointer,
+  BackendLanguageUserData: pointer,
+  WantCaptureMouse: boolean,
+  WantCaptureKeyboard: boolean,
+  WantTextInput: boolean,
+  WantSetMousePos: boolean,
+  WantSaveIniSettings: boolean,
+  NavActive: boolean,
+  NavVisible: boolean,
+  Framerate: float32,
+  MetricsRenderVertices: cint,
+  MetricsRenderIndices: cint,
+  MetricsRenderWindows: cint,
+  MetricsActiveWindows: cint,
+  MouseDelta: ImVec2,
+  Ctx: *ImGuiContext,
+  MousePos: ImVec2,
+  MouseDown: [5]boolean,
+  MouseWheel: float32,
+  MouseWheelH: float32,
+  MouseSource: ImGuiMouseSource,
+  MouseHoveredViewport: cuint,
+  KeyCtrl: boolean,
+  KeyShift: boolean,
+  KeyAlt: boolean,
+  KeySuper: boolean,
+  KeyMods: cint,
+  KeysData: [154]ImGuiKeyData,
+  WantCaptureMouseUnlessPopupClose: boolean,
+  MousePosPrev: ImVec2,
+  MouseClickedPos: [5]ImVec2,
+  MouseClickedTime: [5]float64,
+  MouseClicked: [5]boolean,
+  MouseDoubleClicked: [5]boolean,
+  MouseClickedCount: [5]cushort,
+  MouseClickedLastCount: [5]cushort,
+  MouseReleased: [5]boolean,
+  MouseReleasedTime: [5]float64,
+  MouseDownOwned: [5]boolean,
+  MouseDownOwnedUnlessPopupClose: [5]boolean,
+  MouseWheelRequestAxisSwap: boolean,
+  MouseCtrlLeftAsRightClick: boolean,
+  MouseDownDuration: [5]float32,
+  MouseDownDurationPrev: [5]float32,
+  MouseDragMaxDistanceAbs: [5]ImVec2,
+  MouseDragMaxDistanceSqr: [5]float32,
+  PenPressure: float32,
+  AppFocusLost: boolean,
+  AppAcceptingEvents: boolean,
+  InputQueueSurrogate: cushort,
+  InputQueueCharacters: ImVector_ImWchar
+}
+ImGuiSizeCallbackData = @record{
+  UserData: pointer,
+  Pos: ImVec2,
+  CurrentSize: ImVec2,
+  DesiredSize: ImVec2
+}
+ImGuiWindowClass = @record{
+  ClassId: cuint,
+  ParentViewportId: cuint,
+  FocusRouteParentWindowId: cuint,
+  ViewportFlagsOverrideSet: cint,
+  ViewportFlagsOverrideClear: cint,
+  TabItemFlagsOverrideSet: cint,
+  DockNodeFlagsOverrideSet: cint,
+  DockingAlwaysTabBar: boolean,
+  DockingAllowUnclassed: boolean
+}
+ImGuiPayload = @record{
+  Data: pointer,
+  DataSize: cint,
+  SourceId: cuint,
+  SourceParentId: cuint,
+  DataFrameCount: cint,
+  DataType: [33]cchar,
+  Preview: boolean,
+  Delivery: boolean
+}
+global ImVector_char: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: cstring
+}
+ImGuiTextBuffer = @record{
+  Buf: ImVector_char
+}
+ImGuiStoragePair = @record{
+  key: cuint,
+  __unnamed2: union{
+    val_i: cint,
+    val_f: float32,
+    val_p: pointer
+  }
+}
+global ImVector_ImGuiStoragePair: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiStoragePair
+}
+ImGuiStorage = @record{
+  Data: ImVector_ImGuiStoragePair
+}
+ImGuiListClipper = @record{
+  Ctx: *ImGuiContext,
+  DisplayStart: cint,
+  DisplayEnd: cint,
+  ItemsCount: cint,
+  ItemsHeight: float32,
+  StartPosY: float32,
+  StartSeekOffsetY: float64,
+  TempData: pointer
+}
+global ImVector_ImGuiSelectionRequest: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiSelectionRequest
+}
+ImGuiMultiSelectIO = @record{
+  Requests: ImVector_ImGuiSelectionRequest,
+  RangeSrcItem: clonglong,
+  NavIdItem: clonglong,
+  NavIdSelected: boolean,
+  RangeSrcReset: boolean,
+  ItemsCount: cint
+}
+global ImGuiSelectionRequestType: type <cimport,nodecl,using> = @enum(cint){
+  ImGuiSelectionRequestType_None = 0,
+  ImGuiSelectionRequestType_SetAll = 1,
+  ImGuiSelectionRequestType_SetRange = 2
+}
+ImGuiSelectionRequest = @record{
+  Type: ImGuiSelectionRequestType,
+  Selected: boolean,
+  RangeDirection: cschar,
+  RangeFirstItem: clonglong,
+  RangeLastItem: clonglong
+}
+ImDrawCmd = @record{
+  ClipRect: ImVec4,
+  TextureId: culonglong,
+  VtxOffset: cuint,
+  IdxOffset: cuint,
+  ElemCount: cuint,
+  UserCallback: function(parent_list: *ImDrawList, cmd: *ImDrawCmd): void,
+  UserCallbackData: pointer,
+  UserCallbackDataSize: cint,
+  UserCallbackDataOffset: cint
+}
+ImDrawVert = @record{
+  pos: ImVec2,
+  uv: ImVec2,
+  col: cuint
+}
+global ImDrawCmdHeader: type <cimport,nodecl,forwarddecl> = @record{}
+ImDrawCmdHeader = @record{
+  ClipRect: ImVec4,
+  TextureId: culonglong,
+  VtxOffset: cuint
+}
+global ImVector_ImDrawCmd: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImDrawCmd
+}
+global ImVector_ImDrawIdx: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *cuint
+}
+ImDrawChannel = @record{
+  _CmdBuffer: ImVector_ImDrawCmd,
+  _IdxBuffer: ImVector_ImDrawIdx
+}
+global ImVector_ImDrawChannel: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImDrawChannel
+}
+ImDrawListSplitter = @record{
+  _Current: cint,
+  _Count: cint,
+  _Channels: ImVector_ImDrawChannel
+}
+global ImVector_ImDrawVert: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImDrawVert
+}
+global ImVector_ImVec2: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImVec2
+}
+global ImVector_ImVec4: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImVec4
+}
+global ImVector_ImTextureID: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *culonglong
+}
+global ImVector_ImU8: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *cuchar
+}
+ImDrawList = @record{
+  CmdBuffer: ImVector_ImDrawCmd,
+  IdxBuffer: ImVector_ImDrawIdx,
+  VtxBuffer: ImVector_ImDrawVert,
+  Flags: cint,
+  _VtxCurrentIdx: cuint,
+  _Data: *ImDrawListSharedData,
+  _VtxWritePtr: *ImDrawVert,
+  _IdxWritePtr: *cuint,
+  _Path: ImVector_ImVec2,
+  _CmdHeader: ImDrawCmdHeader,
+  _Splitter: ImDrawListSplitter,
+  _ClipRectStack: ImVector_ImVec4,
+  _TextureIdStack: ImVector_ImTextureID,
+  _CallbacksDataBuf: ImVector_ImU8,
+  _FringeScale: float32,
+  _OwnerName: cstring
+}
+global ImVector_ImDrawListPtr: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: **ImDrawList
+}
+ImDrawData = @record{
+  Valid: boolean,
+  CmdListsCount: cint,
+  TotalIdxCount: cint,
+  TotalVtxCount: cint,
+  CmdLists: ImVector_ImDrawListPtr,
+  DisplayPos: ImVec2,
+  DisplaySize: ImVec2,
+  FramebufferScale: ImVec2,
+  OwnerViewport: *ImGuiViewport
+}
+ImFontConfig = @record{
+  FontData: pointer,
+  FontDataSize: cint,
+  FontDataOwnedByAtlas: boolean,
+  MergeMode: boolean,
+  PixelSnapH: boolean,
+  FontNo: cint,
+  OversampleH: cint,
+  OversampleV: cint,
+  SizePixels: float32,
+  GlyphExtraSpacing: ImVec2,
+  GlyphOffset: ImVec2,
+  GlyphRanges: *cushort,
+  GlyphMinAdvanceX: float32,
+  GlyphMaxAdvanceX: float32,
+  FontBuilderFlags: cuint,
+  RasterizerMultiply: float32,
+  RasterizerDensity: float32,
+  EllipsisChar: cushort,
+  Name: [40]cchar,
+  DstFont: *ImFont
+}
+ImFontGlyph = @record{
+  Colored: cuint,
+  Visible: cuint,
+  Codepoint: cuint,
+  AdvanceX: float32,
+  X0: float32,
+  Y0: float32,
+  X1: float32,
+  Y1: float32,
+  U0: float32,
+  V0: float32,
+  U1: float32,
+  V1: float32
+}
+global ImFontAtlasCustomRect: type <cimport,nodecl,forwarddecl> = @record{}
+ImFontAtlasCustomRect = @record{
+  X: cushort,
+  Y: cushort,
+  Width: cushort,
+  Height: cushort,
+  GlyphID: cuint,
+  GlyphColored: cuint,
+  GlyphAdvanceX: float32,
+  GlyphOffset: ImVec2,
+  Font: *ImFont
+}
+global ImVector_ImFontPtr: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: **ImFont
+}
+global ImVector_ImFontAtlasCustomRect: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImFontAtlasCustomRect
+}
+global ImVector_ImFontConfig: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImFontConfig
+}
+ImFontAtlas = @record{
+  Flags: cint,
+  TexID: culonglong,
+  TexDesiredWidth: cint,
+  TexGlyphPadding: cint,
+  UserData: pointer,
+  Locked: boolean,
+  TexReady: boolean,
+  TexPixelsUseColors: boolean,
+  TexPixelsAlpha8: *cuchar,
+  TexPixelsRGBA32: *cuint,
+  TexWidth: cint,
+  TexHeight: cint,
+  TexUvScale: ImVec2,
+  TexUvWhitePixel: ImVec2,
+  Fonts: ImVector_ImFontPtr,
+  CustomRects: ImVector_ImFontAtlasCustomRect,
+  ConfigData: ImVector_ImFontConfig,
+  TexUvLines: [33]ImVec4,
+  FontBuilderIO: *ImFontBuilderIO,
+  FontBuilderFlags: cuint,
+  PackIdMouseCursors: cint,
+  PackIdLines: cint
+}
+global ImVector_float: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *float32
+}
+global ImVector_ImU16: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *cushort
+}
+global ImVector_ImFontGlyph: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImFontGlyph
+}
+ImFont = @record{
+  IndexAdvanceX: ImVector_float,
+  FallbackAdvanceX: float32,
+  FontSize: float32,
+  IndexLookup: ImVector_ImU16,
+  Glyphs: ImVector_ImFontGlyph,
+  FallbackGlyph: *ImFontGlyph,
+  ContainerAtlas: *ImFontAtlas,
+  ConfigData: *ImFontConfig,
+  ConfigDataCount: cshort,
+  EllipsisCharCount: cshort,
+  EllipsisChar: cushort,
+  FallbackChar: cushort,
+  EllipsisWidth: float32,
+  EllipsisCharStep: float32,
+  Scale: float32,
+  Ascent: float32,
+  Descent: float32,
+  MetricsTotalSurface: cint,
+  DirtyLookupTables: boolean,
+  Used8kPagesMap: [1]cuchar
+}
+ImGuiViewport = @record{
+  ID: cuint,
+  Flags: cint,
+  Pos: ImVec2,
+  Size: ImVec2,
+  WorkPos: ImVec2,
+  WorkSize: ImVec2,
+  DpiScale: float32,
+  ParentViewportId: cuint,
+  DrawData: *ImDrawData,
+  RendererUserData: pointer,
+  PlatformUserData: pointer,
+  PlatformHandle: pointer,
+  PlatformHandleRaw: pointer,
+  PlatformWindowCreated: boolean,
+  PlatformRequestMove: boolean,
+  PlatformRequestResize: boolean,
+  PlatformRequestClose: boolean
+}
+global ImVector_ImGuiPlatformMonitor: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiPlatformMonitor
+}
+global ImVector_ImGuiViewportPtr: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: **ImGuiViewport
+}
+ImGuiPlatformIO = @record{
+  Platform_GetClipboardTextFn: function(ctx: *ImGuiContext): cstring,
+  Platform_SetClipboardTextFn: function(ctx: *ImGuiContext, text: cstring): void,
+  Platform_ClipboardUserData: pointer,
+  Platform_OpenInShellFn: function(ctx: *ImGuiContext, path: cstring): boolean,
+  Platform_OpenInShellUserData: pointer,
+  Platform_SetImeDataFn: function(ctx: *ImGuiContext, viewport: *ImGuiViewport, data: *ImGuiPlatformImeData): void,
+  Platform_ImeUserData: pointer,
+  Platform_LocaleDecimalPoint: cushort,
+  Renderer_RenderState: pointer,
+  Platform_CreateWindow: function(vp: *ImGuiViewport): void,
+  Platform_DestroyWindow: function(vp: *ImGuiViewport): void,
+  Platform_ShowWindow: function(vp: *ImGuiViewport): void,
+  Platform_SetWindowPos: function(vp: *ImGuiViewport, pos: ImVec2): void,
+  Platform_GetWindowPos: function(vp: *ImGuiViewport): ImVec2,
+  Platform_SetWindowSize: function(vp: *ImGuiViewport, size: ImVec2): void,
+  Platform_GetWindowSize: function(vp: *ImGuiViewport): ImVec2,
+  Platform_SetWindowFocus: function(vp: *ImGuiViewport): void,
+  Platform_GetWindowFocus: function(vp: *ImGuiViewport): boolean,
+  Platform_GetWindowMinimized: function(vp: *ImGuiViewport): boolean,
+  Platform_SetWindowTitle: function(vp: *ImGuiViewport, str: cstring): void,
+  Platform_SetWindowAlpha: function(vp: *ImGuiViewport, alpha: float32): void,
+  Platform_UpdateWindow: function(vp: *ImGuiViewport): void,
+  Platform_RenderWindow: function(vp: *ImGuiViewport, render_arg: pointer): void,
+  Platform_SwapBuffers: function(vp: *ImGuiViewport, render_arg: pointer): void,
+  Platform_GetWindowDpiScale: function(vp: *ImGuiViewport): float32,
+  Platform_OnChangedViewport: function(vp: *ImGuiViewport): void,
+  Platform_GetWindowWorkAreaInsets: function(vp: *ImGuiViewport): ImVec4,
+  Platform_CreateVkSurface: function(vp: *ImGuiViewport, vk_inst: culonglong, vk_allocators: pointer, out_vk_surface: *culonglong): cint,
+  Renderer_CreateWindow: function(vp: *ImGuiViewport): void,
+  Renderer_DestroyWindow: function(vp: *ImGuiViewport): void,
+  Renderer_SetWindowSize: function(vp: *ImGuiViewport, size: ImVec2): void,
+  Renderer_RenderWindow: function(vp: *ImGuiViewport, render_arg: pointer): void,
+  Renderer_SwapBuffers: function(vp: *ImGuiViewport, render_arg: pointer): void,
+  Monitors: ImVector_ImGuiPlatformMonitor,
+  Viewports: ImVector_ImGuiViewportPtr
+}
+ImGuiPlatformMonitor = @record{
+  MainPos: ImVec2,
+  MainSize: ImVec2,
+  WorkPos: ImVec2,
+  WorkSize: ImVec2,
+  DpiScale: float32,
+  PlatformHandle: pointer
+}
+ImGuiPlatformImeData = @record{
+  WantVisible: boolean,
+  InputPos: ImVec2,
+  InputLineHeight: float32
+}
+global ImVec1: type <cimport,nodecl,forwarddecl> = @record{}
+ImVec1 = @record{
+  x: float32
+}
+global ImVec2ih: type <cimport,nodecl,forwarddecl> = @record{}
+ImVec2ih = @record{
+  x: cshort,
+  y: cshort
+}
+ImRect = @record{
+  Min: ImVec2,
+  Max: ImVec2
+}
+global ImVector_int: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *cint
+}
+ImGuiTextIndex = @record{
+  LineOffsets: ImVector_int,
+  EndOffset: cint
+}
+ImDrawListSharedData = @record{
+  TexUvWhitePixel: ImVec2,
+  TexUvLines: *ImVec4,
+  Font: *ImFont,
+  FontSize: float32,
+  FontScale: float32,
+  CurveTessellationTol: float32,
+  CircleSegmentMaxError: float32,
+  ClipRectFullscreen: ImVec4,
+  InitialFlags: cint,
+  TempBuffer: ImVector_ImVec2,
+  ArcFastVtx: [48]ImVec2,
+  ArcFastRadiusCutoff: float32,
+  CircleSegmentCounts: [64]cuchar
+}
+ImDrawDataBuilder = @record{
+  Layers: [2]*ImVector_ImDrawListPtr,
+  LayerData1: ImVector_ImDrawListPtr
+}
+global ImGuiDataTypeStorage: type <cimport,nodecl,forwarddecl> = @record{}
+ImGuiDataTypeStorage = @record{
+  Data: [8]cuchar
+}
+global ImGuiAxis: type <cimport,nodecl,using> = @enum(cint){
+  ImGuiAxis_None = -1,
+  ImGuiAxis_X = 0,
+  ImGuiAxis_Y = 1
+}
+ImGuiColorMod = @record{
+  Col: cint,
+  BackupValue: ImVec4
+}
+ImGuiStyleMod = @record{
+  VarIdx: cint,
+  __unnamed2: union{
+    BackupInt: [2]cint,
+    BackupFloat: [2]float32
+  }
+}
+global ImGuiComboPreviewData: type <cimport,nodecl,forwarddecl> = @record{}
+ImGuiComboPreviewData = @record{
+  PreviewRect: ImRect,
+  BackupCursorPos: ImVec2,
+  BackupCursorMaxPos: ImVec2,
+  BackupCursorPosPrevLine: ImVec2,
+  BackupPrevLineTextBaseOffset: float32,
+  BackupLayout: cint
+}
+ImGuiGroupData = @record{
+  WindowID: cuint,
+  BackupCursorPos: ImVec2,
+  BackupCursorMaxPos: ImVec2,
+  BackupCursorPosPrevLine: ImVec2,
+  BackupIndent: ImVec1,
+  BackupGroupOffset: ImVec1,
+  BackupCurrLineSize: ImVec2,
+  BackupCurrLineTextBaseOffset: float32,
+  BackupActiveIdIsAlive: cuint,
+  BackupDeactivatedIdIsAlive: boolean,
+  BackupHoveredIdIsAlive: boolean,
+  BackupIsSameLine: boolean,
+  EmitItem: boolean
+}
+ImGuiMenuColumns = @record{
+  TotalWidth: cuint,
+  NextTotalWidth: cuint,
+  Spacing: cushort,
+  OffsetIcon: cushort,
+  OffsetLabel: cushort,
+  OffsetShortcut: cushort,
+  OffsetMark: cushort,
+  Widths: [4]cushort
+}
+global ImGuiInputTextDeactivatedState: type <cimport,nodecl,forwarddecl> = @record{}
+ImGuiInputTextDeactivatedState = @record{
+  ID: cuint,
+  TextA: ImVector_char
+}
+ImGuiInputTextState = @record{
+  Ctx: *ImGuiContext,
+  Stb: *ImStbTexteditState,
+  Flags: cint,
+  ID: cuint,
+  TextLen: cint,
+  TextSrc: cstring,
+  TextA: ImVector_char,
+  TextToRevertTo: ImVector_char,
+  CallbackTextBackup: ImVector_char,
+  BufCapacity: cint,
+  Scroll: ImVec2,
+  CursorAnim: float32,
+  CursorFollow: boolean,
+  SelectedAllMouseLock: boolean,
+  Edited: boolean,
+  WantReloadUserBuf: boolean,
+  ReloadSelectionStart: cint,
+  ReloadSelectionEnd: cint
+}
+ImGuiNextWindowData = @record{
+  Flags: cint,
+  PosCond: cint,
+  SizeCond: cint,
+  CollapsedCond: cint,
+  DockCond: cint,
+  PosVal: ImVec2,
+  PosPivotVal: ImVec2,
+  SizeVal: ImVec2,
+  ContentSizeVal: ImVec2,
+  ScrollVal: ImVec2,
+  ChildFlags: cint,
+  PosUndock: boolean,
+  CollapsedVal: boolean,
+  SizeConstraintRect: ImRect,
+  SizeCallback: function(data: *ImGuiSizeCallbackData): void,
+  SizeCallbackUserData: pointer,
+  BgAlphaVal: float32,
+  ViewportId: cuint,
+  DockId: cuint,
+  WindowClass: ImGuiWindowClass,
+  MenuBarOffsetMinVal: ImVec2,
+  RefreshFlagsVal: cint
+}
+ImGuiNextItemData = @record{
+  HasFlags: cint,
+  ItemFlags: cint,
+  FocusScopeId: cuint,
+  SelectionUserData: clonglong,
+  Width: float32,
+  Shortcut: cint,
+  ShortcutFlags: cint,
+  OpenVal: boolean,
+  OpenCond: cuchar,
+  RefVal: ImGuiDataTypeStorage,
+  StorageId: cuint
+}
+ImGuiLastItemData = @record{
+  ID: cuint,
+  ItemFlags: cint,
+  StatusFlags: cint,
+  Rect: ImRect,
+  NavRect: ImRect,
+  DisplayRect: ImRect,
+  ClipRect: ImRect,
+  Shortcut: cint
+}
+ImGuiTreeNodeStackData = @record{
+  ID: cuint,
+  TreeFlags: cint,
+  ItemFlags: cint,
+  NavRect: ImRect
+}
+ImGuiErrorRecoveryState = @record{
+  SizeOfWindowStack: cshort,
+  SizeOfIDStack: cshort,
+  SizeOfTreeStack: cshort,
+  SizeOfColorStack: cshort,
+  SizeOfStyleVarStack: cshort,
+  SizeOfFontStack: cshort,
+  SizeOfFocusScopeStack: cshort,
+  SizeOfGroupStack: cshort,
+  SizeOfItemFlagsStack: cshort,
+  SizeOfBeginPopupStack: cshort,
+  SizeOfDisabledStack: cshort
+}
+global ImGuiWindowStackData: type <cimport,nodecl,forwarddecl> = @record{}
+ImGuiWindowStackData = @record{
+  Window: *ImGuiWindow,
+  ParentLastItemDataBackup: ImGuiLastItemData,
+  StackSizesInBegin: ImGuiErrorRecoveryState,
+  DisabledOverrideReenable: boolean
+}
+global ImGuiShrinkWidthItem: type <cimport,nodecl,forwarddecl> = @record{}
+ImGuiShrinkWidthItem = @record{
+  Index: cint,
+  Width: float32,
+  InitialWidth: float32
+}
+global ImGuiPtrOrIndex: type <cimport,nodecl,forwarddecl> = @record{}
+ImGuiPtrOrIndex = @record{
+  Ptr: pointer,
+  Index: cint
+}
+ImGuiDeactivatedItemData = @record{
+  ID: cuint,
+  ElapseFrame: cint,
+  HasBeenEditedBefore: boolean,
+  IsAlive: boolean
+}
+ImGuiPopupData = @record{
+  PopupId: cuint,
+  Window: *ImGuiWindow,
+  RestoreNavWindow: *ImGuiWindow,
+  ParentNavLayer: cint,
+  OpenFrameCount: cint,
+  OpenParentId: cuint,
+  OpenPopupPos: ImVec2,
+  OpenMousePos: ImVec2
+}
+global ImBitArrayForNamedKeys: type <cimport,nodecl> = @record{
+  Storage: [5]cuint
+}
+global ImGuiInputEventType: type <cimport,nodecl,using> = @enum(cint){
+  ImGuiInputEventType_None = 0,
+  ImGuiInputEventType_MousePos = 1,
+  ImGuiInputEventType_MouseWheel = 2,
+  ImGuiInputEventType_MouseButton = 3,
+  ImGuiInputEventType_MouseViewport = 4,
+  ImGuiInputEventType_Key = 5,
+  ImGuiInputEventType_Text = 6,
+  ImGuiInputEventType_Focus = 7,
+  ImGuiInputEventType_COUNT = 8
+}
+global ImGuiInputSource: type <cimport,nodecl,using> = @enum(cint){
+  ImGuiInputSource_None = 0,
+  ImGuiInputSource_Mouse = 1,
+  ImGuiInputSource_Keyboard = 2,
+  ImGuiInputSource_Gamepad = 3,
+  ImGuiInputSource_COUNT = 4
+}
+global ImGuiInputEventMousePos: type <cimport,nodecl,forwarddecl> = @record{}
+ImGuiInputEventMousePos = @record{
+  PosX: float32,
+  PosY: float32,
+  MouseSource: ImGuiMouseSource
+}
+global ImGuiInputEventMouseWheel: type <cimport,nodecl,forwarddecl> = @record{}
+ImGuiInputEventMouseWheel = @record{
+  WheelX: float32,
+  WheelY: float32,
+  MouseSource: ImGuiMouseSource
+}
+global ImGuiInputEventMouseButton: type <cimport,nodecl,forwarddecl> = @record{}
+ImGuiInputEventMouseButton = @record{
+  Button: cint,
+  Down: boolean,
+  MouseSource: ImGuiMouseSource
+}
+global ImGuiInputEventMouseViewport: type <cimport,nodecl,forwarddecl> = @record{}
+ImGuiInputEventMouseViewport = @record{
+  HoveredViewportID: cuint
+}
+global ImGuiInputEventKey: type <cimport,nodecl,forwarddecl> = @record{}
+ImGuiInputEventKey = @record{
+  Key: ImGuiKey,
+  Down: boolean,
+  AnalogValue: float32
+}
+global ImGuiInputEventText: type <cimport,nodecl,forwarddecl> = @record{}
+ImGuiInputEventText = @record{
+  Char: cuint
+}
+global ImGuiInputEventAppFocused: type <cimport,nodecl,forwarddecl> = @record{}
+ImGuiInputEventAppFocused = @record{
+  Focused: boolean
+}
+global ImGuiInputEvent: type <cimport,nodecl,forwarddecl> = @record{}
+ImGuiInputEvent = @record{
+  Type: ImGuiInputEventType,
+  Source: ImGuiInputSource,
+  EventId: cuint,
+  __unnamed4: union{
+    MousePos: ImGuiInputEventMousePos,
+    MouseWheel: ImGuiInputEventMouseWheel,
+    MouseButton: ImGuiInputEventMouseButton,
+    MouseViewport: ImGuiInputEventMouseViewport,
+    Key: ImGuiInputEventKey,
+    Text: ImGuiInputEventText,
+    AppFocused: ImGuiInputEventAppFocused
+  },
+  AddedByTestEngine: boolean
+}
+global ImGuiKeyRoutingData: type <cimport,nodecl,forwarddecl> = @record{}
+ImGuiKeyRoutingData = @record{
+  NextEntryIndex: cshort,
+  Mods: cushort,
+  RoutingCurrScore: cuchar,
+  RoutingNextScore: cuchar,
+  RoutingCurr: cuint,
+  RoutingNext: cuint
+}
+global ImGuiKeyRoutingTable: type <cimport,nodecl,forwarddecl> = @record{}
+global ImVector_ImGuiKeyRoutingData: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiKeyRoutingData
+}
+ImGuiKeyRoutingTable = @record{
+  Index: [154]cshort,
+  Entries: ImVector_ImGuiKeyRoutingData,
+  EntriesNext: ImVector_ImGuiKeyRoutingData
+}
+global ImGuiKeyOwnerData: type <cimport,nodecl,forwarddecl> = @record{}
+ImGuiKeyOwnerData = @record{
+  OwnerCurr: cuint,
+  OwnerNext: cuint,
+  LockThisFrame: boolean,
+  LockUntilRelease: boolean
+}
+global ImGuiListClipperRange: type <cimport,nodecl,forwarddecl> = @record{}
+ImGuiListClipperRange = @record{
+  Min: cint,
+  Max: cint,
+  PosToIndexConvert: boolean,
+  PosToIndexOffsetMin: cschar,
+  PosToIndexOffsetMax: cschar
+}
+global ImGuiListClipperData: type <cimport,nodecl,forwarddecl> = @record{}
+global ImVector_ImGuiListClipperRange: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiListClipperRange
+}
+ImGuiListClipperData = @record{
+  ListClipper: *ImGuiListClipper,
+  LossynessOffset: float32,
+  StepNo: cint,
+  ItemsFrozen: cint,
+  Ranges: ImVector_ImGuiListClipperRange
+}
+global ImGuiNavLayer: type <cimport,nodecl,using> = @enum(cint){
+  ImGuiNavLayer_Main = 0,
+  ImGuiNavLayer_Menu = 1,
+  ImGuiNavLayer_COUNT = 2
+}
+ImGuiNavItemData = @record{
+  Window: *ImGuiWindow,
+  ID: cuint,
+  FocusScopeId: cuint,
+  RectRel: ImRect,
+  ItemFlags: cint,
+  DistBox: float32,
+  DistCenter: float32,
+  DistAxial: float32,
+  SelectionUserData: clonglong
+}
+global ImGuiFocusScopeData: type <cimport,nodecl,forwarddecl> = @record{}
+ImGuiFocusScopeData = @record{
+  ID: cuint,
+  WindowID: cuint
+}
+ImGuiTypingSelectRequest = @record{
+  Flags: cint,
+  SearchBufferLen: cint,
+  SearchBuffer: cstring,
+  SelectRequest: boolean,
+  SingleCharMode: boolean,
+  SingleCharSize: cschar
+}
+ImGuiTypingSelectState = @record{
+  Request: ImGuiTypingSelectRequest,
+  SearchBuffer: [64]cchar,
+  FocusScope: cuint,
+  LastRequestFrame: cint,
+  LastRequestTime: float32,
+  SingleCharModeLock: boolean
+}
+ImGuiOldColumnData = @record{
+  OffsetNorm: float32,
+  OffsetNormBeforeResize: float32,
+  Flags: cint,
+  ClipRect: ImRect
+}
+global ImVector_ImGuiOldColumnData: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiOldColumnData
+}
+ImGuiOldColumns = @record{
+  ID: cuint,
+  Flags: cint,
+  IsFirstFrame: boolean,
+  IsBeingResized: boolean,
+  Current: cint,
+  Count: cint,
+  OffMinX: float32,
+  OffMaxX: float32,
+  LineMinY: float32,
+  LineMaxY: float32,
+  HostCursorPosY: float32,
+  HostCursorMaxPosX: float32,
+  HostInitialClipRect: ImRect,
+  HostBackupClipRect: ImRect,
+  HostBackupParentWorkRect: ImRect,
+  Columns: ImVector_ImGuiOldColumnData,
+  Splitter: ImDrawListSplitter
+}
+ImGuiBoxSelectState = @record{
+  ID: cuint,
+  IsActive: boolean,
+  IsStarting: boolean,
+  IsStartedFromVoid: boolean,
+  IsStartedSetNavIdOnce: boolean,
+  RequestClear: boolean,
+  KeyMods: cint,
+  StartPosRel: ImVec2,
+  EndPosRel: ImVec2,
+  ScrollAccum: ImVec2,
+  Window: *ImGuiWindow,
+  UnclipMode: boolean,
+  UnclipRect: ImRect,
+  BoxSelectRectPrev: ImRect,
+  BoxSelectRectCurr: ImRect
+}
+ImGuiMultiSelectTempData = @record{
+  IO: ImGuiMultiSelectIO,
+  Storage: *ImGuiMultiSelectState,
+  FocusScopeId: cuint,
+  Flags: cint,
+  ScopeRectMin: ImVec2,
+  BackupCursorMaxPos: ImVec2,
+  LastSubmittedItem: clonglong,
+  BoxSelectId: cuint,
+  KeyMods: cint,
+  LoopRequestSetAll: cschar,
+  IsEndIO: boolean,
+  IsFocused: boolean,
+  IsKeyboardSetRange: boolean,
+  NavIdPassedBy: boolean,
+  RangeSrcPassedBy: boolean,
+  RangeDstPassedBy: boolean
+}
+ImGuiMultiSelectState = @record{
+  Window: *ImGuiWindow,
+  ID: cuint,
+  LastFrameActive: cint,
+  LastSelectionSize: cint,
+  RangeSelected: cschar,
+  NavIdSelected: cschar,
+  RangeSrcItem: clonglong,
+  NavIdItem: clonglong
+}
+global ImGuiDockNodeState: type <cimport,nodecl,using> = @enum(cint){
+  ImGuiDockNodeState_Unknown = 0,
+  ImGuiDockNodeState_HostWindowHiddenBecauseSingleWindow = 1,
+  ImGuiDockNodeState_HostWindowHiddenBecauseWindowsAreResizing = 2,
+  ImGuiDockNodeState_HostWindowVisible = 3
+}
+global ImVector_ImGuiWindowPtr: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: **ImGuiWindow
+}
+ImGuiDockNode = @record{
+  ID: cuint,
+  SharedFlags: cint,
+  LocalFlags: cint,
+  LocalFlagsInWindows: cint,
+  MergedFlags: cint,
+  State: ImGuiDockNodeState,
+  ParentNode: *ImGuiDockNode,
+  ChildNodes: [2]*ImGuiDockNode,
+  Windows: ImVector_ImGuiWindowPtr,
+  TabBar: *ImGuiTabBar,
+  Pos: ImVec2,
+  Size: ImVec2,
+  SizeRef: ImVec2,
+  SplitAxis: ImGuiAxis,
+  WindowClass: ImGuiWindowClass,
+  LastBgColor: cuint,
+  HostWindow: *ImGuiWindow,
+  VisibleWindow: *ImGuiWindow,
+  CentralNode: *ImGuiDockNode,
+  OnlyNodeWithWindows: *ImGuiDockNode,
+  CountNodeWithWindows: cint,
+  LastFrameAlive: cint,
+  LastFrameActive: cint,
+  LastFrameFocused: cint,
+  LastFocusedNodeId: cuint,
+  SelectedTabId: cuint,
+  WantCloseTabId: cuint,
+  RefViewportId: cuint,
+  AuthorityForPos: cint,
+  AuthorityForSize: cint,
+  AuthorityForViewport: cint,
+  IsVisible: boolean,
+  IsFocused: boolean,
+  IsBgDrawnThisFrame: boolean,
+  HasCloseButton: boolean,
+  HasWindowMenuButton: boolean,
+  HasCentralNodeChild: boolean,
+  WantCloseAll: boolean,
+  WantLockSizeOnce: boolean,
+  WantMouseMove: boolean,
+  WantHiddenTabBarUpdate: boolean,
+  WantHiddenTabBarToggle: boolean
+}
+ImGuiWindowDockStyle = @record{
+  Colors: [8]cuint
+}
+global ImVector_ImGuiDockRequest: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiDockRequest
+}
+global ImVector_ImGuiDockNodeSettings: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiDockNodeSettings
+}
+ImGuiDockContext = @record{
+  Nodes: ImGuiStorage,
+  Requests: ImVector_ImGuiDockRequest,
+  NodesSettings: ImVector_ImGuiDockNodeSettings,
+  WantFullRebuild: boolean
+}
+global ImGuiViewportP: type <cimport,nodecl,forwarddecl> = @record{}
+ImGuiViewportP = @record{
+  _ImGuiViewport: ImGuiViewport,
+  Window: *ImGuiWindow,
+  Idx: cint,
+  LastFrameActive: cint,
+  LastFocusedStampCount: cint,
+  LastNameHash: cuint,
+  LastPos: ImVec2,
+  LastSize: ImVec2,
+  Alpha: float32,
+  LastAlpha: float32,
+  LastFocusedHadNavWindow: boolean,
+  PlatformMonitor: cshort,
+  BgFgDrawListsLastFrame: [2]cint,
+  BgFgDrawLists: [2]*ImDrawList,
+  DrawDataP: ImDrawData,
+  DrawDataBuilder: ImDrawDataBuilder,
+  LastPlatformPos: ImVec2,
+  LastPlatformSize: ImVec2,
+  LastRendererSize: ImVec2,
+  WorkInsetMin: ImVec2,
+  WorkInsetMax: ImVec2,
+  BuildWorkInsetMin: ImVec2,
+  BuildWorkInsetMax: ImVec2
+}
+ImGuiSettingsHandler = @record{
+  TypeName: cstring,
+  TypeHash: cuint,
+  ClearAllFn: function(ctx: *ImGuiContext, handler: *ImGuiSettingsHandler): void,
+  ReadInitFn: function(ctx: *ImGuiContext, handler: *ImGuiSettingsHandler): void,
+  ReadOpenFn: function(ctx: *ImGuiContext, handler: *ImGuiSettingsHandler, name: cstring): pointer,
+  ReadLineFn: function(ctx: *ImGuiContext, handler: *ImGuiSettingsHandler, entry: pointer, line: cstring): void,
+  ApplyAllFn: function(ctx: *ImGuiContext, handler: *ImGuiSettingsHandler): void,
+  WriteAllFn: function(ctx: *ImGuiContext, handler: *ImGuiSettingsHandler, out_buf: *ImGuiTextBuffer): void,
+  UserData: pointer
+}
+global ImGuiDebugAllocEntry: type <cimport,nodecl,forwarddecl> = @record{}
+ImGuiDebugAllocEntry = @record{
+  FrameCount: cint,
+  AllocCount: cshort,
+  FreeCount: cshort
+}
+global ImGuiDebugAllocInfo: type <cimport,nodecl,forwarddecl> = @record{}
+ImGuiDebugAllocInfo = @record{
+  TotalAllocCount: cint,
+  TotalFreeCount: cint,
+  LastEntriesIdx: cshort,
+  LastEntriesBuf: [6]ImGuiDebugAllocEntry
+}
+ImGuiMetricsConfig = @record{
+  ShowDebugLog: boolean,
+  ShowIDStackTool: boolean,
+  ShowWindowsRects: boolean,
+  ShowWindowsBeginOrder: boolean,
+  ShowTablesRects: boolean,
+  ShowDrawCmdMesh: boolean,
+  ShowDrawCmdBoundingBoxes: boolean,
+  ShowTextEncodingViewer: boolean,
+  ShowAtlasTintedWithTextColor: boolean,
+  ShowDockingNodes: boolean,
+  ShowWindowsRectsType: cint,
+  ShowTablesRectsType: cint,
+  HighlightMonitorIdx: cint,
+  HighlightViewportID: cuint
+}
+global ImGuiStackLevelInfo: type <cimport,nodecl,forwarddecl> = @record{}
+ImGuiStackLevelInfo = @record{
+  ID: cuint,
+  QueryFrameCount: cschar,
+  QuerySuccess: boolean,
+  DataType: cint,
+  Desc: [57]cchar
+}
+global ImGuiIDStackTool: type <cimport,nodecl,forwarddecl> = @record{}
+global ImVector_ImGuiStackLevelInfo: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiStackLevelInfo
+}
+ImGuiIDStackTool = @record{
+  LastActiveFrame: cint,
+  StackLevel: cint,
+  QueryId: cuint,
+  Results: ImVector_ImGuiStackLevelInfo,
+  CopyToClipboardOnCtrlC: boolean,
+  CopyToClipboardLastTime: float32
+}
+global ImGuiContextHookType: type <cimport,nodecl,using> = @enum(cint){
+  ImGuiContextHookType_NewFramePre = 0,
+  ImGuiContextHookType_NewFramePost = 1,
+  ImGuiContextHookType_EndFramePre = 2,
+  ImGuiContextHookType_EndFramePost = 3,
+  ImGuiContextHookType_RenderPre = 4,
+  ImGuiContextHookType_RenderPost = 5,
+  ImGuiContextHookType_Shutdown = 6,
+  ImGuiContextHookType_PendingRemoval_ = 7
+}
+ImGuiContextHook = @record{
+  HookId: cuint,
+  Type: ImGuiContextHookType,
+  Owner: cuint,
+  Callback: function(ctx: *ImGuiContext, hook: *ImGuiContextHook): void,
+  UserData: pointer
+}
+global ImVector_ImGuiInputEvent: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiInputEvent
+}
+global ImVector_ImGuiWindowStackData: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiWindowStackData
+}
+global ImVector_ImGuiColorMod: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiColorMod
+}
+global ImVector_ImGuiStyleMod: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiStyleMod
+}
+global ImVector_ImGuiFocusScopeData: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiFocusScopeData
+}
+global ImVector_ImGuiItemFlags: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *cint
+}
+global ImVector_ImGuiGroupData: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiGroupData
+}
+global ImVector_ImGuiPopupData: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiPopupData
+}
+global ImVector_ImGuiTreeNodeStackData: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiTreeNodeStackData
+}
+global ImVector_ImGuiViewportPPtr: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: **ImGuiViewportP
+}
+global ImVector_unsigned_char: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *cuchar
+}
+global ImVector_ImGuiListClipperData: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiListClipperData
+}
+global ImVector_ImGuiTableTempData: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiTableTempData
+}
+global ImVector_ImGuiTable: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiTable
+}
+global ImPool_ImGuiTable: type <cimport,nodecl> = @record{
+  Buf: ImVector_ImGuiTable,
+  Map: ImGuiStorage,
+  FreeIdx: cint,
+  AliveCount: cint
+}
+global ImVector_ImGuiTabBar: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiTabBar
+}
+global ImPool_ImGuiTabBar: type <cimport,nodecl> = @record{
+  Buf: ImVector_ImGuiTabBar,
+  Map: ImGuiStorage,
+  FreeIdx: cint,
+  AliveCount: cint
+}
+global ImVector_ImGuiPtrOrIndex: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiPtrOrIndex
+}
+global ImVector_ImGuiShrinkWidthItem: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiShrinkWidthItem
+}
+global ImVector_ImGuiMultiSelectTempData: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiMultiSelectTempData
+}
+global ImVector_ImGuiMultiSelectState: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiMultiSelectState
+}
+global ImPool_ImGuiMultiSelectState: type <cimport,nodecl> = @record{
+  Buf: ImVector_ImGuiMultiSelectState,
+  Map: ImGuiStorage,
+  FreeIdx: cint,
+  AliveCount: cint
+}
+global ImVector_ImGuiID: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *cuint
+}
+global ImVector_ImGuiSettingsHandler: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiSettingsHandler
+}
+global ImChunkStream_ImGuiWindowSettings: type <cimport,nodecl> = @record{
+  Buf: ImVector_char
+}
+global ImChunkStream_ImGuiTableSettings: type <cimport,nodecl> = @record{
+  Buf: ImVector_char
+}
+global ImVector_ImGuiContextHook: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiContextHook
+}
+ImGuiContext = @record{
+  Initialized: boolean,
+  FontAtlasOwnedByContext: boolean,
+  IO: ImGuiIO,
+  PlatformIO: ImGuiPlatformIO,
+  Style: ImGuiStyle,
+  ConfigFlagsCurrFrame: cint,
+  ConfigFlagsLastFrame: cint,
+  Font: *ImFont,
+  FontSize: float32,
+  FontBaseSize: float32,
+  FontScale: float32,
+  CurrentDpiScale: float32,
+  DrawListSharedData: ImDrawListSharedData,
+  Time: float64,
+  FrameCount: cint,
+  FrameCountEnded: cint,
+  FrameCountPlatformEnded: cint,
+  FrameCountRendered: cint,
+  WithinEndChildID: cuint,
+  WithinFrameScope: boolean,
+  WithinFrameScopeWithImplicitWindow: boolean,
+  GcCompactAll: boolean,
+  TestEngineHookItems: boolean,
+  TestEngine: pointer,
+  ContextName: [16]cchar,
+  InputEventsQueue: ImVector_ImGuiInputEvent,
+  InputEventsTrail: ImVector_ImGuiInputEvent,
+  InputEventsNextMouseSource: ImGuiMouseSource,
+  InputEventsNextEventId: cuint,
+  Windows: ImVector_ImGuiWindowPtr,
+  WindowsFocusOrder: ImVector_ImGuiWindowPtr,
+  WindowsTempSortBuffer: ImVector_ImGuiWindowPtr,
+  CurrentWindowStack: ImVector_ImGuiWindowStackData,
+  WindowsById: ImGuiStorage,
+  WindowsActiveCount: cint,
+  WindowsHoverPadding: ImVec2,
+  DebugBreakInWindow: cuint,
+  CurrentWindow: *ImGuiWindow,
+  HoveredWindow: *ImGuiWindow,
+  HoveredWindowUnderMovingWindow: *ImGuiWindow,
+  HoveredWindowBeforeClear: *ImGuiWindow,
+  MovingWindow: *ImGuiWindow,
+  WheelingWindow: *ImGuiWindow,
+  WheelingWindowRefMousePos: ImVec2,
+  WheelingWindowStartFrame: cint,
+  WheelingWindowScrolledFrame: cint,
+  WheelingWindowReleaseTimer: float32,
+  WheelingWindowWheelRemainder: ImVec2,
+  WheelingAxisAvg: ImVec2,
+  DebugDrawIdConflicts: cuint,
+  DebugHookIdInfo: cuint,
+  HoveredId: cuint,
+  HoveredIdPreviousFrame: cuint,
+  HoveredIdPreviousFrameItemCount: cint,
+  HoveredIdTimer: float32,
+  HoveredIdNotActiveTimer: float32,
+  HoveredIdAllowOverlap: boolean,
+  HoveredIdIsDisabled: boolean,
+  ItemUnclipByLog: boolean,
+  ActiveId: cuint,
+  ActiveIdIsAlive: cuint,
+  ActiveIdTimer: float32,
+  ActiveIdIsJustActivated: boolean,
+  ActiveIdAllowOverlap: boolean,
+  ActiveIdNoClearOnFocusLoss: boolean,
+  ActiveIdHasBeenPressedBefore: boolean,
+  ActiveIdHasBeenEditedBefore: boolean,
+  ActiveIdHasBeenEditedThisFrame: boolean,
+  ActiveIdFromShortcut: boolean,
+  ActiveIdMouseButton: cint,
+  ActiveIdClickOffset: ImVec2,
+  ActiveIdWindow: *ImGuiWindow,
+  ActiveIdSource: ImGuiInputSource,
+  ActiveIdPreviousFrame: cuint,
+  DeactivatedItemData: ImGuiDeactivatedItemData,
+  ActiveIdValueOnActivation: ImGuiDataTypeStorage,
+  LastActiveId: cuint,
+  LastActiveIdTimer: float32,
+  LastKeyModsChangeTime: float64,
+  LastKeyModsChangeFromNoneTime: float64,
+  LastKeyboardKeyPressTime: float64,
+  KeysMayBeCharInput: ImBitArrayForNamedKeys,
+  KeysOwnerData: [154]ImGuiKeyOwnerData,
+  KeysRoutingTable: ImGuiKeyRoutingTable,
+  ActiveIdUsingNavDirMask: cuint,
+  ActiveIdUsingAllKeyboardKeys: boolean,
+  DebugBreakInShortcutRouting: cint,
+  CurrentFocusScopeId: cuint,
+  CurrentItemFlags: cint,
+  DebugLocateId: cuint,
+  NextItemData: ImGuiNextItemData,
+  LastItemData: ImGuiLastItemData,
+  NextWindowData: ImGuiNextWindowData,
+  DebugShowGroupRects: boolean,
+  DebugFlashStyleColorIdx: cint,
+  ColorStack: ImVector_ImGuiColorMod,
+  StyleVarStack: ImVector_ImGuiStyleMod,
+  FontStack: ImVector_ImFontPtr,
+  FocusScopeStack: ImVector_ImGuiFocusScopeData,
+  ItemFlagsStack: ImVector_ImGuiItemFlags,
+  GroupStack: ImVector_ImGuiGroupData,
+  OpenPopupStack: ImVector_ImGuiPopupData,
+  BeginPopupStack: ImVector_ImGuiPopupData,
+  TreeNodeStack: ImVector_ImGuiTreeNodeStackData,
+  Viewports: ImVector_ImGuiViewportPPtr,
+  CurrentViewport: *ImGuiViewportP,
+  MouseViewport: *ImGuiViewportP,
+  MouseLastHoveredViewport: *ImGuiViewportP,
+  PlatformLastFocusedViewportId: cuint,
+  FallbackMonitor: ImGuiPlatformMonitor,
+  PlatformMonitorsFullWorkRect: ImRect,
+  ViewportCreatedCount: cint,
+  PlatformWindowsCreatedCount: cint,
+  ViewportFocusedStampCount: cint,
+  NavCursorVisible: boolean,
+  NavHighlightItemUnderNav: boolean,
+  NavMousePosDirty: boolean,
+  NavIdIsAlive: boolean,
+  NavId: cuint,
+  NavWindow: *ImGuiWindow,
+  NavFocusScopeId: cuint,
+  NavLayer: ImGuiNavLayer,
+  NavActivateId: cuint,
+  NavActivateDownId: cuint,
+  NavActivatePressedId: cuint,
+  NavActivateFlags: cint,
+  NavFocusRoute: ImVector_ImGuiFocusScopeData,
+  NavHighlightActivatedId: cuint,
+  NavHighlightActivatedTimer: float32,
+  NavNextActivateId: cuint,
+  NavNextActivateFlags: cint,
+  NavInputSource: ImGuiInputSource,
+  NavLastValidSelectionUserData: clonglong,
+  NavCursorHideFrames: cschar,
+  NavAnyRequest: boolean,
+  NavInitRequest: boolean,
+  NavInitRequestFromMove: boolean,
+  NavInitResult: ImGuiNavItemData,
+  NavMoveSubmitted: boolean,
+  NavMoveScoringItems: boolean,
+  NavMoveForwardToNextFrame: boolean,
+  NavMoveFlags: cint,
+  NavMoveScrollFlags: cint,
+  NavMoveKeyMods: cint,
+  NavMoveDir: ImGuiDir,
+  NavMoveDirForDebug: ImGuiDir,
+  NavMoveClipDir: ImGuiDir,
+  NavScoringRect: ImRect,
+  NavScoringNoClipRect: ImRect,
+  NavScoringDebugCount: cint,
+  NavTabbingDir: cint,
+  NavTabbingCounter: cint,
+  NavMoveResultLocal: ImGuiNavItemData,
+  NavMoveResultLocalVisible: ImGuiNavItemData,
+  NavMoveResultOther: ImGuiNavItemData,
+  NavTabbingResultFirst: ImGuiNavItemData,
+  NavJustMovedFromFocusScopeId: cuint,
+  NavJustMovedToId: cuint,
+  NavJustMovedToFocusScopeId: cuint,
+  NavJustMovedToKeyMods: cint,
+  NavJustMovedToIsTabbing: boolean,
+  NavJustMovedToHasSelectionData: boolean,
+  ConfigNavWindowingKeyNext: cint,
+  ConfigNavWindowingKeyPrev: cint,
+  NavWindowingTarget: *ImGuiWindow,
+  NavWindowingTargetAnim: *ImGuiWindow,
+  NavWindowingListWindow: *ImGuiWindow,
+  NavWindowingTimer: float32,
+  NavWindowingHighlightAlpha: float32,
+  NavWindowingToggleLayer: boolean,
+  NavWindowingToggleKey: ImGuiKey,
+  NavWindowingAccumDeltaPos: ImVec2,
+  NavWindowingAccumDeltaSize: ImVec2,
+  DimBgRatio: float32,
+  DragDropActive: boolean,
+  DragDropWithinSource: boolean,
+  DragDropWithinTarget: boolean,
+  DragDropSourceFlags: cint,
+  DragDropSourceFrameCount: cint,
+  DragDropMouseButton: cint,
+  DragDropPayload: ImGuiPayload,
+  DragDropTargetRect: ImRect,
+  DragDropTargetClipRect: ImRect,
+  DragDropTargetId: cuint,
+  DragDropAcceptFlags: cint,
+  DragDropAcceptIdCurrRectSurface: float32,
+  DragDropAcceptIdCurr: cuint,
+  DragDropAcceptIdPrev: cuint,
+  DragDropAcceptFrameCount: cint,
+  DragDropHoldJustPressedId: cuint,
+  DragDropPayloadBufHeap: ImVector_unsigned_char,
+  DragDropPayloadBufLocal: [16]cuchar,
+  ClipperTempDataStacked: cint,
+  ClipperTempData: ImVector_ImGuiListClipperData,
+  CurrentTable: *ImGuiTable,
+  DebugBreakInTable: cuint,
+  TablesTempDataStacked: cint,
+  TablesTempData: ImVector_ImGuiTableTempData,
+  Tables: ImPool_ImGuiTable,
+  TablesLastTimeActive: ImVector_float,
+  DrawChannelsTempMergeBuffer: ImVector_ImDrawChannel,
+  CurrentTabBar: *ImGuiTabBar,
+  TabBars: ImPool_ImGuiTabBar,
+  CurrentTabBarStack: ImVector_ImGuiPtrOrIndex,
+  ShrinkWidthBuffer: ImVector_ImGuiShrinkWidthItem,
+  BoxSelectState: ImGuiBoxSelectState,
+  CurrentMultiSelect: *ImGuiMultiSelectTempData,
+  MultiSelectTempDataStacked: cint,
+  MultiSelectTempData: ImVector_ImGuiMultiSelectTempData,
+  MultiSelectStorage: ImPool_ImGuiMultiSelectState,
+  HoverItemDelayId: cuint,
+  HoverItemDelayIdPreviousFrame: cuint,
+  HoverItemDelayTimer: float32,
+  HoverItemDelayClearTimer: float32,
+  HoverItemUnlockedStationaryId: cuint,
+  HoverWindowUnlockedStationaryId: cuint,
+  MouseCursor: cint,
+  MouseStationaryTimer: float32,
+  MouseLastValidPos: ImVec2,
+  InputTextState: ImGuiInputTextState,
+  InputTextDeactivatedState: ImGuiInputTextDeactivatedState,
+  InputTextPasswordFont: ImFont,
+  TempInputId: cuint,
+  DataTypeZeroValue: ImGuiDataTypeStorage,
+  BeginMenuDepth: cint,
+  BeginComboDepth: cint,
+  ColorEditOptions: cint,
+  ColorEditCurrentID: cuint,
+  ColorEditSavedID: cuint,
+  ColorEditSavedHue: float32,
+  ColorEditSavedSat: float32,
+  ColorEditSavedColor: cuint,
+  ColorPickerRef: ImVec4,
+  ComboPreviewData: ImGuiComboPreviewData,
+  WindowResizeBorderExpectedRect: ImRect,
+  WindowResizeRelativeMode: boolean,
+  ScrollbarSeekMode: cshort,
+  ScrollbarClickDeltaToGrabCenter: float32,
+  SliderGrabClickOffset: float32,
+  SliderCurrentAccum: float32,
+  SliderCurrentAccumDirty: boolean,
+  DragCurrentAccumDirty: boolean,
+  DragCurrentAccum: float32,
+  DragSpeedDefaultRatio: float32,
+  DisabledAlphaBackup: float32,
+  DisabledStackSize: cshort,
+  TooltipOverrideCount: cshort,
+  TooltipPreviousWindow: *ImGuiWindow,
+  ClipboardHandlerData: ImVector_char,
+  MenusIdSubmittedThisFrame: ImVector_ImGuiID,
+  TypingSelectState: ImGuiTypingSelectState,
+  PlatformImeData: ImGuiPlatformImeData,
+  PlatformImeDataPrev: ImGuiPlatformImeData,
+  PlatformImeViewport: cuint,
+  DockContext: ImGuiDockContext,
+  DockNodeWindowMenuHandler: function(ctx: *ImGuiContext, node: *ImGuiDockNode, tab_bar: *ImGuiTabBar): void,
+  SettingsLoaded: boolean,
+  SettingsDirtyTimer: float32,
+  SettingsIniData: ImGuiTextBuffer,
+  SettingsHandlers: ImVector_ImGuiSettingsHandler,
+  SettingsWindows: ImChunkStream_ImGuiWindowSettings,
+  SettingsTables: ImChunkStream_ImGuiTableSettings,
+  Hooks: ImVector_ImGuiContextHook,
+  HookIdNext: cuint,
+  LocalizationTable: [13]cstring,
+  LogEnabled: boolean,
+  LogFlags: cint,
+  LogWindow: *ImGuiWindow,
+  LogFile: *FILE,
+  LogBuffer: ImGuiTextBuffer,
+  LogNextPrefix: cstring,
+  LogNextSuffix: cstring,
+  LogLinePosY: float32,
+  LogLineFirstItem: boolean,
+  LogDepthRef: cint,
+  LogDepthToExpand: cint,
+  LogDepthToExpandDefault: cint,
+  ErrorCallback: function(ctx: *ImGuiContext, user_data: pointer, msg: cstring): void,
+  ErrorCallbackUserData: pointer,
+  ErrorTooltipLockedPos: ImVec2,
+  ErrorFirst: boolean,
+  ErrorCountCurrentFrame: cint,
+  StackSizesInNewFrame: ImGuiErrorRecoveryState,
+  StackSizesInBeginForCurrentWindow: *ImGuiErrorRecoveryState,
+  DebugDrawIdConflictsCount: cint,
+  DebugLogFlags: cint,
+  DebugLogBuf: ImGuiTextBuffer,
+  DebugLogIndex: ImGuiTextIndex,
+  DebugLogSkippedErrors: cint,
+  DebugLogAutoDisableFlags: cint,
+  DebugLogAutoDisableFrames: cuchar,
+  DebugLocateFrames: cuchar,
+  DebugBreakInLocateId: boolean,
+  DebugBreakKeyChord: cint,
+  DebugBeginReturnValueCullDepth: cschar,
+  DebugItemPickerActive: boolean,
+  DebugItemPickerMouseButton: cuchar,
+  DebugItemPickerBreakId: cuint,
+  DebugFlashStyleColorTime: float32,
+  DebugFlashStyleColorBackup: ImVec4,
+  DebugMetricsConfig: ImGuiMetricsConfig,
+  DebugIDStackTool: ImGuiIDStackTool,
+  DebugAllocInfo: ImGuiDebugAllocInfo,
+  DebugHoveredDockNode: *ImGuiDockNode,
+  FramerateSecPerFrame: [60]float32,
+  FramerateSecPerFrameIdx: cint,
+  FramerateSecPerFrameCount: cint,
+  FramerateSecPerFrameAccum: float32,
+  WantCaptureMouseNextFrame: cint,
+  WantCaptureKeyboardNextFrame: cint,
+  WantTextInputNextFrame: cint,
+  TempBuffer: ImVector_char,
+  TempKeychordName: [64]cchar
+}
+ImGuiWindowTempData = @record{
+  CursorPos: ImVec2,
+  CursorPosPrevLine: ImVec2,
+  CursorStartPos: ImVec2,
+  CursorMaxPos: ImVec2,
+  IdealMaxPos: ImVec2,
+  CurrLineSize: ImVec2,
+  PrevLineSize: ImVec2,
+  CurrLineTextBaseOffset: float32,
+  PrevLineTextBaseOffset: float32,
+  IsSameLine: boolean,
+  IsSetPos: boolean,
+  Indent: ImVec1,
+  ColumnsOffset: ImVec1,
+  GroupOffset: ImVec1,
+  CursorStartPosLossyness: ImVec2,
+  NavLayerCurrent: ImGuiNavLayer,
+  NavLayersActiveMask: cshort,
+  NavLayersActiveMaskNext: cshort,
+  NavIsScrollPushableX: boolean,
+  NavHideHighlightOneFrame: boolean,
+  NavWindowHasScrollY: boolean,
+  MenuBarAppending: boolean,
+  MenuBarOffset: ImVec2,
+  MenuColumns: ImGuiMenuColumns,
+  TreeDepth: cint,
+  TreeHasStackDataDepthMask: cuint,
+  ChildWindows: ImVector_ImGuiWindowPtr,
+  StateStorage: *ImGuiStorage,
+  CurrentColumns: *ImGuiOldColumns,
+  CurrentTableIdx: cint,
+  LayoutType: cint,
+  ParentLayoutType: cint,
+  ModalDimBgColor: cuint,
+  WindowItemStatusFlags: cint,
+  ChildItemStatusFlags: cint,
+  DockTabItemStatusFlags: cint,
+  DockTabItemRect: ImRect,
+  ItemWidth: float32,
+  TextWrapPos: float32,
+  ItemWidthStack: ImVector_float,
+  TextWrapPosStack: ImVector_float
+}
+global ImVector_ImGuiOldColumns: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiOldColumns
+}
+ImGuiWindow = @record{
+  Ctx: *ImGuiContext,
+  Name: cstring,
+  ID: cuint,
+  Flags: cint,
+  FlagsPreviousFrame: cint,
+  ChildFlags: cint,
+  WindowClass: ImGuiWindowClass,
+  Viewport: *ImGuiViewportP,
+  ViewportId: cuint,
+  ViewportPos: ImVec2,
+  ViewportAllowPlatformMonitorExtend: cint,
+  Pos: ImVec2,
+  Size: ImVec2,
+  SizeFull: ImVec2,
+  ContentSize: ImVec2,
+  ContentSizeIdeal: ImVec2,
+  ContentSizeExplicit: ImVec2,
+  WindowPadding: ImVec2,
+  WindowRounding: float32,
+  WindowBorderSize: float32,
+  TitleBarHeight: float32,
+  MenuBarHeight: float32,
+  DecoOuterSizeX1: float32,
+  DecoOuterSizeY1: float32,
+  DecoOuterSizeX2: float32,
+  DecoOuterSizeY2: float32,
+  DecoInnerSizeX1: float32,
+  DecoInnerSizeY1: float32,
+  NameBufLen: cint,
+  MoveId: cuint,
+  TabId: cuint,
+  ChildId: cuint,
+  PopupId: cuint,
+  Scroll: ImVec2,
+  ScrollMax: ImVec2,
+  ScrollTarget: ImVec2,
+  ScrollTargetCenterRatio: ImVec2,
+  ScrollTargetEdgeSnapDist: ImVec2,
+  ScrollbarSizes: ImVec2,
+  ScrollbarX: boolean,
+  ScrollbarY: boolean,
+  ViewportOwned: boolean,
+  Active: boolean,
+  WasActive: boolean,
+  WriteAccessed: boolean,
+  Collapsed: boolean,
+  WantCollapseToggle: boolean,
+  SkipItems: boolean,
+  SkipRefresh: boolean,
+  Appearing: boolean,
+  Hidden: boolean,
+  IsFallbackWindow: boolean,
+  IsExplicitChild: boolean,
+  HasCloseButton: boolean,
+  ResizeBorderHovered: cschar,
+  ResizeBorderHeld: cschar,
+  BeginCount: cshort,
+  BeginCountPreviousFrame: cshort,
+  BeginOrderWithinParent: cshort,
+  BeginOrderWithinContext: cshort,
+  FocusOrder: cshort,
+  AutoFitFramesX: cschar,
+  AutoFitFramesY: cschar,
+  AutoFitOnlyGrows: boolean,
+  AutoPosLastDirection: ImGuiDir,
+  HiddenFramesCanSkipItems: cschar,
+  HiddenFramesCannotSkipItems: cschar,
+  HiddenFramesForRenderOnly: cschar,
+  DisableInputsFrames: cschar,
+  SetWindowPosAllowFlags: cint,
+  SetWindowSizeAllowFlags: cint,
+  SetWindowCollapsedAllowFlags: cint,
+  SetWindowDockAllowFlags: cint,
+  SetWindowPosVal: ImVec2,
+  SetWindowPosPivot: ImVec2,
+  IDStack: ImVector_ImGuiID,
+  DC: ImGuiWindowTempData,
+  OuterRectClipped: ImRect,
+  InnerRect: ImRect,
+  InnerClipRect: ImRect,
+  WorkRect: ImRect,
+  ParentWorkRect: ImRect,
+  ClipRect: ImRect,
+  ContentRegionRect: ImRect,
+  HitTestHoleSize: ImVec2ih,
+  HitTestHoleOffset: ImVec2ih,
+  LastFrameActive: cint,
+  LastFrameJustFocused: cint,
+  LastTimeActive: float32,
+  ItemWidthDefault: float32,
+  StateStorage: ImGuiStorage,
+  ColumnsStorage: ImVector_ImGuiOldColumns,
+  FontWindowScale: float32,
+  FontWindowScaleParents: float32,
+  FontDpiScale: float32,
+  FontRefSize: float32,
+  SettingsOffset: cint,
+  DrawList: *ImDrawList,
+  DrawListInst: ImDrawList,
+  ParentWindow: *ImGuiWindow,
+  ParentWindowInBeginStack: *ImGuiWindow,
+  RootWindow: *ImGuiWindow,
+  RootWindowPopupTree: *ImGuiWindow,
+  RootWindowDockTree: *ImGuiWindow,
+  RootWindowForTitleBarHighlight: *ImGuiWindow,
+  RootWindowForNav: *ImGuiWindow,
+  ParentWindowForFocusRoute: *ImGuiWindow,
+  NavLastChildNavWindow: *ImGuiWindow,
+  NavLastIds: [2]cuint,
+  NavRectRel: [2]ImRect,
+  NavPreferredScoringPosRel: [2]ImVec2,
+  NavRootFocusScopeId: cuint,
+  MemoryDrawListIdxCapacity: cint,
+  MemoryDrawListVtxCapacity: cint,
+  MemoryCompacted: boolean,
+  DockIsActive: boolean,
+  DockNodeIsVisible: boolean,
+  DockTabIsVisible: boolean,
+  DockTabWantClose: boolean,
+  DockOrder: cshort,
+  DockStyle: ImGuiWindowDockStyle,
+  DockNode: *ImGuiDockNode,
+  DockNodeAsHost: *ImGuiDockNode,
+  DockId: cuint
+}
+ImGuiTabItem = @record{
+  ID: cuint,
+  Flags: cint,
+  Window: *ImGuiWindow,
+  LastFrameVisible: cint,
+  LastFrameSelected: cint,
+  Offset: float32,
+  Width: float32,
+  ContentWidth: float32,
+  RequestedWidth: float32,
+  NameOffset: cint,
+  BeginOrder: cshort,
+  IndexDuringLayout: cshort,
+  WantClose: boolean
+}
+global ImVector_ImGuiTabItem: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiTabItem
+}
+ImGuiTabBar = @record{
+  Window: *ImGuiWindow,
+  Tabs: ImVector_ImGuiTabItem,
+  Flags: cint,
+  ID: cuint,
+  SelectedTabId: cuint,
+  NextSelectedTabId: cuint,
+  VisibleTabId: cuint,
+  CurrFrameVisible: cint,
+  PrevFrameVisible: cint,
+  BarRect: ImRect,
+  CurrTabsContentsHeight: float32,
+  PrevTabsContentsHeight: float32,
+  WidthAllTabs: float32,
+  WidthAllTabsIdeal: float32,
+  ScrollingAnim: float32,
+  ScrollingTarget: float32,
+  ScrollingTargetDistToVisibility: float32,
+  ScrollingSpeed: float32,
+  ScrollingRectMinX: float32,
+  ScrollingRectMaxX: float32,
+  SeparatorMinX: float32,
+  SeparatorMaxX: float32,
+  ReorderRequestTabId: cuint,
+  ReorderRequestOffset: cshort,
+  BeginCount: cschar,
+  WantLayout: boolean,
+  VisibleTabWasSubmitted: boolean,
+  TabsAddedNew: boolean,
+  TabsActiveCount: cshort,
+  LastTabItemIdx: cshort,
+  ItemSpacingY: float32,
+  FramePadding: ImVec2,
+  BackupCursorPos: ImVec2,
+  TabsNames: ImGuiTextBuffer
+}
+ImGuiTableColumn = @record{
+  Flags: cint,
+  WidthGiven: float32,
+  MinX: float32,
+  MaxX: float32,
+  WidthRequest: float32,
+  WidthAuto: float32,
+  WidthMax: float32,
+  StretchWeight: float32,
+  InitStretchWeightOrWidth: float32,
+  ClipRect: ImRect,
+  UserID: cuint,
+  WorkMinX: float32,
+  WorkMaxX: float32,
+  ItemWidth: float32,
+  ContentMaxXFrozen: float32,
+  ContentMaxXUnfrozen: float32,
+  ContentMaxXHeadersUsed: float32,
+  ContentMaxXHeadersIdeal: float32,
+  NameOffset: cshort,
+  DisplayOrder: cshort,
+  IndexWithinEnabledSet: cshort,
+  PrevEnabledColumn: cshort,
+  NextEnabledColumn: cshort,
+  SortOrder: cshort,
+  DrawChannelCurrent: cushort,
+  DrawChannelFrozen: cushort,
+  DrawChannelUnfrozen: cushort,
+  IsEnabled: boolean,
+  IsUserEnabled: boolean,
+  IsUserEnabledNextFrame: boolean,
+  IsVisibleX: boolean,
+  IsVisibleY: boolean,
+  IsRequestOutput: boolean,
+  IsSkipItems: boolean,
+  IsPreserveWidthAuto: boolean,
+  NavLayerCurrent: cschar,
+  AutoFitQueue: cuchar,
+  CannotSkipItemsQueue: cuchar,
+  SortDirection: cuchar,
+  SortDirectionsAvailCount: cuchar,
+  SortDirectionsAvailMask: cuchar,
+  SortDirectionsAvailList: cuchar
+}
+global ImGuiTableCellData: type <cimport,nodecl,forwarddecl> = @record{}
+ImGuiTableCellData = @record{
+  BgColor: cuint,
+  Column: cshort
+}
+ImGuiTableHeaderData = @record{
+  Index: cshort,
+  TextColor: cuint,
+  BgColor0: cuint,
+  BgColor1: cuint
+}
+ImGuiTableInstanceData = @record{
+  TableInstanceID: cuint,
+  LastOuterHeight: float32,
+  LastTopHeadersRowHeight: float32,
+  LastFrozenHeight: float32,
+  HoveredRowLast: cint,
+  HoveredRowNext: cint
+}
+global ImSpan_ImGuiTableColumn: type <cimport,nodecl> = @record{
+  Data: *ImGuiTableColumn,
+  DataEnd: *ImGuiTableColumn
+}
+global ImSpan_ImGuiTableColumnIdx: type <cimport,nodecl> = @record{
+  Data: *cshort,
+  DataEnd: *cshort
+}
+global ImSpan_ImGuiTableCellData: type <cimport,nodecl> = @record{
+  Data: *ImGuiTableCellData,
+  DataEnd: *ImGuiTableCellData
+}
+global ImVector_ImGuiTableInstanceData: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiTableInstanceData
+}
+global ImVector_ImGuiTableColumnSortSpecs: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiTableColumnSortSpecs
+}
+ImGuiTable = @record{
+  ID: cuint,
+  Flags: cint,
+  RawData: pointer,
+  TempData: *ImGuiTableTempData,
+  Columns: ImSpan_ImGuiTableColumn,
+  DisplayOrderToIndex: ImSpan_ImGuiTableColumnIdx,
+  RowCellData: ImSpan_ImGuiTableCellData,
+  EnabledMaskByDisplayOrder: *cuint,
+  EnabledMaskByIndex: *cuint,
+  VisibleMaskByIndex: *cuint,
+  SettingsLoadedFlags: cint,
+  SettingsOffset: cint,
+  LastFrameActive: cint,
+  ColumnsCount: cint,
+  CurrentRow: cint,
+  CurrentColumn: cint,
+  InstanceCurrent: cshort,
+  InstanceInteracted: cshort,
+  RowPosY1: float32,
+  RowPosY2: float32,
+  RowMinHeight: float32,
+  RowCellPaddingY: float32,
+  RowTextBaseline: float32,
+  RowIndentOffsetX: float32,
+  RowFlags: cint,
+  LastRowFlags: cint,
+  RowBgColorCounter: cint,
+  RowBgColor: [2]cuint,
+  BorderColorStrong: cuint,
+  BorderColorLight: cuint,
+  BorderX1: float32,
+  BorderX2: float32,
+  HostIndentX: float32,
+  MinColumnWidth: float32,
+  OuterPaddingX: float32,
+  CellPaddingX: float32,
+  CellSpacingX1: float32,
+  CellSpacingX2: float32,
+  InnerWidth: float32,
+  ColumnsGivenWidth: float32,
+  ColumnsAutoFitWidth: float32,
+  ColumnsStretchSumWeights: float32,
+  ResizedColumnNextWidth: float32,
+  ResizeLockMinContentsX2: float32,
+  RefScale: float32,
+  AngledHeadersHeight: float32,
+  AngledHeadersSlope: float32,
+  OuterRect: ImRect,
+  InnerRect: ImRect,
+  WorkRect: ImRect,
+  InnerClipRect: ImRect,
+  BgClipRect: ImRect,
+  Bg0ClipRectForDrawCmd: ImRect,
+  Bg2ClipRectForDrawCmd: ImRect,
+  HostClipRect: ImRect,
+  HostBackupInnerClipRect: ImRect,
+  OuterWindow: *ImGuiWindow,
+  InnerWindow: *ImGuiWindow,
+  ColumnsNames: ImGuiTextBuffer,
+  DrawSplitter: *ImDrawListSplitter,
+  InstanceDataFirst: ImGuiTableInstanceData,
+  InstanceDataExtra: ImVector_ImGuiTableInstanceData,
+  SortSpecsSingle: ImGuiTableColumnSortSpecs,
+  SortSpecsMulti: ImVector_ImGuiTableColumnSortSpecs,
+  SortSpecs: ImGuiTableSortSpecs,
+  SortSpecsCount: cshort,
+  ColumnsEnabledCount: cshort,
+  ColumnsEnabledFixedCount: cshort,
+  DeclColumnsCount: cshort,
+  AngledHeadersCount: cshort,
+  HoveredColumnBody: cshort,
+  HoveredColumnBorder: cshort,
+  HighlightColumnHeader: cshort,
+  AutoFitSingleColumn: cshort,
+  ResizedColumn: cshort,
+  LastResizedColumn: cshort,
+  HeldHeaderColumn: cshort,
+  ReorderColumn: cshort,
+  ReorderColumnDir: cshort,
+  LeftMostEnabledColumn: cshort,
+  RightMostEnabledColumn: cshort,
+  LeftMostStretchedColumn: cshort,
+  RightMostStretchedColumn: cshort,
+  ContextPopupColumn: cshort,
+  FreezeRowsRequest: cshort,
+  FreezeRowsCount: cshort,
+  FreezeColumnsRequest: cshort,
+  FreezeColumnsCount: cshort,
+  RowCellDataCurrent: cshort,
+  DummyDrawChannel: cushort,
+  Bg2DrawChannelCurrent: cushort,
+  Bg2DrawChannelUnfrozen: cushort,
+  NavLayer: cschar,
+  IsLayoutLocked: boolean,
+  IsInsideRow: boolean,
+  IsInitializing: boolean,
+  IsSortSpecsDirty: boolean,
+  IsUsingHeaders: boolean,
+  IsContextPopupOpen: boolean,
+  DisableDefaultContextMenu: boolean,
+  IsSettingsRequestLoad: boolean,
+  IsSettingsDirty: boolean,
+  IsDefaultDisplayOrder: boolean,
+  IsResetAllRequest: boolean,
+  IsResetDisplayOrderRequest: boolean,
+  IsUnfrozenRows: boolean,
+  IsDefaultSizingPolicy: boolean,
+  IsActiveIdAliveBeforeTable: boolean,
+  IsActiveIdInTable: boolean,
+  HasScrollbarYCurr: boolean,
+  HasScrollbarYPrev: boolean,
+  MemoryCompacted: boolean,
+  HostSkipItems: boolean
+}
+global ImVector_ImGuiTableHeaderData: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiTableHeaderData
+}
+ImGuiTableTempData = @record{
+  TableIndex: cint,
+  LastTimeActive: float32,
+  AngledHeadersExtraWidth: float32,
+  AngledHeadersRequests: ImVector_ImGuiTableHeaderData,
+  UserOuterSize: ImVec2,
+  DrawSplitter: ImDrawListSplitter,
+  HostBackupWorkRect: ImRect,
+  HostBackupParentWorkRect: ImRect,
+  HostBackupPrevLineSize: ImVec2,
+  HostBackupCurrLineSize: ImVec2,
+  HostBackupCursorMaxPos: ImVec2,
+  HostBackupColumnsOffset: ImVec1,
+  HostBackupItemWidth: float32,
+  HostBackupItemWidthStackSize: cint
+}
+ImFontBuilderIO = @record{
+  FontBuilder_Build: function(atlas: *ImFontAtlas): boolean
+}
+global OPERATION: type <cimport,nodecl,using> = @enum(cint){
+  TRANSLATE_X = 1,
+  TRANSLATE_Y = 2,
+  TRANSLATE_Z = 4,
+  ROTATE_X = 8,
+  ROTATE_Y = 16,
+  ROTATE_Z = 32,
+  ROTATE_SCREEN = 64,
+  SCALE_X = 128,
+  SCALE_Y = 256,
+  SCALE_Z = 512,
+  BOUNDS = 1024,
+  SCALE_XU = 2048,
+  SCALE_YU = 4096,
+  SCALE_ZU = 8192,
+  TRANSLATE = 7,
+  ROTATE = 120,
+  SCALE = 896,
+  SCALEU = 14336,
+  UNIVERSAL = 14463
+}
+global MODE: type <cimport,nodecl,using> = @enum(cint){
+  LOCAL = 0,
+  WORLD = 1
+}
+global Style: type <cimport,nodecl,forwarddecl> = @record{}
+Style = @record{
+  TranslationLineThickness: float32,
+  TranslationLineArrowSize: float32,
+  RotationLineThickness: float32,
+  RotationOuterLineThickness: float32,
+  ScaleLineThickness: float32,
+  ScaleLineCircleSize: float32,
+  HatchedAxisLineThickness: float32,
+  CenterCircleSize: float32,
+  Colors: [15]ImVec4
+}
+global function ImGuizmo_SetDrawlist(drawlist: *ImDrawList): void <cimport,nodecl> end
+global function ImGuizmo_BeginFrame(): void <cimport,nodecl> end
+global function ImGuizmo_SetImGuiContext(ctx: *ImGuiContext): void <cimport,nodecl> end
+global function ImGuizmo_IsOver_Nil(): boolean <cimport,nodecl> end
+global function ImGuizmo_IsUsing(): boolean <cimport,nodecl> end
+global function ImGuizmo_IsUsingViewManipulate(): boolean <cimport,nodecl> end
+global function ImGuizmo_IsViewManipulateHovered(): boolean <cimport,nodecl> end
+global function ImGuizmo_IsUsingAny(): boolean <cimport,nodecl> end
+global function ImGuizmo_Enable(enable: boolean): void <cimport,nodecl> end
+global function ImGuizmo_DecomposeMatrixToComponents(matrix: *float32, translation: *float32, rotation: *float32, scale: *float32): void <cimport,nodecl> end
+global function ImGuizmo_RecomposeMatrixFromComponents(translation: *float32, rotation: *float32, scale: *float32, matrix: *float32): void <cimport,nodecl> end
+global function ImGuizmo_SetRect(x: float32, y: float32, width: float32, height: float32): void <cimport,nodecl> end
+global function ImGuizmo_SetOrthographic(isOrthographic: boolean): void <cimport,nodecl> end
+global function ImGuizmo_DrawCubes(view: *float32, projection: *float32, matrices: *float32, matrixCount: cint): void <cimport,nodecl> end
+global function ImGuizmo_DrawGrid(view: *float32, projection: *float32, matrix: *float32, gridSize: float32): void <cimport,nodecl> end
+global function ImGuizmo_Manipulate(view: *float32, projection: *float32, operation: OPERATION, mode: MODE, matrix: *float32, deltaMatrix: *float32, snap: *float32, localBounds: *float32, boundsSnap: *float32): boolean <cimport,nodecl> end
+global function ImGuizmo_ViewManipulate_Float(view: *float32, length: float32, position: ImVec2, size: ImVec2, backgroundColor: cuint): void <cimport,nodecl> end
+global function ImGuizmo_ViewManipulate_FloatPtr(view: *float32, projection: *float32, operation: OPERATION, mode: MODE, matrix: *float32, length: float32, position: ImVec2, size: ImVec2, backgroundColor: cuint): void <cimport,nodecl> end
+global function ImGuizmo_SetAlternativeWindow(window: *ImGuiWindow): void <cimport,nodecl> end
+global function ImGuizmo_SetID(id: cint): void <cimport,nodecl> end
+global function ImGuizmo_PushID_Str(str_id: cstring): void <cimport,nodecl> end
+global function ImGuizmo_PushID_StrStr(str_id_begin: cstring, str_id_end: cstring): void <cimport,nodecl> end
+global function ImGuizmo_PushID_Ptr(ptr_id: pointer): void <cimport,nodecl> end
+global function ImGuizmo_PushID_Int(int_id: cint): void <cimport,nodecl> end
+global function ImGuizmo_PopID(): void <cimport,nodecl> end
+global function ImGuizmo_GetID_Str(str_id: cstring): cuint <cimport,nodecl> end
+global function ImGuizmo_GetID_StrStr(str_id_begin: cstring, str_id_end: cstring): cuint <cimport,nodecl> end
+global function ImGuizmo_GetID_Ptr(ptr_id: pointer): cuint <cimport,nodecl> end
+global function ImGuizmo_IsOver_OPERATION(op: OPERATION): boolean <cimport,nodecl> end
+global function ImGuizmo_SetGizmoSizeClipSpace(value: float32): void <cimport,nodecl> end
+global function ImGuizmo_AllowAxisFlip(value: boolean): void <cimport,nodecl> end
+global function ImGuizmo_SetAxisLimit(value: float32): void <cimport,nodecl> end
+global function ImGuizmo_SetAxisMask(x: boolean, y: boolean, z: boolean): void <cimport,nodecl> end
+global function ImGuizmo_SetPlaneLimit(value: float32): void <cimport,nodecl> end
+global function ImGuizmo_IsOver_FloatPtr(position: *float32, pixelRadius: float32): boolean <cimport,nodecl> end
+global function ImGuizmo_GetStyle(): *Style <cimport,nodecl> end

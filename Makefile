@@ -6,6 +6,7 @@ EXAMPLE_DIRS := \
 							examples/iconFontViewer \
 							examples/imColorTextEditDemo \
 							examples/imGuiToggleDemo \
+							examples/imGuizmoDemo \
 							examples/imKnobsDemo \
 							examples/imSpinnerDemo \
 							examples/sdl2_opengl3

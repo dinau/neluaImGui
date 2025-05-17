@@ -1,0 +1,172 @@
+-- Show gizmo demo
+-- Converted from:
+--   https://github.com/sonoro1234/LuaJIT-ImGui/blob/255583dcc45c3eb041ab690c1d42f143247e014b/examples/imGuizmo_sample.lua
+--
+require 'os'
+require'math'
+--
+require'cimgui'
+require'imgui_backend_opengl3'
+require'imgui_backend_glfw'
+require'loadImage'
+require'utils'
+require'IconsFontAwesome6'
+--
+require'imguizmo'
+##[=[
+cinclude "cimguizmo.h"
+]=]
+
+--- External functions
+local function setupFonts() <cimport> end                -- from utils/setupFonts.c
+local function point2px(point:float32): float32 <cimport> end
+
+--- Initial Window size
+local MainWinWidth <const>  = 640
+local MainWinHeight <const> = 480
+
+--- Constants
+
+--- Global vars
+local versions : [][2]int32 = {{4, 6} ,{4, 5} ,{4, 4} ,{4, 3} ,{4, 2} ,{4, 1} ,{4, 0} ,{3, 3} }
+
+---------
+--- main
+---------
+local main = function()
+  glfwInit()
+  defer glfwTerminate()  end
+  local glfwWin: *GLFWwindow = nilptr
+  local glsl_version:cstring -- = "#version 330"
+  for _, ver in ipairs(versions) do
+    glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE)
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, ver[0])
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, ver[1])
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE)
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE)
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE)
+
+    glfwWin = glfwCreateWindow(MainWinWidth, MainWinHeight, "ImGui with Nelua 2025/05", nilptr, nilptr)
+    if nilptr ~= glfwWin then
+      glsl_version = "#version " .. tostring( ver[0] * 100 + ver[1] * 10)
+      break
+    end
+  end
+  if nilptr == glfwWin then
+    print("Could not create window")
+    os.exit(false)
+  end
+  defer glfwDestroyWindow(glfwWin) end
+
+  glfwMakeContextCurrent(glfwWin)
+  glfwSwapInterval(1) -- # Enable vsync
+
+  ------------------------
+  --- Load title bar icon
+  ------------------------
+  local IconName = "res/img/nl.png"
+  LoadTitleBarIcon(glfwWin, IconName)
+
+  if gladLoadGL(glfwGetProcAddress) == 0 then
+    error 'Could not initialize GLAD'
+  end
+  print('OpenGL loaded:', (@cstring)(glGetString(GL_VERSION)))
+
+  local context = igCreateContext()
+  defer igDestroyContext(context) end
+
+  ImGui_ImplGlfw_InitForOpenGL(glfwWin, true)
+  defer ImGui_ImplGlfw_Shutdown() end
+
+  ImGui_ImplOpenGL3_Init(glsl_version)
+  defer ImGui_ImplOpenGL3_Shutdown() end
+
+  setupFonts()
+
+  --igStyleColorsDark()
+  igStyleColorsClassic()
+
+  local showWindowDelay = 1 -- TODO : Avoid flickering window at start up.
+  local clearColor: [3]cfloat = {0.03,0.15,0.2}
+
+  local pio = igGetIO()
+
+  local zmoOP = TRANSLATE
+  local zmoMODE = LOCAL
+  local zmobounds:[]float32 = { -0.5, -0.5, -0.5, 0.5, 0.5, 0.5}
+  local Mident   :[]float32 = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1}
+  local MVmo     :[]float32 = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,-7,1}
+  local MPmo     :[]float32 = {2.3787, 0, 0, 0,
+                               0 ,3.1716 ,0 , 0,
+                               0 ,0 ,-1.0002 ,-1,
+                               0 ,0 ,-0.2 ,0}
+  local MOmo:[]float32 = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0.5,0.5,0.5,1}
+  --------------------
+  --- Main while loop
+  --------------------
+  while glfwWindowShouldClose(glfwWin) == 0 do
+    glfwPollEvents()
+
+    ImGui_ImplOpenGL3_NewFrame() -- # start imgui frame
+    ImGui_ImplGlfw_NewFrame()
+    igNewFrame()
+
+    ---------------------------------
+    --- Show ImGuiColorTextEdit demo
+    ---------------------------------
+    do
+      igBegin("ImGuizmo with Nelua lang. " .. ICON_FA_DOG, nilptr, 0)
+      defer igEnd() end
+      igRadioButton_IntPtr("trans",  &zmoOP,   TRANSLATE); igSameLine(0.0, -1.0)
+      igRadioButton_IntPtr("rot",    &zmoOP,   ROTATE);    igSameLine(0.0, -1.0)
+      igRadioButton_IntPtr("scale",  &zmoOP,   SCALE);     igSameLine(0.0, -1.0)
+      igRadioButton_IntPtr("bounds", &zmoOP,   BOUNDS);
+      igRadioButton_IntPtr("local",  &zmoMODE, LOCAL);     igSameLine(0.0, -1.0)
+      igRadioButton_IntPtr("world",  &zmoMODE, WORLD);
+    end -- do igBegin end
+
+    do
+      ImGuizmo_BeginFrame()
+      ImGuizmo_SetRect(0,0,pio.DisplaySize.x, pio.DisplaySize.y)
+      --ImGuizmo_SetRect(0,0,800, 600)
+      ImGuizmo_SetOrthographic(false)
+      ImGuizmo_DrawGrid(  &MVmo[0], &MPmo[0], &Mident[0], 10)
+      ImGuizmo_DrawCubes( &MVmo[0], &MPmo[0], &MOmo[0]  , 1)
+      local pmp = nilptr
+      if zmoOP == BOUNDS then
+        pmp = &zmobounds[0]
+      end
+      ImGuizmo_Manipulate(&MVmo[0]
+                         ,&MPmo[0]
+                         ,zmoOP
+                         ,zmoMODE
+                         ,&MOmo[0]
+                         ,nilptr
+                         ,nilptr
+                         ,pmp
+                         ,nilptr)
+      ImGuizmo_ViewManipulate_Float(&MVmo[0]  -- view
+                           ,7                 -- length
+                           ,ImVec2{0,   0}    -- position
+                           ,ImVec2{128, 128}  -- size
+                           ,0x1010101)    -- background color
+    end
+
+    igRender()
+    glClearColor(clearColor[0], clearColor[1], clearColor[2], 1.0)
+    glClear(GL_COLOR_BUFFER_BIT)
+    ImGui_ImplOpenGL3_RenderDrawData(igGetDrawData())
+
+    glfwSwapBuffers(glfwWin)
+
+    if showWindowDelay > 0 then
+      showWindowDelay = showWindowDelay - 1
+    elseif showWindowDelay == 0 then
+      showWindowDelay = -1
+      glfwShowWindow(glfwWin)
+    end
+  end -- main while loop end
+
+end -- main() end
+
+main()
