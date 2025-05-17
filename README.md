@@ -8,6 +8,7 @@
     - [imGuiToggleDemo](#imguitoggledemo)
     - [imKnobsDemo](#imknobsdemo)
     - [imSpinnerDemo](#imspinnerdemo)
+    - [imColorTextEditDemo](#imcolortexteditdemo)
     - [glfw_opengl3, sdl2_opengl3](#glfw_opengl3-sdl2_opengl3)
     - [iconFontViewer](#iconfontviewer)
     - [glfw_opengl3_jp](#glfw_opengl3_jp)
@@ -82,6 +83,7 @@ GCC
 
 ---
 
+
 ##### imGuiToggleDemo
 
 ---
@@ -105,6 +107,14 @@ GCC
 [imSpinnerDemo.nelua](examples/imSpinnerDemo/imSpinnerDemo.nelua) 
 
 ![alt](img/imSpinner.gif)
+
+##### imColorTextEditDemo
+
+---
+
+[imColorTextEditDemo.nelua](examples/imColorTextEditDemo/imColorTextEditDemo.nelua) 
+
+![alt](img/imColorTextEdit.png)
 
 ##### glfw_opengl3, sdl2_opengl3
 
@@ -167,7 +177,7 @@ Library name / C lang. wrapper
 - [ ] [ImGuiFileDialog](https://github.com/aiekick/ImGuiFileDialog) / [CImGuiFileDialog](https://github.com/dinau/CImGuiFileDialog)
 - [x] [ImGui_Toggle](https://github.com/cmdwtf/imgui_toggle) / [CimGui_Toggle](https://github.com/dinau/cimgui_toggle) (2025/05)
 - [x] [ImSpinner](https://github.com/dalerank/imspinner) / [CImSpinner](https://github.com/dinau/cimspinner) (2025/05)
-- [ ] [ImGuiColorTextEdit](https://github.com/santaclose/ImGuiColorTextEdit) / [cimCTE](https://github.com/cimgui/cimCTE)
+- [x] [ImGuiColorTextEdit](https://github.com/santaclose/ImGuiColorTextEdit) / [cimCTE](https://github.com/cimgui/cimCTE) (2025)
 - [ ] [ImGui_Markdown](https://github.com/enkisoftware/imgui_markdown) 
 
 #### My tools version

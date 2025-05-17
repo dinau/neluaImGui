@@ -1,0 +1,263 @@
+require 'os'
+require'math'
+--
+require'cimgui'
+require'imgui_backend_opengl3'
+require'imgui_backend_glfw'
+require'loadImage'
+require'utils'
+require'IconsFontAwesome6'
+--
+require'imcolortextedit'
+##[=[
+cinclude "cimCTE.h"
+]=]
+
+--- External functions
+local function setupFonts() <cimport> end                -- from utils/setupFonts.c
+
+--- Initial Window size
+local MainWinWidth <const>  = 1024
+local MainWinHeight <const> =  900
+
+--- Constants
+
+--- Global vars
+local versions : [][2]int32 = {{4, 6} ,{4, 5} ,{4, 4} ,{4, 3} ,{4, 2} ,{4, 1} ,{4, 0} ,{3, 3} }
+
+---------
+--- main
+---------
+local main = function()
+  glfwInit()
+  defer glfwTerminate()  end
+  local glfwWin: *GLFWwindow = nilptr
+  local glsl_version:cstring -- = "#version 330"
+  for _, ver in ipairs(versions) do
+    glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE)
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, ver[0])
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, ver[1])
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE)
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE)
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE)
+
+    glfwWin = glfwCreateWindow(MainWinWidth, MainWinHeight, "ImGui with Nelua 2025/05", nilptr, nilptr)
+    if nilptr ~= glfwWin then
+      glsl_version = "#version " .. tostring( ver[0] * 100 + ver[1] * 10)
+      break
+    end
+  end
+  if nilptr == glfwWin then
+    print("Could not create window")
+    os.exit(false)
+  end
+  defer glfwDestroyWindow(glfwWin) end
+
+  glfwMakeContextCurrent(glfwWin)
+  glfwSwapInterval(1) -- # Enable vsync
+
+  ------------------------
+  --- Load title bar icon
+  ------------------------
+  local IconName = "res/img/nl.png"
+  LoadTitleBarIcon(glfwWin, IconName)
+
+  if gladLoadGL(glfwGetProcAddress) == 0 then
+    error 'Could not initialize GLAD'
+  end
+  print('OpenGL loaded:', (@cstring)(glGetString(GL_VERSION)))
+
+  local context = igCreateContext()
+  defer igDestroyContext(context) end
+
+  ImGui_ImplGlfw_InitForOpenGL(glfwWin, true)
+  defer ImGui_ImplGlfw_Shutdown() end
+
+  ImGui_ImplOpenGL3_Init(glsl_version)
+  defer ImGui_ImplOpenGL3_Shutdown() end
+
+  setupFonts()
+
+  --igStyleColorsDark()
+  igStyleColorsClassic()
+
+  local showDemoWindow = false
+  local showInfoWindow = true
+  local showWindowDelay = 1 -- TODO : Avoid flickering window at start up.
+  local clearColor: [3]cfloat = {0.25,0.65,0.85}
+
+  local pio = igGetIO()
+
+  -- This is a programing font. https://github.com/yuru7/NOTONOTO
+  local fontFullPath = "./fonts/notonoto_v0.0.3/NOTONOTO-Regular.ttf"
+  local fileName = "main.cpp"
+
+  local strText:string = "test" -- readFile(fileName)
+  local editor = TextEditor_TextEditor()
+  TextEditor_SetLanguageDefinition(editor, LanguageDefinitionId.Cpp)
+  TextEditor_SetText(editor, strText)
+
+  TextEditor_SetPalette(editor, Light)
+
+  local mLine:cint
+  local mColumn:cint
+  local fQuit = false
+  --------------------
+  --- Main while loop
+  --------------------
+  while glfwWindowShouldClose(glfwWin) == 0 and not fQuit do
+    glfwPollEvents()
+
+    ImGui_ImplOpenGL3_NewFrame() -- # start imgui frame
+    ImGui_ImplGlfw_NewFrame()
+    igNewFrame()
+
+    if showDemoWindow then
+      igShowDemoWindow(&showDemoWindow)
+    end
+
+    --------------------------
+    -- Show information window
+    --------------------------
+    do
+      igBegin("Nelua: Dear ImGui info", &showInfoWindow, 0)
+      defer igEnd() end
+      local s = "GLFW v" .. tostring(glfwGetVersionString())
+      s = ICON_FA_COMMENT .. " " .. s
+      igText(s)
+      s = "OpenGL v" .. tostring((@cstring)(glGetString(GL_VERSION)))
+      s = ICON_FA_COMMENT_SMS .. " " .. s
+      igText(s)
+      igText(ICON_FA_COMMENT_DOTS .. " Dear ImGui")   igSameLine(0, -1.0)
+      igText(igGetVersion())
+      igText(ICON_FA_COMMENT_MEDICAL .. " ")   igSameLine(0, 0)
+      igText(_VERSION)
+
+      igCheckbox("Demo window", &showDemoWindow)
+      igColorEdit3("Background color", &clearColor, 0)
+
+      igText("Application average %.3f ms/frame (%.1f FPS)", (1000.0 / pio.Framerate), pio.Framerate)
+    end
+
+    ---------------------------------
+    --- Show ImGuiColorTextEdit demo
+    ---------------------------------
+    TextEditor_GetCursorPosition(editor,  &mLine, &mColumn)
+    do
+      igBegin("ImGuiColorTextEdit with Nelua lang. " .. ICON_FA_CAT, nilptr, 0)
+      --defer igEnd() end
+      --
+        igSetWindowSize_Vec2(ImVec2{800, 600}, ImGuiCond_FirstUseEver)
+        if igBeginMenuBar() then
+          --defer igEndMenuBar() end
+          -------------
+          -- Menu File
+          -------------
+          if igBeginMenu("File", true) then
+            --defer igEndMenu() end
+            if igMenuItem_BoolPtr("Save", "Ctrl-S", nilptr, true) then
+              strText = TextEditor_GetText(editor)
+              --writeFile("main.cpp", strText)
+              print"saved"
+            end
+            if igMenuItem_Bool("Quit", "Alt-F4", false ,true) then
+              fQuit = true
+              print"quit"
+            end
+            igEndMenu()
+          end
+
+      --    -------------
+      --    -- Menu Edit
+      --    -------------
+      --    if igBeginMenu("Edit", true) then
+      --      defer igEndMenu() end
+      --      local ro = TextEditor_IsReadOnlyEnabled(editor)
+      --      if igMenuItem_BoolPtr("Read-only mode", nilptr, &ro, false) then
+      --        TextEditor_SetReadOnlyEnabled(editor, ro)
+      --      end
+      --      igSeparator()
+      --      --
+      --      if igMenuItem_BoolPtr("Undo", "ALT-Backspace", nilptr, not ro and TextEditor_CanUndo(editor)) then
+      --        TextEditor_Undo(editor,1)
+      --      end
+      --      if igMenuItem_BoolPtr("Redo", "Ctrl-Y"       , nilptr, not ro and TextEditor_CanRedo(editor)) then
+      --        TextEditor_Redo(editor,1)
+      --      end
+      --      igSeparator()
+      --      --
+      --      if igMenuItem_BoolPtr("Copy", "Ctrl-C",        nilptr, TextEditor_AnyCursorHasSelection(editor)) then
+      --        TextEditor_Copy(editor)
+      --      end
+      --      if igMenuItem_BoolPtr("Cut", "Ctrl-X",         nilptr, not ro and TextEditor_AnyCursorHasSelection(editor)) then
+      --        TextEditor_Cut(editor)
+      --      end
+      --      if igMenuItem_BoolPtr("Paste", "Ctrl-V",       nilptr, not ro and igGetClipboardText() ~= nilptr) then
+      --        TextEditor_Paste(editor)
+      --      end
+      --      igSeparator();
+      --      if igMenuItem_Bool("Select all", "Ctrl-A",     nilptr, true) then
+      --        TextEditor_SelectAll(editor)
+      --      end
+      --    end
+      --    -------------
+      --    -- Menu Theme
+      --    -------------
+      --    if igBeginMenu("Theme", true) then
+      --      defer igEndMenu() end
+      --      if igMenuItem_Bool("Dark palette", nilptr, nilptr, false ) then
+      --        TextEditor_SetPalette(editor, Dark)
+      --      end
+      --      if igMenuItem_Bool("Light palette", nilptr, nilptr, false) then
+      --        TextEditor_SetPalette(editor,Light)
+      --      end
+      --      if igMenuItem_Bool("Mariana palette", nilptr, nilptr, false) then
+      --        TextEditor_SetPalette(editor,Mariana)
+      --      end
+      --      if igMenuItem_Bool("Retro blue palette", "Ctrl-B", nilptr, true) then
+      --        TextEditor_SetPalette(editor,RetroBlue)
+      --      end
+      --    end
+        igEndMenuBar()
+      end -- menubar end
+      --local langNames: []string = {"None", "Cpp", "C", "Cs", "Python", "Lua", "Json", "Sql", "AngelScript", "Glsl", "Hlsl"}
+      --local str1:string = "Ins"
+      --if TextEditor_IsOverwriteEnabled(editor) then
+      --  str1 = "Ovr"
+      --end
+      --local str2:string = ""
+      --if TextEditor_CanUndo(editor) then
+      --  str2 = "*"
+      --end
+      --igText("%6d/%-6d %6d lines  | %s | %s | %s | %s" , mLine + 1, mColumn + 1, TextEditor_GetLineCount(editor), str1, str2
+      --       ,langNames[TextEditor_GetLanguageDefinition(editor)], fileName)
+
+      ----igPushFont(textFont)
+      TextEditor_Render(editor, "texteditor", false, ImVec2{0,0}, false)
+      ----igPopFont()
+
+      ----
+      --igNewLine()
+      --igText("Application average %.3f ms/frame (%.1f FPS)", (1000.0 / pio.Framerate), pio.Framerate)
+      --
+      igEnd()
+    end -- do igBegin end
+
+    igRender()
+    glClearColor(clearColor[0], clearColor[1], clearColor[2], 1.0)
+    glClear(GL_COLOR_BUFFER_BIT)
+    ImGui_ImplOpenGL3_RenderDrawData(igGetDrawData())
+
+    glfwSwapBuffers(glfwWin)
+
+    if showWindowDelay > 0 then
+      showWindowDelay = showWindowDelay - 1
+    elseif showWindowDelay == 0 then
+      showWindowDelay = -1
+      glfwShowWindow(glfwWin)
+    end
+  end -- main while loop end
+
+end -- main() end
+
+main()

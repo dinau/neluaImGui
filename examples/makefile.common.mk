@@ -93,7 +93,8 @@ OBJS += $(BUILD_DIR)/imgui_tables.o
 OBJS += $(BUILD_DIR)/imgui_widgets.o
 AR := ar -rc
 
-CPPOPT += -O2 -fno-exceptions -fno-rtti
+CPPOPT += -O2  -fno-rtti
+#CPPOPT += -fno-exceptions
 CPPOPT += $(API_PREFIX)
 CPPOPT += -I$(IMGUI_DIR)/backends -I$(IMGUI_DIR)
 CPPOPT += -DIMGUI_ENABLE_WIN32_DEFAULT_IME_FUNCTIONS

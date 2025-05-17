@@ -1,0 +1,86 @@
+global ImVec2: type <cimport,nodecl,forwarddecl> = @record{}
+ImVec2 = @record{
+  x: float32,
+  y: float32
+}
+global TextEditor: type <cimport,nodecl,forwarddecl> = @record{}
+TextEditor = @record{}
+global PaletteId: type <cimport,nodecl,using> = @enum(cint){
+  Dark = 0,
+  Light = 1,
+  Mariana = 2,
+  RetroBlue = 3
+}
+global LanguageDefinitionId: type <cimport,nodecl,using> = @enum(cint){
+  None = 0,
+  Cpp = 1,
+  C = 2,
+  Cs = 3,
+  Python = 4,
+  Lua = 5,
+  Json = 6,
+  Sql = 7,
+  AngelScript = 8,
+  Glsl = 9,
+  Hlsl = 10
+}
+global SetViewAtLineMode: type <cimport,nodecl,using> = @enum(cint){
+  FirstVisibleLine = 0,
+  Centered = 1,
+  LastVisibleLine = 2
+}
+global function TextEditor_TextEditor(): *TextEditor <cimport,nodecl> end
+global function TextEditor_destroy(self: *TextEditor): void <cimport,nodecl> end
+global function TextEditor_SetReadOnlyEnabled(self: *TextEditor, aValue: boolean): void <cimport,nodecl> end
+global function TextEditor_IsReadOnlyEnabled(self: *TextEditor): boolean <cimport,nodecl> end
+global function TextEditor_SetAutoIndentEnabled(self: *TextEditor, aValue: boolean): void <cimport,nodecl> end
+global function TextEditor_IsAutoIndentEnabled(self: *TextEditor): boolean <cimport,nodecl> end
+global function TextEditor_SetShowWhitespacesEnabled(self: *TextEditor, aValue: boolean): void <cimport,nodecl> end
+global function TextEditor_IsShowWhitespacesEnabled(self: *TextEditor): boolean <cimport,nodecl> end
+global function TextEditor_SetShowLineNumbersEnabled(self: *TextEditor, aValue: boolean): void <cimport,nodecl> end
+global function TextEditor_IsShowLineNumbersEnabled(self: *TextEditor): boolean <cimport,nodecl> end
+global function TextEditor_SetShortTabsEnabled(self: *TextEditor, aValue: boolean): void <cimport,nodecl> end
+global function TextEditor_IsShortTabsEnabled(self: *TextEditor): boolean <cimport,nodecl> end
+global function TextEditor_GetLineCount(self: *TextEditor): cint <cimport,nodecl> end
+global function TextEditor_IsOverwriteEnabled(self: *TextEditor): boolean <cimport,nodecl> end
+global function TextEditor_SetPalette(self: *TextEditor, aValue: PaletteId): void <cimport,nodecl> end
+global function TextEditor_GetPalette(self: *TextEditor): PaletteId <cimport,nodecl> end
+global function TextEditor_SetLanguageDefinition(self: *TextEditor, aValue: LanguageDefinitionId): void <cimport,nodecl> end
+global function TextEditor_GetLanguageDefinition(self: *TextEditor): LanguageDefinitionId <cimport,nodecl> end
+global function TextEditor_GetLanguageDefinitionName(self: *TextEditor): cstring <cimport,nodecl> end
+global function TextEditor_SetTabSize(self: *TextEditor, aValue: cint): void <cimport,nodecl> end
+global function TextEditor_GetTabSize(self: *TextEditor): cint <cimport,nodecl> end
+global function TextEditor_SetLineSpacing(self: *TextEditor, aValue: float32): void <cimport,nodecl> end
+global function TextEditor_GetLineSpacing(self: *TextEditor): float32 <cimport,nodecl> end
+global function TextEditor_SetDefaultPalette(aValue: PaletteId): void <cimport,nodecl> end
+global function TextEditor_GetDefaultPalette(): PaletteId <cimport,nodecl> end
+global function TextEditor_SelectAll(self: *TextEditor): void <cimport,nodecl> end
+global function TextEditor_SelectLine(self: *TextEditor, aLine: cint): void <cimport,nodecl> end
+global function TextEditor_SelectRegion(self: *TextEditor, aStartLine: cint, aStartChar: cint, aEndLine: cint, aEndChar: cint): void <cimport,nodecl> end
+global function TextEditor_SelectNextOccurrenceOf(self: *TextEditor, aText: cstring, aTextSize: cint, aCaseSensitive: boolean): void <cimport,nodecl> end
+global function TextEditor_SelectAllOccurrencesOf(self: *TextEditor, aText: cstring, aTextSize: cint, aCaseSensitive: boolean): void <cimport,nodecl> end
+global function TextEditor_AnyCursorHasSelection(self: *TextEditor): boolean <cimport,nodecl> end
+global function TextEditor_AllCursorsHaveSelection(self: *TextEditor): boolean <cimport,nodecl> end
+global function TextEditor_ClearExtraCursors(self: *TextEditor): void <cimport,nodecl> end
+global function TextEditor_ClearSelections(self: *TextEditor): void <cimport,nodecl> end
+global function TextEditor_SetCursorPosition(self: *TextEditor, aLine: cint, aCharIndex: cint): void <cimport,nodecl> end
+global function TextEditor_GetCursorPosition(self: *TextEditor, outLine: *cint, outColumn: *cint): void <cimport,nodecl> end
+global function TextEditor_GetFirstVisibleLine(self: *TextEditor): cint <cimport,nodecl> end
+global function TextEditor_GetLastVisibleLine(self: *TextEditor): cint <cimport,nodecl> end
+global function TextEditor_SetViewAtLine(self: *TextEditor, aLine: cint, aMode: SetViewAtLineMode): void <cimport,nodecl> end
+global function TextEditor_Copy(self: *TextEditor): void <cimport,nodecl> end
+global function TextEditor_Cut(self: *TextEditor): void <cimport,nodecl> end
+global function TextEditor_Paste(self: *TextEditor): void <cimport,nodecl> end
+global function TextEditor_Undo(self: *TextEditor, aSteps: cint): void <cimport,nodecl> end
+global function TextEditor_Redo(self: *TextEditor, aSteps: cint): void <cimport,nodecl> end
+global function TextEditor_CanUndo(self: *TextEditor): boolean <cimport,nodecl> end
+global function TextEditor_CanRedo(self: *TextEditor): boolean <cimport,nodecl> end
+global function TextEditor_GetUndoIndex(self: *TextEditor): cint <cimport,nodecl> end
+global function TextEditor_Render(self: *TextEditor, aTitle: cstring, aParentIsFocused: boolean, aSize: ImVec2, aBorder: boolean): boolean <cimport,nodecl> end
+global function TextEditor_UnitTests(self: *TextEditor): void <cimport,nodecl> end
+global function TextEditor_SetText(self: *TextEditor, aText: cstring): void <cimport,nodecl> end
+global function TextEditor_GetText_alloc(self: *TextEditor): cstring <cimport,nodecl> end
+global function TextEditor_GetText_free(ptr: cstring): void <cimport,nodecl> end
+global function TextEditor_GetText_static(self: *TextEditor): cstring <cimport,nodecl> end
+global function TextEditor_GetText(self: *TextEditor): cstring <cimport,nodecl> end
+global function TextEditor_ImGuiDebugPanel(self: *TextEditor, panelName: cstring): void <cimport,nodecl> end

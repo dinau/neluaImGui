@@ -1,6 +1,6 @@
-------------------------
+-----------------
 --- cimgui.nelua
-------------------------
+-----------------
 ##[==[
 cflags '-DCIMGUI_DEFINE_ENUMS_AND_STRUCTS'
 cinclude 'cimgui.h'
@@ -26,9 +26,9 @@ local fs = require 'nelua.utils.fs'
 ]==]
 print("Generated [libs/imgui/cimgui.nelua]")
 
-------------------------
+--------------------
 --- imspinner.nelua
-------------------------
+--------------------
 ##[==[
 -- import Nelua Decl plugin and filesystem utils.
 local nldecl = require 'nelua.plugins.nldecl'
@@ -51,9 +51,9 @@ local fs = require 'nelua.utils.fs'
 ]==]
 print("Generated [libs/imgui/imspinner.nelua]")
 
-------------------------
+------------------
 --- imKnobs.nelua
-------------------------
+------------------
 ##[==[
 -- import Nelua Decl plugin and filesystem utils.
 local nldecl = require 'nelua.plugins.nldecl'
@@ -79,9 +79,9 @@ end
 ]==]
 print("Generated [libs/imgui/imknobs.nelua]")
 
-------------------------
+-------------------
 --- imtoggle.nelua
-------------------------
+-------------------
 ##[==[
 -- import Nelua Decl plugin and filesystem utils.
 local nldecl = require 'nelua.plugins.nldecl'
@@ -99,10 +99,38 @@ local fs = require 'nelua.utils.fs'
     parse_includes = {'cimgui_toggle.h','cimgui_toggle_palette.h'},
     -- what symbol name prefix should we import from that file?
     include_names = {'^ImGuiToggle','^Toggle'},
-    include_dirs = {'libs/cimgui','libs/cimgui_toggle',''}
+    include_dirs = {'libs/cimgui','libs/cimgui_toggle'}
   }
 
 if ccinfo.is_windows then
 end
 ]==]
 print("Generated [libs/imgui/imtoggle.nelua]")
+
+--------------------------
+--- imcolortextedit.nelua
+--------------------------
+##[==[
+-- import Nelua Decl plugin and filesystem utils.
+local nldecl = require 'nelua.plugins.nldecl'
+local fs = require 'nelua.utils.fs'
+
+-- Generate nelua bindings file. (It will be always regenerated)
+  nldecl.generate_bindings_file{
+    defines = {'CIMGUI_DEFINE_ENUMS_AND_STRUCTS'
+               ,'bool _Bool'
+               ,'IMGUI_IMPL_API "extern \"C\" __declspec(dllexport)"'
+               ,'ImDrawIdx unsigned int'
+              },
+    output_file = 'libs/nelua/imgui/imcolortextedit.nelua',
+    -- what C file we should generate bindings for and parse?
+    parse_includes = {'cimCTE.h'},
+    -- what symbol name prefix should we import from that file?
+    include_names = {'^TextEditor'},
+    include_dirs = {'libs/cimgui','libs/cimCTE'}
+  }
+
+if ccinfo.is_windows then
+end
+]==]
+print("Generated [libs/imgui/imcolortextedit.nelua]")
