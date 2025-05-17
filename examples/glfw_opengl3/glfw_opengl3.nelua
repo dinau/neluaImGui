@@ -127,7 +127,7 @@ local main = function()
     end
 
     do
-      igBegin("Nelua: Dear ImGui test", &showFirstWindow, 0)
+      igBegin("Nelua: Dear ImGui demo", &showFirstWindow, 0)
       defer igEnd() end
       local s = "GLFW v" .. tostring(glfwGetVersionString())
       s = ICON_FA_COMMENT .. " " .. s

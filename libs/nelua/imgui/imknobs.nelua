@@ -1,0 +1,23 @@
+global IgKnobColorSet: type <cimport,nodecl> = @record{
+  base: cuint,
+  hovered: cuint,
+  active: cuint
+}
+global IgKnobFlags: type <cimport,nodecl,using> = @enum(cint){
+  IgKnobFlags_NoTitle = 1,
+  IgKnobFlags_NoInput = 2,
+  IgKnobFlags_ValueTooltip = 4,
+  IgKnobFlags_DragHorizontal = 8,
+  IgKnobFlags_DragVertical = 16
+}
+global IgKnobVariant: type <cimport,nodecl,using> = @enum(cint){
+  IgKnobVariant_Tick = 1,
+  IgKnobVariant_Dot = 2,
+  IgKnobVariant_Wiper = 4,
+  IgKnobVariant_WiperOnly = 8,
+  IgKnobVariant_WiperDot = 16,
+  IgKnobVariant_Stepped = 32,
+  IgKnobVariant_Space = 64
+}
+global function IgKnobFloat(label: cstring, p_value: *float32, v_min: float32, v_max: float32, speed: float32, format: cstring, variant: IgKnobVariant, size: float32, flags: IgKnobFlags, steps: cint, angle_min: float32, angle_max: float32): boolean <cimport,nodecl> end
+global function IgKnobInt(label: cstring, p_value: *cint, v_min: cint, v_max: cint, speed: float32, format: cstring, variant: IgKnobVariant, size: float32, flags: IgKnobFlags, steps: cint, angle_min: float32, angle_max: float32): boolean <cimport,nodecl> end

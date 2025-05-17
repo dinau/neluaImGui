@@ -1,0 +1,177 @@
+require 'os'
+require'math'
+--
+require'cimgui'
+require'imgui_backend_opengl3'
+require'imgui_backend_glfw'
+require'loadImage'
+require'utils'
+require'IconsFontAwesome6'
+--
+require'imspinner'
+##[=[
+cinclude "cimspinner.h"
+]=]
+
+--- External functions
+local function setupFonts() <cimport> end                -- from utils/setupFonts.c
+
+--- Initial Window size
+local MainWinWidth <const>  = 1024
+local MainWinHeight <const> =  900
+
+--- Constants
+
+--- Global vars
+local versions : [][2]int32 = {{4, 6} ,{4, 5} ,{4, 4} ,{4, 3} ,{4, 2} ,{4, 1} ,{4, 0} ,{3, 3} }
+
+---------
+--- main
+---------
+local main = function()
+  glfwInit()
+  defer glfwTerminate()  end
+  local glfwWin: *GLFWwindow = nilptr
+  local glsl_version:cstring -- = "#version 330"
+  for _, ver in ipairs(versions) do
+    glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE)
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, ver[0])
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, ver[1])
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE)
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE)
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE)
+
+    glfwWin = glfwCreateWindow(MainWinWidth, MainWinHeight, "ImGui with Nelua 2025/05", nilptr, nilptr)
+    if nilptr ~= glfwWin then
+      glsl_version = "#version " .. tostring( ver[0] * 100 + ver[1] * 10)
+      break
+    end
+  end
+  if nilptr == glfwWin then
+    print("Could not create window")
+    os.exit(false)
+  end
+  defer glfwDestroyWindow(glfwWin) end
+
+  glfwMakeContextCurrent(glfwWin)
+  glfwSwapInterval(1) -- # Enable vsync
+
+  ------------------------
+  --- Load title bar icon
+  ------------------------
+  local IconName = "res/img/nl.png"
+  LoadTitleBarIcon(glfwWin, IconName)
+
+  if gladLoadGL(glfwGetProcAddress) == 0 then
+    error 'Could not initialize GLAD'
+  end
+  print('OpenGL loaded:', (@cstring)(glGetString(GL_VERSION)))
+
+  local context = igCreateContext()
+  defer igDestroyContext(context) end
+
+  ImGui_ImplGlfw_InitForOpenGL(glfwWin, true)
+  defer ImGui_ImplGlfw_Shutdown() end
+
+  ImGui_ImplOpenGL3_Init(glsl_version)
+  defer ImGui_ImplOpenGL3_Shutdown() end
+
+  setupFonts()
+
+  --igStyleColorsDark()
+  igStyleColorsClassic()
+
+  local showDemoWindow = false
+  local showInfoWindow = true
+  local showWindowDelay = 1 -- TODO : Avoid flickering window at start up.
+  local clearColor: [3]cfloat = {0.25,0.65,0.85}
+
+  local pio = igGetIO()
+
+  --------------------
+  --- Main while loop
+  --------------------
+  while glfwWindowShouldClose(glfwWin) == 0 do
+    glfwPollEvents()
+
+    ImGui_ImplOpenGL3_NewFrame() -- # start imgui frame
+    ImGui_ImplGlfw_NewFrame()
+    igNewFrame()
+
+    if showDemoWindow then
+      igShowDemoWindow(&showDemoWindow)
+    end
+
+    --------------------------
+    -- Show information window
+    --------------------------
+    do
+      igBegin("Nelua: Dear ImGui info", &showInfoWindow, 0)
+      defer igEnd() end
+      local s = "GLFW v" .. tostring(glfwGetVersionString())
+      s = ICON_FA_COMMENT .. " " .. s
+      igText(s)
+      s = "OpenGL v" .. tostring((@cstring)(glGetString(GL_VERSION)))
+      s = ICON_FA_COMMENT_SMS .. " " .. s
+      igText(s)
+      igText(ICON_FA_COMMENT_DOTS .. " Dear ImGui")   igSameLine(0, -1.0)
+      igText(igGetVersion())
+      igText(ICON_FA_COMMENT_MEDICAL .. " ")   igSameLine(0, 0)
+      igText(_VERSION)
+
+      igCheckbox("Demo window", &showDemoWindow)
+      igColorEdit3("Background color", &clearColor, 0)
+
+      igText("Application average %.3f ms/frame (%.1f FPS)", (1000.0 / pio.Framerate), pio.Framerate)
+    end
+
+    --------------------------
+    -- Show CImSpinner window
+    --------------------------
+    do
+      igBegin ("CImSpinner with Nelua lang. " .. ICON_FA_CAT, nilptr, 0)
+      defer igEnd() end
+      local red = ImColor{ImVec4{1.0, 0.0, 0.0, 1.0}}
+      local blue= ImColor{ImVec4{0.0, 0.0, 1.0, 1.0}}
+      ----
+      --- See ./Makefile to add further spinner widgets.
+      SpinnerDnaDotsEx(      "DnaDotsV"     ,16, 2, red, 1.2 , 8, 0.25, true);igSameLine(0.0, -1.0)
+      SpinnerRainbowMix(     "Rmix"         ,16, 2, blue, 2)                 ;igSameLine(0.0, -1.0)
+      SpinnerAng8(           "Ang"          ,16, 2)                          ;igSameLine(0.0, -1.0)
+      SpinnerPulsar(         "Pulsar"       ,16, 2)                          ;igSameLine(0.0, -1.0)
+      SpinnerClock(          "Clock"        ,16, 2)                          ;igSameLine(0.0, -1.0)
+      SpinnerAtom(           "atom"         ,16, 2)                          ;igSameLine(0.0, -1.0)
+      SpinnerSwingDots(      "wheel"        ,16, 6)                          ;igSameLine(0.0, -1.0)
+      SpinnerDotsToBar(      "tobar"        ,16, 2, 0.5)                     ;igSameLine(0.0, -1.0)
+      SpinnerBarChartRainbow("rainbow"      ,16, 4, red, 4)                  ;igSameLine(0.0, -1.0)
+      SpinnerScaleSquares(   "ScaleSquares" ,16, 8, blue, 4)
+      igText("Application average %.3f ms/frame (%.1f FPS)", (1000.0 / pio.Framerate), pio.Framerate)
+    end
+
+    --------------------------
+    -- Show ImSpinner window
+    --------------------------
+    do
+      igBegin ("ImSpinner demo " .. ICON_FA_DOG, nilptr, 0)
+      defer igEnd() end
+      demoSpinners()
+    end
+
+    igRender()
+    glClearColor(clearColor[0], clearColor[1], clearColor[2], 1.0)
+    glClear(GL_COLOR_BUFFER_BIT)
+    ImGui_ImplOpenGL3_RenderDrawData(igGetDrawData())
+
+    glfwSwapBuffers(glfwWin)
+
+    if showWindowDelay > 0 then
+      showWindowDelay = showWindowDelay - 1
+    elseif showWindowDelay == 0 then
+      showWindowDelay = -1
+      glfwShowWindow(glfwWin)
+    end
+  end -- main while loop end
+
+end -- main() end
+
+main()

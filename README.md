@@ -3,24 +3,25 @@
 
 - [NeluaImGui](#neluaimgui)
   - [Prerequisites](#prerequisites)
-  - [Build and run](#build-and-run)
+  - [Build and run on Windows OS](#build-and-run-on-windows-os)
   - [Examples](#examples)
+    - [imKnobsDemo](#imknobsdemo)
+    - [imSpinnerDemo](#imspinnerdemo)
     - [glfw_opengl3, sdl2_opengl3](#glfw_opengl3-sdl2_opengl3)
     - [iconFontViewer](#iconfontviewer)
     - [glfw_opengl3_jp](#glfw_opengl3_jp)
   - [SDL2 / GLFW / STB headers for Nelua](#sdl2--glfw--stb-headers-for-nelua)
+  - [Available librares list](#available-librares-list)
   - [My tools version](#my-tools-version)
   - [History](#history)
   - [Other ImGui / CImGui project](#other-imgui--cimgui-project)
-  - [SDL game tutorial Platfromer project](#sdl-game-tutorial-platfromer-project)
+  - [SDL game tutorial Platfromer](#sdl-game-tutorial-platfromer)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ### NeluaImGui
 
-ImGui / CImGui with NeLua language
-
-My experiment project for NeLua and ImGui / CImGui libraries.
+ImGui / CImGui wrapper library and some examples with NeLua language
 
 Now work in progress.
 
@@ -80,6 +81,22 @@ GCC
 
 ---
 
+##### imKnobsDemo
+
+---
+
+[imKnobsDemo.nelua](examples/imKnobsDemo/imKnobsDemo.nelua) 
+
+![alt](img/imKnobs.png)
+
+##### imSpinnerDemo
+
+---
+
+[imSpinnerDemo.nelua](examples/imSpinnerDemo/imSpinnerDemo.nelua) 
+
+![alt](img/imSpinner.gif)
+
 ##### glfw_opengl3, sdl2_opengl3
 
 ---
@@ -126,12 +143,30 @@ Showing multibyte fonts(UTF-8, CJK fonts) and IME(Input method)
 
 These header files [libs/nelua/glfw](libs/nelua/glfw), [libs/nelua/sdl2](libs/nelua/sdl2), [libs/nelua/stb](libs/nelua/stb) have thankfully been copied form [nelua-decl libraries project](https://github.com/edubart/nelua-decl).
 
+#### Available librares list at this moment
+
+---
+
+Library name / C lang. wrapper
+
+- [x] [ImGui](https://github.com/ocornut/imgui) / [CImGui](https://github.com/cimgui/cimgui) (2024/11)
+- [ ] [ImPlot](https://github.com/epezent/implot) / [CImPlot](https://github.com/cimgui/cimplot)
+- [ ] [ImPlot3d](https://github.com/brenocq/implot3d) / [CImPlot3d](https://github.com/cimgui/cimplot3d) 
+- [ ] [ImNodes](https://github.com/Nelarius/imnodes) / [CImNodes](https://github.com/cimgui/cimnodes)
+- [ ] [ImGuizmo](https://github.com/CedricGuillemet/ImGuizmo) / [CImGuizmo](https://github.com/cimgui/cimguizmo)
+- [x] [ImGui-Knobs](https://github.com/altschuler/imgui-knobs) / [CImGui-Knobs](https://github.com/dinau/imguin/tree/main/src/imguin/private/cimgui-knobs) (2025/05)
+- [ ] [ImGuiFileDialog](https://github.com/aiekick/ImGuiFileDialog) / [CImGuiFileDialog](https://github.com/dinau/CImGuiFileDialog)
+- [ ] [ImGui_Toggle](https://github.com/cmdwtf/imgui_toggle) / [CimGui_Toggle](https://github.com/dinau/cimgui_toggle)
+- [x] [ImSpinner](https://github.com/dalerank/imspinner) / [CImSpinner](https://github.com/dinau/cimspinner) (2025/05)
+- [ ] [ImGuiColorTextEdit](https://github.com/santaclose/ImGuiColorTextEdit) / [cimCTE](https://github.com/cimgui/cimCTE)
+- [ ] [ImGui_Markdown](https://github.com/enkisoftware/imgui_markdown) 
+
 #### My tools version
 
 ---
 
 - Nelua-0.2.0-dev
-- Gcc.exe (Rev1, Built by MSYS2 project) 14.2.0)
+- Gcc.exe (Rev1, Built by MSYS2 project) 15.1.0)
 - Git version 2.46.0.windows.1
 - Make: GNU Make 4.4.1
 

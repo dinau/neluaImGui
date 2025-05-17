@@ -1,14 +1,15 @@
 *.o
 *.exe
-00glfw_opengl3_new/
 libs/mjson/
-imspinner/
 .neluacache/
 .nimcache/
+.ccache
 *.a
 .build/
 *.dll
 *.nim
 *.save
+*.mp4
 README.html
 org.html
+subadd.bat

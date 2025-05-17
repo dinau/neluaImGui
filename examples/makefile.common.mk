@@ -79,13 +79,13 @@ OPT += -L $(LIBS_DIR)/nelua/glfw   \
        -L ../utils/fonticon        \
        -L ../utils
 
-VPATH = $(CIMGUI_DIR)          \
+VPATH += $(CIMGUI_DIR)          \
 				:$(IMGUI_DIR)          \
 				:$(IMGUI_DIR)/backends \
 	      :$(UTILS_DIR)
 
 # ImGui / CImGui objs
-OBJS =  $(BUILD_DIR)/cimgui.o
+OBJS += $(BUILD_DIR)/cimgui.o
 OBJS += $(BUILD_DIR)/imgui.o
 OBJS += $(BUILD_DIR)/imgui_draw.o
 OBJS += $(BUILD_DIR)/imgui_demo.o
@@ -116,7 +116,9 @@ ver:
 	@nelua -v
 
 $(TARGET)$(EXE): $(DEPS_ALL)
+	@echo ========== ========== ========= ========= =========
 	nelua $(OPT) -o $@ $<
+	@echo ========== ========== ========= ========= =========
 	@strip $(TARGET)$(EXE)
 	@ls -lks $(TARGET)$(EXE)
 

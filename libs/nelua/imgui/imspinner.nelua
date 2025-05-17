@@ -1,0 +1,270 @@
+global ImColor: type <cimport,nodecl,forwarddecl> = @record{}
+global ImVec4: type <cimport,nodecl,forwarddecl> = @record{}
+ImVec4 = @record{
+  x: float32,
+  y: float32,
+  z: float32,
+  w: float32
+}
+ImColor = @record{
+  Value: ImVec4
+}
+global function SpinnerRainbow(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerRainbowEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, ang_min: float32, ang_max: float32, arcs: cint, mode: cint): void <cimport,nodecl> end
+global function SpinnerRainbowMix(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerRainbowMixEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, ang_min: float32, ang_max: float32, arcs: cint, mode: cint): void <cimport,nodecl> end
+global function SpinnerRotatingHeart(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerRotatingHeartEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, ang_min: float32): void <cimport,nodecl> end
+global function SpinnerAng(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerAngEx(label: cstring, radius: float32, thickness: float32, color: ImColor, bg: ImColor, speed: float32, angle: float32, mode: cint): void <cimport,nodecl> end
+global function SpinnerAng8(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerAng8Ex(label: cstring, radius: float32, thickness: float32, color: ImColor, bg: ImColor, speed: float32, angle: float32, mode: cint, rkoef: float32): void <cimport,nodecl> end
+global function SpinnerAngMix(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerAngMixEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, angle: float32, arcs: cint, mode: cint): void <cimport,nodecl> end
+global function SpinnerLoadingRing(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerLoadingRingEx(label: cstring, radius: float32, thickness: float32, color: ImColor, bg: ImColor, speed: float32, segments: cint): void <cimport,nodecl> end
+global function SpinnerClock(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerClockEx(label: cstring, radius: float32, thickness: float32, color: ImColor, bg: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerPulsar(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerPulsarEx(label: cstring, radius: float32, thickness: float32, bg: ImColor, speed: float32, sequence: boolean, angle: float32, mode: cint): void <cimport,nodecl> end
+global function SpinnerDoubleFadePulsar(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerDoubleFadePulsarEx(label: cstring, radius: float32, thickness: float32, bg: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerTwinPulsar(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerTwinPulsarEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, rings: cint, mode: cint): void <cimport,nodecl> end
+global function SpinnerFadePulsar(label: cstring, radius: float32): void <cimport,nodecl> end
+global function SpinnerFadePulsarEx(label: cstring, radius: float32, color: ImColor, speed: float32, rings: cint, mode: cint): void <cimport,nodecl> end
+global function SpinnerFadePulsarSquare(label: cstring, radius: float32): void <cimport,nodecl> end
+global function SpinnerFadePulsarSquareEx(label: cstring, radius: float32, color: ImColor, speed: float32, rings: cint, mode: cint): void <cimport,nodecl> end
+global function SpinnerCircularLines(label: cstring, radius: float32): void <cimport,nodecl> end
+global function SpinnerCircularLinesEx(label: cstring, radius: float32, color: ImColor, speed: float32, lines: cint, mode: cint): void <cimport,nodecl> end
+global function SpinnerDots(label: cstring, nextdot: *float32, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerDotsEx(label: cstring, nextdot: *float32, radius: float32, thickness: float32, color: ImColor, speed: float32, dots: csize, minth: float32, mode: cint): void <cimport,nodecl> end
+global function SpinnerVDots(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerVDotsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, bgcolor: ImColor, speed: float32, dots: csize, mdots: csize, mode: cint): void <cimport,nodecl> end
+global function SpinnerBounceDots(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerBounceDotsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, dots: csize, mode: cint): void <cimport,nodecl> end
+global function SpinnerZipDots(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerZipDotsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, dots: csize): void <cimport,nodecl> end
+global function SpinnerDotsToPoints(label: cstring, radius: float32, thickness: float32, offset_k: float32): void <cimport,nodecl> end
+global function SpinnerDotsToPointsEx(label: cstring, radius: float32, thickness: float32, offset_k: float32, color: ImColor, speed: float32, dots: csize): void <cimport,nodecl> end
+global function SpinnerDotsToBar(label: cstring, radius: float32, thickness: float32, offset_k: float32): void <cimport,nodecl> end
+global function SpinnerDotsToBarEx(label: cstring, radius: float32, thickness: float32, offset_k: float32, color: ImColor, speed: float32, dots: csize): void <cimport,nodecl> end
+global function SpinnerWaveDots(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerWaveDotsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, lt: cint): void <cimport,nodecl> end
+global function SpinnerFadeDots(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerFadeDotsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, lt: cint, mode: cint): void <cimport,nodecl> end
+global function SpinnerThreeDots(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerThreeDotsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, lt: cint): void <cimport,nodecl> end
+global function SpinnerFiveDots(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerFiveDotsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, lt: cint): void <cimport,nodecl> end
+global function Spinner4Caleidospcope(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function Spinner4CaleidospcopeEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, lt: cint): void <cimport,nodecl> end
+global function SpinnerMultiFadeDots(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerMultiFadeDotsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, lt: cint): void <cimport,nodecl> end
+global function SpinnerThickToSin(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerThickToSinEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, lt: cint, mode: cint): void <cimport,nodecl> end
+global function SpinnerScaleDots(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerScaleDotsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, lt: cint): void <cimport,nodecl> end
+global function SpinnerSquareSpins(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerSquareSpinsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerMovingDots(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerMovingDotsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, dots: csize): void <cimport,nodecl> end
+global function SpinnerRotateDots(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerRotateDotsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, dots: cint, mode: cint): void <cimport,nodecl> end
+global function SpinnerOrionDots(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerOrionDotsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, arcs: cint): void <cimport,nodecl> end
+global function SpinnerGalaxyDots(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerGalaxyDotsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, arcs: cint): void <cimport,nodecl> end
+global function SpinnerTwinAng(label: cstring, radius1: float32, radius2: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerTwinAngEx(label: cstring, radius1: float32, radius2: float32, thickness: float32, color1: ImColor, color2: ImColor, speed: float32, angle: float32, mode: cint): void <cimport,nodecl> end
+global function SpinnerFilling(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerFillingEx(label: cstring, radius: float32, thickness: float32, color1: ImColor, color2: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerFillingMem(label: cstring, radius: float32, thickness: float32, color: ImColor, colorbg: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerTopup(label: cstring, radius1: float32, radius2: float32): void <cimport,nodecl> end
+global function SpinnerTopupEx(label: cstring, radius1: float32, radius2: float32, color: ImColor, fg: ImColor, bg: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerTwinAng180(label: cstring, radius1: float32, radius2: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerTwinAng180Ex(label: cstring, radius1: float32, radius2: float32, thickness: float32, color1: ImColor, color2: ImColor, speed: float32, angle: float32, mode: cint): void <cimport,nodecl> end
+global function SpinnerTwinAng360(label: cstring, radius1: float32, radius2: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerTwinAng360Ex(label: cstring, radius1: float32, radius2: float32, thickness: float32, color1: ImColor, color2: ImColor, speed1: float32, speed2: float32, mode: cint): void <cimport,nodecl> end
+global function SpinnerIncDots(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerIncDotsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, dots: csize): void <cimport,nodecl> end
+global function SpinnerIncFullDots(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerIncFullDotsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, dots: csize): void <cimport,nodecl> end
+global function SpinnerFadeBars(label: cstring, w: float32): void <cimport,nodecl> end
+global function SpinnerFadeBarsEx(label: cstring, w: float32, color: ImColor, speed: float32, bars: csize, scale: boolean): void <cimport,nodecl> end
+global function SpinnerFadeTris(label: cstring, radius: float32): void <cimport,nodecl> end
+global function SpinnerFadeTrisEx(label: cstring, radius: float32, color: ImColor, speed: float32, dim: csize, scale: boolean, mode: cint): void <cimport,nodecl> end
+global function SpinnerBarsRotateFade(label: cstring, rmin: float32, rmax: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerBarsRotateFadeEx(label: cstring, rmin: float32, rmax: float32, thickness: float32, color: ImColor, speed: float32, bars: csize): void <cimport,nodecl> end
+global function SpinnerBarsScaleMiddle(label: cstring, w: float32): void <cimport,nodecl> end
+global function SpinnerBarsScaleMiddleEx(label: cstring, w: float32, color: ImColor, speed: float32, bars: csize): void <cimport,nodecl> end
+global function SpinnerAngTwin(label: cstring, radius1: float32, radius2: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerAngTwinEx(label: cstring, radius1: float32, radius2: float32, thickness: float32, color: ImColor, bg: ImColor, speed: float32, angle: float32, arcs: csize, mode: cint): void <cimport,nodecl> end
+global function SpinnerArcRotation(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerArcRotationEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, arcs: csize, mode: cint): void <cimport,nodecl> end
+global function SpinnerArcFade(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerArcFadeEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, arcs: csize, mode: cint): void <cimport,nodecl> end
+global function SpinnerSimpleArcFade(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerSimpleArcFadeEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerSquareStrokeFade(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerSquareStrokeFadeEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerAsciiSymbolPoints(label: cstring, text: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerAsciiSymbolPointsEx(label: cstring, text: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerTextFading(label: cstring, text: cstring, radius: float32, fsize: float32): void <cimport,nodecl> end
+global function SpinnerTextFadingEx(label: cstring, text: cstring, radius: float32, fsize: float32, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerSevenSegments(label: cstring, text: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerSevenSegmentsEx(label: cstring, text: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerSquareStrokeFill(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerSquareStrokeFillEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerSquareStrokeLoading(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerSquareStrokeLoadingEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerSquareLoading(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerSquareLoadingEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerFilledArcFade(label: cstring, radius: float32): void <cimport,nodecl> end
+global function SpinnerFilledArcFadeEx(label: cstring, radius: float32, color: ImColor, speed: float32, arcs: csize, mode: cint): void <cimport,nodecl> end
+global function SpinnerPointsRoller(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerPointsRollerEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, points: csize, circles: cint, rspeed: float32): void <cimport,nodecl> end
+global function SpinnerPointsArcBounce(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerPointsArcBounceEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, points: csize, circles: cint, rspeed: float32): void <cimport,nodecl> end
+global function SpinnerFilledArcColor(label: cstring, radius: float32): void <cimport,nodecl> end
+global function SpinnerFilledArcColorEx(label: cstring, radius: float32, color: ImColor, bg: ImColor, speed: float32, arcs: csize): void <cimport,nodecl> end
+global function SpinnerFilledArcRing(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerFilledArcRingEx(label: cstring, radius: float32, thickness: float32, color: ImColor, bg: ImColor, speed: float32, arcs: csize): void <cimport,nodecl> end
+global function SpinnerArcWedges(label: cstring, radius: float32): void <cimport,nodecl> end
+global function SpinnerArcWedgesEx(label: cstring, radius: float32, color: ImColor, speed: float32, arcs: csize, mode: cint): void <cimport,nodecl> end
+global function SpinnerTwinBall(label: cstring, radius1: float32, radius2: float32, thickness: float32, b_thickness: float32): void <cimport,nodecl> end
+global function SpinnerTwinBallEx(label: cstring, radius1: float32, radius2: float32, thickness: float32, b_thickness: float32, ball: ImColor, bg: ImColor, speed: float32, balls: csize, mode: cint): void <cimport,nodecl> end
+global function SpinnerSolarBalls(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerSolarBallsEx(label: cstring, radius: float32, thickness: float32, ball: ImColor, bg: ImColor, speed: float32, balls: csize): void <cimport,nodecl> end
+global function SpinnerSolarScaleBalls(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerSolarScaleBallsEx(label: cstring, radius: float32, thickness: float32, ball: ImColor, speed: float32, balls: csize): void <cimport,nodecl> end
+global function SpinnerSolarArcs(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerSolarArcsEx(label: cstring, radius: float32, thickness: float32, ball: ImColor, bg: ImColor, speed: float32, balls: csize): void <cimport,nodecl> end
+global function SpinnerMovingArcs(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerMovingArcsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, arcs: csize): void <cimport,nodecl> end
+global function SpinnerRainbowCircle(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerRainbowCircleEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, arcs: csize, mode: float32): void <cimport,nodecl> end
+global function SpinnerBounceBall(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerBounceBallEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, dots: cint, shadow: boolean): void <cimport,nodecl> end
+global function SpinnerPulsarBall(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerPulsarBallEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, shadow: boolean, mode: cint): void <cimport,nodecl> end
+global function SpinnerIncScaleDots(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerIncScaleDotsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, dots: csize, angle: float32, mode: cint): void <cimport,nodecl> end
+global function SpinnerSomeScaleDots(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerSomeScaleDotsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, dots: csize, mode: cint): void <cimport,nodecl> end
+global function SpinnerAngTriple(label: cstring, radius1: float32, radius2: float32, radius3: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerAngTripleEx(label: cstring, radius1: float32, radius2: float32, radius3: float32, thickness: float32, c1: ImColor, c2: ImColor, c3: ImColor, speed: float32, angle: float32): void <cimport,nodecl> end
+global function SpinnerAngEclipse(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerAngEclipseEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, angle: float32): void <cimport,nodecl> end
+global function SpinnerIngYang(label: cstring, radius: float32, thickness: float32, reverse: boolean, yang_detlta_r: float32): void <cimport,nodecl> end
+global function SpinnerIngYangEx(label: cstring, radius: float32, thickness: float32, reverse: boolean, yang_detlta_r: float32, colorI: ImColor, colorY: ImColor, speed: float32, angle: float32, mode: cint): void <cimport,nodecl> end
+global function SpinnerGooeyBalls(label: cstring, radius: float32, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerGooeyBallsEx(label: cstring, radius: float32, color: ImColor, speed: float32, mode: cint): void <cimport,nodecl> end
+global function SpinnerDotsLoading(label: cstring, radius: float32, thickness: float32, color: ImColor, bg: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerRotateGooeyBalls(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, balls: cint): void <cimport,nodecl> end
+global function SpinnerRotateGooeyBallsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, balls: cint, mode: cint): void <cimport,nodecl> end
+global function SpinnerHerbertBalls(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, balls: cint): void <cimport,nodecl> end
+global function SpinnerHerbertBalls3D(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerRotateTriangles(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, tris: cint): void <cimport,nodecl> end
+global function SpinnerRotateTrianglesEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, tris: cint, mode: cint): void <cimport,nodecl> end
+global function SpinnerRotateShapes(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, shapes: cint, pnt: cint): void <cimport,nodecl> end
+global function SpinnerSinSquares(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerSinSquaresEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, mode: cint): void <cimport,nodecl> end
+global function SpinnerMoonLine(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerMoonLineEx(label: cstring, radius: float32, thickness: float32, color: ImColor, bg: ImColor, speed: float32, angle: float32): void <cimport,nodecl> end
+global function SpinnerCircleDrop(label: cstring, radius: float32, thickness: float32, thickness_drop: float32): void <cimport,nodecl> end
+global function SpinnerCircleDropEx(label: cstring, radius: float32, thickness: float32, thickness_drop: float32, color: ImColor, bg: ImColor, speed: float32, angle: float32): void <cimport,nodecl> end
+global function SpinnerSurroundedIndicator(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerSurroundedIndicatorEx(label: cstring, radius: float32, thickness: float32, color: ImColor, bg: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerWifiIndicator(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerWifiIndicatorEx(label: cstring, radius: float32, thickness: float32, color: ImColor, bg: ImColor, speed: float32, cangle: float32, dots: cint): void <cimport,nodecl> end
+global function SpinnerTrianglesSelector(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerTrianglesSelectorEx(label: cstring, radius: float32, thickness: float32, color: ImColor, bg: ImColor, speed: float32, bars: csize): void <cimport,nodecl> end
+global function SpinnerFlowingGradient(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerFlowingGradientEx(label: cstring, radius: float32, thickness: float32, color: ImColor, bg: ImColor, speed: float32, angle: float32): void <cimport,nodecl> end
+global function SpinnerRotateSegments(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerRotateSegmentsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, arcs: csize, layers: csize, mode: cint): void <cimport,nodecl> end
+global function SpinnerLemniscate(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerLemniscateEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, angle: float32): void <cimport,nodecl> end
+global function SpinnerRotateGear(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerRotateGearEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, pins: csize): void <cimport,nodecl> end
+global function SpinnerRotateWheel(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerRotateWheelEx(label: cstring, radius: float32, thickness: float32, bg_color: ImColor, color: ImColor, speed: float32, pins: csize): void <cimport,nodecl> end
+global function SpinnerAtom(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerAtomEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, elipses: cint): void <cimport,nodecl> end
+global function SpinnerPatternRings(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerPatternRingsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, elipses: cint): void <cimport,nodecl> end
+global function SpinnerPatternEclipse(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerPatternEclipseEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, elipses: cint, delta_a: float32, delta_y: float32): void <cimport,nodecl> end
+global function SpinnerPatternSphere(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerPatternSphereEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, elipses: cint): void <cimport,nodecl> end
+global function SpinnerRingSynchronous(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerRingSynchronousEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, elipses: cint): void <cimport,nodecl> end
+global function SpinnerRingWatermarks(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerRingWatermarksEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, elipses: cint): void <cimport,nodecl> end
+global function SpinnerRotatedAtom(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerRotatedAtomEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, elipses: cint, mode: cint): void <cimport,nodecl> end
+global function SpinnerRainbowBalls(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerRainbowBallsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, balls: cint, mode: cint): void <cimport,nodecl> end
+global function SpinnerRainbowShot(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerRainbowShotEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, balls: cint): void <cimport,nodecl> end
+global function SpinnerSpiral(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerSpiralEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, arcs: csize): void <cimport,nodecl> end
+global function SpinnerSpiralEye(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerSpiralEyeEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerBarChartSine(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerBarChartSineEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, bars: cint, mode: cint): void <cimport,nodecl> end
+global function SpinnerBarChartAdvSine(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerBarChartAdvSineEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, mode: cint): void <cimport,nodecl> end
+global function SpinnerBarChartAdvSineFade(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerBarChartAdvSineFadeEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, mode: cint): void <cimport,nodecl> end
+global function SpinnerBarChartRainbow(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerBarChartRainbowEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, bars: cint, mode: cint): void <cimport,nodecl> end
+global function SpinnerBlocks(label: cstring, radius: float32, thickness: float32, bg: ImColor, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerTwinBlocks(label: cstring, radius: float32, thickness: float32, bg: ImColor, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerSquareRandomDots(label: cstring, radius: float32, thickness: float32, bg: ImColor, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerScaleBlocks(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerScaleBlocksEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, mode: cint): void <cimport,nodecl> end
+global function SpinnerScaleSquares(label: cstring, radius: float32, thikness: float32, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerSquishSquare(label: cstring, radius: float32, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerFluid(label: cstring, radius: float32, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerFluidEx(label: cstring, radius: float32, color: ImColor, speed: float32, bars: cint): void <cimport,nodecl> end
+global function SpinnerFluidPoints(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerFluidPointsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, dots: csize, delta: float32): void <cimport,nodecl> end
+global function SpinnerArcPolarFade(label: cstring, radius: float32): void <cimport,nodecl> end
+global function SpinnerArcPolarFadeEx(label: cstring, radius: float32, color: ImColor, speed: float32, arcs: csize, mode: cint): void <cimport,nodecl> end
+global function SpinnerArcPolarRadius(label: cstring, radius: float32): void <cimport,nodecl> end
+global function SpinnerArcPolarRadiusEx(label: cstring, radius: float32, color: ImColor, speed: float32, arcs: csize, mode: cint): void <cimport,nodecl> end
+global function SpinnerCaleidoscope(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerCaleidoscopeEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, arcs: csize, mode: cint): void <cimport,nodecl> end
+global function SpinnerHboDots(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerHboDotsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, minfade: float32, ryk: float32, speed: float32, dots: csize, mode: cint): void <cimport,nodecl> end
+global function SpinnerMoonDots(label: cstring, radius: float32, thickness: float32, first: ImColor, second: ImColor): void <cimport,nodecl> end
+global function SpinnerMoonDotsEx(label: cstring, radius: float32, thickness: float32, first: ImColor, second: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerTwinHboDots(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerTwinHboDotsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, minfade: float32, ryk: float32, speed: float32, dots: csize, delta: float32): void <cimport,nodecl> end
+global function SpinnerThreeDotsStar(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerThreeDotsStarEx(label: cstring, radius: float32, thickness: float32, color: ImColor, minfade: float32, ryk: float32, speed: float32, delta: float32): void <cimport,nodecl> end
+global function SpinnerSineArcs(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerSineArcsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerTrianglesShift(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerTrianglesShiftEx(label: cstring, radius: float32, thickness: float32, color: ImColor, bg: ImColor, speed: float32, bars: csize): void <cimport,nodecl> end
+global function SpinnerPointsShift(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerPointsShiftEx(label: cstring, radius: float32, thickness: float32, color: ImColor, bg: ImColor, speed: float32, bars: csize): void <cimport,nodecl> end
+global function SpinnerSwingDots(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerSwingDotsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32): void <cimport,nodecl> end
+global function SpinnerCircularPoints(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerCircularPointsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, lines: cint): void <cimport,nodecl> end
+global function SpinnerCurvedCircle(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerCurvedCircleEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, circles: csize): void <cimport,nodecl> end
+global function SpinnerModCircle(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerModCircleEx(label: cstring, radius: float32, thickness: float32, color: ImColor, ang_min: float32, ang_max: float32, speed: float32): void <cimport,nodecl> end
+global function SpinnerDnaDots(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerDnaDotsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, lt: cint, delta: float32, mode: boolean): void <cimport,nodecl> end
+global function Spinner3SmuggleDots(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function Spinner3SmuggleDotsEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, lt: cint, delta: float32, mode: boolean): void <cimport,nodecl> end
+global function SpinnerRotateSegmentsPulsar(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerRotateSegmentsPulsarEx(label: cstring, radius: float32, thickness: float32, color: ImColor, speed: float32, arcs: csize, layers: csize): void <cimport,nodecl> end
+global function SpinnerSplineAng(label: cstring, radius: float32, thickness: float32): void <cimport,nodecl> end
+global function SpinnerSplineAngEx(label: cstring, radius: float32, thickness: float32, color: ImColor, bg: ImColor, speed: float32, angle: float32, mode: cint): void <cimport,nodecl> end
+global function demoSpinners(): void <cimport,nodecl> end

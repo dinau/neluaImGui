@@ -1,0 +1,80 @@
+------------------------
+--- cimgui.nelua
+------------------------
+##[==[
+cflags '-DCIMGUI_DEFINE_ENUMS_AND_STRUCTS'
+cinclude 'cimgui.h'
+
+-- import Nelua Decl plugin and filesystem utils.
+local nldecl = require 'nelua.plugins.nldecl'
+local fs = require 'nelua.utils.fs'
+
+-- Generate nelua bindings file. (It will be always regenerated)
+  nldecl.generate_bindings_file{
+    defines = {'CIMGUI_DEFINE_ENUMS_AND_STRUCTS'
+               ,'bool _Bool'
+               ,'IMGUI_IMPL_API "extern \"C\" __declspec(dllexport)"'
+               ,'ImDrawIdx unsigned int'
+              },
+    output_file = 'libs/nelua/imgui/cimgui.nelua',
+    -- what C file we should generate bindings for and parse?
+    parse_includes = {'cimgui.h'},
+    -- what symbol name prefix should we import from that file?
+    include_names = {'^ig','^Im'},
+    include_dirs = {'libs/cimgui'}
+  }
+]==]
+print("Generated [libs/imgui/cimgui.nelua]")
+
+------------------------
+--- imspinner.nelua
+------------------------
+##[==[
+-- import Nelua Decl plugin and filesystem utils.
+local nldecl = require 'nelua.plugins.nldecl'
+local fs = require 'nelua.utils.fs'
+
+-- Generate nelua bindings file. (It will be always regenerated)
+  nldecl.generate_bindings_file{
+    defines = {'CIMGUI_DEFINE_ENUMS_AND_STRUCTS'
+               ,'bool _Bool'
+               ,'IMGUI_IMPL_API "extern \"C\" __declspec(dllexport)"'
+               ,'ImDrawIdx unsigned int'
+              },
+    output_file = 'libs/nelua/imgui/imspinner.nelua',
+    -- what C file we should generate bindings for and parse?
+    parse_includes = {'cimspinner.h'},
+    -- what symbol name prefix should we import from that file?
+    include_names = {'^Spinner','demoSpinners'},
+    include_dirs = {'libs/cimgui','libs/cimspinner'}
+  }
+]==]
+print("Generated [libs/imgui/imspinner.nelua]")
+
+------------------------
+--- imKnobs.nelua
+------------------------
+##[==[
+-- import Nelua Decl plugin and filesystem utils.
+local nldecl = require 'nelua.plugins.nldecl'
+local fs = require 'nelua.utils.fs'
+
+-- Generate nelua bindings file. (It will be always regenerated)
+  nldecl.generate_bindings_file{
+    defines = {'CIMGUI_DEFINE_ENUMS_AND_STRUCTS'
+               ,'bool _Bool'
+               ,'IMGUI_IMPL_API "extern \"C\" __declspec(dllexport)"'
+               ,'ImDrawIdx unsigned int'
+              },
+    output_file = 'libs/nelua/imgui/imknobs.nelua',
+    -- what C file we should generate bindings for and parse?
+    parse_includes = {'cimgui-knobs.h'},
+    -- what symbol name prefix should we import from that file?
+    include_names = {'^IgKnob'},
+    include_dirs = {'libs/cimgui','libs/cimgui-knobs'}
+  }
+
+if ccinfo.is_windows then
+end
+]==]
+print("Generated [libs/imgui/imknobs.nelua]")

@@ -4,6 +4,8 @@ EXAMPLE_DIRS := \
 							examples/glfw_opengl3 \
 							examples/glfw_opengl3_jp \
 							examples/iconFontViewer \
+							examples/imKnobsDemo \
+							examples/imSpinnerDemo \
 							examples/sdl2_opengl3
 
 ifeq ($(OS),Windows_NT)
@@ -35,7 +37,7 @@ MAKEFLAGS += --no-print-directory
 CFLAGS += -Ilibs/cimgui
 OPT += --cflags="$(CFLAGS)"
 gen:
-	nelua $(OPT) genCimguiBind.nelua
+	nelua $(OPT) genLibsBind.nelua
 	@cat libs/nelua/imgui/cimgui_header.lua > tmp.nelua
 	@cat libs/nelua/imgui/cimgui.nelua >> tmp.nelua
 	@mv -f tmp.nelua libs/nelua/imgui/cimgui.nelua

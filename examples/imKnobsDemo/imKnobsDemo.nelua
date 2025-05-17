@@ -1,0 +1,243 @@
+require 'os'
+require'math'
+--
+require'cimgui'
+require'imgui_backend_opengl3'
+require'imgui_backend_glfw'
+require'loadImage'
+require'utils'
+require'IconsFontAwesome6'
+--
+require'imknobs'
+##[=[
+cinclude "cimgui-knobs.h"
+]=]
+
+--- External functions
+local function setupFonts() <cimport> end                -- from utils/setupFonts.c
+
+--- Initial Window size
+local MainWinWidth <const>  = 1024
+local MainWinHeight <const> =  900
+
+--- Constants
+
+--- Global vars
+local versions : [][2]int32 = {{4, 6} ,{4, 5} ,{4, 4} ,{4, 3} ,{4, 2} ,{4, 1} ,{4, 0} ,{3, 3} }
+
+---------
+--- main
+---------
+local main = function()
+  glfwInit()
+  defer glfwTerminate()  end
+  local glfwWin: *GLFWwindow = nilptr
+  local glsl_version:cstring -- = "#version 330"
+  for _, ver in ipairs(versions) do
+    glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE)
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, ver[0])
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, ver[1])
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE)
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE)
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE)
+
+    glfwWin = glfwCreateWindow(MainWinWidth, MainWinHeight, "ImGui with Nelua 2025/05", nilptr, nilptr)
+    if nilptr ~= glfwWin then
+      glsl_version = "#version " .. tostring( ver[0] * 100 + ver[1] * 10)
+      break
+    end
+  end
+  if nilptr == glfwWin then
+    print("Could not create window")
+    os.exit(false)
+  end
+  defer glfwDestroyWindow(glfwWin) end
+
+  glfwMakeContextCurrent(glfwWin)
+  glfwSwapInterval(1) -- # Enable vsync
+
+  ------------------------
+  --- Load title bar icon
+  ------------------------
+  local IconName = "res/img/nl.png"
+  LoadTitleBarIcon(glfwWin, IconName)
+
+  if gladLoadGL(glfwGetProcAddress) == 0 then
+    error 'Could not initialize GLAD'
+  end
+  print('OpenGL loaded:', (@cstring)(glGetString(GL_VERSION)))
+
+  local context = igCreateContext()
+  defer igDestroyContext(context) end
+
+  ImGui_ImplGlfw_InitForOpenGL(glfwWin, true)
+  defer ImGui_ImplGlfw_Shutdown() end
+
+  ImGui_ImplOpenGL3_Init(glsl_version)
+  defer ImGui_ImplOpenGL3_Shutdown() end
+
+  setupFonts()
+
+  --igStyleColorsDark()
+  igStyleColorsClassic()
+
+  local showDemoWindow = false
+  local showInfoWindow = true
+  local showWindowDelay = 1 -- TODO : Avoid flickering window at start up.
+  local clearColor: [3]cfloat = {0.25,0.65,0.85}
+
+  local pio = igGetIO()
+
+  local val1 : cfloat = 0.25
+  local val2 : cfloat = 0.65
+  local val3 : cfloat = 0.85
+  local val4 : cfloat = 1.0
+  local val5 : cint = 1
+  local val6 : cfloat = 1
+
+  --------------------
+  --- Main while loop
+  --------------------
+  while glfwWindowShouldClose(glfwWin) == 0 do
+    glfwPollEvents()
+
+    ImGui_ImplOpenGL3_NewFrame() -- # start imgui frame
+    ImGui_ImplGlfw_NewFrame()
+    igNewFrame()
+
+    if showDemoWindow then
+      igShowDemoWindow(&showDemoWindow)
+    end
+
+    --------------------------
+    -- Show information window
+    --------------------------
+    do
+      igBegin("Nelua: Dear ImGui info", &showInfoWindow, 0)
+      defer igEnd() end
+      local s = "GLFW v" .. tostring(glfwGetVersionString())
+      s = ICON_FA_COMMENT .. " " .. s
+      igText(s)
+      s = "OpenGL v" .. tostring((@cstring)(glGetString(GL_VERSION)))
+      s = ICON_FA_COMMENT_SMS .. " " .. s
+      igText(s)
+      igText(ICON_FA_COMMENT_DOTS .. " Dear ImGui")   igSameLine(0, -1.0)
+      igText(igGetVersion())
+      igText(ICON_FA_COMMENT_MEDICAL .. " ")   igSameLine(0, 0)
+      igText(_VERSION)
+
+      igCheckbox("Demo window", &showDemoWindow)
+      igColorEdit3("Background color", &clearColor, 0)
+
+      igText("Application average %.3f ms/frame (%.1f FPS)", (1000.0 / pio.Framerate), pio.Framerate)
+    end
+
+    --------------------------
+    --- Show ImGui-Knobs demo
+    --------------------------
+    do
+      igBegin ("CImGui-Knobs with Nelua lang. " .. ICON_FA_CAT, nilptr, 0)
+      defer igEnd() end
+      --
+      if IgKnobFloat("Gain", &val1, 0.0, 1.0, 0.01, "%.2fdB" ,IgKnobVariant_Tick
+                        ,0  -- size
+                        ,0  -- IgKnobFlags
+                        ,10 -- steps
+                        ,-1 -- angle_min
+                        ,-1 -- angle_max
+                       ) then
+               -- Value was changed. Do something.
+      end
+      igSameLine(0, -1.0)
+
+      if IgKnobFloat("Mix", &val2, 0.0, 1.0, 0.01, "%.2f" , IgKnobVariant_Stepped
+                       ,0  -- size
+                       ,0  -- IgKnobFlags](0)
+                       ,10 -- steps
+                       ,-1 -- angle_min
+                       ,-1 -- angle_max
+                      ) then
+               -- Value was changed. Do something.
+       end
+
+      -- Double click to reset
+      if igIsItemActive() and igIsMouseDoubleClicked_Nil(0) then
+        val2 = 0.65
+      end
+      igSameLine(0, -1.0)
+
+      --- Custom colors
+        igPushStyleColor_Vec4(ImGuiCol_ButtonActive,  ImVec4{255, 0,   0, 0.7})
+        igPushStyleColor_Vec4(ImGuiCol_ButtonHovered, ImVec4{255, 0,   0, 1})
+        igPushStyleColor_Vec4(ImGuiCol_Button,        ImVec4{0  , 255, 0,  1})
+        --// Push/PopStyleColor() for each colors used (namely ImGuiCol_ButtonActive and ImGuiCol_ButtonHovered for primary and ImGuiCol_Framebg for Track)
+        if IgKnobFloat("Pitch", &val3, 0.0, 1.0, 0.01, "%.2f" , IgKnobVariant_WiperOnly
+                           ,0  -- size
+                           ,0  -- IgKnobFlags
+                           ,10 -- steps
+                           ,-1 -- angle_min
+                           ,-1 -- angle_max
+                          ) then
+               -- Value was changed. Do something.
+        end
+        igPopStyleColor(3)
+        igSameLine(0,-1.0)
+
+        --- Custom min/max angle
+        if IgKnobFloat("Dry", &val4, 0.0, 1.0, 0.01, "%.2f" , IgKnobVariant_Stepped
+                            , 0  -- Size
+                            , 0  -- IgKnobFlags
+                            , 10 -- steps
+                            , 1.570796  -- angle_min
+                            , 3.141592  -- angle_max
+                      ) then
+               -- Value was changed. Do something.
+        end
+        igSameLine(0,-1.0)
+
+        --- Int value
+        if IgKnobInt("Wet",  &val5, 1, 10, 0.1, "%i", IgKnobVariant_Stepped
+                   , 0 --  size
+                   , 0 --  IgKnobFlags
+                   , 10 -- steps
+                   , -1 -- angel_min
+                   , -1 -- angel_max
+                   ) then
+               -- Value was changed. Do something.
+        end
+        igSameLine(0,-1.0)
+
+        --- Vertical drag only
+        if IgKnobFloat("Vertical", &val6, 0.0, 10, 0.1, "%.1f", IgKnobVariant_Space
+                 , 0
+                 , IgKnobFlags_DragVertical
+                 , 10 -- steps
+                 , -1 -- angel_min
+                 , -1 -- angel_max
+                 ) then
+               -- Value was changed. Do something.
+        end
+
+        --
+        igNewLine()
+        igText("Application average %.3f ms/frame (%.1f FPS)", (1000.0 / pio.Framerate), pio.Framerate)
+      end
+
+    igRender()
+    glClearColor(clearColor[0], clearColor[1], clearColor[2], 1.0)
+    glClear(GL_COLOR_BUFFER_BIT)
+    ImGui_ImplOpenGL3_RenderDrawData(igGetDrawData())
+
+    glfwSwapBuffers(glfwWin)
+
+    if showWindowDelay > 0 then
+      showWindowDelay = showWindowDelay - 1
+    elseif showWindowDelay == 0 then
+      showWindowDelay = -1
+      glfwShowWindow(glfwWin)
+    end
+  end -- main while loop end
+
+end -- main() end
+
+main()
