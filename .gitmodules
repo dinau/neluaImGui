@@ -13,3 +13,6 @@
 [submodule "libs/cimCTE"]
 	path = libs/cimCTE
 	url = https://github.com/cimgui/cimCTE
+[submodule "libs/cimguizmo"]
+	path = libs/cimguizmo
+	url = https://github.com/cimgui/cimguizmo
