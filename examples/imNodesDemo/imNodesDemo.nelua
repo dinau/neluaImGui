@@ -48,79 +48,8 @@ local versions : [][2]int32 = {{4, 6} ,{4, 5} ,{4, 4} ,{4, 3} ,{4, 2} ,{4, 1} ,{
     current_id: cint
   }
 
-------------
---- saveObj
-------------
-local saveObj = function(this: *recObj)
-  print"\n=== Save obj"
-  -- Save the internal imnodes state
-  imnodes_SaveCurrentEditorStateToIniFile("save_load.ini")
-  -- Dump our editor state as bytes into a file
-  local fout = io.open("save_load.bytes", "wb")
-  defer fout:close() end
-  -- Copy the vector: nodes to the file
-  fout:write(string.pack("i4", #this.nodes))   -- save vector:nodes size
-  print("Nds size", #this.nodes)
-  for _, nd in ipairs(this.nodes) do           -- save nodes datas
-    fout:write(string.pack("i4", nd.id))
-    fout:write(string.pack("f", nd.value))
-  end
-  -- Copy the vector: links to the file
-  fout:write(string.pack("i4", #this.links))   -- save vector:links size
-  print("Lnk size", #this.links)
-  for _, lk in ipairs(this.links )do           -- save links datas
-    fout:write(string.pack("i4", lk.id))
-    fout:write(string.pack("i4", lk.start_attr))
-    fout:write(string.pack("i4", lk.end_attr))
-  end
-  -- Copy the current_id to the file
-  fout:write(string.pack("i4", this.current_id))
-end
-
-------------
---- loadObj
-------------
-local loadObj = function(this: *recObj)
-  print("=== Load obj")
-  -- Load the internal imnodes state
-  imnodes_LoadCurrentEditorStateFromIniFile("save_load.ini")
-  -- Load our editor state into memory
-  local fin, msgError, err = io.open("save_load.bytes", "rb")
-  if err ~= 0 then
-    print("Error: save_load.bytes: not found !")
-    return
-  end
-  defer fin:close() end
-  -- Load nodes into memory
-  local ind = fin:read(4)
-  local sz = string.unpack("i4", ind)
-  if sz == 0 then return end
-  print("nodes size", sz)
-  for i=0,<sz do
-    ind = fin:read(4)
-    local id    = string.unpack("i4", ind)
-    ind = fin:read(4)
-    local value = string.unpack("f", ind)
-    this.nodes:insert(#this.nodes, Node{id, value})
-  end
-  -- Load links into memory
-  ind = fin:read(4)
-  sz = string.unpack("i4", ind)
-  print("links size", sz)
-  this.links:reserve(sz)
-  for i=0,<sz do
-    ind = fin:read(4)
-    local id    = string.unpack("i4", ind)
-    ind = fin:read(4)
-    local start_attr = string.unpack("i4", ind)
-    ind = fin:read(4)
-    local end_attr = string.unpack("i4", ind)
-    this.links:insert(#this.links, Link{id, start_attr, end_attr})
-  end
-  -- copy current_id into memory
-  ind = fin:read(4)
-  this.current_id = string.unpack("i4", ind)
-  end
+--- Forward definitions
+local saveObj,loadObj
 
 ---------
 --- main
@@ -304,5 +233,79 @@ local main = function()
   end -- main while loop end
 
 end -- main() end
+
+------------
+--- saveObj
+------------
+saveObj = function(this: *recObj)
+  print"\n=== Save obj"
+  -- Save the internal imnodes state
+  imnodes_SaveCurrentEditorStateToIniFile("save_load.ini")
+  -- Dump our editor state as bytes into a file
+  local fout = io.open("save_load.bytes", "wb")
+  defer fout:close() end
+  -- Copy the vector: nodes to the file
+  fout:write(string.pack("i4", #this.nodes))   -- save vector:nodes size
+  print("Nds size", #this.nodes)
+  for _, nd in ipairs(this.nodes) do           -- save nodes datas
+    fout:write(string.pack("i4", nd.id))
+    fout:write(string.pack("f", nd.value))
+  end
+  -- Copy the vector: links to the file
+  fout:write(string.pack("i4", #this.links))   -- save vector:links size
+  print("Lnk size", #this.links)
+  for _, lk in ipairs(this.links )do           -- save links datas
+    fout:write(string.pack("i4", lk.id))
+    fout:write(string.pack("i4", lk.start_attr))
+    fout:write(string.pack("i4", lk.end_attr))
+  end
+  -- Copy the current_id to the file
+  fout:write(string.pack("i4", this.current_id))
+end
+
+------------
+--- loadObj
+------------
+loadObj = function(this: *recObj)
+  print("=== Load obj")
+  -- Load the internal imnodes state
+  imnodes_LoadCurrentEditorStateFromIniFile("save_load.ini")
+  -- Load our editor state into memory
+  local fin, msgError, err = io.open("save_load.bytes", "rb")
+  if err ~= 0 then
+    print("Error: save_load.bytes: not found !")
+    return
+  end
+  defer fin:close() end
+  -- Load nodes into memory
+  local ind = fin:read(4)
+  local sz = string.unpack("i4", ind)
+  if sz == 0 then return end
+  print("nodes size", sz)
+  for i=0,<sz do
+    ind = fin:read(4)
+    local id    = string.unpack("i4", ind)
+    ind = fin:read(4)
+    local value = string.unpack("f", ind)
+    this.nodes:insert(#this.nodes, Node{id, value})
+  end
+  -- Load links into memory
+  ind = fin:read(4)
+  sz = string.unpack("i4", ind)
+  print("links size", sz)
+  this.links:reserve(sz)
+  for i=0,<sz do
+    ind = fin:read(4)
+    local id    = string.unpack("i4", ind)
+    ind = fin:read(4)
+    local start_attr = string.unpack("i4", ind)
+    ind = fin:read(4)
+    local end_attr = string.unpack("i4", ind)
+    this.links:insert(#this.links, Link{id, start_attr, end_attr})
+  end
+  -- copy current_id into memory
+  ind = fin:read(4)
+  this.current_id = string.unpack("i4", ind)
+  end
 
 main()
