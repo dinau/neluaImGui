@@ -16,3 +16,6 @@
 [submodule "libs/cimguizmo"]
 	path = libs/cimguizmo
 	url = https://github.com/cimgui/cimguizmo
+[submodule "libs/cimnodes"]
+	path = libs/cimnodes
+	url = https://github.com/cimgui/cimnodes
