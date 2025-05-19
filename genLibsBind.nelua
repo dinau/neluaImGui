@@ -2,9 +2,6 @@
 --- cimgui.nelua
 -----------------
 ##[==[
-cflags '-DCIMGUI_DEFINE_ENUMS_AND_STRUCTS'
-cinclude 'cimgui.h'
-
 -- import Nelua Decl plugin and filesystem utils.
 local nldecl = require 'nelua.plugins.nldecl'
 local fs = require 'nelua.utils.fs'
@@ -162,3 +159,31 @@ if ccinfo.is_windows then
 end
 ]==]
 print("Generated [libs/imgui/imguizmo.nelua]")
+
+--------------------------
+--- imnodes.nelua
+--------------------------
+##[==[
+-- import Nelua Decl plugin and filesystem utils.
+local nldecl = require 'nelua.plugins.nldecl'
+local fs = require 'nelua.utils.fs'
+
+-- Generate nelua bindings file. (It will be always regenerated)
+  nldecl.generate_bindings_file{
+    defines = {'bool _Bool'
+               ,'IMGUI_IMPL_API "extern \"C\" __declspec(dllexport)"'
+               ,'ImDrawIdx unsigned int'
+               ,'CIMGUI_DEFINE_ENUMS_AND_STRUCTS'
+              },
+    output_file = 'libs/nelua/imgui/imnodes.nelua',
+    -- what C file we should generate bindings for and parse?
+    parse_includes = {'cimnodes.h','cimnodes_template.h'},
+    -- what symbol name prefix should we import from that file?
+    include_names = {'^ImNodes','^imnodes_','getIOKeyCtrlPtr'},
+    include_dirs = {'libs/cimgui','libs/cimnodes','libs/cimnodes/generator'}
+  }
+
+if ccinfo.is_windows then
+end
+]==]
+print("Generated [libs/imgui/imnodes.nelua]")

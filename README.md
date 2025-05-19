@@ -10,6 +10,7 @@
     - [imSpinnerDemo](#imspinnerdemo)
     - [imColorTextEditDemo](#imcolortexteditdemo)
     - [imGuizmoDemo](#imguizmodemo)
+    - [imNodesDemo](#imnodesdemo)
     - [glfw_opengl3, sdl2_opengl3](#glfw_opengl3-sdl2_opengl3)
     - [iconFontViewer](#iconfontviewer)
     - [glfw_opengl3_jp](#glfw_opengl3_jp)
@@ -125,6 +126,13 @@ GCC
 
 ![alt](img/imGuizmo.png)
 
+##### imNodesDemo
+
+---
+
+[imNodesDemo.nelua](examples/imNodesDemo/imNodesDemo.nelua) 
+
+![alt](img/imNodes.png)
 
 ##### glfw_opengl3, sdl2_opengl3
 
@@ -181,7 +189,7 @@ Library name / C lang. wrapper
 - [x] [ImGui](https://github.com/ocornut/imgui) / [CImGui](https://github.com/cimgui/cimgui) (2024/11)
 - [ ] [ImPlot](https://github.com/epezent/implot) / [CImPlot](https://github.com/cimgui/cimplot)
 - [ ] [ImPlot3d](https://github.com/brenocq/implot3d) / [CImPlot3d](https://github.com/cimgui/cimplot3d) 
-- [ ] [ImNodes](https://github.com/Nelarius/imnodes) / [CImNodes](https://github.com/cimgui/cimnodes)
+- [x] [ImNodes](https://github.com/Nelarius/imnodes) / [CImNodes](https://github.com/cimgui/cimnodes) (2025/05)
 - [x] [ImGuizmo](https://github.com/CedricGuillemet/ImGuizmo) / [CImGuizmo](https://github.com/cimgui/cimguizmo) (2025/05)
 - [x] [ImGui-Knobs](https://github.com/altschuler/imgui-knobs) / [CImGui-Knobs](https://github.com/dinau/imguin/tree/main/src/imguin/private/cimgui-knobs) (2025/05)
 - [ ] [ImGuiFileDialog](https://github.com/aiekick/ImGuiFileDialog) / [CImGuiFileDialog](https://github.com/dinau/CImGuiFileDialog)

@@ -1,0 +1,308 @@
+-- This demo has been converted from,
+-- ../../libs/cimnodes/imnodes/example/save_load.cpp
+-- by audin 2025/05
+
+require 'os'
+require'math'
+--
+require'cimgui'
+require'imgui_backend_opengl3'
+require'imgui_backend_glfw'
+require'loadImage'
+require'utils'
+require'IconsFontAwesome6'
+--
+require'imnodes'
+##[=[
+cinclude "cimnodes.h"
+]=]
+require'vector'
+
+--- External functions
+local function setupFonts() <cimport> end                -- from utils/setupFonts.c
+
+--- Initial Window size
+local MainWinWidth <const>  = 900
+local MainWinHeight <const> = 600
+
+--- Constants
+
+--- Global vars
+local versions : [][2]int32 = {{4, 6} ,{4, 5} ,{4, 4} ,{4, 3} ,{4, 2} ,{4, 1} ,{4, 0} ,{3, 3} }
+
+--- Records
+  local Node = @record{
+    id: cint,
+    value: float32
+  }
+
+  local Link = @record{
+    id: cint,
+    start_attr: cint,
+    end_attr: cint
+  }
+
+  local recObj = @record{
+    nodes: vector(Node),
+    links: vector(Link),
+    current_id: cint
+  }
+
+------------
+--- saveObj
+------------
+local saveObj = function(this: *recObj)
+  print"\n=== Save obj"
+  -- Save the internal imnodes state
+  imnodes_SaveCurrentEditorStateToIniFile("save_load.ini")
+  -- Dump our editor state as bytes into a file
+  local fout = io.open("save_load.bytes", "wb")
+  defer fout:close() end
+  -- Copy the vector: nodes to the file
+  fout:write(string.pack("i4", #this.nodes))   -- save vector:nodes size
+  print("Nds size", #this.nodes)
+  for _, nd in ipairs(this.nodes) do           -- save nodes datas
+    fout:write(string.pack("i4", nd.id))
+    fout:write(string.pack("f", nd.value))
+  end
+  -- Copy the vector: links to the file
+  fout:write(string.pack("i4", #this.links))   -- save vector:links size
+  print("Lnk size", #this.links)
+  for _, lk in ipairs(this.links )do           -- save links datas
+    fout:write(string.pack("i4", lk.id))
+    fout:write(string.pack("i4", lk.start_attr))
+    fout:write(string.pack("i4", lk.end_attr))
+  end
+  -- Copy the current_id to the file
+  fout:write(string.pack("i4", this.current_id))
+end
+
+------------
+--- loadObj
+------------
+local loadObj = function(this: *recObj)
+  print("=== Load obj")
+  -- Load the internal imnodes state
+  imnodes_LoadCurrentEditorStateFromIniFile("save_load.ini")
+  -- Load our editor state into memory
+  local fin, msgError, err = io.open("save_load.bytes", "rb")
+  if err ~= 0 then
+    print("Error: save_load.bytes: not found !")
+    return
+  end
+  defer fin:close() end
+  -- Load nodes into memory
+  local ind = fin:read(4)
+  local sz = string.unpack("i4", ind)
+  if sz == 0 then return end
+  print("nodes size", sz)
+  for i=0,<sz do
+    ind = fin:read(4)
+    local id    = string.unpack("i4", ind)
+    ind = fin:read(4)
+    local value = string.unpack("f", ind)
+    this.nodes:insert(#this.nodes, Node{id, value})
+  end
+  -- Load links into memory
+  ind = fin:read(4)
+  sz = string.unpack("i4", ind)
+  print("links size", sz)
+  this.links:reserve(sz)
+  for i=0,<sz do
+    ind = fin:read(4)
+    local id    = string.unpack("i4", ind)
+    ind = fin:read(4)
+    local start_attr = string.unpack("i4", ind)
+    ind = fin:read(4)
+    local end_attr = string.unpack("i4", ind)
+    this.links:insert(#this.links, Link{id, start_attr, end_attr})
+  end
+  -- copy current_id into memory
+  ind = fin:read(4)
+  this.current_id = string.unpack("i4", ind)
+  end
+
+---------
+--- main
+---------
+local main = function()
+  glfwInit()
+  defer glfwTerminate()  end
+  local glfwWin: *GLFWwindow = nilptr
+  local glsl_version:cstring -- = "#version 330"
+  for _, ver in ipairs(versions) do
+    glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE)
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, ver[0])
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, ver[1])
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE)
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE)
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE)
+
+    glfwWin = glfwCreateWindow(MainWinWidth, MainWinHeight, "ImGui with Nelua 2025/05", nilptr, nilptr)
+    if nilptr ~= glfwWin then
+      glsl_version = "#version " .. tostring( ver[0] * 100 + ver[1] * 10)
+      break
+    end
+  end
+  if nilptr == glfwWin then
+    print("Could not create window")
+    os.exit(false)
+  end
+  defer glfwDestroyWindow(glfwWin) end
+
+  glfwMakeContextCurrent(glfwWin)
+  glfwSwapInterval(1) -- # Enable vsync
+
+  ------------------------
+  --- Load title bar icon
+  ------------------------
+  local IconName = "res/img/nl.png"
+  LoadTitleBarIcon(glfwWin, IconName)
+
+  if gladLoadGL(glfwGetProcAddress) == 0 then
+    error 'Could not initialize GLAD'
+  end
+  print('OpenGL loaded:', (@cstring)(glGetString(GL_VERSION)))
+
+  local context = igCreateContext()
+  defer igDestroyContext(context) end
+
+  -----------------------
+  -- ImNode init context
+  -----------------------
+  imnodes_CreateContext()
+  defer imnodes_DestroyContext() end
+
+  ImGui_ImplGlfw_InitForOpenGL(glfwWin, true)
+  defer ImGui_ImplGlfw_Shutdown() end
+
+  ImGui_ImplOpenGL3_Init(glsl_version)
+  defer ImGui_ImplOpenGL3_Shutdown() end
+
+  setupFonts()
+
+  --igStyleColorsDark()
+  igStyleColorsClassic()
+
+  local showWindowDelay = 1 -- TODO : Avoid flickering window at start up.
+  local clearColor: [3]cfloat = {0.03,0.15,0.2}
+
+  local pio = igGetIO()
+
+  -- ImNode: Initialize NodeEditor
+  local obj: recObj
+  imnodes_GetIO().LinkDetachWithModifierClick.Modifier = getIOKeyCtrlPtr()
+  imnodes_PushAttributeFlag(ImNodesAttributeFlags_EnableLinkDetachWithDragClick)
+  loadObj(obj)
+
+  -- ImNode: Shutdown NodeEditor
+  defer
+    imnodes_PopAttributeFlag()
+    saveObj(obj)
+    obj.nodes:destroy()
+    obj.links:destroy()
+  end
+
+  --------------------
+  --- Main while loop
+  --------------------
+  while glfwWindowShouldClose(glfwWin) == 0 do
+    glfwPollEvents()
+
+    ImGui_ImplOpenGL3_NewFrame()
+    ImGui_ImplGlfw_NewFrame()
+    igNewFrame()
+
+    ----------------------
+    --- Show ImNodes demo
+    ----------------------
+    do igBegin("ImNodes Save & load example with Nelua lang " .. ICON_FA_DOG, nilptr, 0)
+      defer igEnd() end
+      igTextUnformatted("A -- add node", nilptr)
+      igTextUnformatted("\"Close the executable and rerun it -- your nodes should be exactly\"\n\"where you left them !\"", nilptr)
+      do imnodes_BeginNodeEditor()
+        defer imnodes_EndNodeEditor() end
+        if igIsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows) and imnodes_IsEditorHovered() and igIsKeyReleased_Nil(ImGuiKey_A) then
+          obj.current_id = obj.current_id + 1
+          local node_id = obj.current_id
+          local pos: ImVec2
+          igGetMousePos(&pos)
+          imnodes_SetNodeScreenSpacePos(node_id, pos)
+          obj.nodes:insert(#obj.nodes, Node{node_id, 0})
+        end
+        for nodeN, node in mpairs(obj.nodes) do
+          do imnodes_BeginNode(node.id)
+            defer imnodes_EndNode() end
+            do imnodes_BeginNodeTitleBar()
+              defer imnodes_EndNodeTitleBar() end
+              igTextUnformatted("node " .. nodeN, nilptr)
+            end
+            do imnodes_BeginInputAttribute(node.id << 8, ImNodesPinShape_CircleFilled)
+              defer imnodes_EndInputAttribute() end
+              igTextUnformatted("input", nilptr)
+            end
+            do imnodes_BeginStaticAttribute(node.id << 16)
+              defer imnodes_EndStaticAttribute() end
+              igPushItemWidth(120)
+              igDragFloat("value", &node.value, 0.01, 0, 0, "%.3f", 0)
+              igPopItemWidth()
+            end
+            do imnodes_BeginOutputAttribute(node.id << 24, ImNodesPinShape_CircleFilled)
+              defer imnodes_EndOutputAttribute() end
+              local wOut: ImVec2
+              local wVal: ImVec2
+              igCalcTextSize(&wOut, "output", nilptr, false, -1.0)
+              igCalcTextSize(&wVal, "value" , nilptr, false, -1.0)
+              igIndent(120 + wVal.x - wOut.x)
+              igTextUnformatted("output", nilptr)
+            end
+          end -- imnodes_EndNode()
+        end -- end for loop
+
+        for _, link in ipairs(obj.links) do
+          imnodes_Link(link.id, link.start_attr, link.end_attr)
+        end
+      end -- imnodes_EndNodeEditor()
+      ---
+      ---
+      local lnk: Link
+      if imnodes_IsLinkCreated_BoolPtr(&lnk.start_attr, &lnk.end_attr, nilptr) then
+        obj.current_id = obj.current_id  + 1
+        lnk.id = obj.current_id
+        obj.links:insert(#obj.links, lnk)
+      end
+
+      local link_id: cint
+      if imnodes_IsLinkDestroyed(&link_id) then
+        local idx = -1
+        for i, item in ipairs(obj.links) do
+          if item.id == link_id then
+            idx = i
+            break
+          end
+        end
+        if idx > 0 then
+          obj.links:remove(idx)
+        end
+      end
+    end -- end do igBegin
+
+    ----
+    igRender()
+    glClearColor(clearColor[0], clearColor[1], clearColor[2], 1.0)
+    glClear(GL_COLOR_BUFFER_BIT)
+    ImGui_ImplOpenGL3_RenderDrawData(igGetDrawData())
+
+    glfwSwapBuffers(glfwWin)
+
+    if showWindowDelay > 0 then
+      showWindowDelay = showWindowDelay - 1
+    elseif showWindowDelay == 0 then
+      showWindowDelay = -1
+      glfwShowWindow(glfwWin)
+    end
+  end -- main while loop end
+
+end -- main() end
+
+main()

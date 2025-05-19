@@ -8,6 +8,7 @@ EXAMPLE_DIRS := \
 							examples/imGuiToggleDemo \
 							examples/imGuizmoDemo \
 							examples/imKnobsDemo \
+							examples/imNodesDemo \
 							examples/imSpinnerDemo \
 							examples/sdl2_opengl3
 

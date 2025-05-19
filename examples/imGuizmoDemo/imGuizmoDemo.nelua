@@ -112,7 +112,7 @@ local main = function()
     igNewFrame()
 
     ---------------------------------
-    --- Show ImGuiColorTextEdit demo
+    --- Show ImGuizmo demo
     ---------------------------------
     do
       igBegin("ImGuizmo with Nelua lang. " .. ICON_FA_DOG, nilptr, 0)
