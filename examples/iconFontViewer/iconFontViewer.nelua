@@ -6,27 +6,28 @@ require'cimgui'
 require'imgui_backend_opengl3'
 require'imgui_backend_glfw'
 require'loadImage'
-require'saveImage'
 require'utils'
 require'IconsFontAwesome6'
 require'iconFontTblDef'
+
+require'vector'
 
 --- External functions
 local function setupFonts() <cimport> end                -- from utils/setupFonts.c
 
 --- Initial Window size
-local MainWinWidth <const>  = 1024
-local MainWinHeight <const> =  800
+local MainWinWidth <const>  = 1600
+local MainWinHeight <const> =  900
 
 --- Constants
-local SaveImageName = "ImageSaved"
+local yellow = ImVec4{1.0, 1.0, 0.0, 1.0}
+local green  = ImVec4{0.0, 1.0, 0.0, 1.0}
 
 --- Global vars
-local imageExt:string
-local recImageFormat = @record{kind: string, ext:string}
-local imageFormatTbl : [4]recImageFormat = {{"JPEG 90%",".jpg"}, {"PNG",".png"}, {"BMP",".bmp"}, {"TGA",".tga"}}
-local cbItemIndex = 0
 local versions : [][2]int32 = {{4, 6} ,{4, 5} ,{4, 4} ,{4, 3} ,{4, 2} ,{4, 1} ,{4, 0} ,{3, 3} }
+
+--- Forward definitions
+local iconAnimals: [14][2]cstring
 
 ---------
 --- main
@@ -57,7 +58,7 @@ local main = function()
   defer glfwDestroyWindow(glfwWin) end
 
   glfwMakeContextCurrent(glfwWin)
-  glfwSwapInterval(1) -- # Enable vsync
+  glfwSwapInterval(1) -- Enable vsync
 
   ------------------------
   --- Load title bar icon
@@ -82,37 +83,23 @@ local main = function()
 
   setupFonts()
 
-  ---------------
-  --- Load image
-  ---------------
-  local textureId: GLuint
-  local textureWidth:  int32 = 0
-  local textureHeight: int32 = 0
-  local ImageName = "parrots-400.png"
-  if fileExists(ImageName) then
-    if not loadTextureFromFile(ImageName, &textureId, &textureWidth, &textureHeight) then
-      print("Error!: Image load error:  ", ImageName)
-    end
-  else
-    print("Error!: Image file not found  error:  ", ImageName)
-  end
-  defer glDeleteTextures(1, &textureId) end
-
-  local showDemoWindow = true
-  local showIconFontViewWindow = true
+  local showDemoWindow = false
   local showFirstWindow = true
-  local fval:cfloat = 0.5
-  local showWindowDelay = 1 -- TODO : Avoid flickering window at start up.
-  local counter = 0
+  local showWindowDelay = 2 -- TODO : Avoid flickering window at start up.
   local sBuf:string = string.create(100)
   sBuf[1] = 0
   local clearColor: [3]cfloat = {0.25,0.65,0.85}
   local item_current:cint = 0
 
-  local listBoxTextureID: GLuint = 0  --# Must be == 0 at first
-  defer glDeleteTextures(1, &listBoxTextureID) end
+  local listBoxTextureID: GLuint = 0  -- Must be == 0 at first
 
   local pio = igGetIO()
+
+  local wsZoom:float32  = 2.5
+  local item_highlighted_idx = 1
+
+  local filterVec:vector(string)
+  local filter
 
   --------------------
   --- Main while loop
@@ -120,7 +107,7 @@ local main = function()
   while glfwWindowShouldClose(glfwWin) == 0 do
     glfwPollEvents()
 
-    ImGui_ImplOpenGL3_NewFrame() -- # start imgui frame
+    ImGui_ImplOpenGL3_NewFrame() -- start imgui frame
     ImGui_ImplGlfw_NewFrame()
     igNewFrame()
 
@@ -140,7 +127,6 @@ local main = function()
       igText(igGetVersion())
       igText(ICON_FA_COMMENT_MEDICAL .. " ")   igSameLine(0, 0)
       igText(_VERSION)
-      igSameLine(0.0, -1.0)
       if igIsItemHovered(ImGuiHoveredFlags_DelayShort) and igBeginTooltip() then
         defer igEndTooltip() end
         igText("[Open file]")
@@ -148,60 +134,183 @@ local main = function()
         igPlotLines_FloatPtr("Curve", &ary, 7, 0, "Overlay string",igGET_FLT_MIN(), igGET_FLT_MAX(), ImVec2{0,0}, #cfloat)
         igText("Sin(time) = %.2f", math.sin(igGetTime()));
       end
-      igCheckbox("Demo window", &showDemoWindow)
-      igSliderFloat("Float", &fval, 0.0, 1.0, "%.3f", 0)
+      igCheckbox("ImGui Demo", &showDemoWindow)
       igColorEdit3("Background color", &clearColor, 0)
-      igText("counter = %d", counter)
       igText("Application average %.3f ms/frame (%.1f FPS)", (1000.0 / pio.Framerate), pio.Framerate)
     end
 
-    if showIconFontViewWindow then
+    -------------------------------
+    --- Show icon font view window
+    -------------------------------
+    do igBegin("Icon Font Viewer", nilptr, 0)
+      defer igEnd() end
+      igSeparatorText(ICON_FA_FONT_AWESOME .. " Icon font view: " .. tostring(#iconFontTbl) .. " icons")
+      --
+      local listBoxWidth = 320              -- The value must be 2^n
       do
-        igBegin("Icon Font Viewer", &showIconFontViewWindow, 0)
-        defer igEnd() end
-        igSeparatorText(ICON_FA_FONT_AWESOME .. " Icon font view: " .. tostring(#iconFontTbl) .. " icons")
-        -- #
-        local listBoxWidth = 320              -- # The value must be 2^n
-        do
-          igText("No.[%4d]", item_current)      igSameLine(0,-1.0)
-          sBuf = iconFontTbl[item_current]
-          if igButton(ICON_FA_COPY .. " Copy to", ImVec2{0,0}) then
-            local r, seqStr = string.match(sBuf,".+(ICON.+)$")
-            if r then
-              igSetClipboardText(seqStr[1])
-            end
-          end
-          setTooltip("Clipboard") -- # Show tooltip help
-        end
-
-        -- # Show ListBox header
-        igSetNextItemWidth(listBoxWidth)
-        igInputText("##inputtext1", sBuf, #sBuf, ImGuiTextFlags_None, nilptr, nilptr)
-
-        -- # Show ListBox main
-        local listBoxPosTop:ImVec2
-        local listBoxPosEnd:ImVec2
-        igNewLine()
-        igGetCursorScreenPos(&listBoxPosTop) --# Get absolute pos.
-        igSetNextItemWidth(listBoxWidth)
-
-        igListBox_Str_arr("##listbox1"
-                          , &item_current
-                          , &iconFontTbl[0]
-                          , #iconFontTbl, 34)
-        igGetCursorScreenPos(&listBoxPosEnd) --# Get absolute pos.
-
-        -- # Show magnifying glass (Zoom in Toolchip)
-        if igIsItemHovered(ImGuiHoveredFlags_DelayNone) then
-          local MousePos = getIO_MousePos()
-          if (MousePos.x - listBoxPosTop.x ) < 50 then
-            zoomGlass(&listBoxTextureID, listBoxWidth, listBoxPosTop, listBoxPosEnd )
+        igText("No.[%4d]", item_current)      igSameLine(0,-1.0)
+        sBuf = iconFontTbl[item_current]
+        if igButton(ICON_FA_COPY .. " Copy to", ImVec2{0,0}) then
+          local r, seqStr = string.match(sBuf,".+(ICON.+)$")
+          if r then
+            igSetClipboardText(seqStr[1])
           end
         end
+        setTooltip("Clipboard", ImGuiHoveredFlags_DelayNormal, green) -- Show tooltip help
+      end
+      -- Show ListBox header
+      igSetNextItemWidth(listBoxWidth)
+      igInputText("##inputtext1", sBuf, #sBuf, ImGuiTextFlags_None, nilptr, nilptr)
 
-      end -- igBegin("Icon Font Viewer"...) end
-    end -- showIconFontViewWindow end
+      -- Show ListBox main
+      local listBoxPosTop:ImVec2
+      local listBoxPosEnd:ImVec2
+      igNewLine()
+      igGetCursorScreenPos(&listBoxPosTop) -- Get absolute pos.
+      igSetNextItemWidth(listBoxWidth)
 
+      igListBox_Str_arr("##listbox1"
+                        , &item_current
+                        , &iconFontTbl[0]
+                        , #iconFontTbl, 34)
+      igGetCursorScreenPos(&listBoxPosEnd) -- Get absolute pos.
+
+      -- Show magnifying glass (Zoom in Toolchip)
+      if igIsItemHovered(ImGuiHoveredFlags_DelayNone) then
+        local MousePos = getIO_MousePos()
+        if (MousePos.x - listBoxPosTop.x ) < 50 then
+          zoomGlass(&listBoxTextureID, listBoxWidth, listBoxPosTop, listBoxPosEnd )
+        end
+      end
+    end -- igBegin("Icon Font Viewer"...) end
+
+    ------------------------
+    --- Show icons in Table
+    ------------------------
+    do igBegin("Icon Font Viewer2", nilptr, 0)
+      defer igEnd() end
+      -- Zoom bar
+      local wsNormal = 1.0
+      igText("%s", " Zoom x"); igSameLine(0,-1.0)
+      igSliderFloat("##Zoom1", &wsZoom, 0.8, 5.0, "%.1f", 0)
+      --- Tab Start
+      igSetNextItemWidth(-1)
+      do igBeginTabBar("IconsTab", 0)
+        defer igEndTabBar() end
+        ------------
+        --- All tab
+        ------------
+        if igBeginTabItem("All icons", nilptr, 0) then
+          defer igEndTabItem() end
+          do igBeginChild_Str("child2", ImVec2{0,0}, 0, 0)
+            defer igEndChild() end
+            local flags = ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersOuter | ImGuiTableFlags_BordersV | ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable
+            local text_base_height = igGetTextLineHeightWithSpacing()
+            local outer_size = ImVec2{0.0, text_base_height * 8}
+            local col = 10
+            if igBeginTable("table_scrolly", col, flags, outer_size, 0) then
+              defer igEndTable() end
+              for row = 0, (#iconFontTbl2 / col) - 1 do
+                igTableNextRow(0, 0.0)
+                for column = 0, col - 1 do
+                  local ix:integer = (row  * col) + column
+                  igTableSetColumnIndex(column)
+                  igSetWindowFontScale(wsZoom)
+                  igText("%s", iconFontTbl2[ix][0])
+                  if igIsItemHovered() then
+                     item_highlighted_idx = ix
+                     item_current =  ix
+                  end
+                  local iconFontLabel = iconFontTbl2[ix][1]
+                  setTooltip(iconFontLabel, ImGuiHoveredFlags_DelayNormal, yellow)
+                  igSetWindowFontScale(wsNormal)
+                  --
+                  igPushID_Int(ix)
+                  if igBeginPopupContextItem("Contex Menu", 1) then
+                    if igMenuItem_Bool("Copy to clip board", "" , false, true) then
+                      item_current =  ix
+                      igSetClipboardText(iconFontTbl2[ix][1])
+                    end
+                    igEndPopup()
+                  end
+                  igPopID()
+                end -- for column end
+              end -- for row end
+            end -- end igBeginTable
+          end -- end igBeginChild
+        end -- igBeginTabItem All
+
+        ---------------
+        --- Animal tab
+        ---------------
+        if igBeginTabItem(ICON_FA_DOG .. " Animal", nilptr, 0) then
+          defer igEndTabItem() end
+          do igBeginChild_Str("chld_animal", ImVec2{0,0}, 0, 0)
+            defer igEndChild() end
+            local flags = ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersOuter | ImGuiTableFlags_BordersV | ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable
+            local text_base_height = igGetTextLineHeightWithSpacing()
+            local outer_size = ImVec2{0.0, text_base_height * 8}
+            local col = 2
+            if igBeginTable("table_scrolly2", col, flags, outer_size, 0) then
+              defer igEndTable() end
+              for row = 0, (#iconAnimals / col) - 1 do
+                igTableNextRow(0, 0.0)
+                for column = 0, col - 1 do
+                  local ix:integer = (row  * col) + column
+                  igTableSetColumnIndex(column)
+                  igSetWindowFontScale(wsZoom)
+                  igText("%s", iconAnimals[ix][0])
+                  if igIsItemHovered() then
+                     item_highlighted_idx = ix
+                  end
+                  local iconFontLabel = iconAnimals[ix][1]
+                  setTooltip(iconFontLabel, ImGuiHoveredFlags_DelayNormal, yellow)
+                  igSetWindowFontScale(wsNormal)
+                  --
+                  igPushID_Int(ix)
+                  if igBeginPopupContextItem("Contex Menu", 1) then
+                    if igMenuItem_Bool("Copy to clip board", "" , false, true) then
+                      igSetClipboardText(iconAnimals[ix][1])
+                    end
+                    igEndPopup()
+                  end
+                  igPopID()
+                end -- for column end
+              end -- for row end
+            end -- end igBeginTable
+          end -- end igBeginChild
+        end -- igBeginTabItem
+      end -- igBeginTabBar
+    end -- end igBegin
+
+    -----------------------
+    --- Text filter window
+    -----------------------
+    do igBegin("Icon Font filter", nilptr, 0)
+      defer igEnd() end
+      igText("(Copy)")
+      if igIsItemHovered() then
+        local bRes, seqRes = filterVec[0]:match(".+(ICON.+)")
+        if bRes then
+          igSetClipboardText(seqRes[1])
+        end
+      end
+      filterVec:clear()
+      setTooltip("Copied first line to clipboard !", ImGuiHoveredFlags_DelayNormal, green) -- Show tooltip help
+      igSameLine(0.0, 01.0)
+      filter = ImGuiTextFilter_ImGuiTextFilter("")
+      ImGuiTextFilter_Draw(filter, "Filter", 0)
+      local tbl = iconFontTbl
+      for i=0,<#tbl do
+        local pstr = tbl[i]
+        if ImGuiTextFilter_PassFilter(filter, pstr, nilptr) then
+          igText("[%04s]  %s", tostring(i), tbl[i])
+          filterVec:insert(#filterVec, tbl[i])
+        end
+      end
+    end
+
+    ---------------
     igRender()
     glClearColor(clearColor[0], clearColor[1], clearColor[2], 1.0)
     glClear(GL_COLOR_BUFFER_BIT)
@@ -209,14 +318,31 @@ local main = function()
 
     glfwSwapBuffers(glfwWin)
 
-    if showWindowDelay > 0 then
+    if showWindowDelay >= 0 then
       showWindowDelay = showWindowDelay - 1
-    elseif showWindowDelay == 0 then
-      showWindowDelay = -1
+    end
+    if showWindowDelay == 0 then
       glfwShowWindow(glfwWin)
     end
   end -- main while loop end
 
 end -- main() end
+
+iconAnimals = {
+  {ICON_FA_CAT, "  ICON_FA_CAT "},
+  {ICON_FA_CROW, "  ICON_FA_CROW "},
+  {ICON_FA_DOG, "  ICON_FA_DOG "},
+  {ICON_FA_KIWI_BIRD, "  ICON_FA_KIWI_BIRD "},
+  {ICON_FA_HORSE, "  ICON_FA_HORSE "},
+  {ICON_FA_DOVE, "  ICON_FA_DOVE "},
+  {ICON_FA_DRAGON, "  ICON_FA_DRAGON "},
+  {ICON_FA_FISH, "  ICON_FA_FISH "},
+  {ICON_FA_FISH_FINS, "  ICON_FA_FISH_FINS "},
+  {ICON_FA_FROG, "  ICON_FA_FROG "},
+  {ICON_FA_GHOST, "  ICON_FA_GHOST "},
+  {ICON_FA_LOCUST, "  ICON_FA_LOCUST "},
+  {ICON_FA_MOSQUITO, "  ICON_FA_MOSQUITO "},
+  {ICON_FA_SPAGHETTI_MONSTER_FLYING, "  ICON_FA_SPAGHETTI_MONSTER_FLYING "},
+}
 
 main()

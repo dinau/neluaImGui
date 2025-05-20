@@ -1,3 +1,11 @@
+--
+-- Notice:
+--   Before generate nelua wrapper for libaries, comment out a line 1600 in nelua-lang/lualib/nelua/plugins/nldecl.nelua
+--   https://github.com/edubart/nelua-lang/blob/a69a12d1e1e5ee0bfab299350e5d707ff7b2e744/lualib/nelua/plugins/nldecl.lua#L1600
+--        else
+--          -- TODO: handle typeof?
+--          --error('unhandled '..typespecifier.tag)   <--- Comment out this line
+--
 -----------------
 --- cimgui.nelua
 -----------------
@@ -132,9 +140,9 @@ end
 ]==]
 print("Generated [libs/imgui/imcolortextedit.nelua]")
 
---------------------------
+-------------------
 --- imguizmo.nelua
---------------------------
+-------------------
 ##[==[
 -- import Nelua Decl plugin and filesystem utils.
 local nldecl = require 'nelua.plugins.nldecl'
@@ -160,9 +168,9 @@ end
 ]==]
 print("Generated [libs/imgui/imguizmo.nelua]")
 
---------------------------
+------------------
 --- imnodes.nelua
---------------------------
+------------------
 ##[==[
 -- import Nelua Decl plugin and filesystem utils.
 local nldecl = require 'nelua.plugins.nldecl'
@@ -187,3 +195,38 @@ if ccinfo.is_windows then
 end
 ]==]
 print("Generated [libs/imgui/imnodes.nelua]")
+
+-----------------------
+--- imfiledialog.nelua
+-----------------------
+-- It needs to add '#include "cimgui.h"' line to libs/CImGuiFileDialog/libs/ImGuiFileDialog/ImGuiFileDialog.h.
+
+##[==[
+-- import Nelua Decl plugin and filesystem utils.
+local nldecl = require 'nelua.plugins.nldecl'
+local fs = require 'nelua.utils.fs'
+
+-- Generate nelua bindings file. (It will be always regenerated)
+  nldecl.generate_bindings_file{
+    defines = {'bool _Bool'
+               ,'IMGUI_IMPL_API "extern \"C\" __declspec(dllexport)"'
+               ,'ImDrawIdx unsigned int'
+               ,'CIMGUI_DEFINE_ENUMS_AND_STRUCTS'
+               ,'CUSTOM_IMGUIFILEDIALOG_CONFIG "customIconFont.h"'
+              },
+    output_file = 'libs/nelua/imgui/imfiledialog.nelua',
+    -- what C file we should generate bindings for and parse?
+    parse_includes = {'ImGuiFileDialog.h'},
+    -- what symbol name prefix should we import from that file?
+    include_names = {'^IGFD','^ImGuiFileDialog'},
+    include_dirs = {'libs/cimgui'
+                   ,'libs/CImGuiFileDialog'
+                   ,'libs/CImGuiFileDialog/libs/ImGuiFileDialog'
+                   ,'examples/utils/fonticon'
+                   }
+  }
+
+if ccinfo.is_windows then
+end
+]==]
+print("Generated [libs/imgui/imfiledialog.nelua]")

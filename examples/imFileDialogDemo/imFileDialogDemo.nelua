@@ -1,0 +1,266 @@
+-- Show gizmo demo
+-- Converted from:
+--   https://github.com/sonoro1234/LuaJIT-ImGui/blob/255583dcc45c3eb041ab690c1d42f143247e014b/examples/imGuizmo_sample.lua
+--
+require 'os'
+require'math'
+--
+require'cimgui'
+require'imgui_backend_opengl3'
+require'imgui_backend_glfw'
+require'loadImage'
+require'utils'
+require'IconsFontAwesome6'
+--
+require'imfiledialog'
+##[=[
+cdefine "CIMGUI_DEFINE_ENUMS_AND_STRUCTS"
+cinclude "ImGuiFileDialog.h"
+]=]
+
+--- External functions
+local function setupFonts() <cimport> end                -- from utils/setupFonts.c
+
+--- Initial Window size
+local MainWinWidth <const>  = 1024
+local MainWinHeight <const> = 800
+
+--- Constants
+
+--- Global vars
+local versions : [][2]int32 = {{4, 6} ,{4, 5} ,{4, 4} ,{4, 3} ,{4, 2} ,{4, 1} ,{4, 0} ,{3, 3} }
+
+--- Forward definitions
+local setFileStyle
+
+---------
+--- main
+---------
+local main = function()
+  glfwInit()
+  defer glfwTerminate()  end
+  local glfwWin: *GLFWwindow = nilptr
+  local glsl_version:cstring -- = "#version 330"
+  for _, ver in ipairs(versions) do
+    glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE)
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, ver[0])
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, ver[1])
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE)
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE)
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE)
+
+    glfwWin = glfwCreateWindow(MainWinWidth, MainWinHeight, "ImGui with Nelua 2025/05", nilptr, nilptr)
+    if nilptr ~= glfwWin then
+      glsl_version = "#version " .. tostring( ver[0] * 100 + ver[1] * 10)
+      break
+    end
+  end
+  if nilptr == glfwWin then
+    print("Could not create window")
+    os.exit(false)
+  end
+  defer glfwDestroyWindow(glfwWin) end
+
+  glfwMakeContextCurrent(glfwWin)
+  glfwSwapInterval(1) -- # Enable vsync
+
+  ------------------------
+  --- Load title bar icon
+  ------------------------
+  local IconName = "res/img/nl.png"
+  LoadTitleBarIcon(glfwWin, IconName)
+
+  if gladLoadGL(glfwGetProcAddress) == 0 then
+    error 'Could not initialize GLAD'
+  end
+  print('OpenGL loaded:', (@cstring)(glGetString(GL_VERSION)))
+
+  local context = igCreateContext()
+  defer igDestroyContext(context) end
+
+  ImGui_ImplGlfw_InitForOpenGL(glfwWin, true)
+  defer ImGui_ImplGlfw_Shutdown() end
+
+  ImGui_ImplOpenGL3_Init(glsl_version)
+  defer ImGui_ImplOpenGL3_Shutdown() end
+
+  setupFonts()
+
+  --igStyleColorsDark()
+  igStyleColorsClassic()
+
+  local showWindowDelay = 1 -- TODO : Avoid flickering window at start up.
+  local clearColor: [3]cfloat = {0.03,0.15,0.2}
+
+  local pio = igGetIO()
+
+  local sFnameSelected:string
+  local sFilePathName:string
+  local sFileDirPath:string
+  local sFilter:string
+  local sDatas:string
+
+  -------------------------------
+  --- Create FileDialog object
+  -------------------------------
+  local cfd = IGFD_Create()
+  defer IGFD_Destroy(cfd) end  -- destroy ImGuiFileDialog
+  setFileStyle(cfd)
+
+  local green     = ImVec4{0,       1,           0,       1}
+
+  --------------------
+  --- Main while loop
+  --------------------
+  while glfwWindowShouldClose(glfwWin) == 0 do
+    glfwPollEvents()
+
+    ImGui_ImplOpenGL3_NewFrame() -- # start imgui frame
+    ImGui_ImplGlfw_NewFrame()
+    igNewFrame()
+
+    ---------------------------------
+    --- Show ImFileDialog demo
+    ---------------------------------
+    do igBegin("ImFileDialog with Nelua lang. " .. ICON_FA_DOG, nilptr, 0)
+      defer igEnd() end
+      -- Show file open dialog
+      if igButton("Open file", ImVec2{100, 50}) then
+        -----------------------------
+        --- Triggered FileOpenDialog
+        -----------------------------
+        local config = IGFD_FileDialog_Config_Get()
+        config.path  = "."
+        config.flags = ImGuiFileDialogFlags_Modal |
+                       ImGuiFileDialogFlags_ShowDevicesButton |
+                       ImGuiFileDialogFlags_CaseInsensitiveExtentionFiltering
+                     --  ImGuiFileDialogFlags_ConfirmOverwrite.int32
+        IGFD_OpenDialog(cfd,
+                        "filedlg",                             -- dialog key (make it possible to have different treatment reagrding the dialog key
+                        (ICON_FA_FILE ..  " Open a File"),      -- dialog title
+                        "all (*){.*},Nelua (*.nelua *.lua){.nelua,.lua},C files(*.c *.h){.c,.h}", -- dialog filter syntax : simple => .h,.c,.pp, etc and collections : text1{filter0,filter1,filter2}, text2{filter0,filter1,filter2}, etc..
+                                                               -- dialog filter syntax : if one wants to select directory then set nil
+                        config)                                -- the file dialog config
+      end
+      setTooltip("[Open file]", ImGuiHoveredFlags_DelayNormal, green) -- Show hint
+
+      -----------------------------
+      --- Start display FileDialog
+      -----------------------------
+      local ioptr = igGetIO()
+      local maxSize = ImVec2{ioptr.DisplaySize.x * 0.8, ioptr.DisplaySize.y * 0.8}
+      local minSize = ImVec2{maxSize.x * 0.25,  maxSize.y * 0.25}
+
+      if IGFD_DisplayDialog(cfd, "filedlg", ImGuiWindowFlags_NoCollapse, minSize, maxSize) then
+        defer IGFD_CloseDialog(cfd) end
+        if IGFD_IsOk(cfd) then -- result ok
+          local  cstr:string
+          sFilePathName = IGFD_GetFilePathName(cfd, IGFD_ResultMode_AddIfNoFileExt)
+          sFileDirPath = IGFD_GetCurrentPath(cfd)
+          sFilter = IGFD_GetCurrentFilter(cfd)
+          -- here convert from string because a string was passed as a userDatas, but it can be what you want
+          local pDatas = IGFD_GetUserDatas(cfd)
+          if pDatas ~= nilptr then
+            sDatas = (@cstring)(pDatas)
+          end
+          -- TODO
+          --var csel = IGFD_GetSelection(cfd, IGFD_ResultMode_KeepInputFile.IGFD_ResultMode) # multi selection
+          --defer: IGFD_Selection_DestroyContent(addr csel)
+          --echo "Selection :\n"
+          --for i in 0..<csel.count:
+          --  local table = cast[UncheckedArray[IGFD_Selection_Pair]](csel.table)
+          --   echo "($#) FileName $# => path $#\n" % [$i, $csel.table[i].fileName, $csel.table[i].filePathName]
+        end
+      end -- end DisplayDialog
+
+      igText("Selected file = %s", sFilePathName)
+      igText("Dir           = %s", sFileDirPath)
+      igText("Filter        = %s", sFilter)
+      igText("Datas         = %s", sDatas)
+    end -- do igBegin end
+
+    igRender()
+    glClearColor(clearColor[0], clearColor[1], clearColor[2], 1.0)
+    glClear(GL_COLOR_BUFFER_BIT)
+    ImGui_ImplOpenGL3_RenderDrawData(igGetDrawData())
+
+    glfwSwapBuffers(glfwWin)
+
+    if showWindowDelay > 0 then
+      showWindowDelay = showWindowDelay - 1
+    elseif showWindowDelay == 0 then
+      showWindowDelay = -1
+      glfwShowWindow(glfwWin)
+    end
+  end -- main while loop end
+
+end -- main() end
+
+-----------------
+--- setFileStyle
+-----------------
+setFileStyle = function(cfd: *ImGuiFileDialog)
+  local clGreen     = ImVec4{0,       1,           0,       1}
+  local clMDseagreen= ImVec4{60/255, 179/255,      113/255, 1}
+
+  local clYellow    = ImVec4{1,       1,           0,       1}
+  local clOrange    = ImVec4{1,       165.0/255.0, 0,       1}
+
+  local clWhite2    = ImVec4{0.98,    0.90,        0.90,    1}
+  local clWhite     = ImVec4{1,       1,           1,       1}
+
+  local clPurple    = ImVec4{1,       51/255,      1,       1}
+  local clPurple2   = ImVec4{1,       161/255,     1,       1}
+
+  local clCyan      = ImVec4{0,       1,           1,       1}
+  local clSkyblue  = ImVec4{135/255,  206/255,     235/255, 1}
+  local clIndigo    = ImVec4{75/255,  0,           130/255, 1}
+  local clMoccasin  = ImVec4{1,       228/255,     181/255, 1}
+  local clRosybrown = ImVec4{188/255, 143/255,     143/255, 1}
+
+  local clSteelblue = ImVec4{70/255, 130/255,      180/255, 1}
+
+  local pFont = igGetDefaultFont()
+  local byExt = IGFD_FileStyleByExtention
+  IGFD_SetFileStyle(cfd, byExt , ".bat",        clCyan,       ICON_FA_PERSON_RUNNING, pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".exe",        clCyan,       ICON_FA_PLANE,          pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".EXE",        clCyan,       ICON_FA_PLANE,          pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".nim",        clSkyblue,    ICON_FA_N,              pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".nelua",      clSkyblue,    ICON_FA_FILE,           pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".lua",        clIndigo,     ICON_FA_FILE,           pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".zig",        clSkyblue,    ICON_FA_FILE,           pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".c",          clMDseagreen, ICON_FA_FILE,           pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".cpp",        clMDseagreen, ICON_FA_FILE,           pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".h",          clYellow,     ICON_FA_FILE,           pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".d",          clWhite2,     ICON_FA_FILE,           pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".txt",        clWhite2,     ICON_FA_FILE_LINES,     pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".TXT",        clWhite2,     ICON_FA_FILE_LINES,     pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".ini",        clWhite2,     ICON_FA_BAHAI,          pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".md",         clMoccasin,   ICON_FA_PEN_TO_SQUARE,  pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".html",       clMoccasin,   ICON_FA_GLOBE,          pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".gitignore",  clWhite2,     ICON_FA_BAHAI,          pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".gitmodules", clWhite2,     ICON_FA_BAHAI,          pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".o",          clWhite2,     ICON_FA_SEEDLING,       pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".a",          clWhite2,     ICON_FA_BAHAI,          pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".rc",         clWhite2,     ICON_FA_BAHAI,          pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".res",        clWhite2,     ICON_FA_BAHAI,          pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".ico",        clWhite,      ICON_FA_IMAGE,          pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".png",        clWhite,      ICON_FA_IMAGE,          pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".jpg",        clWhite,      ICON_FA_IMAGE,          pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".mp3",        clWhite,      ICON_FA_MUSIC,          pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".MP3",        clWhite,      ICON_FA_MUSIC,          pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".mp4",        clWhite,      ICON_FA_FILM,           pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".MP4",        clWhite,      ICON_FA_FILM,           pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".zip",        clWhite,      ICON_FA_FILE_ZIPPER,    pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".cmake",      clYellow,     ICON_FA_GEARS,          pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".mak",        clWhite,      ICON_FA_GEARS,          pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".mk",         clWhite,      ICON_FA_GEARS,          pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".dll",        clWhite,      ICON_FA_SNOWFLAKE,      pFont)
+  IGFD_SetFileStyle(cfd, byExt , ".sys",        clWhite,      ICON_FA_SNOWMAN,        pFont)
+  -- For folder
+  IGFD_SetFileStyle(cfd, IGFD_FileStyleByTypeDir, nilptr, clOrange, ICON_FA_FOLDER, pFont)
+  -- Regex TODO
+  --IGFD_SetFileStyle(cfd, byExt , "(.+[.].+)",   clWhite2,     ICON_FA_FILE,           pFont)
+end
+
+main()

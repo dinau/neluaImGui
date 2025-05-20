@@ -1,0 +1,236 @@
+global ImFont: type <cimport,nodecl,forwarddecl> = @record{}
+global ImFontAtlas: type <cimport,nodecl,forwarddecl> = @record{}
+global ImFontBuilderIO: type <cimport,nodecl,forwarddecl> = @record{}
+global ImFontConfig: type <cimport,nodecl,forwarddecl> = @record{}
+global ImFontGlyph: type <cimport,nodecl,forwarddecl> = @record{}
+global ImVec2: type <cimport,nodecl,forwarddecl> = @record{}
+ImVec2 = @record{
+  x: float32,
+  y: float32
+}
+global ImVec4: type <cimport,nodecl,forwarddecl> = @record{}
+ImVec4 = @record{
+  x: float32,
+  y: float32,
+  z: float32,
+  w: float32
+}
+ImFontConfig = @record{
+  FontData: pointer,
+  FontDataSize: cint,
+  FontDataOwnedByAtlas: boolean,
+  MergeMode: boolean,
+  PixelSnapH: boolean,
+  FontNo: cint,
+  OversampleH: cint,
+  OversampleV: cint,
+  SizePixels: float32,
+  GlyphExtraSpacing: ImVec2,
+  GlyphOffset: ImVec2,
+  GlyphRanges: *cushort,
+  GlyphMinAdvanceX: float32,
+  GlyphMaxAdvanceX: float32,
+  FontBuilderFlags: cuint,
+  RasterizerMultiply: float32,
+  RasterizerDensity: float32,
+  EllipsisChar: cushort,
+  Name: [40]cchar,
+  DstFont: *ImFont
+}
+ImFontGlyph = @record{
+  Colored: cuint,
+  Visible: cuint,
+  Codepoint: cuint,
+  AdvanceX: float32,
+  X0: float32,
+  Y0: float32,
+  X1: float32,
+  Y1: float32,
+  U0: float32,
+  V0: float32,
+  U1: float32,
+  V1: float32
+}
+global ImFontAtlasCustomRect: type <cimport,nodecl,forwarddecl> = @record{}
+ImFontAtlasCustomRect = @record{
+  X: cushort,
+  Y: cushort,
+  Width: cushort,
+  Height: cushort,
+  GlyphID: cuint,
+  GlyphColored: cuint,
+  GlyphAdvanceX: float32,
+  GlyphOffset: ImVec2,
+  Font: *ImFont
+}
+global ImVector_ImFontPtr: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: **ImFont
+}
+global ImVector_ImFontAtlasCustomRect: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImFontAtlasCustomRect
+}
+global ImVector_ImFontConfig: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImFontConfig
+}
+ImFontAtlas = @record{
+  Flags: cint,
+  TexID: culonglong,
+  TexDesiredWidth: cint,
+  TexGlyphPadding: cint,
+  UserData: pointer,
+  Locked: boolean,
+  TexReady: boolean,
+  TexPixelsUseColors: boolean,
+  TexPixelsAlpha8: *cuchar,
+  TexPixelsRGBA32: *cuint,
+  TexWidth: cint,
+  TexHeight: cint,
+  TexUvScale: ImVec2,
+  TexUvWhitePixel: ImVec2,
+  Fonts: ImVector_ImFontPtr,
+  CustomRects: ImVector_ImFontAtlasCustomRect,
+  ConfigData: ImVector_ImFontConfig,
+  TexUvLines: [33]ImVec4,
+  FontBuilderIO: *ImFontBuilderIO,
+  FontBuilderFlags: cuint,
+  PackIdMouseCursors: cint,
+  PackIdLines: cint
+}
+global ImVector_float: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *float32
+}
+global ImVector_ImU16: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *cushort
+}
+global ImVector_ImFontGlyph: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImFontGlyph
+}
+ImFont = @record{
+  IndexAdvanceX: ImVector_float,
+  FallbackAdvanceX: float32,
+  FontSize: float32,
+  IndexLookup: ImVector_ImU16,
+  Glyphs: ImVector_ImFontGlyph,
+  FallbackGlyph: *ImFontGlyph,
+  ContainerAtlas: *ImFontAtlas,
+  ConfigData: *ImFontConfig,
+  ConfigDataCount: cshort,
+  EllipsisCharCount: cshort,
+  EllipsisChar: cushort,
+  FallbackChar: cushort,
+  EllipsisWidth: float32,
+  EllipsisCharStep: float32,
+  Scale: float32,
+  Ascent: float32,
+  Descent: float32,
+  MetricsTotalSurface: cint,
+  DirtyLookupTables: boolean,
+  Used8kPagesMap: [1]cuchar
+}
+ImFontBuilderIO = @record{
+  FontBuilder_Build: function(atlas: *ImFontAtlas): boolean
+}
+global IGFD_FileStyleFlags: type <cimport,nodecl> = @cint
+global IGFD_FileStyleFlags_: type <cimport,nodecl,using,ctypedef'IGFD_FileStyleFlags_'> = @enum(cint){
+  IGFD_FileStyle_None = 0,
+  IGFD_FileStyleByTypeFile = 1,
+  IGFD_FileStyleByTypeDir = 2,
+  IGFD_FileStyleByTypeLink = 4,
+  IGFD_FileStyleByExtention = 8,
+  IGFD_FileStyleByFullName = 16,
+  IGFD_FileStyleByContainedInFullName = 32
+}
+global ImGuiFileDialogFlags: type <cimport,nodecl> = @cint
+global ImGuiFileDialogFlags_: type <cimport,nodecl,using,ctypedef'ImGuiFileDialogFlags_'> = @enum(cint){
+  ImGuiFileDialogFlags_None = 0,
+  ImGuiFileDialogFlags_ConfirmOverwrite = 1,
+  ImGuiFileDialogFlags_DontShowHiddenFiles = 2,
+  ImGuiFileDialogFlags_DisableCreateDirectoryButton = 4,
+  ImGuiFileDialogFlags_HideColumnType = 8,
+  ImGuiFileDialogFlags_HideColumnSize = 16,
+  ImGuiFileDialogFlags_HideColumnDate = 32,
+  ImGuiFileDialogFlags_NoDialog = 64,
+  ImGuiFileDialogFlags_ReadOnlyFileNameField = 128,
+  ImGuiFileDialogFlags_CaseInsensitiveExtentionFiltering = 256,
+  ImGuiFileDialogFlags_Modal = 512,
+  ImGuiFileDialogFlags_DisableThumbnailMode = 1024,
+  ImGuiFileDialogFlags_DisablePlaceMode = 2048,
+  ImGuiFileDialogFlags_DisableQuickPathSelection = 4096,
+  ImGuiFileDialogFlags_ShowDevicesButton = 8192,
+  ImGuiFileDialogFlags_NaturalSorting = 16384,
+  ImGuiFileDialogFlags_Default = 521
+}
+global IGFD_ResultMode: type <cimport,nodecl> = @cint
+global IGFD_ResultMode_: type <cimport,nodecl,using,ctypedef'IGFD_ResultMode_'> = @enum(cint){
+  IGFD_ResultMode_AddIfNoFileExt = 0,
+  IGFD_ResultMode_OverwriteFileExt = 1,
+  IGFD_ResultMode_KeepInputFile = 2
+}
+global ImGuiFileDialog: type <cimport,nodecl,forwarddecl> = @record{}
+global IGFD_Selection_Pair: type <cimport,nodecl,forwarddecl> = @record{}
+global IGFD_Selection: type <cimport,nodecl,forwarddecl> = @record{}
+global IGFD_PaneFun: type <cimport,nodecl> = @function(a1: cstring, a2: pointer, a3: *boolean): void
+global IGFD_FileDialog_Config: type <cimport,nodecl,ctypedef'IGFD_FileDialog_Config'> = @record{
+  path: cstring,
+  fileName: cstring,
+  filePathName: cstring,
+  countSelectionMax: int32,
+  userDatas: pointer,
+  sidePane: IGFD_PaneFun,
+  sidePaneWidth: float32,
+  flags: ImGuiFileDialogFlags
+}
+IGFD_Selection_Pair = @record{
+  fileName: cstring,
+  filePathName: cstring
+}
+IGFD_Selection = @record{
+  table: *IGFD_Selection_Pair,
+  count: csize
+}
+global function IGFD_FileDialog_Config_Get(): IGFD_FileDialog_Config <cimport,nodecl> end
+global function IGFD_Selection_Pair_Get(): IGFD_Selection_Pair <cimport,nodecl> end
+global function IGFD_Selection_Pair_DestroyContent(vSelection_Pair: *IGFD_Selection_Pair): void <cimport,nodecl> end
+global function IGFD_Selection_Get(): IGFD_Selection <cimport,nodecl> end
+global function IGFD_Selection_DestroyContent(vSelection: *IGFD_Selection): void <cimport,nodecl> end
+global function IGFD_Create(): *ImGuiFileDialog <cimport,nodecl> end
+global function IGFD_Destroy(vContextPtr: *ImGuiFileDialog): void <cimport,nodecl> end
+global function IGFD_OpenDialog(vContextPtr: *ImGuiFileDialog, vKey: cstring, vTitle: cstring, vFilters: cstring, vConfig: IGFD_FileDialog_Config): void <cimport,nodecl> end
+global function IGFD_DisplayDialog(vContextPtr: *ImGuiFileDialog, vKey: cstring, vFlags: cint, vMinSize: ImVec2, vMaxSize: ImVec2): boolean <cimport,nodecl> end
+global function IGFD_CloseDialog(vContextPtr: *ImGuiFileDialog): void <cimport,nodecl> end
+global function IGFD_IsOk(vContextPtr: *ImGuiFileDialog): boolean <cimport,nodecl> end
+global function IGFD_WasKeyOpenedThisFrame(vContextPtr: *ImGuiFileDialog, vKey: cstring): boolean <cimport,nodecl> end
+global function IGFD_WasOpenedThisFrame(vContextPtr: *ImGuiFileDialog): boolean <cimport,nodecl> end
+global function IGFD_IsKeyOpened(vContextPtr: *ImGuiFileDialog, vCurrentOpenedKey: cstring): boolean <cimport,nodecl> end
+global function IGFD_IsOpened(vContextPtr: *ImGuiFileDialog): boolean <cimport,nodecl> end
+global function IGFD_GetSelection(vContextPtr: *ImGuiFileDialog, vMode: IGFD_ResultMode): IGFD_Selection <cimport,nodecl> end
+global function IGFD_GetFilePathName(vContextPtr: *ImGuiFileDialog, vMode: IGFD_ResultMode): cstring <cimport,nodecl> end
+global function IGFD_GetCurrentFileName(vContextPtr: *ImGuiFileDialog, vMode: IGFD_ResultMode): cstring <cimport,nodecl> end
+global function IGFD_GetCurrentPath(vContextPtr: *ImGuiFileDialog): cstring <cimport,nodecl> end
+global function IGFD_GetCurrentFilter(vContextPtr: *ImGuiFileDialog): cstring <cimport,nodecl> end
+global function IGFD_GetUserDatas(vContextPtr: *ImGuiFileDialog): pointer <cimport,nodecl> end
+global function IGFD_SetFileStyle(vContextPtr: *ImGuiFileDialog, vFileStyleFlags: IGFD_FileStyleFlags, vFilter: cstring, vColor: ImVec4, vIconText: cstring, vFont: *ImFont): void <cimport,nodecl> end
+global function IGFD_SetFileStyle2(vContextPtr: *ImGuiFileDialog, vFileStyleFlags: IGFD_FileStyleFlags, vFilter: cstring, vR: float32, vG: float32, vB: float32, vA: float32, vIconText: cstring, vFont: *ImFont): void <cimport,nodecl> end
+global function IGFD_GetFileStyle(vContextPtr: *ImGuiFileDialog, vFileStyleFlags: IGFD_FileStyleFlags, vFilter: cstring, vOutColor: *ImVec4, vOutIconText: *cstring, vOutFont: **ImFont): boolean <cimport,nodecl> end
+global function IGFD_ClearFilesStyle(vContextPtr: *ImGuiFileDialog): void <cimport,nodecl> end
+global function IGFD_SetFlashingAttenuationInSeconds(vContextPtr: *ImGuiFileDialog, vAttenValue: float32): void <cimport,nodecl> end
+global function IGFD_SerializePlaces(vContextPtr: *ImGuiFileDialog, vDontSerializeCodeBasedPlaces: boolean): cstring <cimport,nodecl> end
+global function IGFD_DeserializePlaces(vContextPtr: *ImGuiFileDialog, vPlaces: cstring): void <cimport,nodecl> end
+global function IGFD_AddPlacesGroup(vContextPtr: *ImGuiFileDialog, vGroupName: cstring, vDisplayOrder: csize, vCanBeEdited: boolean): boolean <cimport,nodecl> end
+global function IGFD_RemovePlacesGroup(vContextPtr: *ImGuiFileDialog, vGroupName: cstring): boolean <cimport,nodecl> end
+global function IGFD_AddPlace(vContextPtr: *ImGuiFileDialog, vGroupName: cstring, vPlaceName: cstring, vPlacePath: cstring, vCanBeSaved: boolean, vIconText: cstring): boolean <cimport,nodecl> end
+global function IGFD_RemovePlace(vContextPtr: *ImGuiFileDialog, vGroupName: cstring, vPlaceName: cstring): boolean <cimport,nodecl> end
+global IGFD_VERSION: cstring <comptime> = "v0.6.8"
+global IGFD_IMGUI_SUPPORTED_VERSION: cstring <comptime> = "1.90.5 WIP"

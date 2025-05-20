@@ -5,6 +5,7 @@ EXAMPLE_DIRS := \
 							examples/glfw_opengl3_jp \
 							examples/iconFontViewer \
 							examples/imColorTextEditDemo \
+							examples/imFileDialogDemo \
 							examples/imGuiToggleDemo \
 							examples/imGuizmoDemo \
 							examples/imKnobsDemo \

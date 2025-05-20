@@ -11,11 +11,13 @@
     - [imColorTextEditDemo](#imcolortexteditdemo)
     - [imGuizmoDemo](#imguizmodemo)
     - [imNodesDemo](#imnodesdemo)
-    - [glfw_opengl3, sdl2_opengl3](#glfw_opengl3-sdl2_opengl3)
+    - [imFileDialogDemo](#imfiledialogdemo)
     - [iconFontViewer](#iconfontviewer)
+    - [glfw_opengl3, sdl2_opengl3](#glfw_opengl3-sdl2_opengl3)
+    - [iconFontViewer](#iconfontviewer-1)
     - [glfw_opengl3_jp](#glfw_opengl3_jp)
-  - [SDL2 / GLFW / STB headers for Nelua](#sdl2--glfw--stb-headers-for-nelua)
   - [Available libraries list at this moment](#available-libraries-list-at-this-moment)
+  - [SDL2 / GLFW / STB headers for Nelua](#sdl2--glfw--stb-headers-for-nelua)
   - [My tools version](#my-tools-version)
   - [History](#history)
   - [Other ImGui / CImGui project](#other-imgui--cimgui-project)
@@ -92,7 +94,7 @@ GCC
 
 [imGuiToggleDemo.nelua](examples/imGuiToggleDemo/imGuiToggleDemo.nelua) 
 
-![alt](img/imGuiToggle.png)
+![alt](https://github.com/dinau/neluaImGui/raw/main/img/imGuiToggle.png)
 
 ##### imKnobsDemo
 
@@ -100,7 +102,7 @@ GCC
 
 [imKnobsDemo.nelua](examples/imKnobsDemo/imKnobsDemo.nelua) 
 
-![alt](img/imKnobs.png)
+![alt](https://github.com/dinau/neluaImGui/raw/main/img/imKnobs.png)
 
 ##### imSpinnerDemo
 
@@ -108,7 +110,7 @@ GCC
 
 [imSpinnerDemo.nelua](examples/imSpinnerDemo/imSpinnerDemo.nelua) 
 
-![alt](img/imSpinner.gif)
+![alt](https://github.com/dinau/neluaImGui/raw/main/img/imSpinner.gif)
 
 ##### imColorTextEditDemo
 
@@ -116,7 +118,7 @@ GCC
 
 [imColorTextEditDemo.nelua](examples/imColorTextEditDemo/imColorTextEditDemo.nelua) 
 
-![alt](img/imColorTextEdit.png)
+![alt](https://github.com/dinau/neluaImGui/raw/main/img/imColorTextEdit.png)
 
 ##### imGuizmoDemo
 
@@ -124,7 +126,7 @@ GCC
 
 [imGuizmoDemo.nelua](examples/imGuizmoDemo/imGuizmoDemo.nelua) 
 
-![alt](img/imGuizmo.png)
+![alt](https://github.com/dinau/neluaImGui/raw/main/img/imGuizmo.png)
 
 ##### imNodesDemo
 
@@ -132,7 +134,30 @@ GCC
 
 [imNodesDemo.nelua](examples/imNodesDemo/imNodesDemo.nelua) 
 
-![alt](img/imNodes.png)
+![alt](https://github.com/dinau/neluaImGui/raw/main/img/imNodes.png)
+
+##### imFileDialogDemo
+
+---
+
+[imFileDialogDemo.nelua](examples/imFileDialogDemo/imFileDialogDemo.nelua) 
+
+![alt](https://github.com/dinau/neluaImGui/raw/main/img/imFileDialog.png)
+
+##### iconFontViewer 
+
+---
+
+[iconFontViewer.nelua](examples/iconFontViewer/iconFontviewer.nelua) 
+
+- [x] Icon fonts
+- [x] Magnifying glass  
+- [x] Incremental search 
+- [x] Static link [^dllWindows]
+
+   ![iconFontViewer.png](https://github.com/dinau/neluaImGui/raw/main/img/iconFontViewer.png)
+
+[^dllWindows]: Only Windows executables (without .dll dependencies)
 
 ##### glfw_opengl3, sdl2_opengl3
 
@@ -141,27 +166,13 @@ GCC
 [glfw_opengl3.nelua](examples/glfw_opengl3/glfw_opengl3.nelua), 
 [sdl2_opengl3.nelua](examples/sdl2_opengl3/sdl2_opengl3.nelua)
 
-1. Icon fonts
-1. Image loader and saving [jpg, bmp, png, tga]
-1. Magnifying glass  
-1. glfw_opengl3: Static link [^dllWindows]
-1. sdl2_opengl3: Dynamic link
+- [x]  Icon fonts
+- [x]  Image loader and saving **jpg, bmp, png and tga** format
+- [x]  Magnifying glass  
+- [x]  glfw_opengl3: Static link [^dllWindows]
+- [x]  sdl2_opengl3: Dynamic link
 
    ![glfw_opengl3.png](https://github.com/dinau/neluaImGui/raw/main/img/glfw_opengl3.png)
-
-##### iconFontViewer 
-
----
-
-[iconFontViewer.nelua](examples/iconFontViewer/iconFontviewer.nelua) 
-
-1. Icon fonts
-1. Magnifying glass  
-1. Static link [^dllWindows]
-
-   ![iconFontViewer.png](https://github.com/dinau/neluaImGui/raw/main/img/iconFontViewer.png)
-
-[^dllWindows]: Only Windows executables (without .dll dependencies)
 
 ##### glfw_opengl3_jp
 
@@ -172,13 +183,6 @@ Showing multibyte fonts(UTF-8, CJK fonts) and IME(Input method)
 [glfw_opengl3_jp.nelua](examples/glfw_opengl3_jp/glfw_opengl3_jp.nelua) 
 
 ![glfw_opengl3_jp.png](https://github.com/dinau/neluaImGui/raw/main/img/glfw_opengl3_jp.png)
-
-
-#### SDL2 / GLFW / STB headers for Nelua
-
----
-
-These header files [libs/nelua/glfw](libs/nelua/glfw), [libs/nelua/sdl2](libs/nelua/sdl2), [libs/nelua/stb](libs/nelua/stb) have thankfully been copied form [nelua-decl libraries project](https://github.com/edubart/nelua-decl).
 
 #### Available libraries list at this moment
 
@@ -192,11 +196,18 @@ Library name / C lang. wrapper
 - [x] [ImNodes](https://github.com/Nelarius/imnodes) / [CImNodes](https://github.com/cimgui/cimnodes) (2025/05)
 - [x] [ImGuizmo](https://github.com/CedricGuillemet/ImGuizmo) / [CImGuizmo](https://github.com/cimgui/cimguizmo) (2025/05)
 - [x] [ImGui-Knobs](https://github.com/altschuler/imgui-knobs) / [CImGui-Knobs](https://github.com/dinau/imguin/tree/main/src/imguin/private/cimgui-knobs) (2025/05)
-- [ ] [ImGuiFileDialog](https://github.com/aiekick/ImGuiFileDialog) / [CImGuiFileDialog](https://github.com/dinau/CImGuiFileDialog)
+- [x] [ImGuiFileDialog](https://github.com/aiekick/ImGuiFileDialog) / [CImGuiFileDialog](https://github.com/dinau/CImGuiFileDialog)
 - [x] [ImGui_Toggle](https://github.com/cmdwtf/imgui_toggle) / [CimGui_Toggle](https://github.com/dinau/cimgui_toggle) (2025/05)
 - [x] [ImSpinner](https://github.com/dalerank/imspinner) / [CImSpinner](https://github.com/dinau/cimspinner) (2025/05)
 - [x] [ImGuiColorTextEdit](https://github.com/santaclose/ImGuiColorTextEdit) / [cimCTE](https://github.com/cimgui/cimCTE) (2025)
-- [ ] [ImGui_Markdown](https://github.com/enkisoftware/imgui_markdown) 
+- [ ] ~~[ImGui_Markdown](https://github.com/enkisoftware/imgui_markdown) (WIP)~~
+
+#### SDL2 / GLFW / STB headers for Nelua
+
+---
+
+These header files [libs/nelua/glfw](libs/nelua/glfw), [libs/nelua/sdl2](libs/nelua/sdl2), [libs/nelua/stb](libs/nelua/stb) have thankfully been copied form [nelua-decl libraries project](https://github.com/edubart/nelua-decl).
+
 
 #### My tools version
 

@@ -62,17 +62,13 @@ end
 ---------------
 --- setTooltip
 ---------------
-global setTooltip = function(str:string, flags:ImGuiHoveredFlags)
-  local delay: ImGuiHoveredFlags
-  if flags ~= nil then
-    delay = flags
-  else
-    delay = ImGuiHoveredFlags_DelayNormal
-  end
-  if igIsItemHovered(delay) then
+global setTooltip = function(str:string, flags:ImGuiHoveredFlags, color:ImVec4)
+  if igIsItemHovered(flags) then
     if igBeginTooltip() then
+      defer igEndTooltip() end
+      igPushStyleColor_Vec4(ImGuiCol_Text, color)
       igText(str)
-      igEndTooltip()
+      igPopStyleColor(1)
       end
   end
 end
