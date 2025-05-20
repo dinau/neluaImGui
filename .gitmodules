@@ -19,3 +19,6 @@
 [submodule "libs/cimnodes"]
 	path = libs/cimnodes
 	url = https://github.com/cimgui/cimnodes
+[submodule "libs/CImGuiFileDialog"]
+	path = libs/CImGuiFileDialog
+	url = https://github.com/dinau/CImGuiFileDialog
