@@ -8,8 +8,8 @@ require'IconsFontAwesome6'
 global iconFontTbl: []cstring = {
 ]]
 fp:write(sOut)
-for line in io.lines("../utils/fonticon/IconsFontAwesome6.nim") do
-  for m1,m2 in string.gmatch(line,"%s+(.+)*%s=%s(.+)") do
+for line in io.lines("../utils/fonticon/IconsFontAwesome6.nelua") do
+  for m1,m2 in string.gmatch(line,"global%s(.+):.+=%s(.+)") do
     if string.match(m1,"ICON_FA") then
       fp:write("  " .. m1 .. " .. \"" .. " " .. m1 .. "\" ,\n")
     end
@@ -21,8 +21,8 @@ fp:write("\n\n")
 sOut = [[
 global iconFontTbl2: [][2]cstring = { ]]
 fp:write(sOut)
-for line in io.lines("../utils/fonticon/IconsFontAwesome6.nim") do
-  for m1,m2 in string.gmatch(line,"%s+(.+)*%s=%s(.+)") do
+for line in io.lines("../utils/fonticon/IconsFontAwesome6.nelua") do
+  for m1,m2 in string.gmatch(line,"global%s(.+):.+=%s(.+)") do
     if string.match(m1,"ICON_FA") then
       fp:write("\n  {" .. m1 .. ", \"" .. "  " .. m1 .. " \"},")
     end

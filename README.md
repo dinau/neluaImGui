@@ -13,8 +13,9 @@
     - [imNodesDemo](#imnodesdemo)
     - [imFileDialogDemo](#imfiledialogdemo)
     - [iconFontViewer](#iconfontviewer)
+    - [imPlotDemo](#implotdemo)
+    - [imPlot3DDemo](#implot3ddemo)
     - [glfw_opengl3, sdl2_opengl3](#glfw_opengl3-sdl2_opengl3)
-    - [iconFontViewer](#iconfontviewer-1)
     - [glfw_opengl3_jp](#glfw_opengl3_jp)
   - [Available libraries list at this moment](#available-libraries-list-at-this-moment)
   - [SDL2 / GLFW / STB headers for Nelua](#sdl2--glfw--stb-headers-for-nelua)
@@ -28,8 +29,6 @@
 ### NeluaImGui
 
 ImGui / CImGui wrapper library and some examples with NeLua language
-
-Now work in progress.
 
 ImGui / CImGui 1.91.8 (2025/03) 
 
@@ -144,7 +143,7 @@ GCC
 
 ![alt](https://github.com/dinau/neluaImGui/raw/main/img/imFileDialog.png)
 
-##### iconFontViewer 
+##### iconFontViewer
 
 ---
 
@@ -158,6 +157,24 @@ GCC
    ![iconFontViewer.png](https://github.com/dinau/neluaImGui/raw/main/img/iconFontViewer.png)
 
 [^dllWindows]: Only Windows executables (without .dll dependencies)
+
+##### imPlotDemo
+
+---
+
+[imPlotDemo.nelua](examples/imPlotDemo/imPlotDemo.nelua) 
+
+![alt](https://github.com/dinau/neluaImGui/raw/main/img/imPlot.gif)
+![alt](img/imPlot.gif)
+
+##### imPlot3DDemo
+
+---
+
+[imPlot3DDemo.nelua](examples/imPlot3DDemo/imPlot3DDemo.nelua) 
+
+![alt](https://github.com/dinau/neluaImGui/raw/main/img/im3DPlot.gif)
+![alt](img/imPlot3D.gif)
 
 ##### glfw_opengl3, sdl2_opengl3
 
@@ -191,8 +208,8 @@ Showing multibyte fonts(UTF-8, CJK fonts) and IME(Input method)
 Library name / C lang. wrapper
 
 - [x] [ImGui](https://github.com/ocornut/imgui) / [CImGui](https://github.com/cimgui/cimgui) (2024/11)
-- [ ] [ImPlot](https://github.com/epezent/implot) / [CImPlot](https://github.com/cimgui/cimplot)
-- [ ] [ImPlot3d](https://github.com/brenocq/implot3d) / [CImPlot3d](https://github.com/cimgui/cimplot3d) 
+- [x] [ImPlot](https://github.com/epezent/implot) / [CImPlot](https://github.com/cimgui/cimplot)
+- [x] [ImPlot3d](https://github.com/brenocq/implot3d) / [CImPlot3d](https://github.com/cimgui/cimplot3d) 
 - [x] [ImNodes](https://github.com/Nelarius/imnodes) / [CImNodes](https://github.com/cimgui/cimnodes) (2025/05)
 - [x] [ImGuizmo](https://github.com/CedricGuillemet/ImGuizmo) / [CImGuizmo](https://github.com/cimgui/cimguizmo) (2025/05)
 - [x] [ImGui-Knobs](https://github.com/altschuler/imgui-knobs) / [CImGui-Knobs](https://github.com/dinau/imguin/tree/main/src/imguin/private/cimgui-knobs) (2025/05)
@@ -200,7 +217,6 @@ Library name / C lang. wrapper
 - [x] [ImGui_Toggle](https://github.com/cmdwtf/imgui_toggle) / [CimGui_Toggle](https://github.com/dinau/cimgui_toggle) (2025/05)
 - [x] [ImSpinner](https://github.com/dalerank/imspinner) / [CImSpinner](https://github.com/dinau/cimspinner) (2025/05)
 - [x] [ImGuiColorTextEdit](https://github.com/santaclose/ImGuiColorTextEdit) / [cimCTE](https://github.com/cimgui/cimCTE) (2025)
-- [ ] ~~[ImGui_Markdown](https://github.com/enkisoftware/imgui_markdown) (WIP)~~
 
 #### SDL2 / GLFW / STB headers for Nelua
 

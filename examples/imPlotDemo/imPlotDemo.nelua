@@ -1,0 +1,227 @@
+require 'os'
+require'math'
+--
+require'cimgui'
+require'imgui_backend_opengl3'
+require'imgui_backend_glfw'
+require'loadImage'
+require'utils'
+require'IconsFontAwesome6'
+--
+require'cimplot'
+require'imPlotFuncs'
+##[=[
+cinclude "cimplot.h"
+]=]
+
+require'traits'
+
+--- External functions
+local function setupFonts() <cimport> end                -- from utils/setupFonts.c
+
+--- Initial Window size
+local MainWinWidth <const>  = 1280
+local MainWinHeight <const> = 800
+
+--- Constants
+local IMPLOT_AUTO: float32 = -1
+
+--- Global vars
+local versions : [][2]int32 = {{4, 6} ,{4, 5} ,{4, 4} ,{4, 3} ,{4, 2} ,{4, 1} ,{4, 0} ,{3, 3} }
+
+--- Forward definitions
+local Sparkline
+
+---------
+--- main
+---------
+local main = function()
+  glfwInit()
+  defer glfwTerminate()  end
+  local glfwWin: *GLFWwindow = nilptr
+  local glsl_version:cstring -- = "#version 330"
+  for _, ver in ipairs(versions) do
+    glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE)
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, ver[0])
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, ver[1])
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE)
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE)
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE)
+
+    glfwWin = glfwCreateWindow(MainWinWidth, MainWinHeight, "ImGui with Nelua 2025/05", nilptr, nilptr)
+    if nilptr ~= glfwWin then
+      glsl_version = "#version " .. tostring( ver[0] * 100 + ver[1] * 10)
+      break
+    end
+  end
+  if nilptr == glfwWin then
+    print("Could not create window")
+    os.exit(false)
+  end
+  defer glfwDestroyWindow(glfwWin) end
+
+  glfwMakeContextCurrent(glfwWin)
+  glfwSwapInterval(1) -- # Enable vsync
+
+  ------------------------
+  --- Load title bar icon
+  ------------------------
+  local IconName = "res/img/nl.png"
+  LoadTitleBarIcon(glfwWin, IconName)
+
+  if gladLoadGL(glfwGetProcAddress) == 0 then
+    error 'Could not initialize GLAD'
+  end
+  print('OpenGL loaded:', (@cstring)(glGetString(GL_VERSION)))
+
+  local context = igCreateContext()
+  defer igDestroyContext(context) end
+
+  ImGui_ImplGlfw_InitForOpenGL(glfwWin, true)
+  defer ImGui_ImplGlfw_Shutdown() end
+
+  ImGui_ImplOpenGL3_Init(glsl_version)
+  defer ImGui_ImplOpenGL3_Shutdown() end
+
+  setupFonts()
+
+  --igStyleColorsDark()
+  igStyleColorsClassic()
+
+  local showWindowDelay = 1 -- TODO : Avoid flickering window at start up.
+  local clearColor: [3]cfloat = {0.03,0.15,0.2}
+
+  local pio = igGetIO()
+
+  --------------------------
+  --- ImPlot create context
+  --------------------------
+  local imPlotContext = ImPlot_CreateContext()
+  defer ImPlot_DestroyContext(imPlotContext) end
+
+  --------------------
+  --- Main while loop
+  --------------------
+  while glfwWindowShouldClose(glfwWin) == 0 do
+    glfwPollEvents()
+
+    ImGui_ImplOpenGL3_NewFrame() -- # start imgui frame
+    ImGui_ImplGlfw_NewFrame()
+    igNewFrame()
+
+    ImPlot_ShowDemoWindow(nilptr)
+
+    ------------------
+    --- demo_LogScale
+    ------------------
+    do igBegin("ImPlot LogScale with Nelua lang. " .. ICON_FA_CHART_COLUMN, nilptr, 0)
+      defer igEnd() end
+      local finit <static> = true
+      local xs:  [1001]float64 <static>
+      local ys1: [1001]float64 <static>
+      local ys2: [1001]float64 <static>
+      local ys3: [1001]float64 <static>
+
+      if finit then
+        finit = false
+        for i=1,<1001 do
+          xs[i] = i * 0.1;
+          ys1[i] = math.sin(xs[i]) + 1
+          ys2[i] = math.log(xs[i],math.exp(1))
+          ys3[i] = math.pow(10.0, xs[i])
+        end
+      end
+      if ImPlot_BeginPlot("Log Plot", ImVec2{-1, 0}, 0) then
+        defer ImPlot_EndPlot() end
+        ImPlot_SetupAxisScale_PlotScale(ImAxis_X1, ImPlotScale_Log10)
+        ImPlot_SetupAxesLimits(0.1, 100, 0, 10, ImPlotCond_Once)
+        ImPlot_PlotLine_doublePtrdoublePtr("f(x) = x",        &xs, &xs,  1001, 0, 0, #float64)
+        ImPlot_PlotLine_doublePtrdoublePtr("f(x) = sin(x)+1", &xs, &ys1, 1001, 0, 0, #float64)
+        ImPlot_PlotLine_doublePtrdoublePtr("f(x) = log(x)",   &xs, &ys2, 1001, 0, 0, #float64)
+        ImPlot_PlotLine_doublePtrdoublePtr("f(x) = 10^x",     &xs, &ys3, 21,   0, 0, #float64)
+      end
+    end
+
+    ---------------
+    --- demo_Tables
+    ---------------
+    do igBegin("ImPlot Tables with Nelua lang. " .. ICON_FA_CHART_COLUMN, nilptr, 0)
+      defer igEnd() end
+      local anim <static> = true
+      local offset: cint <static> = 0
+      local data: [100]float32 <static>
+      local flags: ImGuiTableFlags <static> = ImGuiTableFlags_BordersOuter
+                                    | ImGuiTableFlags_BordersV
+                                    | ImGuiTableFlags_RowBg
+                                    | ImGuiTableFlags_Resizable
+                                    | ImGuiTableFlags_Reorderable
+      local dtSize = #data
+      igBulletText("Plots can be used inside of ImGui tables as another means of creating subplots.")
+      igCheckbox("Animate", &anim)
+      if anim then
+          offset = (offset + 1) % dtSize
+      end
+      if igBeginTable("##table", 3, flags, ImVec2{-1, 0}, 0) then
+        defer igEndTable() end
+        igTableSetupColumn("Electrode", ImGuiTableColumnFlags_WidthFixed, 75.0, 0)
+        igTableSetupColumn("Voltage", ImGuiTableColumnFlags_WidthFixed, 75.0, 0)
+        igTableSetupColumn("EMG Signal", ImGuiTableColumnFlags_WidthFixed, 0, 0)
+        igTableHeadersRow()
+        ImPlot_PushColormap_PlotColormap(ImPlotColormap_Cool)
+        for row=0,<10 do
+            igTableNextRow(0, 0)
+            math.randomseed(row)
+            for i=1,<dtSize do
+              data[i] = math.random() * 10
+            end
+            igTableSetColumnIndex(0)
+            igText("EMG %d", row)
+            igTableSetColumnIndex(1)
+            igText("%.3f V", data[offset])
+            igTableSetColumnIndex(2)
+            igPushID_Int(row)
+            local vec4: ImVec4
+            ImPlot_GetColormapColor(&vec4, row, IMPLOT_AUTO)
+            -- TODO
+            Sparkline("##spark", &data, dtSize, 0, 11.0, offset , ImVec4{vec4.x, vec4.y, vec4.z, vec4.w } , ImVec2{-1, 35})
+            igPopID()
+        end
+        ImPlot_PopColormap(1)
+      end
+    end
+
+    ---------
+    igRender()
+    glClearColor(clearColor[0], clearColor[1], clearColor[2], 1.0)
+    glClear(GL_COLOR_BUFFER_BIT)
+    ImGui_ImplOpenGL3_RenderDrawData(igGetDrawData())
+
+    glfwSwapBuffers(glfwWin)
+
+    if showWindowDelay > 0 then
+      showWindowDelay = showWindowDelay - 1
+    elseif showWindowDelay == 0 then
+      showWindowDelay = -1
+      glfwShowWindow(glfwWin)
+    end
+  end -- main while loop end
+
+end -- main() end
+
+----------------
+--- Sparkline()
+----------------
+function Sparkline(id: string, values: *float32, count: cint, min_v: float32, max_v: float32, offset: cint, col: ImVec4, size: ImVec2)
+    ImPlot_PushStyleVar_Vec2(ImPlotStyleVar_PlotPadding, ImVec2{0, 0 })
+    if ImPlot_BeginPlot(id, ImVec2{size.x, size.y}, ImPlotFlags_CanvasOnly) then
+      ImPlot_SetupAxes(nilptr, nilptr, ImPlotAxisFlags_NoDecorations, ImPlotAxisFlags_NoDecorations)
+      ImPlot_SetupAxesLimits(0, count - 1, min_v, max_v, ImGuiCond_Always)
+      ImPlot_SetNextLineStyle(ImVec4{col.x, col.y, col.z, col.w}, IMPLOT_AUTO)
+      ImPlot_SetNextFillStyle(ImVec4{col.x, col.y, col.z, col.w}, 0.25)
+      ImPlot_PlotLine_FloatPtrInt(id, values, count, 1.0, 0, ImPlotLineFlags_Shaded, offset, #float32)
+      ImPlot_EndPlot()
+    end
+    ImPlot_PopStyleVar(1)
+end
+
+main()

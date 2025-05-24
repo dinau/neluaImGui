@@ -29,7 +29,7 @@ local fs = require 'nelua.utils.fs'
     include_dirs = {'libs/cimgui'}
   }
 ]==]
-print("Generated [libs/imgui/cimgui.nelua]")
+print("Generated [libs/nelua/imgui/cimgui.nelua]")
 
 --------------------
 --- imspinner.nelua
@@ -54,7 +54,7 @@ local fs = require 'nelua.utils.fs'
     include_dirs = {'libs/cimgui','libs/cimspinner'}
   }
 ]==]
-print("Generated [libs/imgui/imspinner.nelua]")
+print("Generated [libs/nelua/imgui/imspinner.nelua]")
 
 ------------------
 --- imKnobs.nelua
@@ -82,7 +82,7 @@ local fs = require 'nelua.utils.fs'
 if ccinfo.is_windows then
 end
 ]==]
-print("Generated [libs/imgui/imknobs.nelua]")
+print("Generated [libs/nelua/imgui/imknobs.nelua]")
 
 -------------------
 --- imtoggle.nelua
@@ -110,7 +110,7 @@ local fs = require 'nelua.utils.fs'
 if ccinfo.is_windows then
 end
 ]==]
-print("Generated [libs/imgui/imtoggle.nelua]")
+print("Generated [libs/nelua/imgui/imtoggle.nelua]")
 
 --------------------------
 --- imcolortextedit.nelua
@@ -138,7 +138,7 @@ local fs = require 'nelua.utils.fs'
 if ccinfo.is_windows then
 end
 ]==]
-print("Generated [libs/imgui/imcolortextedit.nelua]")
+print("Generated [libs/nelua/imgui/imcolortextedit.nelua]")
 
 -------------------
 --- imguizmo.nelua
@@ -166,7 +166,7 @@ local fs = require 'nelua.utils.fs'
 if ccinfo.is_windows then
 end
 ]==]
-print("Generated [libs/imgui/imguizmo.nelua]")
+print("Generated [libs/nelua/imgui/imguizmo.nelua]")
 
 ------------------
 --- imnodes.nelua
@@ -194,12 +194,12 @@ local fs = require 'nelua.utils.fs'
 if ccinfo.is_windows then
 end
 ]==]
-print("Generated [libs/imgui/imnodes.nelua]")
+print("Generated [libs/nelua/imgui/imnodes.nelua]")
 
 -----------------------
 --- imfiledialog.nelua
 -----------------------
--- It needs to add '#include "cimgui.h"' line to libs/CImGuiFileDialog/libs/ImGuiFileDialog/ImGuiFileDialog.h.
+-- It needs to add '#include "cimgui.h"' line to the top of libs/CImGuiFileDialog/libs/ImGuiFileDialog/ImGuiFileDialog.h.
 
 ##[==[
 -- import Nelua Decl plugin and filesystem utils.
@@ -229,4 +229,60 @@ local fs = require 'nelua.utils.fs'
 if ccinfo.is_windows then
 end
 ]==]
-print("Generated [libs/imgui/imfiledialog.nelua]")
+print("Generated [libs/nelua/imgui/imfiledialog.nelua]")
+
+------------------
+--- cmplot.nelua
+------------------
+##[==[
+-- import Nelua Decl plugin and filesystem utils.
+local nldecl = require 'nelua.plugins.nldecl'
+local fs = require 'nelua.utils.fs'
+
+-- Generate nelua bindings file. (It will be always regenerated)
+  nldecl.generate_bindings_file{
+    defines = {'bool _Bool'
+               ,'IMGUI_IMPL_API "extern \"C\" __declspec(dllexport)"'
+               ,'ImDrawIdx unsigned int'
+               ,'CIMGUI_DEFINE_ENUMS_AND_STRUCTS'
+              },
+    output_file = 'libs/nelua/imgui/cimplot.nelua',
+    -- what C file we should generate bindings for and parse?
+    parse_includes = {'cimplot.h'},
+    -- what symbol name prefix should we import from that file?
+    include_names = {'^ImPlot','^ImAxis'},
+    include_dirs = {'libs/cimgui','libs/cimplot'}
+  }
+
+if ccinfo.is_windows then
+end
+]==]
+print("Generated [libs/nelua/imgui/implot.nelua]")
+
+------------------
+--- cmplot3d.nelua
+------------------
+##[==[
+-- import Nelua Decl plugin and filesystem utils.
+local nldecl = require 'nelua.plugins.nldecl'
+local fs = require 'nelua.utils.fs'
+
+-- Generate nelua bindings file. (It will be always regenerated)
+  nldecl.generate_bindings_file{
+    defines = {'bool _Bool'
+               ,'IMGUI_IMPL_API "extern \"C\" __declspec(dllexport)"'
+               ,'ImDrawIdx unsigned int'
+               ,'CIMGUI_DEFINE_ENUMS_AND_STRUCTS'
+              },
+    output_file = 'libs/nelua/imgui/cimplot3d.nelua',
+    -- what C file we should generate bindings for and parse?
+    parse_includes = {'cimplot3d.h'},
+    -- what symbol name prefix should we import from that file?
+    include_names = {'^ImPlot3D','^ImAxis','^ImPlane'},
+    include_dirs = {'libs/cimgui','libs/cimplot3d'}
+  }
+
+if ccinfo.is_windows then
+end
+]==]
+print("Generated [libs/nelua/imgui/implot3d.nelua]")

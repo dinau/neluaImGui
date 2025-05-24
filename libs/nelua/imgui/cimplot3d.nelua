@@ -1,0 +1,626 @@
+global ImDrawChannel: type <cimport,nodecl,forwarddecl> = @record{}
+global ImDrawCmd: type <cimport,nodecl,forwarddecl> = @record{}
+global ImDrawList: type <cimport,nodecl,forwarddecl> = @record{}
+global ImDrawListSharedData: type <cimport,nodecl,forwarddecl> = @record{}
+global ImDrawListSplitter: type <cimport,nodecl,forwarddecl> = @record{}
+global ImDrawVert: type <cimport,nodecl,forwarddecl> = @record{}
+global ImFont: type <cimport,nodecl,forwarddecl> = @record{}
+global ImFontAtlas: type <cimport,nodecl,forwarddecl> = @record{}
+global ImFontBuilderIO: type <cimport,nodecl,forwarddecl> = @record{}
+global ImFontConfig: type <cimport,nodecl,forwarddecl> = @record{}
+global ImFontGlyph: type <cimport,nodecl,forwarddecl> = @record{}
+global ImVec2: type <cimport,nodecl,forwarddecl> = @record{}
+ImVec2 = @record{
+  x: float32,
+  y: float32
+}
+global ImVec4: type <cimport,nodecl,forwarddecl> = @record{}
+ImVec4 = @record{
+  x: float32,
+  y: float32,
+  z: float32,
+  w: float32
+}
+ImDrawCmd = @record{
+  ClipRect: ImVec4,
+  TextureId: culonglong,
+  VtxOffset: cuint,
+  IdxOffset: cuint,
+  ElemCount: cuint,
+  UserCallback: function(parent_list: *ImDrawList, cmd: *ImDrawCmd): void,
+  UserCallbackData: pointer,
+  UserCallbackDataSize: cint,
+  UserCallbackDataOffset: cint
+}
+ImDrawVert = @record{
+  pos: ImVec2,
+  uv: ImVec2,
+  col: cuint
+}
+global ImDrawCmdHeader: type <cimport,nodecl,forwarddecl> = @record{}
+ImDrawCmdHeader = @record{
+  ClipRect: ImVec4,
+  TextureId: culonglong,
+  VtxOffset: cuint
+}
+global ImVector_ImDrawCmd: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImDrawCmd
+}
+global ImVector_ImDrawIdx: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *cuint
+}
+ImDrawChannel = @record{
+  _CmdBuffer: ImVector_ImDrawCmd,
+  _IdxBuffer: ImVector_ImDrawIdx
+}
+global ImVector_ImDrawChannel: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImDrawChannel
+}
+ImDrawListSplitter = @record{
+  _Current: cint,
+  _Count: cint,
+  _Channels: ImVector_ImDrawChannel
+}
+global ImVector_ImDrawVert: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImDrawVert
+}
+global ImVector_ImVec2: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImVec2
+}
+global ImVector_ImVec4: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImVec4
+}
+global ImVector_ImTextureID: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *culonglong
+}
+global ImVector_ImU8: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *cuchar
+}
+ImDrawList = @record{
+  CmdBuffer: ImVector_ImDrawCmd,
+  IdxBuffer: ImVector_ImDrawIdx,
+  VtxBuffer: ImVector_ImDrawVert,
+  Flags: cint,
+  _VtxCurrentIdx: cuint,
+  _Data: *ImDrawListSharedData,
+  _VtxWritePtr: *ImDrawVert,
+  _IdxWritePtr: *cuint,
+  _Path: ImVector_ImVec2,
+  _CmdHeader: ImDrawCmdHeader,
+  _Splitter: ImDrawListSplitter,
+  _ClipRectStack: ImVector_ImVec4,
+  _TextureIdStack: ImVector_ImTextureID,
+  _CallbacksDataBuf: ImVector_ImU8,
+  _FringeScale: float32,
+  _OwnerName: cstring
+}
+ImFontConfig = @record{
+  FontData: pointer,
+  FontDataSize: cint,
+  FontDataOwnedByAtlas: boolean,
+  MergeMode: boolean,
+  PixelSnapH: boolean,
+  FontNo: cint,
+  OversampleH: cint,
+  OversampleV: cint,
+  SizePixels: float32,
+  GlyphExtraSpacing: ImVec2,
+  GlyphOffset: ImVec2,
+  GlyphRanges: *cushort,
+  GlyphMinAdvanceX: float32,
+  GlyphMaxAdvanceX: float32,
+  FontBuilderFlags: cuint,
+  RasterizerMultiply: float32,
+  RasterizerDensity: float32,
+  EllipsisChar: cushort,
+  Name: [40]cchar,
+  DstFont: *ImFont
+}
+ImFontGlyph = @record{
+  Colored: cuint,
+  Visible: cuint,
+  Codepoint: cuint,
+  AdvanceX: float32,
+  X0: float32,
+  Y0: float32,
+  X1: float32,
+  Y1: float32,
+  U0: float32,
+  V0: float32,
+  U1: float32,
+  V1: float32
+}
+global ImFontAtlasCustomRect: type <cimport,nodecl,forwarddecl> = @record{}
+ImFontAtlasCustomRect = @record{
+  X: cushort,
+  Y: cushort,
+  Width: cushort,
+  Height: cushort,
+  GlyphID: cuint,
+  GlyphColored: cuint,
+  GlyphAdvanceX: float32,
+  GlyphOffset: ImVec2,
+  Font: *ImFont
+}
+global ImVector_ImFontPtr: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: **ImFont
+}
+global ImVector_ImFontAtlasCustomRect: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImFontAtlasCustomRect
+}
+global ImVector_ImFontConfig: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImFontConfig
+}
+ImFontAtlas = @record{
+  Flags: cint,
+  TexID: culonglong,
+  TexDesiredWidth: cint,
+  TexGlyphPadding: cint,
+  UserData: pointer,
+  Locked: boolean,
+  TexReady: boolean,
+  TexPixelsUseColors: boolean,
+  TexPixelsAlpha8: *cuchar,
+  TexPixelsRGBA32: *cuint,
+  TexWidth: cint,
+  TexHeight: cint,
+  TexUvScale: ImVec2,
+  TexUvWhitePixel: ImVec2,
+  Fonts: ImVector_ImFontPtr,
+  CustomRects: ImVector_ImFontAtlasCustomRect,
+  ConfigData: ImVector_ImFontConfig,
+  TexUvLines: [33]ImVec4,
+  FontBuilderIO: *ImFontBuilderIO,
+  FontBuilderFlags: cuint,
+  PackIdMouseCursors: cint,
+  PackIdLines: cint
+}
+global ImVector_float: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *float32
+}
+global ImVector_ImU16: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *cushort
+}
+global ImVector_ImFontGlyph: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImFontGlyph
+}
+ImFont = @record{
+  IndexAdvanceX: ImVector_float,
+  FallbackAdvanceX: float32,
+  FontSize: float32,
+  IndexLookup: ImVector_ImU16,
+  Glyphs: ImVector_ImFontGlyph,
+  FallbackGlyph: *ImFontGlyph,
+  ContainerAtlas: *ImFontAtlas,
+  ConfigData: *ImFontConfig,
+  ConfigDataCount: cshort,
+  EllipsisCharCount: cshort,
+  EllipsisChar: cushort,
+  FallbackChar: cushort,
+  EllipsisWidth: float32,
+  EllipsisCharStep: float32,
+  Scale: float32,
+  Ascent: float32,
+  Descent: float32,
+  MetricsTotalSurface: cint,
+  DirtyLookupTables: boolean,
+  Used8kPagesMap: [1]cuchar
+}
+ImDrawListSharedData = @record{
+  TexUvWhitePixel: ImVec2,
+  TexUvLines: *ImVec4,
+  Font: *ImFont,
+  FontSize: float32,
+  FontScale: float32,
+  CurveTessellationTol: float32,
+  CircleSegmentMaxError: float32,
+  ClipRectFullscreen: ImVec4,
+  InitialFlags: cint,
+  TempBuffer: ImVector_ImVec2,
+  ArcFastVtx: [48]ImVec2,
+  ArcFastRadiusCutoff: float32,
+  CircleSegmentCounts: [64]cuchar
+}
+ImFontBuilderIO = @record{
+  FontBuilder_Build: function(atlas: *ImFontAtlas): boolean
+}
+global ImPlot3DContext: type <cimport,nodecl,forwarddecl> = @record{}
+global ImPlot3DStyle: type <cimport,nodecl,forwarddecl> = @record{}
+global ImPlot3DPoint: type <cimport,nodecl,forwarddecl> = @record{}
+global ImPlot3DRay: type <cimport,nodecl,forwarddecl> = @record{}
+global ImPlot3DPlane: type <cimport,nodecl,forwarddecl> = @record{}
+global ImPlot3DBox: type <cimport,nodecl,forwarddecl> = @record{}
+global ImPlot3DRange: type <cimport,nodecl,forwarddecl> = @record{}
+global ImPlot3DQuat: type <cimport,nodecl,forwarddecl> = @record{}
+global ImPlot3DCond: type <cimport,nodecl> = @cint
+global ImPlot3DCol: type <cimport,nodecl> = @cint
+global ImPlot3DStyleVar: type <cimport,nodecl> = @cint
+global ImPlot3DMarker: type <cimport,nodecl> = @cint
+global ImPlot3DLocation: type <cimport,nodecl> = @cint
+global ImAxis3D: type <cimport,nodecl> = @cint
+global ImPlane3D: type <cimport,nodecl> = @cint
+global ImPlot3DColormap: type <cimport,nodecl> = @cint
+global ImPlot3DFlags: type <cimport,nodecl> = @cint
+global ImPlot3DItemFlags: type <cimport,nodecl> = @cint
+global ImPlot3DScatterFlags: type <cimport,nodecl> = @cint
+global ImPlot3DLineFlags: type <cimport,nodecl> = @cint
+global ImPlot3DTriangleFlags: type <cimport,nodecl> = @cint
+global ImPlot3DQuadFlags: type <cimport,nodecl> = @cint
+global ImPlot3DSurfaceFlags: type <cimport,nodecl> = @cint
+global ImPlot3DMeshFlags: type <cimport,nodecl> = @cint
+global ImPlot3DLegendFlags: type <cimport,nodecl> = @cint
+global ImPlot3DAxisFlags: type <cimport,nodecl> = @cint
+global ImPlot3DFlags_: type <cimport,nodecl,using> = @enum(cint){
+  ImPlot3DFlags_None = 0,
+  ImPlot3DFlags_NoTitle = 1,
+  ImPlot3DFlags_NoLegend = 2,
+  ImPlot3DFlags_NoMouseText = 4,
+  ImPlot3DFlags_NoClip = 8,
+  ImPlot3DFlags_NoMenus = 16,
+  ImPlot3DFlags_CanvasOnly = 7
+}
+global ImPlot3DCond_: type <cimport,nodecl,using> = @enum(cint){
+  ImPlot3DCond_None = 0,
+  ImPlot3DCond_Always = 1,
+  ImPlot3DCond_Once = 2
+}
+global ImPlot3DCol_: type <cimport,nodecl,using> = @enum(cint){
+  ImPlot3DCol_Line = 0,
+  ImPlot3DCol_Fill = 1,
+  ImPlot3DCol_MarkerOutline = 2,
+  ImPlot3DCol_MarkerFill = 3,
+  ImPlot3DCol_TitleText = 4,
+  ImPlot3DCol_InlayText = 5,
+  ImPlot3DCol_FrameBg = 6,
+  ImPlot3DCol_PlotBg = 7,
+  ImPlot3DCol_PlotBorder = 8,
+  ImPlot3DCol_LegendBg = 9,
+  ImPlot3DCol_LegendBorder = 10,
+  ImPlot3DCol_LegendText = 11,
+  ImPlot3DCol_AxisText = 12,
+  ImPlot3DCol_AxisGrid = 13,
+  ImPlot3DCol_AxisTick = 14,
+  ImPlot3DCol_COUNT = 15
+}
+global ImPlot3DStyleVar_: type <cimport,nodecl,using> = @enum(cint){
+  ImPlot3DStyleVar_LineWeight = 0,
+  ImPlot3DStyleVar_Marker = 1,
+  ImPlot3DStyleVar_MarkerSize = 2,
+  ImPlot3DStyleVar_MarkerWeight = 3,
+  ImPlot3DStyleVar_FillAlpha = 4,
+  ImPlot3DStyleVar_PlotDefaultSize = 5,
+  ImPlot3DStyleVar_PlotMinSize = 6,
+  ImPlot3DStyleVar_PlotPadding = 7,
+  ImPlot3DStyleVar_LabelPadding = 8,
+  ImPlot3DStyleVar_LegendPadding = 9,
+  ImPlot3DStyleVar_LegendInnerPadding = 10,
+  ImPlot3DStyleVar_LegendSpacing = 11,
+  ImPlot3DStyleVar_COUNT = 12
+}
+global ImPlot3DMarker_: type <cimport,nodecl,using> = @enum(cint){
+  ImPlot3DMarker_None = -1,
+  ImPlot3DMarker_Circle = 0,
+  ImPlot3DMarker_Square = 1,
+  ImPlot3DMarker_Diamond = 2,
+  ImPlot3DMarker_Up = 3,
+  ImPlot3DMarker_Down = 4,
+  ImPlot3DMarker_Left = 5,
+  ImPlot3DMarker_Right = 6,
+  ImPlot3DMarker_Cross = 7,
+  ImPlot3DMarker_Plus = 8,
+  ImPlot3DMarker_Asterisk = 9,
+  ImPlot3DMarker_COUNT = 10
+}
+global ImPlot3DItemFlags_: type <cimport,nodecl,using> = @enum(cint){
+  ImPlot3DItemFlags_None = 0,
+  ImPlot3DItemFlags_NoLegend = 1,
+  ImPlot3DItemFlags_NoFit = 2
+}
+global ImPlot3DScatterFlags_: type <cimport,nodecl,using> = @enum(cint){
+  ImPlot3DScatterFlags_None = 0,
+  ImPlot3DScatterFlags_NoLegend = 1,
+  ImPlot3DScatterFlags_NoFit = 2
+}
+global ImPlot3DLineFlags_: type <cimport,nodecl,using> = @enum(cint){
+  ImPlot3DLineFlags_None = 0,
+  ImPlot3DLineFlags_NoLegend = 1,
+  ImPlot3DLineFlags_NoFit = 2,
+  ImPlot3DLineFlags_Segments = 1024,
+  ImPlot3DLineFlags_Loop = 2048,
+  ImPlot3DLineFlags_SkipNaN = 4096
+}
+global ImPlot3DTriangleFlags_: type <cimport,nodecl,using> = @enum(cint){
+  ImPlot3DTriangleFlags_None = 0,
+  ImPlot3DTriangleFlags_NoLegend = 1,
+  ImPlot3DTriangleFlags_NoFit = 2
+}
+global ImPlot3DQuadFlags_: type <cimport,nodecl,using> = @enum(cint){
+  ImPlot3DQuadFlags_None = 0,
+  ImPlot3DQuadFlags_NoLegend = 1,
+  ImPlot3DQuadFlags_NoFit = 2
+}
+global ImPlot3DSurfaceFlags_: type <cimport,nodecl,using> = @enum(cint){
+  ImPlot3DSurfaceFlags_None = 0,
+  ImPlot3DSurfaceFlags_NoLegend = 1,
+  ImPlot3DSurfaceFlags_NoFit = 2
+}
+global ImPlot3DMeshFlags_: type <cimport,nodecl,using> = @enum(cint){
+  ImPlot3DMeshFlags_None = 0,
+  ImPlot3DMeshFlags_NoLegend = 1,
+  ImPlot3DMeshFlags_NoFit = 2
+}
+global ImPlot3DLegendFlags_: type <cimport,nodecl,using> = @enum(cint){
+  ImPlot3DLegendFlags_None = 0,
+  ImPlot3DLegendFlags_NoButtons = 1,
+  ImPlot3DLegendFlags_NoHighlightItem = 2,
+  ImPlot3DLegendFlags_Horizontal = 4
+}
+global ImPlot3DLocation_: type <cimport,nodecl,using> = @enum(cint){
+  ImPlot3DLocation_Center = 0,
+  ImPlot3DLocation_North = 1,
+  ImPlot3DLocation_South = 2,
+  ImPlot3DLocation_West = 4,
+  ImPlot3DLocation_East = 8,
+  ImPlot3DLocation_NorthWest = 5,
+  ImPlot3DLocation_NorthEast = 9,
+  ImPlot3DLocation_SouthWest = 6,
+  ImPlot3DLocation_SouthEast = 10
+}
+global ImPlot3DAxisFlags_: type <cimport,nodecl,using> = @enum(cint){
+  ImPlot3DAxisFlags_None = 0,
+  ImPlot3DAxisFlags_NoLabel = 1,
+  ImPlot3DAxisFlags_NoGridLines = 2,
+  ImPlot3DAxisFlags_NoTickMarks = 4,
+  ImPlot3DAxisFlags_NoTickLabels = 8,
+  ImPlot3DAxisFlags_LockMin = 16,
+  ImPlot3DAxisFlags_LockMax = 32,
+  ImPlot3DAxisFlags_AutoFit = 64,
+  ImPlot3DAxisFlags_Invert = 128,
+  ImPlot3DAxisFlags_Lock = 48,
+  ImPlot3DAxisFlags_NoDecorations = 11
+}
+global ImAxis3D_: type <cimport,nodecl,using> = @enum(cint){
+  ImAxis3D_X = 0,
+  ImAxis3D_Y = 1,
+  ImAxis3D_Z = 2,
+  ImAxis3D_COUNT = 3
+}
+global ImPlane3D_: type <cimport,nodecl,using> = @enum(cint){
+  ImPlane3D_YZ = 0,
+  ImPlane3D_XZ = 1,
+  ImPlane3D_XY = 2,
+  ImPlane3D_COUNT = 3
+}
+global ImPlot3DColormap_: type <cimport,nodecl,using> = @enum(cint){
+  ImPlot3DColormap_Deep = 0,
+  ImPlot3DColormap_Dark = 1,
+  ImPlot3DColormap_Pastel = 2,
+  ImPlot3DColormap_Paired = 3,
+  ImPlot3DColormap_Viridis = 4,
+  ImPlot3DColormap_Plasma = 5,
+  ImPlot3DColormap_Hot = 6,
+  ImPlot3DColormap_Cool = 7,
+  ImPlot3DColormap_Pink = 8,
+  ImPlot3DColormap_Jet = 9,
+  ImPlot3DColormap_Twilight = 10,
+  ImPlot3DColormap_RdBu = 11,
+  ImPlot3DColormap_BrBG = 12,
+  ImPlot3DColormap_PiYG = 13,
+  ImPlot3DColormap_Spectral = 14,
+  ImPlot3DColormap_Greys = 15
+}
+global ImPlot3DFormatter: type <cimport,nodecl> = @function(value: float32, buff: cstring, size: cint, user_data: pointer): cint
+ImPlot3DPoint = @record{
+  x: float32,
+  y: float32,
+  z: float32
+}
+ImPlot3DRay = @record{
+  Origin: ImPlot3DPoint,
+  Direction: ImPlot3DPoint
+}
+ImPlot3DPlane = @record{
+  Point: ImPlot3DPoint,
+  Normal: ImPlot3DPoint
+}
+ImPlot3DBox = @record{
+  Min: ImPlot3DPoint,
+  Max: ImPlot3DPoint
+}
+ImPlot3DRange = @record{
+  Min: float32,
+  Max: float32
+}
+ImPlot3DQuat = @record{
+  x: float32,
+  y: float32,
+  z: float32,
+  w: float32
+}
+ImPlot3DStyle = @record{
+  LineWeight: float32,
+  Marker: cint,
+  MarkerSize: float32,
+  MarkerWeight: float32,
+  FillAlpha: float32,
+  PlotDefaultSize: ImVec2,
+  PlotMinSize: ImVec2,
+  PlotPadding: ImVec2,
+  LabelPadding: ImVec2,
+  LegendPadding: ImVec2,
+  LegendInnerPadding: ImVec2,
+  LegendSpacing: ImVec2,
+  Colors: [15]ImVec4,
+  Colormap: ImPlot3DColormap
+}
+global function ImPlot3D_CreateContext(): *ImPlot3DContext <cimport,nodecl> end
+global function ImPlot3D_DestroyContext(ctx: *ImPlot3DContext): void <cimport,nodecl> end
+global function ImPlot3D_GetCurrentContext(): *ImPlot3DContext <cimport,nodecl> end
+global function ImPlot3D_SetCurrentContext(ctx: *ImPlot3DContext): void <cimport,nodecl> end
+global function ImPlot3D_BeginPlot(title_id: cstring, size: ImVec2, flags: ImPlot3DFlags): boolean <cimport,nodecl> end
+global function ImPlot3D_EndPlot(): void <cimport,nodecl> end
+global function ImPlot3D_SetupAxis(axis: ImAxis3D, label: cstring, flags: ImPlot3DAxisFlags): void <cimport,nodecl> end
+global function ImPlot3D_SetupAxisLimits(axis: ImAxis3D, v_min: float64, v_max: float64, cond: ImPlot3DCond): void <cimport,nodecl> end
+global function ImPlot3D_SetupAxisFormat(idx: ImAxis3D, formatter: ImPlot3DFormatter, data: pointer): void <cimport,nodecl> end
+global function ImPlot3D_SetupAxisTicks_doublePtr(axis: ImAxis3D, values: *float64, n_ticks: cint, labels: *[0]cstring, keep_default: boolean): void <cimport,nodecl> end
+global function ImPlot3D_SetupAxisTicks_double(axis: ImAxis3D, v_min: float64, v_max: float64, n_ticks: cint, labels: *[0]cstring, keep_default: boolean): void <cimport,nodecl> end
+global function ImPlot3D_SetupAxes(x_label: cstring, y_label: cstring, z_label: cstring, x_flags: ImPlot3DAxisFlags, y_flags: ImPlot3DAxisFlags, z_flags: ImPlot3DAxisFlags): void <cimport,nodecl> end
+global function ImPlot3D_SetupAxesLimits(x_min: float64, x_max: float64, y_min: float64, y_max: float64, z_min: float64, z_max: float64, cond: ImPlot3DCond): void <cimport,nodecl> end
+global function ImPlot3D_SetupBoxScale(x: float32, y: float32, z: float32): void <cimport,nodecl> end
+global function ImPlot3D_SetupLegend(location: ImPlot3DLocation, flags: ImPlot3DLegendFlags): void <cimport,nodecl> end
+global function ImPlot3D_PlotScatter_FloatPtr(label_id: cstring, xs: *float32, ys: *float32, zs: *float32, count: cint, flags: ImPlot3DScatterFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotScatter_doublePtr(label_id: cstring, xs: *float64, ys: *float64, zs: *float64, count: cint, flags: ImPlot3DScatterFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotScatter_S8Ptr(label_id: cstring, xs: *cschar, ys: *cschar, zs: *cschar, count: cint, flags: ImPlot3DScatterFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotScatter_U8Ptr(label_id: cstring, xs: *cuchar, ys: *cuchar, zs: *cuchar, count: cint, flags: ImPlot3DScatterFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotScatter_S16Ptr(label_id: cstring, xs: *cshort, ys: *cshort, zs: *cshort, count: cint, flags: ImPlot3DScatterFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotScatter_U16Ptr(label_id: cstring, xs: *cushort, ys: *cushort, zs: *cushort, count: cint, flags: ImPlot3DScatterFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotScatter_S32Ptr(label_id: cstring, xs: *cint, ys: *cint, zs: *cint, count: cint, flags: ImPlot3DScatterFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotScatter_U32Ptr(label_id: cstring, xs: *cuint, ys: *cuint, zs: *cuint, count: cint, flags: ImPlot3DScatterFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotScatter_S64Ptr(label_id: cstring, xs: *clonglong, ys: *clonglong, zs: *clonglong, count: cint, flags: ImPlot3DScatterFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotScatter_U64Ptr(label_id: cstring, xs: *culonglong, ys: *culonglong, zs: *culonglong, count: cint, flags: ImPlot3DScatterFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotLine_FloatPtr(label_id: cstring, xs: *float32, ys: *float32, zs: *float32, count: cint, flags: ImPlot3DLineFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotLine_doublePtr(label_id: cstring, xs: *float64, ys: *float64, zs: *float64, count: cint, flags: ImPlot3DLineFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotLine_S8Ptr(label_id: cstring, xs: *cschar, ys: *cschar, zs: *cschar, count: cint, flags: ImPlot3DLineFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotLine_U8Ptr(label_id: cstring, xs: *cuchar, ys: *cuchar, zs: *cuchar, count: cint, flags: ImPlot3DLineFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotLine_S16Ptr(label_id: cstring, xs: *cshort, ys: *cshort, zs: *cshort, count: cint, flags: ImPlot3DLineFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotLine_U16Ptr(label_id: cstring, xs: *cushort, ys: *cushort, zs: *cushort, count: cint, flags: ImPlot3DLineFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotLine_S32Ptr(label_id: cstring, xs: *cint, ys: *cint, zs: *cint, count: cint, flags: ImPlot3DLineFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotLine_U32Ptr(label_id: cstring, xs: *cuint, ys: *cuint, zs: *cuint, count: cint, flags: ImPlot3DLineFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotLine_S64Ptr(label_id: cstring, xs: *clonglong, ys: *clonglong, zs: *clonglong, count: cint, flags: ImPlot3DLineFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotLine_U64Ptr(label_id: cstring, xs: *culonglong, ys: *culonglong, zs: *culonglong, count: cint, flags: ImPlot3DLineFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotTriangle_FloatPtr(label_id: cstring, xs: *float32, ys: *float32, zs: *float32, count: cint, flags: ImPlot3DTriangleFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotTriangle_doublePtr(label_id: cstring, xs: *float64, ys: *float64, zs: *float64, count: cint, flags: ImPlot3DTriangleFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotTriangle_S8Ptr(label_id: cstring, xs: *cschar, ys: *cschar, zs: *cschar, count: cint, flags: ImPlot3DTriangleFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotTriangle_U8Ptr(label_id: cstring, xs: *cuchar, ys: *cuchar, zs: *cuchar, count: cint, flags: ImPlot3DTriangleFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotTriangle_S16Ptr(label_id: cstring, xs: *cshort, ys: *cshort, zs: *cshort, count: cint, flags: ImPlot3DTriangleFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotTriangle_U16Ptr(label_id: cstring, xs: *cushort, ys: *cushort, zs: *cushort, count: cint, flags: ImPlot3DTriangleFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotTriangle_S32Ptr(label_id: cstring, xs: *cint, ys: *cint, zs: *cint, count: cint, flags: ImPlot3DTriangleFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotTriangle_U32Ptr(label_id: cstring, xs: *cuint, ys: *cuint, zs: *cuint, count: cint, flags: ImPlot3DTriangleFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotTriangle_S64Ptr(label_id: cstring, xs: *clonglong, ys: *clonglong, zs: *clonglong, count: cint, flags: ImPlot3DTriangleFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotTriangle_U64Ptr(label_id: cstring, xs: *culonglong, ys: *culonglong, zs: *culonglong, count: cint, flags: ImPlot3DTriangleFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotQuad_FloatPtr(label_id: cstring, xs: *float32, ys: *float32, zs: *float32, count: cint, flags: ImPlot3DQuadFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotQuad_doublePtr(label_id: cstring, xs: *float64, ys: *float64, zs: *float64, count: cint, flags: ImPlot3DQuadFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotQuad_S8Ptr(label_id: cstring, xs: *cschar, ys: *cschar, zs: *cschar, count: cint, flags: ImPlot3DQuadFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotQuad_U8Ptr(label_id: cstring, xs: *cuchar, ys: *cuchar, zs: *cuchar, count: cint, flags: ImPlot3DQuadFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotQuad_S16Ptr(label_id: cstring, xs: *cshort, ys: *cshort, zs: *cshort, count: cint, flags: ImPlot3DQuadFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotQuad_U16Ptr(label_id: cstring, xs: *cushort, ys: *cushort, zs: *cushort, count: cint, flags: ImPlot3DQuadFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotQuad_S32Ptr(label_id: cstring, xs: *cint, ys: *cint, zs: *cint, count: cint, flags: ImPlot3DQuadFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotQuad_U32Ptr(label_id: cstring, xs: *cuint, ys: *cuint, zs: *cuint, count: cint, flags: ImPlot3DQuadFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotQuad_S64Ptr(label_id: cstring, xs: *clonglong, ys: *clonglong, zs: *clonglong, count: cint, flags: ImPlot3DQuadFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotQuad_U64Ptr(label_id: cstring, xs: *culonglong, ys: *culonglong, zs: *culonglong, count: cint, flags: ImPlot3DQuadFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotSurface_FloatPtr(label_id: cstring, xs: *float32, ys: *float32, zs: *float32, x_count: cint, y_count: cint, scale_min: float64, scale_max: float64, flags: ImPlot3DSurfaceFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotSurface_doublePtr(label_id: cstring, xs: *float64, ys: *float64, zs: *float64, x_count: cint, y_count: cint, scale_min: float64, scale_max: float64, flags: ImPlot3DSurfaceFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotSurface_S8Ptr(label_id: cstring, xs: *cschar, ys: *cschar, zs: *cschar, x_count: cint, y_count: cint, scale_min: float64, scale_max: float64, flags: ImPlot3DSurfaceFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotSurface_U8Ptr(label_id: cstring, xs: *cuchar, ys: *cuchar, zs: *cuchar, x_count: cint, y_count: cint, scale_min: float64, scale_max: float64, flags: ImPlot3DSurfaceFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotSurface_S16Ptr(label_id: cstring, xs: *cshort, ys: *cshort, zs: *cshort, x_count: cint, y_count: cint, scale_min: float64, scale_max: float64, flags: ImPlot3DSurfaceFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotSurface_U16Ptr(label_id: cstring, xs: *cushort, ys: *cushort, zs: *cushort, x_count: cint, y_count: cint, scale_min: float64, scale_max: float64, flags: ImPlot3DSurfaceFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotSurface_S32Ptr(label_id: cstring, xs: *cint, ys: *cint, zs: *cint, x_count: cint, y_count: cint, scale_min: float64, scale_max: float64, flags: ImPlot3DSurfaceFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotSurface_U32Ptr(label_id: cstring, xs: *cuint, ys: *cuint, zs: *cuint, x_count: cint, y_count: cint, scale_min: float64, scale_max: float64, flags: ImPlot3DSurfaceFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotSurface_S64Ptr(label_id: cstring, xs: *clonglong, ys: *clonglong, zs: *clonglong, x_count: cint, y_count: cint, scale_min: float64, scale_max: float64, flags: ImPlot3DSurfaceFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotSurface_U64Ptr(label_id: cstring, xs: *culonglong, ys: *culonglong, zs: *culonglong, x_count: cint, y_count: cint, scale_min: float64, scale_max: float64, flags: ImPlot3DSurfaceFlags, offset: cint, stride: cint): void <cimport,nodecl> end
+global function ImPlot3D_PlotMesh(label_id: cstring, vtx: *ImPlot3DPoint, idx: *cuint, vtx_count: cint, idx_count: cint, flags: ImPlot3DMeshFlags): void <cimport,nodecl> end
+global function ImPlot3D_PlotText(text: cstring, x: float32, y: float32, z: float32, angle: float32, pix_offset: ImVec2): void <cimport,nodecl> end
+global function ImPlot3D_PlotToPixels_Plot3DPoInt(pOut: *ImVec2, point: ImPlot3DPoint): void <cimport,nodecl> end
+global function ImPlot3D_PlotToPixels_double(pOut: *ImVec2, x: float64, y: float64, z: float64): void <cimport,nodecl> end
+global function ImPlot3D_PixelsToPlotRay_Vec2(pix: ImVec2): ImPlot3DRay <cimport,nodecl> end
+global function ImPlot3D_PixelsToPlotRay_double(x: float64, y: float64): ImPlot3DRay <cimport,nodecl> end
+global function ImPlot3D_PixelsToPlotPlane_Vec2(pOut: *ImPlot3DPoint, pix: ImVec2, plane: ImPlane3D, mask: boolean): void <cimport,nodecl> end
+global function ImPlot3D_PixelsToPlotPlane_double(pOut: *ImPlot3DPoint, x: float64, y: float64, plane: ImPlane3D, mask: boolean): void <cimport,nodecl> end
+global function ImPlot3D_GetPlotPos(pOut: *ImVec2): void <cimport,nodecl> end
+global function ImPlot3D_GetPlotSize(pOut: *ImVec2): void <cimport,nodecl> end
+global function ImPlot3D_GetPlotDrawList(): *ImDrawList <cimport,nodecl> end
+global function ImPlot3D_GetStyle(): *ImPlot3DStyle <cimport,nodecl> end
+global function ImPlot3D_StyleColorsAuto(dst: *ImPlot3DStyle): void <cimport,nodecl> end
+global function ImPlot3D_StyleColorsDark(dst: *ImPlot3DStyle): void <cimport,nodecl> end
+global function ImPlot3D_StyleColorsLight(dst: *ImPlot3DStyle): void <cimport,nodecl> end
+global function ImPlot3D_StyleColorsClassic(dst: *ImPlot3DStyle): void <cimport,nodecl> end
+global function ImPlot3D_PushStyleColor_U32(idx: ImPlot3DCol, col: cuint): void <cimport,nodecl> end
+global function ImPlot3D_PushStyleColor_Vec4(idx: ImPlot3DCol, col: ImVec4): void <cimport,nodecl> end
+global function ImPlot3D_PopStyleColor(count: cint): void <cimport,nodecl> end
+global function ImPlot3D_PushStyleVar_Float(idx: ImPlot3DStyleVar, val: float32): void <cimport,nodecl> end
+global function ImPlot3D_PushStyleVar_Int(idx: ImPlot3DStyleVar, val: cint): void <cimport,nodecl> end
+global function ImPlot3D_PushStyleVar_Vec2(idx: ImPlot3DStyleVar, val: ImVec2): void <cimport,nodecl> end
+global function ImPlot3D_PopStyleVar(count: cint): void <cimport,nodecl> end
+global function ImPlot3D_SetNextLineStyle(col: ImVec4, weight: float32): void <cimport,nodecl> end
+global function ImPlot3D_SetNextFillStyle(col: ImVec4, alpha_mod: float32): void <cimport,nodecl> end
+global function ImPlot3D_SetNextMarkerStyle(marker: ImPlot3DMarker, size: float32, fill: ImVec4, weight: float32, outline: ImVec4): void <cimport,nodecl> end
+global function ImPlot3D_GetStyleColorVec4(pOut: *ImVec4, idx: ImPlot3DCol): void <cimport,nodecl> end
+global function ImPlot3D_GetStyleColorU32(idx: ImPlot3DCol): cuint <cimport,nodecl> end
+global function ImPlot3D_AddColormap_Vec4Ptr(name: cstring, cols: *ImVec4, size: cint, qual: boolean): ImPlot3DColormap <cimport,nodecl> end
+global function ImPlot3D_AddColormap_U32Ptr(name: cstring, cols: *cuint, size: cint, qual: boolean): ImPlot3DColormap <cimport,nodecl> end
+global function ImPlot3D_GetColormapCount(): cint <cimport,nodecl> end
+global function ImPlot3D_GetColormapName(cmap: ImPlot3DColormap): cstring <cimport,nodecl> end
+global function ImPlot3D_GetColormapIndex(name: cstring): ImPlot3DColormap <cimport,nodecl> end
+global function ImPlot3D_PushColormap_Plot3DColormap(cmap: ImPlot3DColormap): void <cimport,nodecl> end
+global function ImPlot3D_PushColormap_Str(name: cstring): void <cimport,nodecl> end
+global function ImPlot3D_PopColormap(count: cint): void <cimport,nodecl> end
+global function ImPlot3D_NextColormapColor(pOut: *ImVec4): void <cimport,nodecl> end
+global function ImPlot3D_GetColormapSize(cmap: ImPlot3DColormap): cint <cimport,nodecl> end
+global function ImPlot3D_GetColormapColor(pOut: *ImVec4, idx: cint, cmap: ImPlot3DColormap): void <cimport,nodecl> end
+global function ImPlot3D_SampleColormap(pOut: *ImVec4, t: float32, cmap: ImPlot3DColormap): void <cimport,nodecl> end
+global function ImPlot3D_ShowDemoWindow(p_open: *boolean): void <cimport,nodecl> end
+global function ImPlot3D_ShowStyleEditor(ref: *ImPlot3DStyle): void <cimport,nodecl> end
+global function ImPlot3DPoint_ImPlot3DPoint_Nil(): *ImPlot3DPoint <cimport,nodecl> end
+global function ImPlot3DPoint_destroy(self: *ImPlot3DPoint): void <cimport,nodecl> end
+global function ImPlot3DPoint_ImPlot3DPoint_Float(_x: float32, _y: float32, _z: float32): *ImPlot3DPoint <cimport,nodecl> end
+global function ImPlot3DPoint_Dot(self: *ImPlot3DPoint, rhs: ImPlot3DPoint): float32 <cimport,nodecl> end
+global function ImPlot3DPoint_Cross(pOut: *ImPlot3DPoint, self: *ImPlot3DPoint, rhs: ImPlot3DPoint): void <cimport,nodecl> end
+global function ImPlot3DPoint_Length(self: *ImPlot3DPoint): float32 <cimport,nodecl> end
+global function ImPlot3DPoint_LengthSquared(self: *ImPlot3DPoint): float32 <cimport,nodecl> end
+global function ImPlot3DPoint_Normalize(self: *ImPlot3DPoint): void <cimport,nodecl> end
+global function ImPlot3DPoint_Normalized(pOut: *ImPlot3DPoint, self: *ImPlot3DPoint): void <cimport,nodecl> end
+global function ImPlot3DPoint_IsNaN(self: *ImPlot3DPoint): boolean <cimport,nodecl> end
+global function ImPlot3DBox_ImPlot3DBox_Nil(): *ImPlot3DBox <cimport,nodecl> end
+global function ImPlot3DBox_destroy(self: *ImPlot3DBox): void <cimport,nodecl> end
+global function ImPlot3DBox_ImPlot3DBox_Plot3DPoInt(min: ImPlot3DPoint, max: ImPlot3DPoint): *ImPlot3DBox <cimport,nodecl> end
+global function ImPlot3DBox_Expand(self: *ImPlot3DBox, point: ImPlot3DPoint): void <cimport,nodecl> end
+global function ImPlot3DBox_Contains(self: *ImPlot3DBox, point: ImPlot3DPoint): boolean <cimport,nodecl> end
+global function ImPlot3DBox_ClipLineSegment(self: *ImPlot3DBox, p0: ImPlot3DPoint, p1: ImPlot3DPoint, p0_clipped: *ImPlot3DPoint, p1_clipped: *ImPlot3DPoint): boolean <cimport,nodecl> end
+global function ImPlot3DRange_ImPlot3DRange_Nil(): *ImPlot3DRange <cimport,nodecl> end
+global function ImPlot3DRange_destroy(self: *ImPlot3DRange): void <cimport,nodecl> end
+global function ImPlot3DRange_ImPlot3DRange_Float(min: float32, max: float32): *ImPlot3DRange <cimport,nodecl> end
+global function ImPlot3DRange_Expand(self: *ImPlot3DRange, value: float32): void <cimport,nodecl> end
+global function ImPlot3DRange_Contains(self: *ImPlot3DRange, value: float32): boolean <cimport,nodecl> end
+global function ImPlot3DRange_Size(self: *ImPlot3DRange): float32 <cimport,nodecl> end
+global function ImPlot3DQuat_ImPlot3DQuat_Nil(): *ImPlot3DQuat <cimport,nodecl> end
+global function ImPlot3DQuat_destroy(self: *ImPlot3DQuat): void <cimport,nodecl> end
+global function ImPlot3DQuat_ImPlot3DQuat_FloatFloat(_x: float32, _y: float32, _z: float32, _w: float32): *ImPlot3DQuat <cimport,nodecl> end
+global function ImPlot3DQuat_ImPlot3DQuat_FloatPlot3DPoInt(_angle: float32, _axis: ImPlot3DPoint): *ImPlot3DQuat <cimport,nodecl> end
+global function ImPlot3DQuat_FromTwoVectors(pOut: *ImPlot3DQuat, v0: ImPlot3DPoint, v1: ImPlot3DPoint): void <cimport,nodecl> end
+global function ImPlot3DQuat_Length(self: *ImPlot3DQuat): float32 <cimport,nodecl> end
+global function ImPlot3DQuat_Normalized(pOut: *ImPlot3DQuat, self: *ImPlot3DQuat): void <cimport,nodecl> end
+global function ImPlot3DQuat_Conjugate(pOut: *ImPlot3DQuat, self: *ImPlot3DQuat): void <cimport,nodecl> end
+global function ImPlot3DQuat_Inverse(pOut: *ImPlot3DQuat, self: *ImPlot3DQuat): void <cimport,nodecl> end
+global function ImPlot3DQuat_Normalize(self: *ImPlot3DQuat): *ImPlot3DQuat <cimport,nodecl> end
+global function ImPlot3DQuat_Slerp(pOut: *ImPlot3DQuat, q1: ImPlot3DQuat, q2: ImPlot3DQuat, t: float32): void <cimport,nodecl> end
+global function ImPlot3DQuat_Dot(self: *ImPlot3DQuat, rhs: ImPlot3DQuat): float32 <cimport,nodecl> end
+global function ImPlot3DStyle_ImPlot3DStyle(): *ImPlot3DStyle <cimport,nodecl> end
+global function ImPlot3DStyle_destroy(self: *ImPlot3DStyle): void <cimport,nodecl> end

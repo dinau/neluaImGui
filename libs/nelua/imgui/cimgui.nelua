@@ -3674,8 +3674,8 @@ global function igImage(user_texture_id: ImTextureID, image_size: ImVec2, uv0: I
 global function igImageButton(str_id: cstring, user_texture_id: ImTextureID, image_size: ImVec2, uv0: ImVec2, uv1: ImVec2, bg_col: ImVec4, tint_col: ImVec4): boolean <cimport,nodecl> end
 global function igBeginCombo(label: cstring, preview_value: cstring, flags: ImGuiComboFlags): boolean <cimport,nodecl> end
 global function igEndCombo(): void <cimport,nodecl> end
-global function igCombo_Str_arr(label: cstring, current_item: *cint, items: *[0]cstring, items_count: cint, popup_max_height_in_items: cint): boolean <cimport,nodecl> end
-global function igCombo_Str(label: cstring, current_item: *cint, items_separated_by_zeros: cstring, popup_max_height_in_items: cint): boolean <cimport,nodecl> end
+global function igCombo_Str_arr(label: cstring, current_item: *cint, items: *[0]cstring,                items_count: cint  , popup_max_height_in_items: cint): boolean <cimport,nodecl> end
+global function igCombo_Str(    label: cstring, current_item: *cint, items_separated_by_zeros: cstring, popup_max_height_in_items: cint): boolean <cimport,nodecl> end
 global function igCombo_FnStrPtr(label: cstring, current_item: *cint, getter: function(user_data: pointer, idx: cint): cstring, user_data: pointer, items_count: cint, popup_max_height_in_items: cint): boolean <cimport,nodecl> end
 global function igDragFloat(label: cstring, v: *float32, v_speed: float32, v_min: float32, v_max: float32, format: cstring, flags: ImGuiSliderFlags): boolean <cimport,nodecl> end
 global function igDragFloat2(label: cstring, v: *[2]float32, v_speed: float32, v_min: float32, v_max: float32, format: cstring, flags: ImGuiSliderFlags): boolean <cimport,nodecl> end

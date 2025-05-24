@@ -1,0 +1,243 @@
+-- Notice:
+--   Compile with Clang.
+--
+--
+require 'os'
+require'math'
+--
+require'cimgui'
+require'imgui_backend_opengl3'
+require'imgui_backend_glfw'
+require'loadImage'
+require'utils'
+require'IconsFontAwesome6'
+--
+require'cimplot'
+require'cimplot3d'
+##[=[
+cinclude "cimplot.h"
+cinclude "cimplot3d.h"
+]=]
+
+require'traits'
+
+--- External functions
+local function setupFonts() <cimport> end                -- from utils/setupFonts.c
+
+--- Initial Window size
+local MainWinWidth <const>  = 1280
+local MainWinHeight <const> = 800
+
+--- Constants
+local IMPLOT_AUTO: float32 = -1
+
+--- Global vars
+local versions : [][2]int32 = {{4, 6} ,{4, 5} ,{4, 4} ,{4, 3} ,{4, 2} ,{4, 1} ,{4, 0} ,{3, 3} }
+
+--- Forward definitions
+
+---------
+--- main
+---------
+local main = function()
+  glfwInit()
+  defer glfwTerminate()  end
+  local glfwWin: *GLFWwindow = nilptr
+  local glsl_version:cstring -- = "#version 330"
+  for _, ver in ipairs(versions) do
+    glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE)
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, ver[0])
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, ver[1])
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE)
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE)
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE)
+
+    glfwWin = glfwCreateWindow(MainWinWidth, MainWinHeight, "ImGui with Nelua 2025/05", nilptr, nilptr)
+    if nilptr ~= glfwWin then
+      glsl_version = "#version " .. tostring( ver[0] * 100 + ver[1] * 10)
+      break
+    end
+  end
+  if nilptr == glfwWin then
+    print("Could not create window")
+    os.exit(false)
+  end
+  defer glfwDestroyWindow(glfwWin) end
+
+  glfwMakeContextCurrent(glfwWin)
+  glfwSwapInterval(1) -- # Enable vsync
+
+  ------------------------
+  --- Load title bar icon
+  ------------------------
+  local IconName = "res/img/nl.png"
+  LoadTitleBarIcon(glfwWin, IconName)
+
+  if gladLoadGL(glfwGetProcAddress) == 0 then
+    error 'Could not initialize GLAD'
+  end
+  print('OpenGL loaded:', (@cstring)(glGetString(GL_VERSION)))
+
+  local context = igCreateContext()
+  defer igDestroyContext(context) end
+
+  ImGui_ImplGlfw_InitForOpenGL(glfwWin, true)
+  defer ImGui_ImplGlfw_Shutdown() end
+
+  ImGui_ImplOpenGL3_Init(glsl_version)
+  defer ImGui_ImplOpenGL3_Shutdown() end
+
+  setupFonts()
+
+  --igStyleColorsDark()
+  igStyleColorsClassic()
+
+  local showWindowDelay = 1 -- TODO : Avoid flickering window at start up.
+  local clearColor: [3]cfloat = {0.03,0.15,0.2}
+
+  local pio = igGetIO()
+
+  --------------------------
+  --- ImPlot/ImPlot3D create context
+  --------------------------
+  local imPlotContext = ImPlot_CreateContext()
+  defer ImPlot_DestroyContext(imPlotContext) end
+  --- 3D
+  local imPlot3DContext = ImPlot3D_CreateContext()
+  defer ImPlot3D_DestroyContext(imPlot3DContext) end
+
+  --------------------
+  --- Main while loop
+  --------------------
+  while glfwWindowShouldClose(glfwWin) == 0 do
+    glfwPollEvents()
+
+    ImGui_ImplOpenGL3_NewFrame() -- # start imgui frame
+    ImGui_ImplGlfw_NewFrame()
+    igNewFrame()
+
+    ImPlot3D_ShowDemoWindow(nilptr)
+
+    ------------------
+    --- demo_LogScale
+    ------------------
+    do igBegin("ImPlot3D Surface plots with Nelua lang. " .. ICON_FA_CHART_COLUMN, nilptr, 0)
+      defer igEnd() end
+      ----------------------------------
+      -- For ImPlot3D: DemoSurfacePlots
+      ----------------------------------
+      -- Static vars
+      local N <const> = 20
+      local xs: [400]float32 <static>
+      local ys: [400]float32 <static>
+      local zs: [400]float32 <static>
+      local t:float32 <static> = 0.0
+      --
+      local  selected_fill:cint <static> = 1 -- Colormap by default
+      local  sel_colormap :cint <static> = 5 -- Jet by default
+
+      local  solid_color <static> = ImVec4{0.8, 0.8, 0.2, 0.6}
+      -- Generate colormaps
+      local colormaps:[]cstring <static> = {"Viridis", "Plasma", "Hot", "Cool", "Pink", "Jet", "Twilight", "RdBu", "BrBG", "PiYG", "Spectral", "Greys"}
+      --
+      local custom_range      <static> = false
+      local range_min:float32 <static> = -1.0
+      local range_max:float32 <static> = 1.0
+
+      ---------------------
+      --- DemoSurfacePlots
+      ---------------------
+      igText("Frame rate  %.3f ms/frame (%.1f FPS)" , 1000.0 / pio.Framerate, pio.Framerate)
+      t = t + igGetIO().DeltaTime
+      -- Define the range for X and Y
+      local min_val = -1.0
+      local max_val = 1.0
+      local step = (max_val - min_val) / (N - 1)
+      -- Populate the xs, ys, and zs arrays
+      for i=0, N -1 do
+        local j = 0
+        while j < N do
+          local  idx = i * N + j
+          xs[idx] = min_val + j * step -- X values are constant along rows
+          ys[idx] = min_val + i * step -- Y values are constant along columns
+          zs[idx] = math.sin(2 * t + math.sqrt((xs[idx] * xs[idx] + ys[idx] * ys[idx]))) -- z = sin(2t + sqrt(x^2 + y^2))
+          j = j + 1
+        end
+      end
+      -- Choose fill color
+      igText("Fill color")
+      do igIndent()
+        -- Choose solid color
+        igRadioButton_IntPtr("Solid", &selected_fill, 0)
+        if selected_fill == 0 then
+          igSameLine()
+          igColorEdit4("##SurfaceSolidColor", (@pointer(array(float32,4)))(&solid_color), 0)
+        end
+        -- Choose colormap
+        igRadioButton_IntPtr("Colormap", &selected_fill, 1)
+        if selected_fill == 1 then
+          igSameLine()
+          igCombo_Str_arr("##SurfaceColormap", &sel_colormap, &colormaps, #colormaps, -1)
+        end
+        igUnindent()
+      end
+
+      -- Choose range
+      igCheckbox("Custom range", &custom_range)
+      do igIndent()
+        if not custom_range then igBeginDisabled() end
+        igSliderFloat("Range min", &range_min, -1.0               , range_max - 0.01)
+        igSliderFloat("Range max", &range_max, range_min + 0.01, 1.0)
+        if not custom_range then igEndDisabled() end
+        igUnindent()
+      end
+      -- Begin the plot
+      if selected_fill == 1 then
+        ImPlot3D_PushColormap_Str(colormaps[sel_colormap])
+      end
+      if ImPlot3D_BeginPlot("Surface Plots", ImVec2{-1, 400}, ImPlot3DFlags_NoClip) then
+        -- Set styles
+        ImPlot3D_SetupAxesLimits(-1, 1, -1, 1, -1.5, 1.5)
+        ImPlot3D_PushStyleVar_Float(ImPlot3DStyleVar_FillAlpha, 0.8)
+        if selected_fill == 0 then
+          ImPlot3D_SetNextFillStyle(solid_color)
+        end
+        local IMPLOT3D_AUTO <const> =  -1                       -- Deduce variable automatically
+        local vec4:ImVec4
+        ImPlot3D_GetColormapColor(&vec4, 1, IMPLOT3D_AUTO)
+        ImPlot3D_SetNextLineStyle(vec4, IMPLOT3D_AUTO)
+
+        -- Plot the surface
+        if custom_range then
+          ImPlot3D_PlotSurface_FloatPtr("Wave Surface", &xs, &ys, &zs, N, N, range_min, range_max, 0, 0, #float32)
+        else
+          ImPlot3D_PlotSurface_FloatPtr("Wave Surface", &xs, &ys, &zs, N, N, range_min, range_max, 0, 0, #float32)
+        end
+        -- End the plot
+        ImPlot3D_PopStyleVar()
+        ImPlot3D_EndPlot()
+      end
+      if selected_fill == 1 then
+        ImPlot3D_PopColormap()
+      end
+    end
+
+    ---------
+    igRender()
+    glClearColor(clearColor[0], clearColor[1], clearColor[2], 1.0)
+    glClear(GL_COLOR_BUFFER_BIT)
+    ImGui_ImplOpenGL3_RenderDrawData(igGetDrawData())
+
+    glfwSwapBuffers(glfwWin)
+
+    if showWindowDelay > 0 then
+      showWindowDelay = showWindowDelay - 1
+    elseif showWindowDelay == 0 then
+      showWindowDelay = -1
+      glfwShowWindow(glfwWin)
+    end
+  end -- main while loop end
+
+end -- main() end
+
+main()

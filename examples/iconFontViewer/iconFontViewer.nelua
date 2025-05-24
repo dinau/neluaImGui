@@ -27,7 +27,7 @@ local green  = ImVec4{0.0, 1.0, 0.0, 1.0}
 local versions : [][2]int32 = {{4, 6} ,{4, 5} ,{4, 4} ,{4, 3} ,{4, 2} ,{4, 1} ,{4, 0} ,{3, 3} }
 
 --- Forward definitions
-local iconAnimals: [14][2]cstring
+local iconAnimals: [16][2]cstring
 
 ---------
 --- main
@@ -332,16 +332,18 @@ iconAnimals = {
   {ICON_FA_CAT, "  ICON_FA_CAT "},
   {ICON_FA_CROW, "  ICON_FA_CROW "},
   {ICON_FA_DOG, "  ICON_FA_DOG "},
-  {ICON_FA_KIWI_BIRD, "  ICON_FA_KIWI_BIRD "},
-  {ICON_FA_HORSE, "  ICON_FA_HORSE "},
   {ICON_FA_DOVE, "  ICON_FA_DOVE "},
   {ICON_FA_DRAGON, "  ICON_FA_DRAGON "},
   {ICON_FA_FISH, "  ICON_FA_FISH "},
   {ICON_FA_FISH_FINS, "  ICON_FA_FISH_FINS "},
   {ICON_FA_FROG, "  ICON_FA_FROG "},
   {ICON_FA_GHOST, "  ICON_FA_GHOST "},
+  {ICON_FA_HIPPO, "  ICON_FA_HIPPO "},
+  {ICON_FA_HORSE, "  ICON_FA_HORSE "},
+  {ICON_FA_KIWI_BIRD, "  ICON_FA_KIWI_BIRD "},
   {ICON_FA_LOCUST, "  ICON_FA_LOCUST "},
   {ICON_FA_MOSQUITO, "  ICON_FA_MOSQUITO "},
+  {ICON_FA_PIGGY_BANK, "  ICON_FA_PIGGY_BANK "},
   {ICON_FA_SPAGHETTI_MONSTER_FLYING, "  ICON_FA_SPAGHETTI_MONSTER_FLYING "},
 }
 
