@@ -22,3 +22,9 @@
 [submodule "libs/CImGuiFileDialog"]
 	path = libs/CImGuiFileDialog
 	url = https://github.com/dinau/CImGuiFileDialog
+[submodule "libs/cimplot"]
+	path = libs/cimplot
+	url = https://github.com/cimgui/cimplot
+[submodule "libs/cimplot3d"]
+	path = libs/cimplot3d
+	url = https://github.com/cimgui/cimplot3d
