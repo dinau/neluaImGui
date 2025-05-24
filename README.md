@@ -164,16 +164,13 @@ GCC
 
 [imPlotDemo.nelua](examples/imPlotDemo/imPlotDemo.nelua) 
 
-![alt](https://github.com/dinau/neluaImGui/raw/main/img/imPlot.gif)
-![alt](img/imPlot.gif)
+![alt](img/imPlot3D.gif)
 
 ##### imPlot3DDemo
 
----
 
 [imPlot3DDemo.nelua](examples/imPlot3DDemo/imPlot3DDemo.nelua) 
 
-![alt](https://github.com/dinau/neluaImGui/raw/main/img/im3DPlot.gif)
 ![alt](img/imPlot3D.gif)
 
 ##### glfw_opengl3, sdl2_opengl3
