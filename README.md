@@ -164,7 +164,7 @@ GCC
 
 [imPlotDemo.nelua](examples/imPlotDemo/imPlotDemo.nelua) 
 
-![alt](img/imPlot3D.gif)
+![alt](img/imPlot.gif)
 
 ##### imPlot3DDemo
 
