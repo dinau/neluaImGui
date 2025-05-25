@@ -1,0 +1,3 @@
+require'cimgui'
+
+global function igGetIO() return igGetIO_Nil() end

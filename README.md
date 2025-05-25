@@ -30,7 +30,7 @@
 
 ImGui / CImGui wrapper library and some examples with NeLua language
 
-ImGui / CImGui 1.91.8 (2025/03) 
+ImGui / CImGui 1.91.9bdock (2025/05) 
 
 #### Prerequisites
 

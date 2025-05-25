@@ -9,7 +9,7 @@
 //#include "utils.h"
 #include "setupFonts.h"
 
-#define ImGui_GetIO igGetIO
+#define ImGui_GetIO igGetIO_Nil
 
 const char* IconFontPath = "../utils/fonticon/fa6/fa-solid-900.ttf";
 const ImWchar ranges_icon_fonts[]  = {(ImWchar)ICON_MIN_FA, (ImWchar)ICON_MAX_FA, (ImWchar)0};

@@ -2,6 +2,7 @@ require 'os'
 require'math'
 --
 require'cimgui'
+require'simple'
 require'imgui_backend_opengl3'
 require'imgui_backend_glfw'
 require'loadImage'
@@ -220,12 +221,10 @@ local main = function()
       local size = ImVec2{textureWidth, textureHeight}
       local uv0  = ImVec2{0, 0}
       local uv1  = ImVec2{1, 1}
-      local tint_col = ImVec4{1, 1, 1, 1}
-      local border_col = ImVec4{0, 0, 0, 0}
       local imageBoxPosTop:ImVec2
       local imageBoxPosEnd:ImVec2
       igGetCursorScreenPos(&imageBoxPosTop) -- # Get absolute pos.
-      igImage(textureId, size, uv0, uv1, tint_col, border_col)
+      igImage(textureId, size, uv0, uv1)
       igGetCursorScreenPos(&imageBoxPosEnd) -- # Get absolute pos.
       -- #
       if igIsItemHovered(ImGuiHoveredFlags_DelayNone) then

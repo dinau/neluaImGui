@@ -218,49 +218,50 @@ global ImGuiKey: type <cimport,nodecl,using> = @enum(cint){
   ImGuiKey_KeypadEqual = 628,
   ImGuiKey_AppBack = 629,
   ImGuiKey_AppForward = 630,
-  ImGuiKey_GamepadStart = 631,
-  ImGuiKey_GamepadBack = 632,
-  ImGuiKey_GamepadFaceLeft = 633,
-  ImGuiKey_GamepadFaceRight = 634,
-  ImGuiKey_GamepadFaceUp = 635,
-  ImGuiKey_GamepadFaceDown = 636,
-  ImGuiKey_GamepadDpadLeft = 637,
-  ImGuiKey_GamepadDpadRight = 638,
-  ImGuiKey_GamepadDpadUp = 639,
-  ImGuiKey_GamepadDpadDown = 640,
-  ImGuiKey_GamepadL1 = 641,
-  ImGuiKey_GamepadR1 = 642,
-  ImGuiKey_GamepadL2 = 643,
-  ImGuiKey_GamepadR2 = 644,
-  ImGuiKey_GamepadL3 = 645,
-  ImGuiKey_GamepadR3 = 646,
-  ImGuiKey_GamepadLStickLeft = 647,
-  ImGuiKey_GamepadLStickRight = 648,
-  ImGuiKey_GamepadLStickUp = 649,
-  ImGuiKey_GamepadLStickDown = 650,
-  ImGuiKey_GamepadRStickLeft = 651,
-  ImGuiKey_GamepadRStickRight = 652,
-  ImGuiKey_GamepadRStickUp = 653,
-  ImGuiKey_GamepadRStickDown = 654,
-  ImGuiKey_MouseLeft = 655,
-  ImGuiKey_MouseRight = 656,
-  ImGuiKey_MouseMiddle = 657,
-  ImGuiKey_MouseX1 = 658,
-  ImGuiKey_MouseX2 = 659,
-  ImGuiKey_MouseWheelX = 660,
-  ImGuiKey_MouseWheelY = 661,
-  ImGuiKey_ReservedForModCtrl = 662,
-  ImGuiKey_ReservedForModShift = 663,
-  ImGuiKey_ReservedForModAlt = 664,
-  ImGuiKey_ReservedForModSuper = 665,
-  ImGuiKey_NamedKey_END = 666,
+  ImGuiKey_Oem102 = 631,
+  ImGuiKey_GamepadStart = 632,
+  ImGuiKey_GamepadBack = 633,
+  ImGuiKey_GamepadFaceLeft = 634,
+  ImGuiKey_GamepadFaceRight = 635,
+  ImGuiKey_GamepadFaceUp = 636,
+  ImGuiKey_GamepadFaceDown = 637,
+  ImGuiKey_GamepadDpadLeft = 638,
+  ImGuiKey_GamepadDpadRight = 639,
+  ImGuiKey_GamepadDpadUp = 640,
+  ImGuiKey_GamepadDpadDown = 641,
+  ImGuiKey_GamepadL1 = 642,
+  ImGuiKey_GamepadR1 = 643,
+  ImGuiKey_GamepadL2 = 644,
+  ImGuiKey_GamepadR2 = 645,
+  ImGuiKey_GamepadL3 = 646,
+  ImGuiKey_GamepadR3 = 647,
+  ImGuiKey_GamepadLStickLeft = 648,
+  ImGuiKey_GamepadLStickRight = 649,
+  ImGuiKey_GamepadLStickUp = 650,
+  ImGuiKey_GamepadLStickDown = 651,
+  ImGuiKey_GamepadRStickLeft = 652,
+  ImGuiKey_GamepadRStickRight = 653,
+  ImGuiKey_GamepadRStickUp = 654,
+  ImGuiKey_GamepadRStickDown = 655,
+  ImGuiKey_MouseLeft = 656,
+  ImGuiKey_MouseRight = 657,
+  ImGuiKey_MouseMiddle = 658,
+  ImGuiKey_MouseX1 = 659,
+  ImGuiKey_MouseX2 = 660,
+  ImGuiKey_MouseWheelX = 661,
+  ImGuiKey_MouseWheelY = 662,
+  ImGuiKey_ReservedForModCtrl = 663,
+  ImGuiKey_ReservedForModShift = 664,
+  ImGuiKey_ReservedForModAlt = 665,
+  ImGuiKey_ReservedForModSuper = 666,
+  ImGuiKey_NamedKey_END = 667,
   ImGuiMod_None = 0,
   ImGuiMod_Ctrl = 4096,
   ImGuiMod_Shift = 8192,
   ImGuiMod_Alt = 16384,
   ImGuiMod_Super = 32768,
   ImGuiMod_Mask_ = 61440,
-  ImGuiKey_NamedKey_COUNT = 154
+  ImGuiKey_NamedKey_COUNT = 155
 }
 global ImGuiMouseSource: type <cimport,nodecl,using> = @enum(cint){
   ImGuiMouseSource_Mouse = 0,
@@ -285,6 +286,7 @@ ImGuiStyle = @record{
   WindowPadding: ImVec2,
   WindowRounding: float32,
   WindowBorderSize: float32,
+  WindowBorderHoverPadding: float32,
   WindowMinSize: ImVec2,
   WindowTitleAlign: ImVec2,
   WindowMenuButtonPosition: ImGuiDir,
@@ -306,9 +308,11 @@ ImGuiStyle = @record{
   GrabMinSize: float32,
   GrabRounding: float32,
   LogSliderDeadzone: float32,
+  ImageBorderSize: float32,
   TabRounding: float32,
   TabBorderSize: float32,
-  TabMinWidthForCloseButton: float32,
+  TabCloseButtonMinWidthSelected: float32,
+  TabCloseButtonMinWidthUnselected: float32,
   TabBarBorderSize: float32,
   TabBarOverlineSize: float32,
   TableAngledHeadersAngle: float32,
@@ -397,6 +401,7 @@ ImGuiIO = @record{
   ConfigErrorRecoveryEnableTooltip: boolean,
   ConfigDebugIsDebuggerPresent: boolean,
   ConfigDebugHighlightIdConflicts: boolean,
+  ConfigDebugHighlightIdConflictsShowItemPicker: boolean,
   ConfigDebugBeginReturnValueOnce: boolean,
   ConfigDebugBeginReturnValueLoop: boolean,
   ConfigDebugIgnoreFocusLoss: boolean,
@@ -431,7 +436,7 @@ ImGuiIO = @record{
   KeyAlt: boolean,
   KeySuper: boolean,
   KeyMods: cint,
-  KeysData: [154]ImGuiKeyData,
+  KeysData: [155]ImGuiKeyData,
   WantCaptureMouseUnlessPopupClose: boolean,
   MousePosPrev: ImVec2,
   MouseClickedPos: [5]ImVec2,
@@ -657,11 +662,11 @@ ImFontConfig = @record{
   OversampleH: cint,
   OversampleV: cint,
   SizePixels: float32,
-  GlyphExtraSpacing: ImVec2,
   GlyphOffset: ImVec2,
   GlyphRanges: *cushort,
   GlyphMinAdvanceX: float32,
   GlyphMaxAdvanceX: float32,
+  GlyphExtraAdvanceX: float32,
   FontBuilderFlags: cuint,
   RasterizerMultiply: float32,
   RasterizerDensity: float32,
@@ -727,7 +732,7 @@ ImFontAtlas = @record{
   TexUvWhitePixel: ImVec2,
   Fonts: ImVector_ImFontPtr,
   CustomRects: ImVector_ImFontAtlasCustomRect,
-  ConfigData: ImVector_ImFontConfig,
+  Sources: ImVector_ImFontConfig,
   TexUvLines: [33]ImVec4,
   FontBuilderIO: *ImFontBuilderIO,
   FontBuilderFlags: cuint,
@@ -757,8 +762,8 @@ ImFont = @record{
   Glyphs: ImVector_ImFontGlyph,
   FallbackGlyph: *ImFontGlyph,
   ContainerAtlas: *ImFontAtlas,
-  ConfigData: *ImFontConfig,
-  ConfigDataCount: cshort,
+  Sources: *ImFontConfig,
+  SourcesCount: cshort,
   EllipsisCharCount: cshort,
   EllipsisChar: cushort,
   FallbackChar: cushort,
@@ -880,8 +885,9 @@ ImDrawListSharedData = @record{
   FontScale: float32,
   CurveTessellationTol: float32,
   CircleSegmentMaxError: float32,
-  ClipRectFullscreen: ImVec4,
+  InitialFringeScale: float32,
   InitialFlags: cint,
+  ClipRectFullscreen: ImVec4,
   TempBuffer: ImVector_ImVec2,
   ArcFastVtx: [48]ImVec2,
   ArcFastRadiusCutoff: float32,
@@ -890,15 +896,6 @@ ImDrawListSharedData = @record{
 ImDrawDataBuilder = @record{
   Layers: [2]*ImVector_ImDrawListPtr,
   LayerData1: ImVector_ImDrawListPtr
-}
-global ImGuiDataTypeStorage: type <cimport,nodecl,forwarddecl> = @record{}
-ImGuiDataTypeStorage = @record{
-  Data: [8]cuchar
-}
-global ImGuiAxis: type <cimport,nodecl,using> = @enum(cint){
-  ImGuiAxis_None = -1,
-  ImGuiAxis_X = 0,
-  ImGuiAxis_Y = 1
 }
 ImGuiColorMod = @record{
   Col: cint,
@@ -910,6 +907,15 @@ ImGuiStyleMod = @record{
     BackupInt: [2]cint,
     BackupFloat: [2]float32
   }
+}
+global ImGuiDataTypeStorage: type <cimport,nodecl,forwarddecl> = @record{}
+ImGuiDataTypeStorage = @record{
+  Data: [8]cuchar
+}
+global ImGuiAxis: type <cimport,nodecl,using> = @enum(cint){
+  ImGuiAxis_None = -1,
+  ImGuiAxis_X = 0,
+  ImGuiAxis_Y = 1
 }
 global ImGuiComboPreviewData: type <cimport,nodecl,forwarddecl> = @record{}
 ImGuiComboPreviewData = @record{
@@ -971,7 +977,7 @@ ImGuiInputTextState = @record{
   ReloadSelectionEnd: cint
 }
 ImGuiNextWindowData = @record{
-  Flags: cint,
+  HasFlags: cint,
   PosCond: cint,
   SizeCond: cint,
   CollapsedCond: cint,
@@ -981,6 +987,7 @@ ImGuiNextWindowData = @record{
   SizeVal: ImVec2,
   ContentSizeVal: ImVec2,
   ScrollVal: ImVec2,
+  WindowFlags: cint,
   ChildFlags: cint,
   PosUndock: boolean,
   CollapsedVal: boolean,
@@ -1041,7 +1048,8 @@ ImGuiWindowStackData = @record{
   Window: *ImGuiWindow,
   ParentLastItemDataBackup: ImGuiLastItemData,
   StackSizesInBegin: ImGuiErrorRecoveryState,
-  DisabledOverrideReenable: boolean
+  DisabledOverrideReenable: boolean,
+  DisabledOverrideReenableAlphaBackup: float32
 }
 global ImGuiShrinkWidthItem: type <cimport,nodecl,forwarddecl> = @record{}
 ImGuiShrinkWidthItem = @record{
@@ -1159,7 +1167,7 @@ global ImVector_ImGuiKeyRoutingData: type <cimport,nodecl> = @record{
   Data: *ImGuiKeyRoutingData
 }
 ImGuiKeyRoutingTable = @record{
-  Index: [154]cshort,
+  Index: [155]cshort,
   Entries: ImVector_ImGuiKeyRoutingData,
   EntriesNext: ImVector_ImGuiKeyRoutingData
 }
@@ -1436,7 +1444,6 @@ ImGuiMetricsConfig = @record{
   ShowDrawCmdMesh: boolean,
   ShowDrawCmdBoundingBoxes: boolean,
   ShowTextEncodingViewer: boolean,
-  ShowAtlasTintedWithTextColor: boolean,
   ShowDockingNodes: boolean,
   ShowWindowsRectsType: cint,
   ShowTablesRectsType: cint,
@@ -1463,7 +1470,8 @@ ImGuiIDStackTool = @record{
   QueryId: cuint,
   Results: ImVector_ImGuiStackLevelInfo,
   CopyToClipboardOnCtrlC: boolean,
-  CopyToClipboardLastTime: float32
+  CopyToClipboardLastTime: float32,
+  ResultPathBuf: ImGuiTextBuffer
 }
 global ImGuiContextHookType: type <cimport,nodecl,using> = @enum(cint){
   ImGuiContextHookType_NewFramePre = 0,
@@ -1652,7 +1660,7 @@ ImGuiContext = @record{
   CurrentWindowStack: ImVector_ImGuiWindowStackData,
   WindowsById: ImGuiStorage,
   WindowsActiveCount: cint,
-  WindowsHoverPadding: ImVec2,
+  WindowsBorderHoverPadding: float32,
   DebugBreakInWindow: cuint,
   CurrentWindow: *ImGuiWindow,
   HoveredWindow: *ImGuiWindow,
@@ -1699,7 +1707,7 @@ ImGuiContext = @record{
   LastKeyModsChangeFromNoneTime: float64,
   LastKeyboardKeyPressTime: float64,
   KeysMayBeCharInput: ImBitArrayForNamedKeys,
-  KeysOwnerData: [154]ImGuiKeyOwnerData,
+  KeysOwnerData: [155]ImGuiKeyOwnerData,
   KeysRoutingTable: ImGuiKeyRoutingTable,
   ActiveIdUsingNavDirMask: cuint,
   ActiveIdUsingAllKeyboardKeys: boolean,
@@ -2021,6 +2029,8 @@ ImGuiWindow = @record{
   ScrollbarSizes: ImVec2,
   ScrollbarX: boolean,
   ScrollbarY: boolean,
+  ScrollbarXStabilizeEnabled: boolean,
+  ScrollbarXStabilizeToggledHistory: cuchar,
   ViewportOwned: boolean,
   Active: boolean,
   WasActive: boolean,

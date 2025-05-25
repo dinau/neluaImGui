@@ -120,11 +120,11 @@ ImFontConfig = @record{
   OversampleH: cint,
   OversampleV: cint,
   SizePixels: float32,
-  GlyphExtraSpacing: ImVec2,
   GlyphOffset: ImVec2,
   GlyphRanges: *cushort,
   GlyphMinAdvanceX: float32,
   GlyphMaxAdvanceX: float32,
+  GlyphExtraAdvanceX: float32,
   FontBuilderFlags: cuint,
   RasterizerMultiply: float32,
   RasterizerDensity: float32,
@@ -190,7 +190,7 @@ ImFontAtlas = @record{
   TexUvWhitePixel: ImVec2,
   Fonts: ImVector_ImFontPtr,
   CustomRects: ImVector_ImFontAtlasCustomRect,
-  ConfigData: ImVector_ImFontConfig,
+  Sources: ImVector_ImFontConfig,
   TexUvLines: [33]ImVec4,
   FontBuilderIO: *ImFontBuilderIO,
   FontBuilderFlags: cuint,
@@ -220,8 +220,8 @@ ImFont = @record{
   Glyphs: ImVector_ImFontGlyph,
   FallbackGlyph: *ImFontGlyph,
   ContainerAtlas: *ImFontAtlas,
-  ConfigData: *ImFontConfig,
-  ConfigDataCount: cshort,
+  Sources: *ImFontConfig,
+  SourcesCount: cshort,
   EllipsisCharCount: cshort,
   EllipsisChar: cushort,
   FallbackChar: cushort,
@@ -242,8 +242,9 @@ ImDrawListSharedData = @record{
   FontScale: float32,
   CurveTessellationTol: float32,
   CircleSegmentMaxError: float32,
-  ClipRectFullscreen: ImVec4,
+  InitialFringeScale: float32,
   InitialFlags: cint,
+  ClipRectFullscreen: ImVec4,
   TempBuffer: ImVector_ImVec2,
   ArcFastVtx: [48]ImVec2,
   ArcFastRadiusCutoff: float32,
@@ -494,6 +495,10 @@ global function ImPlot3D_SetupAxisTicks_doublePtr(axis: ImAxis3D, values: *float
 global function ImPlot3D_SetupAxisTicks_double(axis: ImAxis3D, v_min: float64, v_max: float64, n_ticks: cint, labels: *[0]cstring, keep_default: boolean): void <cimport,nodecl> end
 global function ImPlot3D_SetupAxes(x_label: cstring, y_label: cstring, z_label: cstring, x_flags: ImPlot3DAxisFlags, y_flags: ImPlot3DAxisFlags, z_flags: ImPlot3DAxisFlags): void <cimport,nodecl> end
 global function ImPlot3D_SetupAxesLimits(x_min: float64, x_max: float64, y_min: float64, y_max: float64, z_min: float64, z_max: float64, cond: ImPlot3DCond): void <cimport,nodecl> end
+global function ImPlot3D_SetupBoxRotation_Float(elevation: float32, azimuth: float32, animate: boolean, cond: ImPlot3DCond): void <cimport,nodecl> end
+global function ImPlot3D_SetupBoxRotation_Plot3DQuat(rotation: ImPlot3DQuat, animate: boolean, cond: ImPlot3DCond): void <cimport,nodecl> end
+global function ImPlot3D_SetupBoxInitialRotation_Float(elevation: float32, azimuth: float32): void <cimport,nodecl> end
+global function ImPlot3D_SetupBoxInitialRotation_Plot3DQuat(rotation: ImPlot3DQuat): void <cimport,nodecl> end
 global function ImPlot3D_SetupBoxScale(x: float32, y: float32, z: float32): void <cimport,nodecl> end
 global function ImPlot3D_SetupLegend(location: ImPlot3DLocation, flags: ImPlot3DLegendFlags): void <cimport,nodecl> end
 global function ImPlot3D_PlotScatter_FloatPtr(label_id: cstring, xs: *float32, ys: *float32, zs: *float32, count: cint, flags: ImPlot3DScatterFlags, offset: cint, stride: cint): void <cimport,nodecl> end
@@ -615,6 +620,7 @@ global function ImPlot3DQuat_destroy(self: *ImPlot3DQuat): void <cimport,nodecl>
 global function ImPlot3DQuat_ImPlot3DQuat_FloatFloat(_x: float32, _y: float32, _z: float32, _w: float32): *ImPlot3DQuat <cimport,nodecl> end
 global function ImPlot3DQuat_ImPlot3DQuat_FloatPlot3DPoInt(_angle: float32, _axis: ImPlot3DPoint): *ImPlot3DQuat <cimport,nodecl> end
 global function ImPlot3DQuat_FromTwoVectors(pOut: *ImPlot3DQuat, v0: ImPlot3DPoint, v1: ImPlot3DPoint): void <cimport,nodecl> end
+global function ImPlot3DQuat_FromElAz(pOut: *ImPlot3DQuat, elevation: float32, azimuth: float32): void <cimport,nodecl> end
 global function ImPlot3DQuat_Length(self: *ImPlot3DQuat): float32 <cimport,nodecl> end
 global function ImPlot3DQuat_Normalized(pOut: *ImPlot3DQuat, self: *ImPlot3DQuat): void <cimport,nodecl> end
 global function ImPlot3DQuat_Conjugate(pOut: *ImPlot3DQuat, self: *ImPlot3DQuat): void <cimport,nodecl> end
