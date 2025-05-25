@@ -119,14 +119,11 @@ local main = function()
 
     ImPlot3D_ShowDemoWindow(nilptr)
 
-    ------------------
-    --- demo_LogScale
-    ------------------
+    ---------------------
+    --- DemoSurfacePlots
+    ---------------------
     do igBegin("ImPlot3D Surface plots with Nelua lang. " .. ICON_FA_CHART_COLUMN, nilptr, 0)
       defer igEnd() end
-      ----------------------------------
-      -- For ImPlot3D: DemoSurfacePlots
-      ----------------------------------
       -- Static vars
       local N <const> = 20
       local xs: [400]float32 <static>
@@ -145,9 +142,6 @@ local main = function()
       local range_min:float32 <static> = -1.0
       local range_max:float32 <static> = 1.0
 
-      ---------------------
-      --- DemoSurfacePlots
-      ---------------------
       igText("Frame rate  %.3f ms/frame (%.1f FPS)" , 1000.0 / pio.Framerate, pio.Framerate)
       t = t + igGetIO().DeltaTime
       -- Define the range for X and Y
