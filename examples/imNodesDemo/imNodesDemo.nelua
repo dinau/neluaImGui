@@ -14,9 +14,6 @@ require'utils'
 require'IconsFontAwesome6'
 --
 require'imnodes'
-##[=[
-cinclude "cimnodes.h"
-]=]
 require'vector'
 
 --- External functions

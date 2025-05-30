@@ -1,3 +1,10 @@
+--
+-- This file has been auto generated. Don't edit this file.
+--
+
+##[==[
+cinclude "cimCTE.h"
+]==]
 global ImVec2: type <cimport,nodecl,forwarddecl> = @record{}
 ImVec2 = @record{
   x: float32,

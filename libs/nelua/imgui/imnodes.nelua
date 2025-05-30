@@ -1,3 +1,10 @@
+--
+-- This file has been auto generated. Don't edit this file.
+--
+
+##[==[
+cinclude "cimnodes.h"
+]==]
 global FILE: type <cimport,nodecl,cincomplete> = @record{}
 global ImDrawChannel: type <cimport,nodecl,forwarddecl> = @record{}
 global ImDrawCmd: type <cimport,nodecl,forwarddecl> = @record{}

@@ -184,7 +184,7 @@ local main = function()
 
       -- ComboBox: Select save image format
       igSetNextItemWidth(100)
-      if igBeginCombo("##", imageFormatTbl[cbItemIndex].kind, 0) then
+      if igBeginCombo("##combo", imageFormatTbl[cbItemIndex].kind, 0) then
         defer igEndCombo() end
         for n,val in ipairs(imageFormatTbl) do
           local is_selected = (cbItemIndex == n)

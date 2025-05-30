@@ -1,3 +1,11 @@
+--
+-- This file has been auto generated. Don't edit this file.
+--
+
+##[==[
+cdefine "CIMGUI_DEFINE_ENUMS_AND_STRUCTS"
+cinclude "ImGuiFileDialog.h"
+]==]
 global ImFont: type <cimport,nodecl,forwarddecl> = @record{}
 global ImFontAtlas: type <cimport,nodecl,forwarddecl> = @record{}
 global ImFontBuilderIO: type <cimport,nodecl,forwarddecl> = @record{}

@@ -15,9 +15,6 @@ require'utils'
 require'IconsFontAwesome6'
 --
 require'imcolortextedit'
-##[=[
-cinclude "cimCTE.h"
-]=]
 
 --- External functions
 local function setupFonts() <cimport> end                -- from utils/setupFonts.c

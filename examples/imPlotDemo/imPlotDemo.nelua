@@ -11,11 +11,6 @@ require'IconsFontAwesome6'
 --
 require'cimplot'
 require'imPlotFuncs'
-##[=[
-cinclude "cimplot.h"
-]=]
-
-require'traits'
 
 --- External functions
 local function setupFonts() <cimport> end                -- from utils/setupFonts.c

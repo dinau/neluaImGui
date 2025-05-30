@@ -1,3 +1,10 @@
+--
+-- This file has been auto generated. Don't edit this file.
+--
+
+##[==[
+cinclude "cimgui-knobs.h"
+]==]
 global IgKnobColorSet: type <cimport,nodecl> = @record{
   base: cuint,
   hovered: cuint,

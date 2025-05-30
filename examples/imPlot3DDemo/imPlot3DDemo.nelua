@@ -1,5 +1,5 @@
 -- Notice:
---   Compile with Clang.
+--   Compile with Clang compiler.
 --
 --
 require 'os'
@@ -15,12 +15,6 @@ require'IconsFontAwesome6'
 --
 require'cimplot'
 require'cimplot3d'
-##[=[
-cinclude "cimplot.h"
-cinclude "cimplot3d.h"
-]=]
-
-require'traits'
 
 --- External functions
 local function setupFonts() <cimport> end                -- from utils/setupFonts.c
@@ -206,7 +200,7 @@ local main = function()
         if custom_range then
           ImPlot3D_PlotSurface_FloatPtr("Wave Surface", &xs, &ys, &zs, N, N, range_min, range_max, 0, 0, #float32)
         else
-          ImPlot3D_PlotSurface_FloatPtr("Wave Surface", &xs, &ys, &zs, N, N, range_min, range_max, 0, 0, #float32)
+          ImPlot3D_PlotSurface_FloatPtr("Wave Surface", &xs, &ys, &zs, N, N, 0, 0, 0, 0, #float32)
         end
         -- End the plot
         ImPlot3D_PopStyleVar()

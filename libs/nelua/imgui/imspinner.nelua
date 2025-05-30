@@ -1,3 +1,10 @@
+--
+-- This file has been auto generated. Don't edit this file.
+--
+
+##[==[
+cinclude "cimspinner.h"
+]==]
 global ImColor: type <cimport,nodecl,forwarddecl> = @record{}
 global ImVec4: type <cimport,nodecl,forwarddecl> = @record{}
 ImVec4 = @record{

@@ -53,9 +53,6 @@ gen:
 	@cp -f $(ORG_H) $(SAVE_H)
 	@(echo "#include \"cimgui.h\"" > $(TMP_H); cat $(ORG_H) >> $(TMP_H); mv -f $(TMP_H) $(ORG_H) )
 	@nelua $(OPT) genLibsBind.nelua
-	@cat $(NELUA_IMGUI_DIR)/cimgui_header.lua > tmp.nelua
-	@cat $(NELUA_IMGUI_DIR)/cimgui.nelua >> tmp.nelua
-	@mv -f tmp.nelua $(NELUA_IMGUI_DIR)/cimgui.nelua
 	@mv -f $(SAVE_H) $(ORG_H)
 
 genimplot:

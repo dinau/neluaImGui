@@ -14,10 +14,6 @@ require'utils'
 require'IconsFontAwesome6'
 --
 require'imfiledialog'
-##[=[
-cdefine "CIMGUI_DEFINE_ENUMS_AND_STRUCTS"
-cinclude "ImGuiFileDialog.h"
-]=]
 
 --- External functions
 local function setupFonts() <cimport> end                -- from utils/setupFonts.c
