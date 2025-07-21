@@ -96,7 +96,7 @@ local main = function()
 
   local pio = igGetIO()
 
-  local wsZoom:float32  = 2.5
+  local wsZoom:float32  = 45
   local item_highlighted_idx = 1
 
   local filterVec:vector(string)
@@ -191,9 +191,8 @@ local main = function()
     do igBegin("Icon Font Viewer2", nilptr, 0)
       defer igEnd() end
       -- Zoom bar
-      local wsNormal = 1.0
       igText("%s", " Zoom x"); igSameLine(0,-1.0)
-      igSliderFloat("##Zoom1", &wsZoom, 0.8, 5.0, "%.1f", 0)
+      igSliderFloat("##Zoom1", &wsZoom, 30.0, 90.0, "%.1f", 0)
       --- Tab Start
       igSetNextItemWidth(-1)
       do igBeginTabBar("IconsTab", 0)
@@ -203,12 +202,15 @@ local main = function()
         ------------
         if igBeginTabItem("All icons", nilptr, 0) then
           defer igEndTabItem() end
+
           do igBeginChild_Str("child2", ImVec2{0,0}, 0, 0)
             defer igEndChild() end
+
             local flags = ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersOuter | ImGuiTableFlags_BordersV | ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable
             local text_base_height = igGetTextLineHeightWithSpacing()
             local outer_size = ImVec2{0.0, text_base_height * 8}
             local col = 10
+
             if igBeginTable("table_scrolly", col, flags, outer_size, 0) then
               defer igEndTable() end
               for row = 0, (#iconFontTbl2 / col) - 1 do
@@ -216,15 +218,17 @@ local main = function()
                 for column = 0, col - 1 do
                   local ix:integer = (row  * col) + column
                   igTableSetColumnIndex(column)
-                  igSetWindowFontScale(wsZoom)
+                  --igSetWindowFontScale(wsZoom)
+                  igPushFont(nilptr, wsZoom)
                   igText("%s", iconFontTbl2[ix][0])
                   if igIsItemHovered() then
                      item_highlighted_idx = ix
                      item_current =  ix
                   end
+                  igPopFont()
                   local iconFontLabel = iconFontTbl2[ix][1]
                   setTooltip(iconFontLabel, ImGuiHoveredFlags_DelayNormal, yellow)
-                  igSetWindowFontScale(wsNormal)
+                  --igSetWindowFontScale(wsNormal)
                   --
                   igPushID_Int(ix)
                   if igBeginPopupContextItem("Contex Menu", 1) then
@@ -259,14 +263,16 @@ local main = function()
                 for column = 0, col - 1 do
                   local ix:integer = (row  * col) + column
                   igTableSetColumnIndex(column)
-                  igSetWindowFontScale(wsZoom)
+                  --igSetWindowFontScale(wsZoom)
+                  igPushFont(nilptr, wsZoom)
                   igText("%s", iconAnimals[ix][0])
                   if igIsItemHovered() then
                      item_highlighted_idx = ix
                   end
+                  igPopFont()
                   local iconFontLabel = iconAnimals[ix][1]
                   setTooltip(iconFontLabel, ImGuiHoveredFlags_DelayNormal, yellow)
-                  igSetWindowFontScale(wsNormal)
+                  --igSetWindowFontScale(wsNormal)
                   --
                   igPushID_Int(ix)
                   if igBeginPopupContextItem("Contex Menu", 1) then

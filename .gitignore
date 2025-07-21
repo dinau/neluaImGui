@@ -1,3 +1,4 @@
+delModule.mak
 *.o
 *.exe
 libs/mjson/
@@ -16,3 +17,5 @@ subadd.bat
 GPATH
 GRTAGS
 GTAGS
+gen/
+00*/

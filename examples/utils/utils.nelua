@@ -55,7 +55,8 @@ global zoomGlass = function(pTextureID: *GLuint, itemWidth: int32, itemPosTop:Im
     local tint_col   = ImVec4{ 1.0, 1.0, 1.0, 1.0}  -- #// No tint
     local border_col = ImVec4{0.22, 0.56, 0.22, 1.0} -- # Green
     igText(ICON_FA_MAGNIFYING_GLASS ..  " 4 x")
-    igImage($pTextureID, ImVec2{region_sz * zoom, region_sz * zoom}, uv0, uv1) -- tint_col, border_col)
+    local texRef = ImTextureRef{nilptr, $pTextureID}
+    igImage(texRef, ImVec2{region_sz * zoom, region_sz * zoom}, uv0, uv1) -- tint_col, border_col)
   end
 end
 

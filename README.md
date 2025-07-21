@@ -28,9 +28,9 @@
 
 ### NeluaImGui
 
-ImGui / CImGui wrapper library and some examples with NeLua language
+[Dear ImGui](https://github.com/ocornut/imgui) / [CImGui](https://github.com/cimgui/cimgui) wrapper library and some examples with NeLua language
 
-ImGui / CImGui 1.91.9bdock (2025/05) 
+ImGui / CImGui 1.92.0 dock (2025/07) 
 
 #### Prerequisites
 
@@ -49,7 +49,7 @@ ImGui / CImGui 1.91.9bdock (2025/05)
    1. Install libraries
 
       ```sh
-      $ sudo apt install xorg-dev libopengl-dev libgl1-mesa-dev make
+      $ sudo apt install libopengl-dev libgl1-mesa-dev make
       ```
 
       and for glfw3 and sdl2,
@@ -59,7 +59,7 @@ ImGui / CImGui 1.91.9bdock (2025/05)
       $ sudo apt install libsdl2-dev
       ```
 - C/C++ Compiler  
-GCC
+GCC (/ Clang)
 
 #### Build and run on Windows OS
 
@@ -205,15 +205,15 @@ Showing multibyte fonts(UTF-8, CJK fonts) and IME(Input method)
 Library name / C lang. wrapper
 
 - [x] [ImGui](https://github.com/ocornut/imgui) / [CImGui](https://github.com/cimgui/cimgui) (2024/11)
-- [x] [ImPlot](https://github.com/epezent/implot) / [CImPlot](https://github.com/cimgui/cimplot)
-- [x] [ImPlot3d](https://github.com/brenocq/implot3d) / [CImPlot3d](https://github.com/cimgui/cimplot3d) 
+- [x] [ImPlot](https://github.com/epezent/implot) / [CImPlot](https://github.com/cimgui/cimplot) (2025/05)
+- [x] [ImPlot3d](https://github.com/brenocq/implot3d) / [CImPlot3d](https://github.com/cimgui/cimplot3d) (2025/05)
 - [x] [ImNodes](https://github.com/Nelarius/imnodes) / [CImNodes](https://github.com/cimgui/cimnodes) (2025/05)
 - [x] [ImGuizmo](https://github.com/CedricGuillemet/ImGuizmo) / [CImGuizmo](https://github.com/cimgui/cimguizmo) (2025/05)
 - [x] [ImGui-Knobs](https://github.com/altschuler/imgui-knobs) / [CImGui-Knobs](https://github.com/dinau/imguin/tree/main/src/imguin/private/cimgui-knobs) (2025/05)
-- [x] [ImGuiFileDialog](https://github.com/aiekick/ImGuiFileDialog) / [CImGuiFileDialog](https://github.com/dinau/CImGuiFileDialog)
+- [x] [ImGuiFileDialog](https://github.com/aiekick/ImGuiFileDialog) / [CImGuiFileDialog](https://github.com/dinau/CImGuiFileDialog) (2025/05)
 - [x] [ImGui_Toggle](https://github.com/cmdwtf/imgui_toggle) / [CimGui_Toggle](https://github.com/dinau/cimgui_toggle) (2025/05)
 - [x] [ImSpinner](https://github.com/dalerank/imspinner) / [CImSpinner](https://github.com/dinau/cimspinner) (2025/05)
-- [x] [ImGuiColorTextEdit](https://github.com/santaclose/ImGuiColorTextEdit) / [cimCTE](https://github.com/cimgui/cimCTE) (2025)
+- [x] [ImGuiColorTextEdit](https://github.com/santaclose/ImGuiColorTextEdit) / [cimCTE](https://github.com/cimgui/cimCTE) (2025/05)
 
 #### SDL2 / GLFW / STB headers for Nelua
 
@@ -266,6 +266,6 @@ These header files [libs/nelua/glfw](libs/nelua/glfw), [libs/nelua/sdl2](libs/ne
 | **Nelua**            | Compiler | SDL2        | [NeLua-Platformer](https://github.com/dinau/nelua-platformer)
 | **Nim**              | Compiler | SDL3 / SDL2 | [Nim-Platformer-sdl2](https://github.com/def-/nim-platformer)/ [Nim-Platformer-sdl3](https://github.com/dinau/sdl3_nim/tree/main/examples/platformer) |
 | **Ruby**             | Script   | SDL3        | [Ruby-Platformer](https://github.com/dinau/ruby-platformer)                                                                                           |
-| **Zig**              | Compiler | SDL2        | [Zig-Platformer](https://github.com/dinau/zig-platformer)                                                                                             |
+| **Zig**              | Compiler | SDL3 / SDL2 | [Zig-Platformer](https://github.com/dinau/zig-platformer)                                                                                             |
 
 [^order]: Alphabectial order

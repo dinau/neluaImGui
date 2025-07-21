@@ -115,7 +115,7 @@ local main = function()
                                                   ,fontFullPath
                                                   ,point2px(textPoint)
                                                   ,nilptr
-                                                  ,ImFontAtlas_GetGlyphRangesJapanese(pio.Fonts))
+                                                  ,nilptr)
   --------------------
   --- Main while loop
   --------------------
@@ -243,7 +243,7 @@ local main = function()
         igText("%6d/%-6d %6d lines  | %s | %s | %s | %s" , mLine + 1, mColumn + 1, TextEditor_GetLineCount(editor), str1, str2
                ,langNames[TextEditor_GetLanguageDefinition(editor)], fileName)
 
-        igPushFont(textFont)
+        igPushFont(textFont, 0.0)
         TextEditor_Render(editor, "texteditor", false, ImVec2{0,0}, false)
         igPopFont()
     end -- do igBegin end

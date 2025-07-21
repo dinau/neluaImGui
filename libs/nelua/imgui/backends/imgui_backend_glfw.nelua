@@ -1,0 +1,7 @@
+require'glfw'
+
+
+-- GLFW
+global function ImGui_ImplGlfw_InitForOpenGL(window: *GLFWwindow, install_callbacks: boolean): boolean <cimport> end
+global function ImGui_ImplGlfw_NewFrame() <cimport> end
+global function ImGui_ImplGlfw_Shutdown() <cimport> end

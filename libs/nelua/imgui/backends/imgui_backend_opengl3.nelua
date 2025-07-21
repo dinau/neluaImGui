@@ -1,0 +1,13 @@
+require'glad'
+
+require'cimgui'
+
+-- OpenGL
+global function ImGui_ImplOpenGL3_Init(glsl_version:cstring <const>): boolean <cimport> end
+global function ImGui_ImplOpenGL3_NewFrame() <cimport> end
+global function ImGui_ImplOpenGL3_RenderDrawData(draw_data: *ImDrawData) <cimport> end
+global function ImGui_ImplOpenGL3_Shutdown() <cimport> end
+global function ImGui_ImplOpenGL3_CreateFontsTexture(): boolean <cimport> end
+global function ImGui_ImplOpenGL3_DestroyFontsTexture() <cimport> end
+global function ImGui_ImplOpenGL3_CreateDeviceObjects(): boolean <cimport> end
+global function ImGui_ImplOpenGL3_DestroyDeviceObjects() <cimport> end

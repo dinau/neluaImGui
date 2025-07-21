@@ -74,6 +74,7 @@ OPT += --ldflags="$(NELUA_LDFLAGS)"
 # Nelua libs dir
 OPT += -L $(LIBS_DIR)/nelua/glfw   \
        -L $(LIBS_DIR)/nelua/imgui  \
+       -L $(LIBS_DIR)/nelua/imgui/backends  \
        -L $(LIBS_DIR)/nelua/stb    \
        -L $(LIBS_DIR)/nelua/sdl2   \
        -L ../utils/fonticon        \

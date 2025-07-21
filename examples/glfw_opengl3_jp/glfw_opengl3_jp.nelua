@@ -224,7 +224,8 @@ local main = function()
       local imageBoxPosTop:ImVec2
       local imageBoxPosEnd:ImVec2
       igGetCursorScreenPos(&imageBoxPosTop) -- # Get absolute pos.
-      igImage(textureId, size, uv0, uv1)
+      local texRef = ImTextureRef{nilptr, textureId}
+      igImage(texRef, size, uv0, uv1)
       igGetCursorScreenPos(&imageBoxPosEnd) -- # Get absolute pos.
       -- #
       if igIsItemHovered(ImGuiHoveredFlags_DelayNone) then

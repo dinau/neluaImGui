@@ -15,9 +15,13 @@ global ImDrawListSplitter: type <cimport,nodecl,forwarddecl> = @record{}
 global ImDrawVert: type <cimport,nodecl,forwarddecl> = @record{}
 global ImFont: type <cimport,nodecl,forwarddecl> = @record{}
 global ImFontAtlas: type <cimport,nodecl,forwarddecl> = @record{}
-global ImFontBuilderIO: type <cimport,nodecl,forwarddecl> = @record{}
+global ImFontAtlasBuilder: type <cimport,nodecl,forwarddecl> = @record{}
+global ImFontBaked: type <cimport,nodecl,forwarddecl> = @record{}
 global ImFontConfig: type <cimport,nodecl,forwarddecl> = @record{}
 global ImFontGlyph: type <cimport,nodecl,forwarddecl> = @record{}
+global ImFontLoader: type <cimport,nodecl,forwarddecl> = @record{}
+global ImTextureData: type <cimport,nodecl,forwarddecl> = @record{}
+global ImTextureRect: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiContext: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiIO: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiKeyData: type <cimport,nodecl,forwarddecl> = @record{}
@@ -26,7 +30,6 @@ global ImGuiMultiSelectIO: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiPayload: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiPlatformIO: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiPlatformImeData: type <cimport,nodecl,forwarddecl> = @record{}
-global ImGuiPlatformMonitor: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiSelectionRequest: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiSizeCallbackData: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiStorage: type <cimport,nodecl,forwarddecl> = @record{}
@@ -36,18 +39,14 @@ global ImGuiTableSortSpecs: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiTableColumnSortSpecs: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiTextBuffer: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiViewport: type <cimport,nodecl,forwarddecl> = @record{}
-global ImGuiWindowClass: type <cimport,nodecl,forwarddecl> = @record{}
 global ImRect: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiTextIndex: type <cimport,nodecl,forwarddecl> = @record{}
 global ImDrawDataBuilder: type <cimport,nodecl,forwarddecl> = @record{}
+global ImFontAtlasRectEntry: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiBoxSelectState: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiColorMod: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiContextHook: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiDeactivatedItemData: type <cimport,nodecl,forwarddecl> = @record{}
-global ImGuiDockContext: type <cimport,nodecl,forwarddecl> = @record{}
-global ImGuiDockRequest: type <cimport,nodecl,forwarddecl> = @record{}
-global ImGuiDockNode: type <cimport,nodecl,forwarddecl> = @record{}
-global ImGuiDockNodeSettings: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiErrorRecoveryState: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiGroupData: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiInputTextState: type <cimport,nodecl,forwarddecl> = @record{}
@@ -75,9 +74,9 @@ global ImGuiTreeNodeStackData: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiTypingSelectState: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiTypingSelectRequest: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiWindow: type <cimport,nodecl,forwarddecl> = @record{}
-global ImGuiWindowDockStyle: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiWindowTempData: type <cimport,nodecl,forwarddecl> = @record{}
 global ImStbTexteditState: type <cimport,nodecl,forwarddecl> = @record{}
+global stbrp_node_im: type <cimport,nodecl,forwarddecl> = @record{}
 global ImVec2: type <cimport,nodecl,forwarddecl> = @record{}
 ImVec2 = @record{
   x: float32,
@@ -89,6 +88,11 @@ ImVec4 = @record{
   y: float32,
   z: float32,
   w: float32
+}
+global ImTextureRef: type <cimport,nodecl,forwarddecl> = @record{}
+ImTextureRef = @record{
+  _TexData: *ImTextureData,
+  _TexID: culonglong
 }
 global ImGuiDir: type <cimport,nodecl,using> = @enum(cint){
   ImGuiDir_None = -1,
@@ -262,13 +266,13 @@ global ImGuiKey: type <cimport,nodecl,using> = @enum(cint){
   ImGuiKey_ReservedForModAlt = 665,
   ImGuiKey_ReservedForModSuper = 666,
   ImGuiKey_NamedKey_END = 667,
+  ImGuiKey_NamedKey_COUNT = 155,
   ImGuiMod_None = 0,
   ImGuiMod_Ctrl = 4096,
   ImGuiMod_Shift = 8192,
   ImGuiMod_Alt = 16384,
   ImGuiMod_Super = 32768,
-  ImGuiMod_Mask_ = 61440,
-  ImGuiKey_NamedKey_COUNT = 155
+  ImGuiMod_Mask_ = 61440
 }
 global ImGuiMouseSource: type <cimport,nodecl,using> = @enum(cint){
   ImGuiMouseSource_Mouse = 0,
@@ -288,6 +292,9 @@ ImGuiTableColumnSortSpecs = @record{
   SortDirection: ImGuiSortDirection
 }
 ImGuiStyle = @record{
+  FontSizeBase: float32,
+  FontScaleMain: float32,
+  FontScaleDpi: float32,
   Alpha: float32,
   DisabledAlpha: float32,
   WindowPadding: ImVec2,
@@ -324,6 +331,9 @@ ImGuiStyle = @record{
   TabBarOverlineSize: float32,
   TableAngledHeadersAngle: float32,
   TableAngledHeadersTextAlign: ImVec2,
+  TreeLinesFlags: cint,
+  TreeLinesSize: float32,
+  TreeLinesRounding: float32,
   ColorButtonPosition: ImGuiDir,
   ButtonTextAlign: ImVec2,
   SelectableTextAlign: ImVec2,
@@ -332,7 +342,6 @@ ImGuiStyle = @record{
   SeparatorTextPadding: ImVec2,
   DisplayWindowPadding: ImVec2,
   DisplaySafeAreaPadding: ImVec2,
-  DockingSeparatorSize: float32,
   MouseCursorScale: float32,
   AntiAliasedLines: boolean,
   AntiAliasedLinesUseTex: boolean,
@@ -344,7 +353,9 @@ ImGuiStyle = @record{
   HoverDelayShort: float32,
   HoverDelayNormal: float32,
   HoverFlagsForTooltipMouse: cint,
-  HoverFlagsForTooltipNav: cint
+  HoverFlagsForTooltipNav: cint,
+  _MainScale: float32,
+  _NextFrameFontSizeBase: float32
 }
 ImGuiKeyData = @record{
   Down: boolean,
@@ -361,16 +372,15 @@ ImGuiIO = @record{
   ConfigFlags: cint,
   BackendFlags: cint,
   DisplaySize: ImVec2,
+  DisplayFramebufferScale: ImVec2,
   DeltaTime: float32,
   IniSavingRate: float32,
   IniFilename: cstring,
   LogFilename: cstring,
   UserData: pointer,
   Fonts: *ImFontAtlas,
-  FontGlobalScale: float32,
-  FontAllowUserScaling: boolean,
   FontDefault: *ImFont,
-  DisplayFramebufferScale: ImVec2,
+  FontAllowUserScaling: boolean,
   ConfigNavSwapGamepadButtons: boolean,
   ConfigNavMoveSetMousePos: boolean,
   ConfigNavCaptureKeyboard: boolean,
@@ -378,14 +388,6 @@ ImGuiIO = @record{
   ConfigNavEscapeClearFocusWindow: boolean,
   ConfigNavCursorVisibleAuto: boolean,
   ConfigNavCursorVisibleAlways: boolean,
-  ConfigDockingNoSplit: boolean,
-  ConfigDockingWithShift: boolean,
-  ConfigDockingAlwaysTabBar: boolean,
-  ConfigDockingTransparentPayload: boolean,
-  ConfigViewportsNoAutoMerge: boolean,
-  ConfigViewportsNoTaskBarIcon: boolean,
-  ConfigViewportsNoDecoration: boolean,
-  ConfigViewportsNoDefaultParent: boolean,
   MouseDrawCursor: boolean,
   ConfigMacOSXBehaviors: boolean,
   ConfigInputTrickleEventQueue: boolean,
@@ -437,7 +439,6 @@ ImGuiIO = @record{
   MouseWheel: float32,
   MouseWheelH: float32,
   MouseSource: ImGuiMouseSource,
-  MouseHoveredViewport: cuint,
   KeyCtrl: boolean,
   KeyShift: boolean,
   KeyAlt: boolean,
@@ -460,7 +461,6 @@ ImGuiIO = @record{
   MouseCtrlLeftAsRightClick: boolean,
   MouseDownDuration: [5]float32,
   MouseDownDurationPrev: [5]float32,
-  MouseDragMaxDistanceAbs: [5]ImVec2,
   MouseDragMaxDistanceSqr: [5]float32,
   PenPressure: float32,
   AppFocusLost: boolean,
@@ -473,17 +473,6 @@ ImGuiSizeCallbackData = @record{
   Pos: ImVec2,
   CurrentSize: ImVec2,
   DesiredSize: ImVec2
-}
-ImGuiWindowClass = @record{
-  ClassId: cuint,
-  ParentViewportId: cuint,
-  FocusRouteParentWindowId: cuint,
-  ViewportFlagsOverrideSet: cint,
-  ViewportFlagsOverrideClear: cint,
-  TabItemFlagsOverrideSet: cint,
-  DockNodeFlagsOverrideSet: cint,
-  DockingAlwaysTabBar: boolean,
-  DockingAllowUnclassed: boolean
 }
 ImGuiPayload = @record{
   Data: pointer,
@@ -525,7 +514,7 @@ ImGuiListClipper = @record{
   DisplayEnd: cint,
   ItemsCount: cint,
   ItemsHeight: float32,
-  StartPosY: float32,
+  StartPosY: float64,
   StartSeekOffsetY: float64,
   TempData: pointer
 }
@@ -556,7 +545,7 @@ ImGuiSelectionRequest = @record{
 }
 ImDrawCmd = @record{
   ClipRect: ImVec4,
-  TextureId: culonglong,
+  TexRef: ImTextureRef,
   VtxOffset: cuint,
   IdxOffset: cuint,
   ElemCount: cuint,
@@ -573,7 +562,7 @@ ImDrawVert = @record{
 global ImDrawCmdHeader: type <cimport,nodecl,forwarddecl> = @record{}
 ImDrawCmdHeader = @record{
   ClipRect: ImVec4,
-  TextureId: culonglong,
+  TexRef: ImTextureRef,
   VtxOffset: cuint
 }
 global ImVector_ImDrawCmd: type <cimport,nodecl> = @record{
@@ -615,10 +604,10 @@ global ImVector_ImVec4: type <cimport,nodecl> = @record{
   Capacity: cint,
   Data: *ImVec4
 }
-global ImVector_ImTextureID: type <cimport,nodecl> = @record{
+global ImVector_ImTextureRef: type <cimport,nodecl> = @record{
   Size: cint,
   Capacity: cint,
-  Data: *culonglong
+  Data: *ImTextureRef
 }
 global ImVector_ImU8: type <cimport,nodecl> = @record{
   Size: cint,
@@ -638,7 +627,7 @@ ImDrawList = @record{
   _CmdHeader: ImDrawCmdHeader,
   _Splitter: ImDrawListSplitter,
   _ClipRectStack: ImVector_ImVec4,
-  _TextureIdStack: ImVector_ImTextureID,
+  _TextureStack: ImVector_ImTextureRef,
   _CallbacksDataBuf: ImVector_ImU8,
   _FringeScale: float32,
   _OwnerName: cstring
@@ -647,6 +636,11 @@ global ImVector_ImDrawListPtr: type <cimport,nodecl> = @record{
   Size: cint,
   Capacity: cint,
   Data: **ImDrawList
+}
+global ImVector_ImTextureDataPtr: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: **ImTextureData
 }
 ImDrawData = @record{
   Valid: boolean,
@@ -657,33 +651,80 @@ ImDrawData = @record{
   DisplayPos: ImVec2,
   DisplaySize: ImVec2,
   FramebufferScale: ImVec2,
-  OwnerViewport: *ImGuiViewport
+  OwnerViewport: *ImGuiViewport,
+  Textures: *ImVector_ImTextureDataPtr
+}
+global ImTextureFormat: type <cimport,nodecl,using> = @enum(cint){
+  ImTextureFormat_RGBA32 = 0,
+  ImTextureFormat_Alpha8 = 1
+}
+global ImTextureStatus: type <cimport,nodecl,using> = @enum(cint){
+  ImTextureStatus_OK = 0,
+  ImTextureStatus_Destroyed = 1,
+  ImTextureStatus_WantCreate = 2,
+  ImTextureStatus_WantUpdates = 3,
+  ImTextureStatus_WantDestroy = 4
+}
+ImTextureRect = @record{
+  x: cushort,
+  y: cushort,
+  w: cushort,
+  h: cushort
+}
+global ImVector_ImTextureRect: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImTextureRect
+}
+ImTextureData = @record{
+  UniqueID: cint,
+  Status: ImTextureStatus,
+  BackendUserData: pointer,
+  TexID: culonglong,
+  Format: ImTextureFormat,
+  Width: cint,
+  Height: cint,
+  BytesPerPixel: cint,
+  Pixels: *cuchar,
+  UsedRect: ImTextureRect,
+  UpdateRect: ImTextureRect,
+  Updates: ImVector_ImTextureRect,
+  UnusedFrames: cint,
+  RefCount: cushort,
+  UseColors: boolean,
+  WantDestroyNextFrame: boolean
 }
 ImFontConfig = @record{
+  Name: [40]cchar,
   FontData: pointer,
   FontDataSize: cint,
   FontDataOwnedByAtlas: boolean,
   MergeMode: boolean,
   PixelSnapH: boolean,
-  FontNo: cint,
-  OversampleH: cint,
-  OversampleV: cint,
+  PixelSnapV: boolean,
+  OversampleH: cschar,
+  OversampleV: cschar,
+  EllipsisChar: cushort,
   SizePixels: float32,
-  GlyphOffset: ImVec2,
   GlyphRanges: *cushort,
+  GlyphExcludeRanges: *cushort,
+  GlyphOffset: ImVec2,
   GlyphMinAdvanceX: float32,
   GlyphMaxAdvanceX: float32,
   GlyphExtraAdvanceX: float32,
-  FontBuilderFlags: cuint,
+  FontNo: cuint,
+  FontLoaderFlags: cuint,
   RasterizerMultiply: float32,
   RasterizerDensity: float32,
-  EllipsisChar: cushort,
-  Name: [40]cchar,
-  DstFont: *ImFont
+  Flags: cint,
+  DstFont: *ImFont,
+  FontLoader: *ImFontLoader,
+  FontLoaderData: pointer
 }
 ImFontGlyph = @record{
   Colored: cuint,
   Visible: cuint,
+  SourceIdx: cuint,
   Codepoint: cuint,
   AdvanceX: float32,
   X0: float32,
@@ -693,63 +734,60 @@ ImFontGlyph = @record{
   U0: float32,
   V0: float32,
   U1: float32,
-  V1: float32
+  V1: float32,
+  PackId: cint
 }
 global ImVector_ImU32: type <cimport,nodecl> = @record{
   Size: cint,
   Capacity: cint,
   Data: *cuint
 }
-global ImFontAtlasCustomRect: type <cimport,nodecl,forwarddecl> = @record{}
-ImFontAtlasCustomRect = @record{
-  X: cushort,
-  Y: cushort,
-  Width: cushort,
-  Height: cushort,
-  GlyphID: cuint,
-  GlyphColored: cuint,
-  GlyphAdvanceX: float32,
-  GlyphOffset: ImVec2,
-  Font: *ImFont
-}
 global ImVector_ImFontPtr: type <cimport,nodecl> = @record{
   Size: cint,
   Capacity: cint,
   Data: **ImFont
-}
-global ImVector_ImFontAtlasCustomRect: type <cimport,nodecl> = @record{
-  Size: cint,
-  Capacity: cint,
-  Data: *ImFontAtlasCustomRect
 }
 global ImVector_ImFontConfig: type <cimport,nodecl> = @record{
   Size: cint,
   Capacity: cint,
   Data: *ImFontConfig
 }
+global ImVector_ImDrawListSharedDataPtr: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: **ImDrawListSharedData
+}
 ImFontAtlas = @record{
   Flags: cint,
-  TexID: culonglong,
-  TexDesiredWidth: cint,
+  TexDesiredFormat: ImTextureFormat,
   TexGlyphPadding: cint,
+  TexMinWidth: cint,
+  TexMinHeight: cint,
+  TexMaxWidth: cint,
+  TexMaxHeight: cint,
   UserData: pointer,
+  TexRef: ImTextureRef,
+  TexData: *ImTextureData,
+  TexList: ImVector_ImTextureDataPtr,
   Locked: boolean,
-  TexReady: boolean,
+  RendererHasTextures: boolean,
+  TexIsBuilt: boolean,
   TexPixelsUseColors: boolean,
-  TexPixelsAlpha8: *cuchar,
-  TexPixelsRGBA32: *cuint,
-  TexWidth: cint,
-  TexHeight: cint,
   TexUvScale: ImVec2,
   TexUvWhitePixel: ImVec2,
   Fonts: ImVector_ImFontPtr,
-  CustomRects: ImVector_ImFontAtlasCustomRect,
   Sources: ImVector_ImFontConfig,
   TexUvLines: [33]ImVec4,
-  FontBuilderIO: *ImFontBuilderIO,
-  FontBuilderFlags: cuint,
-  PackIdMouseCursors: cint,
-  PackIdLines: cint
+  TexNextUniqueID: cint,
+  FontNextUniqueID: cint,
+  DrawListSharedDatas: ImVector_ImDrawListSharedDataPtr,
+  Builder: *ImFontAtlasBuilder,
+  FontLoader: *ImFontLoader,
+  FontLoaderName: cstring,
+  FontLoaderData: pointer,
+  FontLoaderFlags: cuint,
+  RefCount: cint,
+  OwnerContext: *ImGuiContext
 }
 global ImVector_float: type <cimport,nodecl> = @record{
   Size: cint,
@@ -766,56 +804,53 @@ global ImVector_ImFontGlyph: type <cimport,nodecl> = @record{
   Capacity: cint,
   Data: *ImFontGlyph
 }
-ImFont = @record{
+ImFontBaked = @record{
   IndexAdvanceX: ImVector_float,
   FallbackAdvanceX: float32,
-  FontSize: float32,
+  Size: float32,
+  RasterizerDensity: float32,
   IndexLookup: ImVector_ImU16,
   Glyphs: ImVector_ImFontGlyph,
-  FallbackGlyph: *ImFontGlyph,
-  ContainerAtlas: *ImFontAtlas,
-  Sources: *ImFontConfig,
-  SourcesCount: cshort,
-  EllipsisCharCount: cshort,
-  EllipsisChar: cushort,
-  FallbackChar: cushort,
-  EllipsisWidth: float32,
-  EllipsisCharStep: float32,
-  Scale: float32,
+  FallbackGlyphIndex: cint,
   Ascent: float32,
   Descent: float32,
-  MetricsTotalSurface: cint,
-  DirtyLookupTables: boolean,
-  Used8kPagesMap: [1]cuchar
+  MetricsTotalSurface: cuint,
+  WantDestroy: cuint,
+  LockLoadingFallback: cuint,
+  LastUsedFrame: cint,
+  BakedId: cuint,
+  ContainerFont: *ImFont,
+  FontLoaderDatas: pointer
+}
+global ImVector_ImFontConfigPtr: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: **ImFontConfig
+}
+ImFont = @record{
+  LastBaked: *ImFontBaked,
+  ContainerAtlas: *ImFontAtlas,
+  Flags: cint,
+  CurrentRasterizerDensity: float32,
+  FontId: cuint,
+  LegacySize: float32,
+  Sources: ImVector_ImFontConfigPtr,
+  EllipsisChar: cushort,
+  FallbackChar: cushort,
+  Used8kPagesMap: [1]cuchar,
+  EllipsisAutoBake: boolean,
+  RemapPairs: ImGuiStorage
 }
 ImGuiViewport = @record{
   ID: cuint,
   Flags: cint,
   Pos: ImVec2,
   Size: ImVec2,
+  FramebufferScale: ImVec2,
   WorkPos: ImVec2,
   WorkSize: ImVec2,
-  DpiScale: float32,
-  ParentViewportId: cuint,
-  DrawData: *ImDrawData,
-  RendererUserData: pointer,
-  PlatformUserData: pointer,
   PlatformHandle: pointer,
-  PlatformHandleRaw: pointer,
-  PlatformWindowCreated: boolean,
-  PlatformRequestMove: boolean,
-  PlatformRequestResize: boolean,
-  PlatformRequestClose: boolean
-}
-global ImVector_ImGuiPlatformMonitor: type <cimport,nodecl> = @record{
-  Size: cint,
-  Capacity: cint,
-  Data: *ImGuiPlatformMonitor
-}
-global ImVector_ImGuiViewportPtr: type <cimport,nodecl> = @record{
-  Size: cint,
-  Capacity: cint,
-  Data: **ImGuiViewport
+  PlatformHandleRaw: pointer
 }
 ImGuiPlatformIO = @record{
   Platform_GetClipboardTextFn: function(ctx: *ImGuiContext): cstring,
@@ -826,50 +861,26 @@ ImGuiPlatformIO = @record{
   Platform_SetImeDataFn: function(ctx: *ImGuiContext, viewport: *ImGuiViewport, data: *ImGuiPlatformImeData): void,
   Platform_ImeUserData: pointer,
   Platform_LocaleDecimalPoint: cushort,
+  Renderer_TextureMaxWidth: cint,
+  Renderer_TextureMaxHeight: cint,
   Renderer_RenderState: pointer,
-  Platform_CreateWindow: function(vp: *ImGuiViewport): void,
-  Platform_DestroyWindow: function(vp: *ImGuiViewport): void,
-  Platform_ShowWindow: function(vp: *ImGuiViewport): void,
-  Platform_SetWindowPos: function(vp: *ImGuiViewport, pos: ImVec2): void,
-  Platform_GetWindowPos: function(vp: *ImGuiViewport): ImVec2,
-  Platform_SetWindowSize: function(vp: *ImGuiViewport, size: ImVec2): void,
-  Platform_GetWindowSize: function(vp: *ImGuiViewport): ImVec2,
-  Platform_SetWindowFocus: function(vp: *ImGuiViewport): void,
-  Platform_GetWindowFocus: function(vp: *ImGuiViewport): boolean,
-  Platform_GetWindowMinimized: function(vp: *ImGuiViewport): boolean,
-  Platform_SetWindowTitle: function(vp: *ImGuiViewport, str: cstring): void,
-  Platform_SetWindowAlpha: function(vp: *ImGuiViewport, alpha: float32): void,
-  Platform_UpdateWindow: function(vp: *ImGuiViewport): void,
-  Platform_RenderWindow: function(vp: *ImGuiViewport, render_arg: pointer): void,
-  Platform_SwapBuffers: function(vp: *ImGuiViewport, render_arg: pointer): void,
-  Platform_GetWindowDpiScale: function(vp: *ImGuiViewport): float32,
-  Platform_OnChangedViewport: function(vp: *ImGuiViewport): void,
-  Platform_GetWindowWorkAreaInsets: function(vp: *ImGuiViewport): ImVec4,
-  Platform_CreateVkSurface: function(vp: *ImGuiViewport, vk_inst: culonglong, vk_allocators: pointer, out_vk_surface: *culonglong): cint,
-  Renderer_CreateWindow: function(vp: *ImGuiViewport): void,
-  Renderer_DestroyWindow: function(vp: *ImGuiViewport): void,
-  Renderer_SetWindowSize: function(vp: *ImGuiViewport, size: ImVec2): void,
-  Renderer_RenderWindow: function(vp: *ImGuiViewport, render_arg: pointer): void,
-  Renderer_SwapBuffers: function(vp: *ImGuiViewport, render_arg: pointer): void,
-  Monitors: ImVector_ImGuiPlatformMonitor,
-  Viewports: ImVector_ImGuiViewportPtr
-}
-ImGuiPlatformMonitor = @record{
-  MainPos: ImVec2,
-  MainSize: ImVec2,
-  WorkPos: ImVec2,
-  WorkSize: ImVec2,
-  DpiScale: float32,
-  PlatformHandle: pointer
+  Textures: ImVector_ImTextureDataPtr
 }
 ImGuiPlatformImeData = @record{
   WantVisible: boolean,
+  WantTextInput: boolean,
   InputPos: ImVec2,
-  InputLineHeight: float32
+  InputLineHeight: float32,
+  ViewportId: cuint
 }
 global ImVec1: type <cimport,nodecl,forwarddecl> = @record{}
 ImVec1 = @record{
   x: float32
+}
+global ImVec2i: type <cimport,nodecl,forwarddecl> = @record{}
+ImVec2i = @record{
+  x: cint,
+  y: cint
 }
 global ImVec2ih: type <cimport,nodecl,forwarddecl> = @record{}
 ImVec2ih = @record{
@@ -892,6 +903,7 @@ ImGuiTextIndex = @record{
 ImDrawListSharedData = @record{
   TexUvWhitePixel: ImVec2,
   TexUvLines: *ImVec4,
+  FontAtlas: *ImFontAtlas,
   Font: *ImFont,
   FontSize: float32,
   FontScale: float32,
@@ -901,6 +913,8 @@ ImDrawListSharedData = @record{
   InitialFlags: cint,
   ClipRectFullscreen: ImVec4,
   TempBuffer: ImVector_ImVec2,
+  DrawLists: ImVector_ImDrawListPtr,
+  Context: *ImGuiContext,
   ArcFastVtx: [48]ImVec2,
   ArcFastRadiusCutoff: float32,
   CircleSegmentCounts: [64]cuchar
@@ -908,6 +922,12 @@ ImDrawListSharedData = @record{
 ImDrawDataBuilder = @record{
   Layers: [2]*ImVector_ImDrawListPtr,
   LayerData1: ImVector_ImDrawListPtr
+}
+global ImFontStackData: type <cimport,nodecl,forwarddecl> = @record{}
+ImFontStackData = @record{
+  Font: *ImFont,
+  FontSizeBeforeScaling: float32,
+  FontSizeAfterScaling: float32
 }
 ImGuiColorMod = @record{
   Col: cint,
@@ -923,11 +943,6 @@ ImGuiStyleMod = @record{
 global ImGuiDataTypeStorage: type <cimport,nodecl,forwarddecl> = @record{}
 ImGuiDataTypeStorage = @record{
   Data: [8]cuchar
-}
-global ImGuiAxis: type <cimport,nodecl,using> = @enum(cint){
-  ImGuiAxis_None = -1,
-  ImGuiAxis_X = 0,
-  ImGuiAxis_Y = 1
 }
 global ImGuiComboPreviewData: type <cimport,nodecl,forwarddecl> = @record{}
 ImGuiComboPreviewData = @record{
@@ -993,7 +1008,6 @@ ImGuiNextWindowData = @record{
   PosCond: cint,
   SizeCond: cint,
   CollapsedCond: cint,
-  DockCond: cint,
   PosVal: ImVec2,
   PosPivotVal: ImVec2,
   SizeVal: ImVec2,
@@ -1001,15 +1015,11 @@ ImGuiNextWindowData = @record{
   ScrollVal: ImVec2,
   WindowFlags: cint,
   ChildFlags: cint,
-  PosUndock: boolean,
   CollapsedVal: boolean,
   SizeConstraintRect: ImRect,
   SizeCallback: function(data: *ImGuiSizeCallbackData): void,
   SizeCallbackUserData: pointer,
   BgAlphaVal: float32,
-  ViewportId: cuint,
-  DockId: cuint,
-  WindowClass: ImGuiWindowClass,
   MenuBarOffsetMinVal: ImVec2,
   RefreshFlagsVal: cint
 }
@@ -1040,7 +1050,10 @@ ImGuiTreeNodeStackData = @record{
   ID: cuint,
   TreeFlags: cint,
   ItemFlags: cint,
-  NavRect: ImRect
+  NavRect: ImRect,
+  DrawLinesX1: float32,
+  DrawLinesToNodesY2: float32,
+  DrawLinesTableColumn: cshort
 }
 ImGuiErrorRecoveryState = @record{
   SizeOfWindowStack: cshort,
@@ -1098,11 +1111,10 @@ global ImGuiInputEventType: type <cimport,nodecl,using> = @enum(cint){
   ImGuiInputEventType_MousePos = 1,
   ImGuiInputEventType_MouseWheel = 2,
   ImGuiInputEventType_MouseButton = 3,
-  ImGuiInputEventType_MouseViewport = 4,
-  ImGuiInputEventType_Key = 5,
-  ImGuiInputEventType_Text = 6,
-  ImGuiInputEventType_Focus = 7,
-  ImGuiInputEventType_COUNT = 8
+  ImGuiInputEventType_Key = 4,
+  ImGuiInputEventType_Text = 5,
+  ImGuiInputEventType_Focus = 6,
+  ImGuiInputEventType_COUNT = 7
 }
 global ImGuiInputSource: type <cimport,nodecl,using> = @enum(cint){
   ImGuiInputSource_None = 0,
@@ -1129,10 +1141,6 @@ ImGuiInputEventMouseButton = @record{
   Down: boolean,
   MouseSource: ImGuiMouseSource
 }
-global ImGuiInputEventMouseViewport: type <cimport,nodecl,forwarddecl> = @record{}
-ImGuiInputEventMouseViewport = @record{
-  HoveredViewportID: cuint
-}
 global ImGuiInputEventKey: type <cimport,nodecl,forwarddecl> = @record{}
 ImGuiInputEventKey = @record{
   Key: ImGuiKey,
@@ -1156,7 +1164,6 @@ ImGuiInputEvent = @record{
     MousePos: ImGuiInputEventMousePos,
     MouseWheel: ImGuiInputEventMouseWheel,
     MouseButton: ImGuiInputEventMouseButton,
-    MouseViewport: ImGuiInputEventMouseViewport,
     Key: ImGuiInputEventKey,
     Text: ImGuiInputEventText,
     AppFocused: ImGuiInputEventAppFocused
@@ -1323,101 +1330,13 @@ ImGuiMultiSelectState = @record{
   RangeSrcItem: clonglong,
   NavIdItem: clonglong
 }
-global ImGuiDockNodeState: type <cimport,nodecl,using> = @enum(cint){
-  ImGuiDockNodeState_Unknown = 0,
-  ImGuiDockNodeState_HostWindowHiddenBecauseSingleWindow = 1,
-  ImGuiDockNodeState_HostWindowHiddenBecauseWindowsAreResizing = 2,
-  ImGuiDockNodeState_HostWindowVisible = 3
-}
-global ImVector_ImGuiWindowPtr: type <cimport,nodecl> = @record{
-  Size: cint,
-  Capacity: cint,
-  Data: **ImGuiWindow
-}
-ImGuiDockNode = @record{
-  ID: cuint,
-  SharedFlags: cint,
-  LocalFlags: cint,
-  LocalFlagsInWindows: cint,
-  MergedFlags: cint,
-  State: ImGuiDockNodeState,
-  ParentNode: *ImGuiDockNode,
-  ChildNodes: [2]*ImGuiDockNode,
-  Windows: ImVector_ImGuiWindowPtr,
-  TabBar: *ImGuiTabBar,
-  Pos: ImVec2,
-  Size: ImVec2,
-  SizeRef: ImVec2,
-  SplitAxis: ImGuiAxis,
-  WindowClass: ImGuiWindowClass,
-  LastBgColor: cuint,
-  HostWindow: *ImGuiWindow,
-  VisibleWindow: *ImGuiWindow,
-  CentralNode: *ImGuiDockNode,
-  OnlyNodeWithWindows: *ImGuiDockNode,
-  CountNodeWithWindows: cint,
-  LastFrameAlive: cint,
-  LastFrameActive: cint,
-  LastFrameFocused: cint,
-  LastFocusedNodeId: cuint,
-  SelectedTabId: cuint,
-  WantCloseTabId: cuint,
-  RefViewportId: cuint,
-  AuthorityForPos: cint,
-  AuthorityForSize: cint,
-  AuthorityForViewport: cint,
-  IsVisible: boolean,
-  IsFocused: boolean,
-  IsBgDrawnThisFrame: boolean,
-  HasCloseButton: boolean,
-  HasWindowMenuButton: boolean,
-  HasCentralNodeChild: boolean,
-  WantCloseAll: boolean,
-  WantLockSizeOnce: boolean,
-  WantMouseMove: boolean,
-  WantHiddenTabBarUpdate: boolean,
-  WantHiddenTabBarToggle: boolean
-}
-ImGuiWindowDockStyle = @record{
-  Colors: [8]cuint
-}
-global ImVector_ImGuiDockRequest: type <cimport,nodecl> = @record{
-  Size: cint,
-  Capacity: cint,
-  Data: *ImGuiDockRequest
-}
-global ImVector_ImGuiDockNodeSettings: type <cimport,nodecl> = @record{
-  Size: cint,
-  Capacity: cint,
-  Data: *ImGuiDockNodeSettings
-}
-ImGuiDockContext = @record{
-  Nodes: ImGuiStorage,
-  Requests: ImVector_ImGuiDockRequest,
-  NodesSettings: ImVector_ImGuiDockNodeSettings,
-  WantFullRebuild: boolean
-}
 global ImGuiViewportP: type <cimport,nodecl,forwarddecl> = @record{}
 ImGuiViewportP = @record{
   _ImGuiViewport: ImGuiViewport,
-  Window: *ImGuiWindow,
-  Idx: cint,
-  LastFrameActive: cint,
-  LastFocusedStampCount: cint,
-  LastNameHash: cuint,
-  LastPos: ImVec2,
-  LastSize: ImVec2,
-  Alpha: float32,
-  LastAlpha: float32,
-  LastFocusedHadNavWindow: boolean,
-  PlatformMonitor: cshort,
   BgFgDrawListsLastFrame: [2]cint,
   BgFgDrawLists: [2]*ImDrawList,
   DrawDataP: ImDrawData,
   DrawDataBuilder: ImDrawDataBuilder,
-  LastPlatformPos: ImVec2,
-  LastPlatformSize: ImVec2,
-  LastRendererSize: ImVec2,
   WorkInsetMin: ImVec2,
   WorkInsetMax: ImVec2,
   BuildWorkInsetMin: ImVec2,
@@ -1456,11 +1375,12 @@ ImGuiMetricsConfig = @record{
   ShowDrawCmdMesh: boolean,
   ShowDrawCmdBoundingBoxes: boolean,
   ShowTextEncodingViewer: boolean,
-  ShowDockingNodes: boolean,
+  ShowTextureUsedRect: boolean,
   ShowWindowsRectsType: cint,
   ShowTablesRectsType: cint,
   HighlightMonitorIdx: cint,
-  HighlightViewportID: cuint
+  HighlightViewportID: cuint,
+  ShowFontPreview: boolean
 }
 global ImGuiStackLevelInfo: type <cimport,nodecl,forwarddecl> = @record{}
 ImGuiStackLevelInfo = @record{
@@ -1502,10 +1422,20 @@ ImGuiContextHook = @record{
   Callback: function(ctx: *ImGuiContext, hook: *ImGuiContextHook): void,
   UserData: pointer
 }
+global ImVector_ImFontAtlasPtr: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: **ImFontAtlas
+}
 global ImVector_ImGuiInputEvent: type <cimport,nodecl> = @record{
   Size: cint,
   Capacity: cint,
   Data: *ImGuiInputEvent
+}
+global ImVector_ImGuiWindowPtr: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: **ImGuiWindow
 }
 global ImVector_ImGuiWindowStackData: type <cimport,nodecl> = @record{
   Size: cint,
@@ -1521,6 +1451,11 @@ global ImVector_ImGuiStyleMod: type <cimport,nodecl> = @record{
   Size: cint,
   Capacity: cint,
   Data: *ImGuiStyleMod
+}
+global ImVector_ImFontStackData: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImFontStackData
 }
 global ImVector_ImGuiFocusScopeData: type <cimport,nodecl> = @record{
   Size: cint,
@@ -1638,22 +1573,21 @@ global ImVector_ImGuiContextHook: type <cimport,nodecl> = @record{
 }
 ImGuiContext = @record{
   Initialized: boolean,
-  FontAtlasOwnedByContext: boolean,
   IO: ImGuiIO,
   PlatformIO: ImGuiPlatformIO,
   Style: ImGuiStyle,
-  ConfigFlagsCurrFrame: cint,
-  ConfigFlagsLastFrame: cint,
+  FontAtlases: ImVector_ImFontAtlasPtr,
   Font: *ImFont,
+  FontBaked: *ImFontBaked,
   FontSize: float32,
-  FontBaseSize: float32,
-  FontScale: float32,
+  FontSizeBase: float32,
+  FontBakedScale: float32,
+  FontRasterizerDensity: float32,
   CurrentDpiScale: float32,
   DrawListSharedData: ImDrawListSharedData,
   Time: float64,
   FrameCount: cint,
   FrameCountEnded: cint,
-  FrameCountPlatformEnded: cint,
   FrameCountRendered: cint,
   WithinEndChildID: cuint,
   WithinFrameScope: boolean,
@@ -1686,7 +1620,7 @@ ImGuiContext = @record{
   WheelingWindowReleaseTimer: float32,
   WheelingWindowWheelRemainder: ImVec2,
   WheelingAxisAvg: ImVec2,
-  DebugDrawIdConflicts: cuint,
+  DebugDrawIdConflictsId: cuint,
   DebugHookIdInfo: cuint,
   HoveredId: cuint,
   HoveredIdPreviousFrame: cuint,
@@ -1734,7 +1668,7 @@ ImGuiContext = @record{
   DebugFlashStyleColorIdx: cint,
   ColorStack: ImVector_ImGuiColorMod,
   StyleVarStack: ImVector_ImGuiStyleMod,
-  FontStack: ImVector_ImFontPtr,
+  FontStack: ImVector_ImFontStackData,
   FocusScopeStack: ImVector_ImGuiFocusScopeData,
   ItemFlagsStack: ImVector_ImGuiItemFlags,
   GroupStack: ImVector_ImGuiGroupData,
@@ -1742,15 +1676,6 @@ ImGuiContext = @record{
   BeginPopupStack: ImVector_ImGuiPopupData,
   TreeNodeStack: ImVector_ImGuiTreeNodeStackData,
   Viewports: ImVector_ImGuiViewportPPtr,
-  CurrentViewport: *ImGuiViewportP,
-  MouseViewport: *ImGuiViewportP,
-  MouseLastHoveredViewport: *ImGuiViewportP,
-  PlatformLastFocusedViewportId: cuint,
-  FallbackMonitor: ImGuiPlatformMonitor,
-  PlatformMonitorsFullWorkRect: ImRect,
-  ViewportCreatedCount: cint,
-  PlatformWindowsCreatedCount: cint,
-  ViewportFocusedStampCount: cint,
   NavCursorVisible: boolean,
   NavHighlightItemUnderNav: boolean,
   NavMousePosDirty: boolean,
@@ -1799,6 +1724,7 @@ ImGuiContext = @record{
   NavJustMovedToKeyMods: cint,
   NavJustMovedToIsTabbing: boolean,
   NavJustMovedToHasSelectionData: boolean,
+  ConfigNavWindowingWithGamepad: boolean,
   ConfigNavWindowingKeyNext: cint,
   ConfigNavWindowingKeyPrev: cint,
   NavWindowingTarget: *ImGuiWindow,
@@ -1806,6 +1732,7 @@ ImGuiContext = @record{
   NavWindowingListWindow: *ImGuiWindow,
   NavWindowingTimer: float32,
   NavWindowingHighlightAlpha: float32,
+  NavWindowingInputSource: ImGuiInputSource,
   NavWindowingToggleLayer: boolean,
   NavWindowingToggleKey: ImGuiKey,
   NavWindowingAccumDeltaPos: ImVec2,
@@ -1858,7 +1785,8 @@ ImGuiContext = @record{
   MouseLastValidPos: ImVec2,
   InputTextState: ImGuiInputTextState,
   InputTextDeactivatedState: ImGuiInputTextDeactivatedState,
-  InputTextPasswordFont: ImFont,
+  InputTextPasswordFontBackupBaked: ImFontBaked,
+  InputTextPasswordFontBackupFlags: cint,
   TempInputId: cuint,
   DataTypeZeroValue: ImGuiDataTypeStorage,
   BeginMenuDepth: cint,
@@ -1890,9 +1818,7 @@ ImGuiContext = @record{
   TypingSelectState: ImGuiTypingSelectState,
   PlatformImeData: ImGuiPlatformImeData,
   PlatformImeDataPrev: ImGuiPlatformImeData,
-  PlatformImeViewport: cuint,
-  DockContext: ImGuiDockContext,
-  DockNodeWindowMenuHandler: function(ctx: *ImGuiContext, node: *ImGuiDockNode, tab_bar: *ImGuiTabBar): void,
+  UserTextures: ImVector_ImTextureDataPtr,
   SettingsLoaded: boolean,
   SettingsDirtyTimer: float32,
   SettingsIniData: ImGuiTextBuffer,
@@ -1901,7 +1827,7 @@ ImGuiContext = @record{
   SettingsTables: ImChunkStream_ImGuiTableSettings,
   Hooks: ImVector_ImGuiContextHook,
   HookIdNext: cuint,
-  LocalizationTable: [13]cstring,
+  LocalizationTable: [10]cstring,
   LogEnabled: boolean,
   LogFlags: cint,
   LogWindow: *ImGuiWindow,
@@ -1940,7 +1866,6 @@ ImGuiContext = @record{
   DebugMetricsConfig: ImGuiMetricsConfig,
   DebugIDStackTool: ImGuiIDStackTool,
   DebugAllocInfo: ImGuiDebugAllocInfo,
-  DebugHoveredDockNode: *ImGuiDockNode,
   FramerateSecPerFrame: [60]float32,
   FramerateSecPerFrameIdx: cint,
   FramerateSecPerFrameCount: cint,
@@ -1978,6 +1903,7 @@ ImGuiWindowTempData = @record{
   MenuColumns: ImGuiMenuColumns,
   TreeDepth: cint,
   TreeHasStackDataDepthMask: cuint,
+  TreeRecordsClippedNodesY2Mask: cuint,
   ChildWindows: ImVector_ImGuiWindowPtr,
   StateStorage: *ImGuiStorage,
   CurrentColumns: *ImGuiOldColumns,
@@ -1987,8 +1913,6 @@ ImGuiWindowTempData = @record{
   ModalDimBgColor: cuint,
   WindowItemStatusFlags: cint,
   ChildItemStatusFlags: cint,
-  DockTabItemStatusFlags: cint,
-  DockTabItemRect: ImRect,
   ItemWidth: float32,
   TextWrapPos: float32,
   ItemWidthStack: ImVector_float,
@@ -2004,13 +1928,8 @@ ImGuiWindow = @record{
   Name: cstring,
   ID: cuint,
   Flags: cint,
-  FlagsPreviousFrame: cint,
   ChildFlags: cint,
-  WindowClass: ImGuiWindowClass,
   Viewport: *ImGuiViewportP,
-  ViewportId: cuint,
-  ViewportPos: ImVec2,
-  ViewportAllowPlatformMonitorExtend: cint,
   Pos: ImVec2,
   Size: ImVec2,
   SizeFull: ImVec2,
@@ -2030,7 +1949,6 @@ ImGuiWindow = @record{
   DecoInnerSizeY1: float32,
   NameBufLen: cint,
   MoveId: cuint,
-  TabId: cuint,
   ChildId: cuint,
   PopupId: cuint,
   Scroll: ImVec2,
@@ -2043,7 +1961,6 @@ ImGuiWindow = @record{
   ScrollbarY: boolean,
   ScrollbarXStabilizeEnabled: boolean,
   ScrollbarXStabilizeToggledHistory: cuchar,
-  ViewportOwned: boolean,
   Active: boolean,
   WasActive: boolean,
   WriteAccessed: boolean,
@@ -2074,7 +1991,6 @@ ImGuiWindow = @record{
   SetWindowPosAllowFlags: cint,
   SetWindowSizeAllowFlags: cint,
   SetWindowCollapsedAllowFlags: cint,
-  SetWindowDockAllowFlags: cint,
   SetWindowPosVal: ImVec2,
   SetWindowPosPivot: ImVec2,
   IDStack: ImVector_ImGuiID,
@@ -2089,14 +2005,12 @@ ImGuiWindow = @record{
   HitTestHoleSize: ImVec2ih,
   HitTestHoleOffset: ImVec2ih,
   LastFrameActive: cint,
-  LastFrameJustFocused: cint,
   LastTimeActive: float32,
   ItemWidthDefault: float32,
   StateStorage: ImGuiStorage,
   ColumnsStorage: ImVector_ImGuiOldColumns,
   FontWindowScale: float32,
   FontWindowScaleParents: float32,
-  FontDpiScale: float32,
   FontRefSize: float32,
   SettingsOffset: cint,
   DrawList: *ImDrawList,
@@ -2105,7 +2019,6 @@ ImGuiWindow = @record{
   ParentWindowInBeginStack: *ImGuiWindow,
   RootWindow: *ImGuiWindow,
   RootWindowPopupTree: *ImGuiWindow,
-  RootWindowDockTree: *ImGuiWindow,
   RootWindowForTitleBarHighlight: *ImGuiWindow,
   RootWindowForNav: *ImGuiWindow,
   ParentWindowForFocusRoute: *ImGuiWindow,
@@ -2116,21 +2029,11 @@ ImGuiWindow = @record{
   NavRootFocusScopeId: cuint,
   MemoryDrawListIdxCapacity: cint,
   MemoryDrawListVtxCapacity: cint,
-  MemoryCompacted: boolean,
-  DockIsActive: boolean,
-  DockNodeIsVisible: boolean,
-  DockTabIsVisible: boolean,
-  DockTabWantClose: boolean,
-  DockOrder: cshort,
-  DockStyle: ImGuiWindowDockStyle,
-  DockNode: *ImGuiDockNode,
-  DockNodeAsHost: *ImGuiDockNode,
-  DockId: cuint
+  MemoryCompacted: boolean
 }
 ImGuiTabItem = @record{
   ID: cuint,
   Flags: cint,
-  Window: *ImGuiWindow,
   LastFrameVisible: cint,
   LastFrameSelected: cint,
   Offset: float32,
@@ -2404,8 +2307,68 @@ ImGuiTableTempData = @record{
   HostBackupItemWidth: float32,
   HostBackupItemWidthStackSize: cint
 }
-ImFontBuilderIO = @record{
-  FontBuilder_Build: function(atlas: *ImFontAtlas): boolean
+ImFontLoader = @record{
+  Name: cstring,
+  LoaderInit: function(atlas: *ImFontAtlas): boolean,
+  LoaderShutdown: function(atlas: *ImFontAtlas): void,
+  FontSrcInit: function(atlas: *ImFontAtlas, src: *ImFontConfig): boolean,
+  FontSrcDestroy: function(atlas: *ImFontAtlas, src: *ImFontConfig): void,
+  FontSrcContainsGlyph: function(atlas: *ImFontAtlas, src: *ImFontConfig, codepoint: cushort): boolean,
+  FontBakedInit: function(atlas: *ImFontAtlas, src: *ImFontConfig, baked: *ImFontBaked, loader_data_for_baked_src: pointer): boolean,
+  FontBakedDestroy: function(atlas: *ImFontAtlas, src: *ImFontConfig, baked: *ImFontBaked, loader_data_for_baked_src: pointer): void,
+  FontBakedLoadGlyph: function(atlas: *ImFontAtlas, src: *ImFontConfig, baked: *ImFontBaked, loader_data_for_baked_src: pointer, codepoint: cushort, out_glyph: *ImFontGlyph, out_advance_x: *float32): boolean,
+  FontBakedSrcLoaderDataSize: csize
+}
+ImFontAtlasRectEntry = @record{
+  TargetIndex: cint,
+  Generation: cint,
+  IsUsed: cuint
+}
+global stbrp_context_opaque: type <cimport,nodecl,forwarddecl> = @record{}
+stbrp_context_opaque = @record{
+  data: [80]cchar
+}
+global ImVector_stbrp_node_im: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *stbrp_node_im
+}
+global ImVector_ImFontAtlasRectEntry: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImFontAtlasRectEntry
+}
+global ImVector_ImFontBakedPtr: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: **ImFontBaked
+}
+global ImStableVector_ImFontBaked__32: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Blocks: ImVector_ImFontBakedPtr
+}
+ImFontAtlasBuilder = @record{
+  PackContext: stbrp_context_opaque,
+  PackNodes: ImVector_stbrp_node_im,
+  Rects: ImVector_ImTextureRect,
+  RectsIndex: ImVector_ImFontAtlasRectEntry,
+  TempBuffer: ImVector_unsigned_char,
+  RectsIndexFreeListStart: cint,
+  RectsPackedCount: cint,
+  RectsPackedSurface: cint,
+  RectsDiscardedCount: cint,
+  RectsDiscardedSurface: cint,
+  FrameCount: cint,
+  MaxRectSize: ImVec2i,
+  MaxRectBounds: ImVec2i,
+  LockDisableResize: boolean,
+  PreloadedAllGlyphsRanges: boolean,
+  BakedPool: ImStableVector_ImFontBaked__32,
+  BakedMap: ImGuiStorage,
+  BakedDiscardedCount: cint,
+  PackIdMouseCursors: cint,
+  PackIdLinesTexData: cint
 }
 global tm: type <cimport,nodecl> = @record{
   tm_sec: cint,
@@ -3513,7 +3476,7 @@ global function ImPlot_PlotDigital_U32Ptr(label_id: cstring, xs: *cuint, ys: *cu
 global function ImPlot_PlotDigital_S64Ptr(label_id: cstring, xs: *clonglong, ys: *clonglong, count: cint, flags: ImPlotDigitalFlags, offset: cint, stride: cint): void <cimport,nodecl> end
 global function ImPlot_PlotDigital_U64Ptr(label_id: cstring, xs: *culonglong, ys: *culonglong, count: cint, flags: ImPlotDigitalFlags, offset: cint, stride: cint): void <cimport,nodecl> end
 global function ImPlot_PlotDigitalG(label_id: cstring, getter: ImPlotPoint_getter, data: pointer, count: cint, flags: ImPlotDigitalFlags): void <cimport,nodecl> end
-global function ImPlot_PlotImage(label_id: cstring, user_texture_id: culonglong, bounds_min: ImPlotPoint, bounds_max: ImPlotPoint, uv0: ImVec2, uv1: ImVec2, tint_col: ImVec4, flags: ImPlotImageFlags): void <cimport,nodecl> end
+global function ImPlot_PlotImage(label_id: cstring, tex_ref: ImTextureRef, bounds_min: ImPlotPoint, bounds_max: ImPlotPoint, uv0: ImVec2, uv1: ImVec2, tint_col: ImVec4, flags: ImPlotImageFlags): void <cimport,nodecl> end
 global function ImPlot_PlotText(text: cstring, x: float64, y: float64, pix_offset: ImVec2, flags: ImPlotTextFlags): void <cimport,nodecl> end
 global function ImPlot_PlotDummy(label_id: cstring, flags: ImPlotDummyFlags): void <cimport,nodecl> end
 global function ImPlot_DragPoint(id: cint, x: *float64, y: *float64, col: ImVec4, size: float32, flags: ImPlotDragToolFlags, out_clicked: *boolean, out_hovered: *boolean, held: *boolean): boolean <cimport,nodecl> end

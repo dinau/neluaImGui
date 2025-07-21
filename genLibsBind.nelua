@@ -77,10 +77,12 @@ prependStr(#[outfile]#, str)
     parse_includes = {'cimspinner.h'},
     -- what symbol name prefix should we import from that file?
     include_names = {'^Spinner','demoSpinners'},
-    include_dirs = {'libs/cimgui','libs/cimspinner'}
+    include_dirs = {'libs/cimgui','libs/cimspinner/imspinner'}
   }
 ]==]
 str = [[
+cdefine 'CIMGUI_DEFINE_ENUMS_AND_STRUCTS'
+cinclude "cimgui.h"
 cinclude "cimspinner.h"
 ]]
 prependStr(#[outfile]#, str)

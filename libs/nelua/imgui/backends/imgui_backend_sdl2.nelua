@@ -1,0 +1,15 @@
+require'sdl2'
+
+-- SDL2
+global _SDL_GameController = @record{}
+global GamepadMode = @enum{ ImGui_ImplSDL2_GamepadMode_AutoFirst = 0, ImGui_ImplSDL2_GamepadMode_AutoAll, ImGui_ImplSDL2_GamepadMode_Manual }
+global function ImGui_ImplSDL2_InitForOpenGL(window: *SDL_Window ,sdl_gl_context: *void): boolean <cimport> end
+global function ImGui_ImplSDL2_InitForVulkan(window: *SDL_Window ): boolean <cimport> end
+global function ImGui_ImplSDL2_InitForD3D(window: *SDL_Window): boolean <cimport> end
+global function ImGui_ImplSDL2_InitForMetal(window: *SDL_Window): boolean <cimport> end
+global function ImGui_ImplSDL2_InitForSDLRenderer(window: *SDL_Window, renderer: *SDL_Renderer): boolean <cimport> end
+global function ImGui_ImplSDL2_InitForOther(window: *SDL_Window): boolean <cimport> end
+global function ImGui_ImplSDL2_Shutdown() <cimport> end
+global function ImGui_ImplSDL2_NewFrame() <cimport> end
+global function ImGui_ImplSDL2_ProcessEvent(event: *SDL_Event): boolean <cimport> end
+global function ImGui_ImplSDL2_SetGamepadMode(mode: GamepadMode ,manual_gamepads_array: **_SDL_GameController ,manual_gamepads_count: cint) <cimport> end
