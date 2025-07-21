@@ -156,6 +156,9 @@ GCC (/ Clang)
 
 ##### imPlot3DDemo
 
+---
+
+Note: Use Clang compiler (see Makefile)
 
 [imPlot3DDemo.nelua](examples/imPlot3DDemo/imPlot3DDemo.nelua) 
 
