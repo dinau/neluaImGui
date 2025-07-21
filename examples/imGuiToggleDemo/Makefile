@@ -9,7 +9,7 @@ BACKENDS_OBJS += $(BUILD_DIR)/imgui_impl_opengl3.o \
 								 $(BUILD_DIR)/imgui_impl_glfw.o
 
 CIMTOGGLE_DIR = ../../libs/cimgui_toggle
-IMTOGGLE_DIR  = $(CIMTOGGLE_DIR)/libs/imgui_toggle
+IMTOGGLE_DIR  = $(CIMTOGGLE_DIR)/imgui_toggle
 VPATH         +=   $(CIMTOGGLE_DIR)
 VPATH         +=   $(IMTOGGLE_DIR)
 NELUA_CFLAGS  += -I$(CIMTOGGLE_DIR)

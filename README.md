@@ -30,7 +30,7 @@
 
 [Dear ImGui](https://github.com/ocornut/imgui) / [CImGui](https://github.com/cimgui/cimgui) wrapper library and some examples with NeLua language
 
-ImGui / CImGui 1.92.0 dock (2025/07) 
+ImGui / CImGui 1.92.1 dock (2025/07) 
 
 #### Prerequisites
 
@@ -49,15 +49,9 @@ ImGui / CImGui 1.92.0 dock (2025/07)
    1. Install libraries
 
       ```sh
-      $ sudo apt install libopengl-dev libgl1-mesa-dev make
+      $ sudo apt install lib{opengl-dev,gl1-mesa-dev,glfw3,glfw3-dev,sdl2-dev} make
       ```
 
-      and for glfw3 and sdl2,
-
-      ```sh
-      $ sudo apt install libglfw3 libglfw3-dev
-      $ sudo apt install libsdl2-dev
-      ```
 - C/C++ Compiler  
 GCC (/ Clang)
 
@@ -68,17 +62,12 @@ GCC (/ Clang)
 1. Download this project.
 
    ```sh
-   git clone --recurse-submodules https://github.com/dinau/neluaImGui
+   git clone https://github.com/dinau/neluaImGui
    ```
 1. Open **MSys2 console** and go to one of the examples folder ,
 
    ```sh
    cd neluaImGui/examples/glfw_opengl3
-   ```
-
-1. Build and run 
-
-   ```sh
    make run 
    ```
 
@@ -149,7 +138,6 @@ GCC (/ Clang)
 
 [iconFontViewer.nelua](examples/iconFontViewer/iconFontviewer.nelua) 
 
-- [x] Icon fonts
 - [x] Magnifying glass  
 - [x] Incremental search 
 - [x] Static link [^dllWindows]

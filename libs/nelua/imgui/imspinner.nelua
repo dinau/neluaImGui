@@ -3,8 +3,6 @@
 --
 
 ##[==[
-cdefine 'CIMGUI_DEFINE_ENUMS_AND_STRUCTS'
-cinclude "cimgui.h"
 cinclude "cimspinner.h"
 ]==]
 global ImColor: type <cimport,nodecl,forwarddecl> = @record{}
