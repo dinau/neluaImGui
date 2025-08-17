@@ -101,7 +101,7 @@ CPPOPT += -I$(IMGUI_DIR)/backends -I$(IMGUI_DIR)
 CPPOPT += -DIMGUI_ENABLE_WIN32_DEFAULT_IME_FUNCTIONS
 CPPOPT += -DImDrawIdx="unsigned int"
 
-DEPS_NELUA += $(wildcard $(UTILS_DIR)/*.nlua )
+DEPS_NELUA += $(wildcard $(UTILS_DIR)/*.nelua )
 
 DEPS_ALL += $(TARGET).nelua \
 						$(DEPS_NELUA) \
