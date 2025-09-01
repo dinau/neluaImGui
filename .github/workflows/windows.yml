@@ -1,0 +1,37 @@
+name: Windows OS Nim 2.2.4 compilation
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - 'main'
+
+jobs:
+  build_windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          install: >-
+            base-devel
+            mingw-w64-x86_64-toolchain
+            git
+            cmake
+      - name: Build
+        shell: msys2 {0}
+        run: |
+          pacman -S --needed --noconfirm base-devel git mingw-w64-x86_64-{glfw,SDL2,SDL2_image} make
+          git clone https://github.com/edubart/nelua-lang.git
+          cd nelua-lang
+          make
+          make install
+          cd ..
+          make
+        env:
+            MSYSTEM: MINGW64
+            MSYS2_PATH_TYPE: inherit

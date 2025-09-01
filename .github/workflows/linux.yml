@@ -1,0 +1,24 @@
+name: Linux OS(Ubuntu) Nim 2.2.4 compilation
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - 'main'
+
+jobs:
+  build_linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          sudo apt-get update
+          sudo apt-get install --fix-missing git gcc build-essential libopengl-dev libgl1-mesa-dev libglfw3 libglfw3-dev libsdl2-dev
+          git clone https://github.com/edubart/nelua-lang.git
+          cd nelua-lang
+          make
+          sudo make install
+          cd ..
+          make
