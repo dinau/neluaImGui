@@ -30,6 +30,7 @@ global ImGuiMultiSelectIO: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiPayload: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiPlatformIO: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiPlatformImeData: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiPlatformMonitor: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiSelectionRequest: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiSizeCallbackData: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiStorage: type <cimport,nodecl,forwarddecl> = @record{}
@@ -39,6 +40,7 @@ global ImGuiTableSortSpecs: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiTableColumnSortSpecs: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiTextBuffer: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiViewport: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiWindowClass: type <cimport,nodecl,forwarddecl> = @record{}
 global ImRect: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiTextIndex: type <cimport,nodecl,forwarddecl> = @record{}
 global ImDrawDataBuilder: type <cimport,nodecl,forwarddecl> = @record{}
@@ -47,6 +49,10 @@ global ImGuiBoxSelectState: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiColorMod: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiContextHook: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiDeactivatedItemData: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiDockContext: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiDockRequest: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiDockNode: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiDockNodeSettings: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiErrorRecoveryState: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiGroupData: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiInputTextState: type <cimport,nodecl,forwarddecl> = @record{}
@@ -74,6 +80,7 @@ global ImGuiTreeNodeStackData: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiTypingSelectState: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiTypingSelectRequest: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiWindow: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiWindowDockStyle: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiWindowTempData: type <cimport,nodecl,forwarddecl> = @record{}
 global ImStbTexteditState: type <cimport,nodecl,forwarddecl> = @record{}
 global stbrp_node_im: type <cimport,nodecl,forwarddecl> = @record{}
@@ -325,6 +332,8 @@ ImGuiStyle = @record{
   ImageBorderSize: float32,
   TabRounding: float32,
   TabBorderSize: float32,
+  TabMinWidthBase: float32,
+  TabMinWidthShrink: float32,
   TabCloseButtonMinWidthSelected: float32,
   TabCloseButtonMinWidthUnselected: float32,
   TabBarBorderSize: float32,
@@ -342,13 +351,14 @@ ImGuiStyle = @record{
   SeparatorTextPadding: ImVec2,
   DisplayWindowPadding: ImVec2,
   DisplaySafeAreaPadding: ImVec2,
+  DockingSeparatorSize: float32,
   MouseCursorScale: float32,
   AntiAliasedLines: boolean,
   AntiAliasedLinesUseTex: boolean,
   AntiAliasedFill: boolean,
   CurveTessellationTol: float32,
   CircleTessellationMaxError: float32,
-  Colors: [58]ImVec4,
+  Colors: [60]ImVec4,
   HoverStationaryDelay: float32,
   HoverDelayShort: float32,
   HoverDelayNormal: float32,
@@ -388,6 +398,17 @@ ImGuiIO = @record{
   ConfigNavEscapeClearFocusWindow: boolean,
   ConfigNavCursorVisibleAuto: boolean,
   ConfigNavCursorVisibleAlways: boolean,
+  ConfigDockingNoSplit: boolean,
+  ConfigDockingWithShift: boolean,
+  ConfigDockingAlwaysTabBar: boolean,
+  ConfigDockingTransparentPayload: boolean,
+  ConfigViewportsNoAutoMerge: boolean,
+  ConfigViewportsNoTaskBarIcon: boolean,
+  ConfigViewportsNoDecoration: boolean,
+  ConfigViewportsNoDefaultParent: boolean,
+  ConfigViewportPlatformFocusSetsImGuiFocus: boolean,
+  ConfigDpiScaleFonts: boolean,
+  ConfigDpiScaleViewports: boolean,
   MouseDrawCursor: boolean,
   ConfigMacOSXBehaviors: boolean,
   ConfigInputTrickleEventQueue: boolean,
@@ -439,6 +460,7 @@ ImGuiIO = @record{
   MouseWheel: float32,
   MouseWheelH: float32,
   MouseSource: ImGuiMouseSource,
+  MouseHoveredViewport: cuint,
   KeyCtrl: boolean,
   KeyShift: boolean,
   KeyAlt: boolean,
@@ -461,6 +483,7 @@ ImGuiIO = @record{
   MouseCtrlLeftAsRightClick: boolean,
   MouseDownDuration: [5]float32,
   MouseDownDurationPrev: [5]float32,
+  MouseDragMaxDistanceAbs: [5]ImVec2,
   MouseDragMaxDistanceSqr: [5]float32,
   PenPressure: float32,
   AppFocusLost: boolean,
@@ -473,6 +496,17 @@ ImGuiSizeCallbackData = @record{
   Pos: ImVec2,
   CurrentSize: ImVec2,
   DesiredSize: ImVec2
+}
+ImGuiWindowClass = @record{
+  ClassId: cuint,
+  ParentViewportId: cuint,
+  FocusRouteParentWindowId: cuint,
+  ViewportFlagsOverrideSet: cint,
+  ViewportFlagsOverrideClear: cint,
+  TabItemFlagsOverrideSet: cint,
+  DockNodeFlagsOverrideSet: cint,
+  DockingAlwaysTabBar: boolean,
+  DockingAllowUnclassed: boolean
 }
 ImGuiPayload = @record{
   Data: pointer,
@@ -811,7 +845,8 @@ ImFontBaked = @record{
   Descent: float32,
   MetricsTotalSurface: cuint,
   WantDestroy: cuint,
-  LockLoadingFallback: cuint,
+  LoadNoFallback: cuint,
+  LoadNoRenderOnLayout: cuint,
   LastUsedFrame: cint,
   BakedId: cuint,
   ContainerFont: *ImFont,
@@ -844,8 +879,27 @@ ImGuiViewport = @record{
   FramebufferScale: ImVec2,
   WorkPos: ImVec2,
   WorkSize: ImVec2,
+  DpiScale: float32,
+  ParentViewportId: cuint,
+  DrawData: *ImDrawData,
+  RendererUserData: pointer,
+  PlatformUserData: pointer,
   PlatformHandle: pointer,
-  PlatformHandleRaw: pointer
+  PlatformHandleRaw: pointer,
+  PlatformWindowCreated: boolean,
+  PlatformRequestMove: boolean,
+  PlatformRequestResize: boolean,
+  PlatformRequestClose: boolean
+}
+global ImVector_ImGuiPlatformMonitor: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiPlatformMonitor
+}
+global ImVector_ImGuiViewportPtr: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: **ImGuiViewport
 }
 ImGuiPlatformIO = @record{
   Platform_GetClipboardTextFn: function(ctx: *ImGuiContext): cstring,
@@ -859,7 +913,42 @@ ImGuiPlatformIO = @record{
   Renderer_TextureMaxWidth: cint,
   Renderer_TextureMaxHeight: cint,
   Renderer_RenderState: pointer,
-  Textures: ImVector_ImTextureDataPtr
+  Platform_CreateWindow: function(vp: *ImGuiViewport): void,
+  Platform_DestroyWindow: function(vp: *ImGuiViewport): void,
+  Platform_ShowWindow: function(vp: *ImGuiViewport): void,
+  Platform_SetWindowPos: function(vp: *ImGuiViewport, pos: ImVec2): void,
+  Platform_GetWindowPos: function(vp: *ImGuiViewport): ImVec2,
+  Platform_SetWindowSize: function(vp: *ImGuiViewport, size: ImVec2): void,
+  Platform_GetWindowSize: function(vp: *ImGuiViewport): ImVec2,
+  Platform_GetWindowFramebufferScale: function(vp: *ImGuiViewport): ImVec2,
+  Platform_SetWindowFocus: function(vp: *ImGuiViewport): void,
+  Platform_GetWindowFocus: function(vp: *ImGuiViewport): boolean,
+  Platform_GetWindowMinimized: function(vp: *ImGuiViewport): boolean,
+  Platform_SetWindowTitle: function(vp: *ImGuiViewport, str: cstring): void,
+  Platform_SetWindowAlpha: function(vp: *ImGuiViewport, alpha: float32): void,
+  Platform_UpdateWindow: function(vp: *ImGuiViewport): void,
+  Platform_RenderWindow: function(vp: *ImGuiViewport, render_arg: pointer): void,
+  Platform_SwapBuffers: function(vp: *ImGuiViewport, render_arg: pointer): void,
+  Platform_GetWindowDpiScale: function(vp: *ImGuiViewport): float32,
+  Platform_OnChangedViewport: function(vp: *ImGuiViewport): void,
+  Platform_GetWindowWorkAreaInsets: function(vp: *ImGuiViewport): ImVec4,
+  Platform_CreateVkSurface: function(vp: *ImGuiViewport, vk_inst: culonglong, vk_allocators: pointer, out_vk_surface: *culonglong): cint,
+  Renderer_CreateWindow: function(vp: *ImGuiViewport): void,
+  Renderer_DestroyWindow: function(vp: *ImGuiViewport): void,
+  Renderer_SetWindowSize: function(vp: *ImGuiViewport, size: ImVec2): void,
+  Renderer_RenderWindow: function(vp: *ImGuiViewport, render_arg: pointer): void,
+  Renderer_SwapBuffers: function(vp: *ImGuiViewport, render_arg: pointer): void,
+  Monitors: ImVector_ImGuiPlatformMonitor,
+  Textures: ImVector_ImTextureDataPtr,
+  Viewports: ImVector_ImGuiViewportPtr
+}
+ImGuiPlatformMonitor = @record{
+  MainPos: ImVec2,
+  MainSize: ImVec2,
+  WorkPos: ImVec2,
+  WorkSize: ImVec2,
+  DpiScale: float32,
+  PlatformHandle: pointer
 }
 ImGuiPlatformImeData = @record{
   WantVisible: boolean,
@@ -939,6 +1028,11 @@ global ImGuiDataTypeStorage: type <cimport,nodecl,forwarddecl> = @record{}
 ImGuiDataTypeStorage = @record{
   Data: [8]cuchar
 }
+global ImGuiAxis: type <cimport,nodecl,using> = @enum(cint){
+  ImGuiAxis_None = -1,
+  ImGuiAxis_X = 0,
+  ImGuiAxis_Y = 1
+}
 global ImGuiComboPreviewData: type <cimport,nodecl,forwarddecl> = @record{}
 ImGuiComboPreviewData = @record{
   PreviewRect: ImRect,
@@ -1003,6 +1097,7 @@ ImGuiNextWindowData = @record{
   PosCond: cint,
   SizeCond: cint,
   CollapsedCond: cint,
+  DockCond: cint,
   PosVal: ImVec2,
   PosPivotVal: ImVec2,
   SizeVal: ImVec2,
@@ -1010,11 +1105,15 @@ ImGuiNextWindowData = @record{
   ScrollVal: ImVec2,
   WindowFlags: cint,
   ChildFlags: cint,
+  PosUndock: boolean,
   CollapsedVal: boolean,
   SizeConstraintRect: ImRect,
   SizeCallback: function(data: *ImGuiSizeCallbackData): void,
   SizeCallbackUserData: pointer,
   BgAlphaVal: float32,
+  ViewportId: cuint,
+  DockId: cuint,
+  WindowClass: ImGuiWindowClass,
   MenuBarOffsetMinVal: ImVec2,
   RefreshFlagsVal: cint
 }
@@ -1106,10 +1205,11 @@ global ImGuiInputEventType: type <cimport,nodecl,using> = @enum(cint){
   ImGuiInputEventType_MousePos = 1,
   ImGuiInputEventType_MouseWheel = 2,
   ImGuiInputEventType_MouseButton = 3,
-  ImGuiInputEventType_Key = 4,
-  ImGuiInputEventType_Text = 5,
-  ImGuiInputEventType_Focus = 6,
-  ImGuiInputEventType_COUNT = 7
+  ImGuiInputEventType_MouseViewport = 4,
+  ImGuiInputEventType_Key = 5,
+  ImGuiInputEventType_Text = 6,
+  ImGuiInputEventType_Focus = 7,
+  ImGuiInputEventType_COUNT = 8
 }
 global ImGuiInputSource: type <cimport,nodecl,using> = @enum(cint){
   ImGuiInputSource_None = 0,
@@ -1136,6 +1236,10 @@ ImGuiInputEventMouseButton = @record{
   Down: boolean,
   MouseSource: ImGuiMouseSource
 }
+global ImGuiInputEventMouseViewport: type <cimport,nodecl,forwarddecl> = @record{}
+ImGuiInputEventMouseViewport = @record{
+  HoveredViewportID: cuint
+}
 global ImGuiInputEventKey: type <cimport,nodecl,forwarddecl> = @record{}
 ImGuiInputEventKey = @record{
   Key: ImGuiKey,
@@ -1159,6 +1263,7 @@ ImGuiInputEvent = @record{
     MousePos: ImGuiInputEventMousePos,
     MouseWheel: ImGuiInputEventMouseWheel,
     MouseButton: ImGuiInputEventMouseButton,
+    MouseViewport: ImGuiInputEventMouseViewport,
     Key: ImGuiInputEventKey,
     Text: ImGuiInputEventText,
     AppFocused: ImGuiInputEventAppFocused
@@ -1325,13 +1430,101 @@ ImGuiMultiSelectState = @record{
   RangeSrcItem: clonglong,
   NavIdItem: clonglong
 }
+global ImGuiDockNodeState: type <cimport,nodecl,using> = @enum(cint){
+  ImGuiDockNodeState_Unknown = 0,
+  ImGuiDockNodeState_HostWindowHiddenBecauseSingleWindow = 1,
+  ImGuiDockNodeState_HostWindowHiddenBecauseWindowsAreResizing = 2,
+  ImGuiDockNodeState_HostWindowVisible = 3
+}
+global ImVector_ImGuiWindowPtr: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: **ImGuiWindow
+}
+ImGuiDockNode = @record{
+  ID: cuint,
+  SharedFlags: cint,
+  LocalFlags: cint,
+  LocalFlagsInWindows: cint,
+  MergedFlags: cint,
+  State: ImGuiDockNodeState,
+  ParentNode: *ImGuiDockNode,
+  ChildNodes: [2]*ImGuiDockNode,
+  Windows: ImVector_ImGuiWindowPtr,
+  TabBar: *ImGuiTabBar,
+  Pos: ImVec2,
+  Size: ImVec2,
+  SizeRef: ImVec2,
+  SplitAxis: ImGuiAxis,
+  WindowClass: ImGuiWindowClass,
+  LastBgColor: cuint,
+  HostWindow: *ImGuiWindow,
+  VisibleWindow: *ImGuiWindow,
+  CentralNode: *ImGuiDockNode,
+  OnlyNodeWithWindows: *ImGuiDockNode,
+  CountNodeWithWindows: cint,
+  LastFrameAlive: cint,
+  LastFrameActive: cint,
+  LastFrameFocused: cint,
+  LastFocusedNodeId: cuint,
+  SelectedTabId: cuint,
+  WantCloseTabId: cuint,
+  RefViewportId: cuint,
+  AuthorityForPos: cint,
+  AuthorityForSize: cint,
+  AuthorityForViewport: cint,
+  IsVisible: boolean,
+  IsFocused: boolean,
+  IsBgDrawnThisFrame: boolean,
+  HasCloseButton: boolean,
+  HasWindowMenuButton: boolean,
+  HasCentralNodeChild: boolean,
+  WantCloseAll: boolean,
+  WantLockSizeOnce: boolean,
+  WantMouseMove: boolean,
+  WantHiddenTabBarUpdate: boolean,
+  WantHiddenTabBarToggle: boolean
+}
+ImGuiWindowDockStyle = @record{
+  Colors: [8]cuint
+}
+global ImVector_ImGuiDockRequest: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiDockRequest
+}
+global ImVector_ImGuiDockNodeSettings: type <cimport,nodecl> = @record{
+  Size: cint,
+  Capacity: cint,
+  Data: *ImGuiDockNodeSettings
+}
+ImGuiDockContext = @record{
+  Nodes: ImGuiStorage,
+  Requests: ImVector_ImGuiDockRequest,
+  NodesSettings: ImVector_ImGuiDockNodeSettings,
+  WantFullRebuild: boolean
+}
 global ImGuiViewportP: type <cimport,nodecl,forwarddecl> = @record{}
 ImGuiViewportP = @record{
   _ImGuiViewport: ImGuiViewport,
+  Window: *ImGuiWindow,
+  Idx: cint,
+  LastFrameActive: cint,
+  LastFocusedStampCount: cint,
+  LastNameHash: cuint,
+  LastPos: ImVec2,
+  LastSize: ImVec2,
+  Alpha: float32,
+  LastAlpha: float32,
+  LastFocusedHadNavWindow: boolean,
+  PlatformMonitor: cshort,
   BgFgDrawListsLastFrame: [2]cint,
   BgFgDrawLists: [2]*ImDrawList,
   DrawDataP: ImDrawData,
   DrawDataBuilder: ImDrawDataBuilder,
+  LastPlatformPos: ImVec2,
+  LastPlatformSize: ImVec2,
+  LastRendererSize: ImVec2,
   WorkInsetMin: ImVec2,
   WorkInsetMax: ImVec2,
   BuildWorkInsetMin: ImVec2,
@@ -1371,6 +1564,7 @@ ImGuiMetricsConfig = @record{
   ShowDrawCmdBoundingBoxes: boolean,
   ShowTextEncodingViewer: boolean,
   ShowTextureUsedRect: boolean,
+  ShowDockingNodes: boolean,
   ShowWindowsRectsType: cint,
   ShowTablesRectsType: cint,
   HighlightMonitorIdx: cint,
@@ -1426,11 +1620,6 @@ global ImVector_ImGuiInputEvent: type <cimport,nodecl> = @record{
   Size: cint,
   Capacity: cint,
   Data: *ImGuiInputEvent
-}
-global ImVector_ImGuiWindowPtr: type <cimport,nodecl> = @record{
-  Size: cint,
-  Capacity: cint,
-  Data: **ImGuiWindow
 }
 global ImVector_ImGuiWindowStackData: type <cimport,nodecl> = @record{
   Size: cint,
@@ -1571,6 +1760,8 @@ ImGuiContext = @record{
   IO: ImGuiIO,
   PlatformIO: ImGuiPlatformIO,
   Style: ImGuiStyle,
+  ConfigFlagsCurrFrame: cint,
+  ConfigFlagsLastFrame: cint,
   FontAtlases: ImVector_ImFontAtlasPtr,
   Font: *ImFont,
   FontBaked: *ImFontBaked,
@@ -1583,6 +1774,7 @@ ImGuiContext = @record{
   Time: float64,
   FrameCount: cint,
   FrameCountEnded: cint,
+  FrameCountPlatformEnded: cint,
   FrameCountRendered: cint,
   WithinEndChildID: cuint,
   WithinFrameScope: boolean,
@@ -1635,6 +1827,7 @@ ImGuiContext = @record{
   ActiveIdHasBeenEditedBefore: boolean,
   ActiveIdHasBeenEditedThisFrame: boolean,
   ActiveIdFromShortcut: boolean,
+  ActiveIdDisabledId: cuint,
   ActiveIdMouseButton: cint,
   ActiveIdClickOffset: ImVec2,
   ActiveIdWindow: *ImGuiWindow,
@@ -1671,6 +1864,15 @@ ImGuiContext = @record{
   BeginPopupStack: ImVector_ImGuiPopupData,
   TreeNodeStack: ImVector_ImGuiTreeNodeStackData,
   Viewports: ImVector_ImGuiViewportPPtr,
+  CurrentViewport: *ImGuiViewportP,
+  MouseViewport: *ImGuiViewportP,
+  MouseLastHoveredViewport: *ImGuiViewportP,
+  PlatformLastFocusedViewportId: cuint,
+  FallbackMonitor: ImGuiPlatformMonitor,
+  PlatformMonitorsFullWorkRect: ImRect,
+  ViewportCreatedCount: cint,
+  PlatformWindowsCreatedCount: cint,
+  ViewportFocusedStampCount: cint,
   NavCursorVisible: boolean,
   NavHighlightItemUnderNav: boolean,
   NavMousePosDirty: boolean,
@@ -1814,6 +2016,8 @@ ImGuiContext = @record{
   PlatformImeData: ImGuiPlatformImeData,
   PlatformImeDataPrev: ImGuiPlatformImeData,
   UserTextures: ImVector_ImTextureDataPtr,
+  DockContext: ImGuiDockContext,
+  DockNodeWindowMenuHandler: function(ctx: *ImGuiContext, node: *ImGuiDockNode, tab_bar: *ImGuiTabBar): void,
   SettingsLoaded: boolean,
   SettingsDirtyTimer: float32,
   SettingsIniData: ImGuiTextBuffer,
@@ -1822,7 +2026,7 @@ ImGuiContext = @record{
   SettingsTables: ImChunkStream_ImGuiTableSettings,
   Hooks: ImVector_ImGuiContextHook,
   HookIdNext: cuint,
-  LocalizationTable: [10]cstring,
+  LocalizationTable: [13]cstring,
   LogEnabled: boolean,
   LogFlags: cint,
   LogWindow: *ImGuiWindow,
@@ -1861,6 +2065,7 @@ ImGuiContext = @record{
   DebugMetricsConfig: ImGuiMetricsConfig,
   DebugIDStackTool: ImGuiIDStackTool,
   DebugAllocInfo: ImGuiDebugAllocInfo,
+  DebugHoveredDockNode: *ImGuiDockNode,
   FramerateSecPerFrame: [60]float32,
   FramerateSecPerFrameIdx: cint,
   FramerateSecPerFrameCount: cint,
@@ -1908,6 +2113,8 @@ ImGuiWindowTempData = @record{
   ModalDimBgColor: cuint,
   WindowItemStatusFlags: cint,
   ChildItemStatusFlags: cint,
+  DockTabItemStatusFlags: cint,
+  DockTabItemRect: ImRect,
   ItemWidth: float32,
   TextWrapPos: float32,
   ItemWidthStack: ImVector_float,
@@ -1923,8 +2130,13 @@ ImGuiWindow = @record{
   Name: cstring,
   ID: cuint,
   Flags: cint,
+  FlagsPreviousFrame: cint,
   ChildFlags: cint,
+  WindowClass: ImGuiWindowClass,
   Viewport: *ImGuiViewportP,
+  ViewportId: cuint,
+  ViewportPos: ImVec2,
+  ViewportAllowPlatformMonitorExtend: cint,
   Pos: ImVec2,
   Size: ImVec2,
   SizeFull: ImVec2,
@@ -1944,6 +2156,7 @@ ImGuiWindow = @record{
   DecoInnerSizeY1: float32,
   NameBufLen: cint,
   MoveId: cuint,
+  TabId: cuint,
   ChildId: cuint,
   PopupId: cuint,
   Scroll: ImVec2,
@@ -1956,6 +2169,7 @@ ImGuiWindow = @record{
   ScrollbarY: boolean,
   ScrollbarXStabilizeEnabled: boolean,
   ScrollbarXStabilizeToggledHistory: cuchar,
+  ViewportOwned: boolean,
   Active: boolean,
   WasActive: boolean,
   WriteAccessed: boolean,
@@ -1986,6 +2200,7 @@ ImGuiWindow = @record{
   SetWindowPosAllowFlags: cint,
   SetWindowSizeAllowFlags: cint,
   SetWindowCollapsedAllowFlags: cint,
+  SetWindowDockAllowFlags: cint,
   SetWindowPosVal: ImVec2,
   SetWindowPosPivot: ImVec2,
   IDStack: ImVector_ImGuiID,
@@ -2000,6 +2215,7 @@ ImGuiWindow = @record{
   HitTestHoleSize: ImVec2ih,
   HitTestHoleOffset: ImVec2ih,
   LastFrameActive: cint,
+  LastFrameJustFocused: cint,
   LastTimeActive: float32,
   ItemWidthDefault: float32,
   StateStorage: ImGuiStorage,
@@ -2014,6 +2230,7 @@ ImGuiWindow = @record{
   ParentWindowInBeginStack: *ImGuiWindow,
   RootWindow: *ImGuiWindow,
   RootWindowPopupTree: *ImGuiWindow,
+  RootWindowDockTree: *ImGuiWindow,
   RootWindowForTitleBarHighlight: *ImGuiWindow,
   RootWindowForNav: *ImGuiWindow,
   ParentWindowForFocusRoute: *ImGuiWindow,
@@ -2024,11 +2241,21 @@ ImGuiWindow = @record{
   NavRootFocusScopeId: cuint,
   MemoryDrawListIdxCapacity: cint,
   MemoryDrawListVtxCapacity: cint,
-  MemoryCompacted: boolean
+  MemoryCompacted: boolean,
+  DockIsActive: boolean,
+  DockNodeIsVisible: boolean,
+  DockTabIsVisible: boolean,
+  DockTabWantClose: boolean,
+  DockOrder: cshort,
+  DockStyle: ImGuiWindowDockStyle,
+  DockNode: *ImGuiDockNode,
+  DockNodeAsHost: *ImGuiDockNode,
+  DockId: cuint
 }
 ImGuiTabItem = @record{
   ID: cuint,
   Flags: cint,
+  Window: *ImGuiWindow,
   LastFrameVisible: cint,
   LastFrameSelected: cint,
   Offset: float32,
@@ -2056,6 +2283,7 @@ ImGuiTabBar = @record{
   CurrFrameVisible: cint,
   PrevFrameVisible: cint,
   BarRect: ImRect,
+  BarRectPrevWidth: float32,
   CurrTabsContentsHeight: float32,
   PrevTabsContentsHeight: float32,
   WidthAllTabs: float32,
@@ -2074,6 +2302,7 @@ ImGuiTabBar = @record{
   WantLayout: boolean,
   VisibleTabWasSubmitted: boolean,
   TabsAddedNew: boolean,
+  ScrollButtonEnabled: boolean,
   TabsActiveCount: cshort,
   LastTabItemIdx: cshort,
   ItemSpacingY: float32,

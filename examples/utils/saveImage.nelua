@@ -4,6 +4,10 @@
 
 require'stb_image_write'
 
+local function even(x: cint): cint
+  return (( x // 2 ) * 2)
+end
+
 ----------------
 --- saveImage()
 ----------------
@@ -14,11 +18,13 @@ global saveImage = function(fname:string, xs:cint, ys:cint, imageWidth:cint, ima
       return
     end
   end
-  if 1 > imageWidth or 1 > imageHeight then
+  local iWidth = even(imageWidth)
+  local iHeight = even(imageHeight)
+  if 1 > iWidth or 1 > iHeight then
     print("Error!: Rect of save image is mismatch at saveImage.nelua")
     return
   end
-  local sz = imageWidth * imageHeight * comp
+  local sz = iWidth * iHeight * comp
   local pTexBuffer =  (@*GLuByte)(default_allocator:alloc(sz))
   defer delete(pTexBuffer) end
   local pDataBuffer = (@*GLuByte)(default_allocator:alloc(sz))
@@ -27,18 +33,18 @@ global saveImage = function(fname:string, xs:cint, ys:cint, imageWidth:cint, ima
   glReadBuffer( GL_BACK ) -- # Specify OpenGL buffer to be read, 'GL_FRONT': Front buffer, 'GL_BACK': Back buffer
   -- # Read form OpenGL buffer and save to local buffer
   glReadPixels( xs, ys,                  -- # x,y position (left down) at start //0 or getCurrentWidth() - 1
-                imageWidth, imageHeight, -- # width, height to be read
+                iWidth, iHeight, -- # width, height to be read
                 GL_RGB,                  -- # Read type
                 GL_UNSIGNED_BYTE,        -- # Save type
                 pTexBuffer)              -- # Pointer to pixel data
   -- # Fix upside-down of image
-  local  widthStep = 3 * imageWidth
+  local  widthStep = 3 * iWidth
   local n = 0
-  for y=0,<imageHeight do
-    for x=0,<imageWidth do
-     $((@*GLuByte)(((@usize)(pDataBuffer)) + (imageHeight - y - 1 ) * widthStep + (x * 3) + 0 )) = $((@*GLuByte)(((@usize)(pTexBuffer)) + (n + 0))) -- # copy R
-     $((@*GLuByte)(((@usize)(pDataBuffer)) + (imageHeight - y - 1 ) * widthStep + (x * 3) + 1 )) = $((@*GLuByte)(((@usize)(pTexBuffer)) + (n + 1))) -- # copy G
-     $((@*GLuByte)(((@usize)(pDataBuffer)) + (imageHeight - y - 1 ) * widthStep + (x * 3) + 2 )) = $((@*GLuByte)(((@usize)(pTexBuffer)) + (n + 2))) -- # copy B
+  for y=0,<iHeight do
+    for x=0,<iWidth do
+     $((@*GLuByte)(((@usize)(pDataBuffer)) + (iHeight - y - 1 ) * widthStep + (x * 3) + 0 )) = $((@*GLuByte)(((@usize)(pTexBuffer)) + (n + 0))) -- # copy R
+     $((@*GLuByte)(((@usize)(pDataBuffer)) + (iHeight - y - 1 ) * widthStep + (x * 3) + 1 )) = $((@*GLuByte)(((@usize)(pTexBuffer)) + (n + 1))) -- # copy G
+     $((@*GLuByte)(((@usize)(pDataBuffer)) + (iHeight - y - 1 ) * widthStep + (x * 3) + 2 )) = $((@*GLuByte)(((@usize)(pTexBuffer)) + (n + 2))) -- # copy B
       n = n + 3
     end
   end
@@ -58,13 +64,13 @@ global saveImage = function(fname:string, xs:cint, ys:cint, imageWidth:cint, ima
     if quality <= 0 then
       qt = 90
     end
-    res = stbi_write_jpg(fname, imageWidth, imageHeight, comp, pDataBuffer, quality)
+    res = stbi_write_jpg(fname, iWidth, iHeight, comp, pDataBuffer, quality)
   elseif ext == ".png" then
-    res = stbi_write_png(fname, imageWidth, imageHeight, comp, pDataBuffer)
+    res = stbi_write_png(fname, iWidth, iHeight, comp, pDataBuffer)
   elseif ext == ".bmp" then
-    res = stbi_write_bmp(fname, imageWidth, imageHeight, comp, pDataBuffer)
+    res = stbi_write_bmp(fname, iWidth, iHeight, comp, pDataBuffer)
   elseif ext == ".tga" then
-    res = stbi_write_tga(fname, imageWidth, imageHeight, comp, pDataBuffer)
+    res = stbi_write_tga(fname, iWidth, iHeight, comp, pDataBuffer)
   else
     print(string.format("Error! Unrecognize image extension: [%s]", ext))
     res = 0

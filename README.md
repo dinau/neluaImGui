@@ -30,7 +30,7 @@
 
 [Dear ImGui](https://github.com/ocornut/imgui) / [CImGui](https://github.com/cimgui/cimgui) wrapper library and some examples with NeLua language
 
-ImGui / CImGui 1.92.1 dock (2025/07) 
+ImGui / CImGui 1.92.2b dock (2025/08) 
 
 #### Prerequisites
 
@@ -49,7 +49,7 @@ ImGui / CImGui 1.92.1 dock (2025/07)
    1. Install libraries
 
       ```sh
-      $ sudo apt install lib{opengl-dev,gl1-mesa-dev,glfw3,glfw3-dev,sdl2-dev} make
+      $ sudo apt install lib{opengl-dev,gl1-mesa-dev,glfw3-dev,sdl2-dev} make
       ```
 
 - C/C++ Compiler  
@@ -218,7 +218,7 @@ These header files [libs/nelua/glfw](libs/nelua/glfw), [libs/nelua/sdl2](libs/ne
 ---
 
 - Nelua-0.2.0-dev
-- Gcc.exe (Rev1, Built by MSYS2 project) 15.1.0)
+- Gcc.exe (Rev1, Built by MSYS2 project) 15.2.0)
 - Git version 2.46.0.windows.1
 - Make: GNU Make 4.4.1
 

@@ -1262,7 +1262,7 @@ void IGFD::FilterManager::ParseFilters(const char* vFilters) {
         std::string word;
         std::string filter_name;
 
-        char last_split_char = 0;
+        char last_char = 0;
         for (char c : dLGFilters) {
             if (c == '{') {
                 if (regex_started) {
@@ -1274,7 +1274,6 @@ void IGFD::FilterManager::ParseFilters(const char* vFilters) {
                     filter_name.clear();
                     word.clear();
                 }
-                last_split_char = c;
             } else if (c == '}') {
                 if (regex_started) {
                     word += c;
@@ -1291,20 +1290,18 @@ void IGFD::FilterManager::ParseFilters(const char* vFilters) {
                         started = false;
                     }
                 }
-                last_split_char = c;
             } else if (c == '(') {
                 word += c;
-                if (last_split_char == '(') {
+                if (last_char == '(') {
                     regex_started = true;
                 }
                 parenthesis_started = true;
                 if (!started) {
                     filter_name += c;
                 }
-                last_split_char = c;
             } else if (c == ')') {
                 word += c;
-                if (last_split_char == ')') {
+                if (last_char == ')') {
                     if (regex_started) {
                         if (started) {
                             m_ParsedFilters.back().addCollectionFilter(word, true);
@@ -1331,18 +1328,14 @@ void IGFD::FilterManager::ParseFilters(const char* vFilters) {
                 if (!started) {
                     filter_name += c;
                 }
-                last_split_char = c;
             } else if (c == '.') {
                 word += c;
                 if (!started) {
                     filter_name += c;
                 }
-                last_split_char = c;
             } else if (c == ',') {
                 if (regex_started) {
-                    regex_started = false;
-                    word.clear();
-                    filter_name.clear();
+                    word += c;
                 } else {
                     if (started) {
                         if (word.size() > 1U && word[0] == '.') {
@@ -1370,6 +1363,7 @@ void IGFD::FilterManager::ParseFilters(const char* vFilters) {
                     filter_name += c;
                 }
             }
+            last_char = c;
         }
 
         if (started) {
@@ -1975,11 +1969,13 @@ bool IGFD::FileManager::m_CompleteFileInfosWithUserFileAttirbutes(const FileDial
 void IGFD::FileManager::ClearFileLists() {
     m_FilteredFileList.clear();
     m_FileList.clear();
+    m_SelectedFileNames.clear();
 }
 
 void IGFD::FileManager::ClearPathLists() {
     m_FilteredPathList.clear();
     m_PathList.clear();
+    m_SelectedFileNames.clear();
 }
 
 void IGFD::FileManager::m_AddFile(const FileDialogInternal& vFileDialogInternal, const std::string& vPath, const std::string& vFileName, const FileType& vFileType) {
@@ -2711,16 +2707,23 @@ std::string IGFD::FileManager::GetResultingFilePathName(FileDialogInternal& vFil
 
 std::map<std::string, std::string> IGFD::FileManager::GetResultingSelection(FileDialogInternal& vFileDialogInternal, IGFD_ResultMode vFlag) {
     std::map<std::string, std::string> res;
-    for (const auto& selectedFileName : m_SelectedFileNames) {
-        auto result = GetResultingPath();
+    const auto& result_path = GetResultingPath();
+    if (!m_SelectedFileNames.empty()) {
+        for (const auto& selectedFileName : m_SelectedFileNames) {
+            auto result = result_path;
 #ifdef _IGFD_UNIX_
-        if (fsRoot != result)
+            if (fsRoot != result)
 #endif  // _IGFD_UNIX_
-        {
-            result += IGFD::Utils::GetPathSeparator();
+            {
+                result += IGFD::Utils::GetPathSeparator();
+            }
+            result += vFileDialogInternal.filterManager.ReplaceExtentionWithCurrentFilterIfNeeded(selectedFileName, vFlag);
+            res[selectedFileName] = result;
         }
-        result += vFileDialogInternal.filterManager.ReplaceExtentionWithCurrentFilterIfNeeded(selectedFileName, vFlag);
-        res[selectedFileName] = result;
+    } else {                                                     // opened directory with no selection
+        if (vFileDialogInternal.fileManager.dLGDirectoryMode) {  // directory mode
+            res["."] = result_path;
+        }
     }
     return res;
 }
@@ -4017,7 +4020,8 @@ void IGFD::FileDialog::m_DisplayPathPopup(ImVec2 vSize) {
 
 bool IGFD::FileDialog::m_DrawOkButton() {
     auto& fdFile = m_FileDialogInternal.fileManager;
-    if (m_FileDialogInternal.canWeContinue && strlen(fdFile.fileNameBuffer)) {
+    if (m_FileDialogInternal.canWeContinue && strlen(fdFile.fileNameBuffer) || //
+        m_FileDialogInternal.getDialogConfig().flags & ImGuiFileDialogFlags_OptionalFileName) { // optional
         if (IMGUI_BUTTON(okButtonString "##validationdialog", ImVec2(okButtonWidth, 0.0f)) || m_FileDialogInternal.isOk) {
             m_FileDialogInternal.isOk = true;
             return true;

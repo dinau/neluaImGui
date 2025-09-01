@@ -106,9 +106,8 @@ implot3d:
 
 imspinner:
 	@echo copying [ $(EXT_LIB_DIR)/$@] to $(TARGET_DIR)/
-	@-mkdir -p $(TARGET_DIR)/c$@/$@
-	@-cp -f $(EXT_LIB_DIR)/c$@/{README.md,LICENSE}                       $(TARGET_DIR)/c$@/
-	@cp  -f $(EXT_LIB_DIR)/c$@/libs/$@/{*.cpp,*.h,LICENSE.txt,README.md} $(TARGET_DIR)/c$@/$@/
+	@-mkdir -p $(TARGET_DIR)/$@
+	@-cp -f $(EXT_LIB_DIR)/$@/{*.cpp,*.h,LICENSE.txt,*.md} $(TARGET_DIR)/c$@/$@/
 	@#echo "" >  $(TARGET_DIR)/c$@/$@/cimspinner_config.h
 
 imgui-knobs:
@@ -127,7 +126,9 @@ TMP_H = tmp.h
 SAVE_H = ImGuiFileDialog.h.org
 NELUA_IMGUI_DIR = libs/nelua/imgui
 
-#gen: copylibs
+# To update libs
+#    1. make copylib
+#    2. make gen
 gen:
 	@cp -f $(ORG_H) $(SAVE_H)
 	@(echo "#include \"cimgui.h\"" > $(TMP_H); cat $(ORG_H) >> $(TMP_H); mv -f $(TMP_H) $(ORG_H) )

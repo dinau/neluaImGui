@@ -148,7 +148,6 @@ extern "C" {
   #define CIMSPINNER_API
 #endif
 
-
 CIMSPINNER_API void SpinnerRainbow(const char *label, float radius, float thickness, const ImColor color, float speed);
 CIMSPINNER_API void SpinnerRainbowEx(const char *label, float radius, float thickness, const ImColor color, float speed,float ang_min, float ang_max, int arcs, int mode);
 CIMSPINNER_API void SpinnerRainbowMix(const char *label, float radius, float thickness, const ImColor color, float speed);

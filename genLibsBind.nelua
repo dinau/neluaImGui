@@ -291,30 +291,27 @@ cinclude "cimplot.h"
 prependStr(#[outfile]#, str)
 
 ------------------
---- cmplot3d.nelua
+--- sdl3.nelua
 ------------------
-##[==[
--- Generate nelua bindings file. (It will be always regenerated)
-  outfile = 'libs/nelua/imgui/cimplot3d.nelua'
-  nldecl.generate_bindings_file{
-    defines = {'bool _Bool'
-               ,'IMGUI_IMPL_API "extern \"C\" __declspec(dllexport)"'
-               ,'ImDrawIdx unsigned int'
-               ,'CIMGUI_DEFINE_ENUMS_AND_STRUCTS'
-              },
-    output_file = outfile,
-    -- what C file we should generate bindings for and parse?
-    parse_includes = {'cimplot3d.h'},
-    -- what symbol name prefix should we import from that file?
-    include_names = {'^ImPlot3D','^ImAxis','^ImPlane'},
-    include_dirs = {'libs/cimgui','libs/cimplot3d'}
-  }
-
-if ccinfo.is_windows then
-end
-]==]
-str = [[
-cinclude "cimplot.h"
-cinclude "cimplot3d.h"
-]]
-prependStr(#[outfile]#, str)
+--##[==[
+---- Generate nelua bindings file. (It will be always regenerated)
+--  outfile = 'libs/nelua/imgui/sdl3.nelua'
+--  nldecl.generate_bindings_file{
+--    defines = {'bool _Bool' },
+--    output_file = outfile,
+--    -- what C file we should generate bindings for and parse?
+--    --parse_includes = {'SDL.h'},
+--    parse_includes = {'SDL_version.h'},
+--    -- what symbol name prefix should we import from that file?
+--    include_names = {'^SDL_'},
+--    include_dirs = {'libs/SDL3/x86_64-w64-mingw32/include'
+--                   ,'libs/SDL3/x86_64-w64-mingw32/include/SDL3'}
+--  }
+--
+--if ccinfo.is_windows then
+--end
+--]==]
+--str = [[
+--cinclude "SDL.h"
+--]]
+--prependStr(#[outfile]#, str)
