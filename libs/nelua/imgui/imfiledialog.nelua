@@ -2624,7 +2624,6 @@ global ImGuiFileDialogFlags_: type <cimport,nodecl,using,ctypedef'ImGuiFileDialo
   ImGuiFileDialogFlags_DisableQuickPathSelection = 4096,
   ImGuiFileDialogFlags_ShowDevicesButton = 8192,
   ImGuiFileDialogFlags_NaturalSorting = 16384,
-  ImGuiFileDialogFlags_OptionalFileName = 32768,
   ImGuiFileDialogFlags_Default = 521
 }
 global IGFD_ResultMode: type <cimport,nodecl> = @cint
@@ -2688,4 +2687,4 @@ global function IGFD_RemovePlacesGroup(vContextPtr: *ImGuiFileDialog, vGroupName
 global function IGFD_AddPlace(vContextPtr: *ImGuiFileDialog, vGroupName: cstring, vPlaceName: cstring, vPlacePath: cstring, vCanBeSaved: boolean, vIconText: cstring): boolean <cimport,nodecl> end
 global function IGFD_RemovePlace(vContextPtr: *ImGuiFileDialog, vGroupName: cstring, vPlaceName: cstring): boolean <cimport,nodecl> end
 global IGFD_VERSION: cstring <comptime> = "v0.6.8"
-global IGFD_IMGUI_SUPPORTED_VERSION: cstring <comptime> = "1.92.0 WIP"
+global IGFD_IMGUI_SUPPORTED_VERSION: cstring <comptime> = "1.90.5 WIP"

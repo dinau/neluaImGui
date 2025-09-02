@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v4
       - run: |
           sudo apt-get update
-          sudo apt-get install --fix-missing git gcc build-essential libopengl-dev libgl1-mesa-dev libglfw3 libglfw3-dev libsdl2-dev
+          sudo apt-get install -y lua5.4 git gcc build-essential libopengl-dev libgl1-mesa-dev libglfw3 libglfw3-dev libsdl2-dev
           git clone https://github.com/edubart/nelua-lang.git
           cd nelua-lang
           make

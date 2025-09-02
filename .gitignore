@@ -9,7 +9,7 @@ libs/mjson/
 *.a
 .build/
 *.dll
-*.nim
+#*.nim
 *.save
 *.mp4
 README.html

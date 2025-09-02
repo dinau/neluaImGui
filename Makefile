@@ -31,9 +31,9 @@ clean:
 
 #
 define def_make
-	@echo --------------------
+	@echo --------------------------------------------
 	@echo --- Enter: examples/$(1) $(2)
-	@echo --------------------
+	@echo --------------------------------------------
 	@$(MAKE) -C  examples/$(1) $(2)
 
 endef
@@ -46,6 +46,7 @@ MAKEFLAGS += --no-print-directory
 EXT_LIB_DIR = c:/000imguin_dev/imguin_git/libs
 TARGET_DIR = libs
 copylibs: imgui implot imnodes imguizmo ImGuiFileDialog imgui_toggle implot3d imspinner imCTE imgui-knobs
+	@$(MAKE) -C libs/libs_hash
 
 imCTE:
 	@echo copying [ $(EXT_LIB_DIR)/c$@] to $(TARGET_DIR)/
@@ -108,7 +109,6 @@ imspinner:
 	@echo copying [ $(EXT_LIB_DIR)/$@] to $(TARGET_DIR)/
 	@-mkdir -p $(TARGET_DIR)/$@
 	@-cp -f $(EXT_LIB_DIR)/$@/{*.cpp,*.h,LICENSE.txt,*.md} $(TARGET_DIR)/c$@/$@/
-	@#echo "" >  $(TARGET_DIR)/c$@/$@/cimspinner_config.h
 
 imgui-knobs:
 	@echo copying [ $(EXT_LIB_DIR)/c$@] to $(TARGET_DIR)/
@@ -129,11 +129,16 @@ NELUA_IMGUI_DIR = libs/nelua/imgui
 # To update libs
 #    1. make copylib
 #    2. make gen
-gen:
+gen: imspinner_patch
 	@cp -f $(ORG_H) $(SAVE_H)
 	@(echo "#include \"cimgui.h\"" > $(TMP_H); cat $(ORG_H) >> $(TMP_H); mv -f $(TMP_H) $(ORG_H) )
 	@nelua $(OPT) genLibsBind.nelua
 	@mv -f $(SAVE_H) $(ORG_H)
+	mv -f cimspinner.h libs/cimspinner/imspinner/cimspinner.h
+
+imspinner_patch:
+	@cp -f libs/cimspinner/imspinner/cimspinner.h .
+	@sed -i '1i#include "cimgui.h"'  libs/cimspinner/imspinner/cimspinner.h
 
 genimplot:
 	@echo Generated [$(NELUA_IMGUI_DIR)/imPlotFuncs.nelua]

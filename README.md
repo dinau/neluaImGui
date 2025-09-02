@@ -18,6 +18,7 @@
     - [glfw_opengl3, sdl2_opengl3](#glfw_opengl3-sdl2_opengl3)
     - [glfw_opengl3_jp](#glfw_opengl3_jp)
   - [Available libraries list at this moment](#available-libraries-list-at-this-moment)
+  - [Update NeluaImGui](#update-neluaimgui)
   - [SDL2 / GLFW / STB headers for Nelua](#sdl2--glfw--stb-headers-for-nelua)
   - [My tools version](#my-tools-version)
   - [History](#history)
@@ -208,6 +209,19 @@ Library name / C lang. wrapper
 - [x] [ImGui_Toggle](https://github.com/cmdwtf/imgui_toggle) / [CimGui_Toggle](https://github.com/dinau/cimgui_toggle) (2025/05)
 - [x] [ImSpinner](https://github.com/dalerank/imspinner) / [CImSpinner](https://github.com/dinau/cimspinner) (2025/05)
 - [x] [ImGuiColorTextEdit](https://github.com/santaclose/ImGuiColorTextEdit) / [cimCTE](https://github.com/cimgui/cimCTE) (2025/05)
+
+
+#### Update NeluaImGui
+
+---
+
+```sh
+make copylibs
+make gen
+```
+
+See ./Makefile and libs/libs_hash/Makefile
+
 
 #### SDL2 / GLFW / STB headers for Nelua
 
