@@ -8,7 +8,7 @@ BACKENDS_OBJS += $(BUILD_DIR)/imgui_impl_opengl3.o \
 								 $(BUILD_DIR)/imgui_impl_glfw.o
 
 ###### Specify compiler to Clang
-#OPT += --cc clang
+OPT += --cc clang
 ################################
 
 CIMPLOT_DIR    = ../../libs/cimplot
