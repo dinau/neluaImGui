@@ -1,4 +1,4 @@
-name: Linux OS(Ubuntu) Nim 2.2.4 compilation
+name: Linux OS(Ubuntu) Nelua 0.2.0-dev compilation
 
 on:
   push:

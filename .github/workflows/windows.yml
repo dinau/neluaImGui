@@ -1,4 +1,4 @@
-name: Windows OS Nim 2.2.4 compilation
+name: Windows OS Nelua 0.2.0-dev compilation
 
 on:
   push:
@@ -25,7 +25,7 @@ jobs:
       - name: Build
         shell: msys2 {0}
         run: |
-          pacman -S --needed --noconfirm base-devel git mingw-w64-x86_64-{glfw,SDL2,SDL2_image} make
+          pacman -S --needed --noconfirm base-devel git mingw-w64-x86_64-{glfw,SDL2,SDL2_image,lua} make
           git clone https://github.com/edubart/nelua-lang.git
           cd nelua-lang
           make

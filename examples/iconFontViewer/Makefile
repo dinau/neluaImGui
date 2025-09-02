@@ -21,4 +21,4 @@ PHONY: gen
 gen: iconFontTblDef.nelua
 
 iconFontTblDef.nelua: makeIconFontTblDef.lua
-	lua54 $<
+	lua $<
