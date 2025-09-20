@@ -5,4 +5,7 @@
 *.hpp linguist-vendored
 *.nim linguist-vendored
 *.zig linguist-vendored
+*.rb linguist-vendored
 *.nelua linguist-language=Nelua
+Makefile linguist-vendored
+*.mk linguist-vendored
