@@ -27,9 +27,6 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-![alt](https://github.com/dinau/neluaImGui/actions/workflows/windows.yml/badge.svg) 
-![alt](https://github.com/dinau/neluaImGui/actions/workflows/linux.yml/badge.svg)
-
 ### NeluaImGui
 
 [Dear ImGui](https://github.com/ocornut/imgui) / [CImGui](https://github.com/cimgui/cimgui) wrapper library and some examples with NeLua language
