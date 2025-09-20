@@ -1,3 +1,6 @@
+*.nelua linguist-language=Nelua
+
+*.lua linguist-vendored
 *.zig linguist-language=Zig
 *.c linguist-vendored
 *.h linguist-vendored
@@ -6,6 +9,6 @@
 *.nim linguist-vendored
 *.zig linguist-vendored
 *.rb linguist-vendored
-*.nelua linguist-language=Nelua
+*.bat linguist-vendored
 Makefile linguist-vendored
 *.mk linguist-vendored
