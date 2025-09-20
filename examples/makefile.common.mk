@@ -11,7 +11,9 @@ ifeq ($(OS),Windows_NT)
 	ifneq ($(SHOW_CONSOLE),true)
 		HIDE_CONSOLE = -mwindows
 	endif
-	IMM32LIB = -limm32
+	EXTRA_LIBS = -limm32
+else
+	EXTRA_LIBS = -lX11
 endif
 
 
@@ -66,7 +68,7 @@ NELUA_LDFLAGS += $(RES)
 NELUA_LDFLAGS += $(STATIC_OPT)
 NELUA_LDFLAGS += -lcimgui
 NELUA_LDFLAGS += -lstdc++
-NELUA_LDFLAGS += $(IMM32LIB)
+NELUA_LDFLAGS += $(EXTRA_LIBS)
 
 OPT += --cflags="$(NELUA_CFLAGS)"
 OPT += --ldflags="$(NELUA_LDFLAGS)"

@@ -291,6 +291,36 @@ cinclude "cimplot.h"
 prependStr(#[outfile]#, str)
 
 ------------------
+--- cmplot3d.nelua
+------------------
+##[==[
+-- Generate nelua bindings file. (It will be always regenerated)
+  outfile = 'libs/nelua/imgui/cimplot3d.nelua'
+  nldecl.generate_bindings_file{
+    defines = { 'NELUA_GEN'
+               ,'CIMGUI_DEFINE_ENUMS_AND_STRUCTS'
+               ,'bool _Bool'
+               ,'IMGUI_IMPL_API "extern \"C\" __declspec(dllexport)"'
+               ,'ImDrawIdx unsigned int'
+              },
+    output_file = outfile,
+    -- what C file we should generate bindings for and parse?
+    parse_includes = {'cimplot3d.h'},
+    -- what symbol name prefix should we import from that file?
+    include_names = {'^ImPlot','^ImAxis'},
+    include_dirs = {'libs/dcimgui','libs/cimgui','libs/imgui','libs/cimplot','libs/cimplot3d','libs/cimplot3d/implot3d'}
+  }
+
+if ccinfo.is_windows then
+end
+]==]
+str = [[
+cinclude "cimgui.h"
+cinclude "cimplot3d.h"
+]]
+prependStr(#[outfile]#, str)
+
+------------------
 --- sdl3.nelua
 ------------------
 --##[==[

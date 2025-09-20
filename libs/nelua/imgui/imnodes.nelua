@@ -326,6 +326,7 @@ ImGuiStyle = @record{
   ColumnsMinSpacing: float32,
   ScrollbarSize: float32,
   ScrollbarRounding: float32,
+  ScrollbarPadding: float32,
   GrabMinSize: float32,
   GrabRounding: float32,
   LogSliderDeadzone: float32,
@@ -351,6 +352,7 @@ ImGuiStyle = @record{
   SeparatorTextPadding: ImVec2,
   DisplayWindowPadding: ImVec2,
   DisplaySafeAreaPadding: ImVec2,
+  DockingNodeHasCloseButton: boolean,
   DockingSeparatorSize: float32,
   MouseCursorScale: float32,
   AntiAliasedLines: boolean,
@@ -550,7 +552,8 @@ ImGuiListClipper = @record{
   ItemsHeight: float32,
   StartPosY: float64,
   StartSeekOffsetY: float64,
-  TempData: pointer
+  TempData: pointer,
+  Flags: cint
 }
 global ImVector_ImGuiSelectionRequest: type <cimport,nodecl> = @record{
   Size: cint,
@@ -981,7 +984,7 @@ global ImVector_int: type <cimport,nodecl> = @record{
   Data: *cint
 }
 ImGuiTextIndex = @record{
-  LineOffsets: ImVector_int,
+  Offsets: ImVector_int,
   EndOffset: cint
 }
 ImDrawListSharedData = @record{
@@ -1084,11 +1087,15 @@ ImGuiInputTextState = @record{
   CallbackTextBackup: ImVector_char,
   BufCapacity: cint,
   Scroll: ImVec2,
+  LineCount: cint,
+  WrapWidth: float32,
   CursorAnim: float32,
   CursorFollow: boolean,
+  CursorCenterY: boolean,
   SelectedAllMouseLock: boolean,
   Edited: boolean,
   WantReloadUserBuf: boolean,
+  LastMoveDirectionLR: cschar,
   ReloadSelectionStart: cint,
   ReloadSelectionEnd: cint
 }
@@ -1576,8 +1583,8 @@ ImGuiStackLevelInfo = @record{
   ID: cuint,
   QueryFrameCount: cschar,
   QuerySuccess: boolean,
-  DataType: cint,
-  Desc: [57]cchar
+  DataType: cschar,
+  DescOffset: cint
 }
 global ImGuiIDStackTool: type <cimport,nodecl,forwarddecl> = @record{}
 global ImVector_ImGuiStackLevelInfo: type <cimport,nodecl> = @record{
@@ -1588,11 +1595,14 @@ global ImVector_ImGuiStackLevelInfo: type <cimport,nodecl> = @record{
 ImGuiIDStackTool = @record{
   LastActiveFrame: cint,
   StackLevel: cint,
-  QueryId: cuint,
+  QueryMainId: cuint,
   Results: ImVector_ImGuiStackLevelInfo,
-  CopyToClipboardOnCtrlC: boolean,
+  QueryHookActive: boolean,
+  OptHexEncodeNonAsciiChars: boolean,
+  OptCopyToClipboardOnCtrlC: boolean,
   CopyToClipboardLastTime: float32,
-  ResultPathBuf: ImGuiTextBuffer
+  ResultPathsBuf: ImGuiTextBuffer,
+  ResultTempBuf: ImGuiTextBuffer
 }
 global ImGuiContextHookType: type <cimport,nodecl,using> = @enum(cint){
   ImGuiContextHookType_NewFramePre = 0,
@@ -1808,7 +1818,7 @@ ImGuiContext = @record{
   WheelingWindowWheelRemainder: ImVec2,
   WheelingAxisAvg: ImVec2,
   DebugDrawIdConflictsId: cuint,
-  DebugHookIdInfo: cuint,
+  DebugHookIdInfoId: cuint,
   HoveredId: cuint,
   HoveredIdPreviousFrame: cuint,
   HoveredIdPreviousFrameItemCount: cint,
@@ -1981,6 +1991,7 @@ ImGuiContext = @record{
   MouseStationaryTimer: float32,
   MouseLastValidPos: ImVec2,
   InputTextState: ImGuiInputTextState,
+  InputTextLineIndex: ImGuiTextIndex,
   InputTextDeactivatedState: ImGuiInputTextDeactivatedState,
   InputTextPasswordFontBackupBaked: ImFontBaked,
   InputTextPasswordFontBackupFlags: cint,
@@ -2545,7 +2556,7 @@ ImFontLoader = @record{
 }
 ImFontAtlasRectEntry = @record{
   TargetIndex: cint,
-  Generation: cint,
+  Generation: cuint,
   IsUsed: cuint
 }
 global stbrp_context_opaque: type <cimport,nodecl,forwarddecl> = @record{}

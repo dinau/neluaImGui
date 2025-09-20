@@ -34,7 +34,7 @@
 
 [Dear ImGui](https://github.com/ocornut/imgui) / [CImGui](https://github.com/cimgui/cimgui) wrapper library and some examples with NeLua language
 
-ImGui / CImGui 1.92.2b dock (2025/08) 
+ImGui / CImGui 1.92.3 dock (2025/09) 
 
 #### Prerequisites
 
@@ -46,18 +46,18 @@ ImGui / CImGui 1.92.2b dock (2025/08)
    1. Install libraries
    
       ```sh
-      pacman -S mingw-w64-x86_64-{glfw,pkgconf,SDL2,SDL2_image} make
+      pacman -S mingw-w64-x86_64-{gcc,clang,glfw,pkgconf,SDL2,SDL2_image} make
       ```
 
-- Linux: Ubuntu / Debian families  
+- Linux: Debian13 Trixie faimilies  
    1. Install libraries
 
       ```sh
-      $ sudo apt install lib{opengl-dev,gl1-mesa-dev,glfw3-dev,sdl2-dev} make
+      $ sudo apt install gcc clang lib{opengl-dev,gl1-mesa-dev,glfw3-dev,sdl2-dev} make
       ```
 
 - C/C++ Compiler  
-GCC (/ Clang)
+GCC / Clang
 
 #### Build and run on Windows OS
 

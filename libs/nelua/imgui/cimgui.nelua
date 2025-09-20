@@ -125,6 +125,7 @@ global ImGuiStyleVar: type <cimport,nodecl> = @cint
 global ImGuiTableBgTarget: type <cimport,nodecl> = @cint
 global ImDrawFlags: type <cimport,nodecl> = @cint
 global ImDrawListFlags: type <cimport,nodecl> = @cint
+global ImDrawTextFlags: type <cimport,nodecl> = @cint
 global ImFontFlags: type <cimport,nodecl> = @cint
 global ImFontAtlasFlags: type <cimport,nodecl> = @cint
 global ImGuiBackendFlags: type <cimport,nodecl> = @cint
@@ -141,6 +142,7 @@ global ImGuiInputFlags: type <cimport,nodecl> = @cint
 global ImGuiInputTextFlags: type <cimport,nodecl> = @cint
 global ImGuiItemFlags: type <cimport,nodecl> = @cint
 global ImGuiKeyChord: type <cimport,nodecl> = @cint
+global ImGuiListClipperFlags: type <cimport,nodecl> = @cint
 global ImGuiPopupFlags: type <cimport,nodecl> = @cint
 global ImGuiMultiSelectFlags: type <cimport,nodecl> = @cint
 global ImGuiSelectableFlags: type <cimport,nodecl> = @cint
@@ -257,7 +259,8 @@ global ImGuiInputTextFlags_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiInputTextFlags_CallbackAlways = 1048576,
   ImGuiInputTextFlags_CallbackCharFilter = 2097152,
   ImGuiInputTextFlags_CallbackResize = 4194304,
-  ImGuiInputTextFlags_CallbackEdit = 8388608
+  ImGuiInputTextFlags_CallbackEdit = 8388608,
+  ImGuiInputTextFlags_WordWrap = 16777216
 }
 global ImGuiTreeNodeFlags_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiTreeNodeFlags_None = 0,
@@ -304,7 +307,8 @@ global ImGuiSelectableFlags_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiSelectableFlags_AllowDoubleClick = 4,
   ImGuiSelectableFlags_Disabled = 8,
   ImGuiSelectableFlags_AllowOverlap = 16,
-  ImGuiSelectableFlags_Highlight = 32
+  ImGuiSelectableFlags_Highlight = 32,
+  ImGuiSelectableFlags_SelectOnNav = 64
 }
 global ImGuiComboFlags_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiComboFlags_None = 0,
@@ -717,26 +721,27 @@ global ImGuiStyleVar_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiStyleVar_CellPadding = 17,
   ImGuiStyleVar_ScrollbarSize = 18,
   ImGuiStyleVar_ScrollbarRounding = 19,
-  ImGuiStyleVar_GrabMinSize = 20,
-  ImGuiStyleVar_GrabRounding = 21,
-  ImGuiStyleVar_ImageBorderSize = 22,
-  ImGuiStyleVar_TabRounding = 23,
-  ImGuiStyleVar_TabBorderSize = 24,
-  ImGuiStyleVar_TabMinWidthBase = 25,
-  ImGuiStyleVar_TabMinWidthShrink = 26,
-  ImGuiStyleVar_TabBarBorderSize = 27,
-  ImGuiStyleVar_TabBarOverlineSize = 28,
-  ImGuiStyleVar_TableAngledHeadersAngle = 29,
-  ImGuiStyleVar_TableAngledHeadersTextAlign = 30,
-  ImGuiStyleVar_TreeLinesSize = 31,
-  ImGuiStyleVar_TreeLinesRounding = 32,
-  ImGuiStyleVar_ButtonTextAlign = 33,
-  ImGuiStyleVar_SelectableTextAlign = 34,
-  ImGuiStyleVar_SeparatorTextBorderSize = 35,
-  ImGuiStyleVar_SeparatorTextAlign = 36,
-  ImGuiStyleVar_SeparatorTextPadding = 37,
-  ImGuiStyleVar_DockingSeparatorSize = 38,
-  ImGuiStyleVar_COUNT = 39
+  ImGuiStyleVar_ScrollbarPadding = 20,
+  ImGuiStyleVar_GrabMinSize = 21,
+  ImGuiStyleVar_GrabRounding = 22,
+  ImGuiStyleVar_ImageBorderSize = 23,
+  ImGuiStyleVar_TabRounding = 24,
+  ImGuiStyleVar_TabBorderSize = 25,
+  ImGuiStyleVar_TabMinWidthBase = 26,
+  ImGuiStyleVar_TabMinWidthShrink = 27,
+  ImGuiStyleVar_TabBarBorderSize = 28,
+  ImGuiStyleVar_TabBarOverlineSize = 29,
+  ImGuiStyleVar_TableAngledHeadersAngle = 30,
+  ImGuiStyleVar_TableAngledHeadersTextAlign = 31,
+  ImGuiStyleVar_TreeLinesSize = 32,
+  ImGuiStyleVar_TreeLinesRounding = 33,
+  ImGuiStyleVar_ButtonTextAlign = 34,
+  ImGuiStyleVar_SelectableTextAlign = 35,
+  ImGuiStyleVar_SeparatorTextBorderSize = 36,
+  ImGuiStyleVar_SeparatorTextAlign = 37,
+  ImGuiStyleVar_SeparatorTextPadding = 38,
+  ImGuiStyleVar_DockingSeparatorSize = 39,
+  ImGuiStyleVar_COUNT = 40
 }
 global ImGuiButtonFlags_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiButtonFlags_None = 0,
@@ -943,6 +948,7 @@ ImGuiStyle = @record{
   ColumnsMinSpacing: float32,
   ScrollbarSize: float32,
   ScrollbarRounding: float32,
+  ScrollbarPadding: float32,
   GrabMinSize: float32,
   GrabRounding: float32,
   LogSliderDeadzone: float32,
@@ -968,6 +974,7 @@ ImGuiStyle = @record{
   SeparatorTextPadding: ImVec2,
   DisplayWindowPadding: ImVec2,
   DisplaySafeAreaPadding: ImVec2,
+  DockingNodeHasCloseButton: boolean,
   DockingSeparatorSize: float32,
   MouseCursorScale: float32,
   AntiAliasedLines: boolean,
@@ -1191,6 +1198,10 @@ global ImVector_ImGuiStoragePair: type <cimport,nodecl> = @record{
 ImGuiStorage = @record{
   Data: ImVector_ImGuiStoragePair
 }
+global ImGuiListClipperFlags_: type <cimport,nodecl,using> = @enum(cint){
+  ImGuiListClipperFlags_None = 0,
+  ImGuiListClipperFlags_NoSetTableRowCounters = 1
+}
 ImGuiListClipper = @record{
   Ctx: *ImGuiContext,
   DisplayStart: cint,
@@ -1199,7 +1210,8 @@ ImGuiListClipper = @record{
   ItemsHeight: float32,
   StartPosY: float64,
   StartSeekOffsetY: float64,
-  TempData: pointer
+  TempData: pointer,
+  Flags: ImGuiListClipperFlags
 }
 ImColor = @record{
   Value: ImVec4
@@ -1730,6 +1742,12 @@ global ImGuiTypingSelectFlags: type <cimport,nodecl> = @cint
 global ImGuiWindowRefreshFlags: type <cimport,nodecl> = @cint
 global ImGuiTableColumnIdx: type <cimport,nodecl> = @ImS16
 global ImGuiTableDrawChannelIdx: type <cimport,nodecl> = @ImU16
+global ImDrawTextFlags_: type <cimport,nodecl,using> = @enum(cint){
+  ImDrawTextFlags_None = 0,
+  ImDrawTextFlags_CpuFineClip = 1,
+  ImDrawTextFlags_WrapKeepBlanks = 2,
+  ImDrawTextFlags_StopOnNewLine = 4
+}
 global ImFileHandle: type <cimport,nodecl> = @*FILE
 global ImVec1: type <cimport,nodecl,forwarddecl> = @record{}
 ImVec1 = @record{
@@ -1760,7 +1778,7 @@ global ImVector_int: type <cimport,nodecl> = @record{
   Data: *cint
 }
 ImGuiTextIndex = @record{
-  LineOffsets: ImVector_int,
+  Offsets: ImVector_int,
   EndOffset: cint
 }
 ImDrawListSharedData = @record{
@@ -1889,7 +1907,6 @@ global ImGuiSliderFlagsPrivate_: type <cimport,nodecl,using> = @enum(cint){
 }
 global ImGuiSelectableFlagsPrivate_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiSelectableFlags_NoHoldingActiveID = 1048576,
-  ImGuiSelectableFlags_SelectOnNav = 2097152,
   ImGuiSelectableFlags_SelectOnClick = 4194304,
   ImGuiSelectableFlags_SelectOnRelease = 8388608,
   ImGuiSelectableFlags_SpanAvailWidth = 16777216,
@@ -1995,11 +2012,15 @@ ImGuiInputTextState = @record{
   CallbackTextBackup: ImVector_char,
   BufCapacity: cint,
   Scroll: ImVec2,
+  LineCount: cint,
+  WrapWidth: float32,
   CursorAnim: float32,
   CursorFollow: boolean,
+  CursorCenterY: boolean,
   SelectedAllMouseLock: boolean,
   Edited: boolean,
   WantReloadUserBuf: boolean,
+  LastMoveDirectionLR: ImS8,
   ReloadSelectionStart: cint,
   ReloadSelectionEnd: cint
 }
@@ -2299,7 +2320,8 @@ global ImGuiActivateFlags_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiActivateFlags_PreferTweak = 2,
   ImGuiActivateFlags_TryToPreserveState = 4,
   ImGuiActivateFlags_FromTabbing = 8,
-  ImGuiActivateFlags_FromShortcut = 16
+  ImGuiActivateFlags_FromShortcut = 16,
+  ImGuiActivateFlags_FromFocusApi = 32
 }
 global ImGuiScrollFlags_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiScrollFlags_None = 0,
@@ -2698,8 +2720,8 @@ ImGuiStackLevelInfo = @record{
   ID: ImGuiID,
   QueryFrameCount: ImS8,
   QuerySuccess: boolean,
-  DataType: ImGuiDataType,
-  Desc: [57]cchar
+  DataType: ImS8,
+  DescOffset: cint
 }
 global ImGuiIDStackTool: type <cimport,nodecl,forwarddecl> = @record{}
 global ImVector_ImGuiStackLevelInfo: type <cimport,nodecl> = @record{
@@ -2710,11 +2732,14 @@ global ImVector_ImGuiStackLevelInfo: type <cimport,nodecl> = @record{
 ImGuiIDStackTool = @record{
   LastActiveFrame: cint,
   StackLevel: cint,
-  QueryId: ImGuiID,
+  QueryMainId: ImGuiID,
   Results: ImVector_ImGuiStackLevelInfo,
-  CopyToClipboardOnCtrlC: boolean,
+  QueryHookActive: boolean,
+  OptHexEncodeNonAsciiChars: boolean,
+  OptCopyToClipboardOnCtrlC: boolean,
   CopyToClipboardLastTime: float32,
-  ResultPathBuf: ImGuiTextBuffer
+  ResultPathsBuf: ImGuiTextBuffer,
+  ResultTempBuf: ImGuiTextBuffer
 }
 global ImGuiContextHookCallback: type <cimport,nodecl> = @function(ctx: *ImGuiContext, hook: *ImGuiContextHook): void
 global ImGuiContextHookType: type <cimport,nodecl,using> = @enum(cint){
@@ -2931,7 +2956,7 @@ ImGuiContext = @record{
   WheelingWindowWheelRemainder: ImVec2,
   WheelingAxisAvg: ImVec2,
   DebugDrawIdConflictsId: ImGuiID,
-  DebugHookIdInfo: ImGuiID,
+  DebugHookIdInfoId: ImGuiID,
   HoveredId: ImGuiID,
   HoveredIdPreviousFrame: ImGuiID,
   HoveredIdPreviousFrameItemCount: cint,
@@ -3104,6 +3129,7 @@ ImGuiContext = @record{
   MouseStationaryTimer: float32,
   MouseLastValidPos: ImVec2,
   InputTextState: ImGuiInputTextState,
+  InputTextLineIndex: ImGuiTextIndex,
   InputTextDeactivatedState: ImGuiInputTextDeactivatedState,
   InputTextPasswordFontBackupBaked: ImFontBaked,
   InputTextPasswordFontBackupFlags: ImFontFlags,
@@ -3699,7 +3725,7 @@ ImFontLoader = @record{
 }
 ImFontAtlasRectEntry = @record{
   TargetIndex: cint,
-  Generation: cint,
+  Generation: cuint,
   IsUsed: cuint
 }
 ImFontAtlasPostProcessData = @record{
@@ -4440,10 +4466,10 @@ global function ImFont_IsGlyphInFont(self: *ImFont, c: ImWchar): boolean <cimpor
 global function ImFont_IsLoaded(self: *ImFont): boolean <cimport,nodecl> end
 global function ImFont_GetDebugName(self: *ImFont): cstring <cimport,nodecl> end
 global function ImFont_GetFontBaked(self: *ImFont, font_size: float32, density: float32): *ImFontBaked <cimport,nodecl> end
-global function ImFont_CalcTextSizeA(pOut: *ImVec2, self: *ImFont, size: float32, max_width: float32, wrap_width: float32, text_begin: cstring, text_end: cstring, remaining: *cstring): void <cimport,nodecl> end
+global function ImFont_CalcTextSizeA(pOut: *ImVec2, self: *ImFont, size: float32, max_width: float32, wrap_width: float32, text_begin: cstring, text_end: cstring, out_remaining: *cstring): void <cimport,nodecl> end
 global function ImFont_CalcWordWrapPosition(self: *ImFont, size: float32, text: cstring, text_end: cstring, wrap_width: float32): cstring <cimport,nodecl> end
 global function ImFont_RenderChar(self: *ImFont, draw_list: *ImDrawList, size: float32, pos: ImVec2, col: ImU32, c: ImWchar, cpu_fine_clip: *ImVec4): void <cimport,nodecl> end
-global function ImFont_RenderText(self: *ImFont, draw_list: *ImDrawList, size: float32, pos: ImVec2, col: ImU32, clip_rect: ImVec4, text_begin: cstring, text_end: cstring, wrap_width: float32, cpu_fine_clip: boolean): void <cimport,nodecl> end
+global function ImFont_RenderText(self: *ImFont, draw_list: *ImDrawList, size: float32, pos: ImVec2, col: ImU32, clip_rect: ImVec4, text_begin: cstring, text_end: cstring, wrap_width: float32, flags: ImDrawTextFlags): void <cimport,nodecl> end
 global function ImFont_ClearOutputData(self: *ImFont): void <cimport,nodecl> end
 global function ImFont_AddRemapChar(self: *ImFont, from_codepoint: ImWchar, to_codepoint: ImWchar): void <cimport,nodecl> end
 global function ImFont_IsGlyphRangeUnused(self: *ImFont, c_begin: cuint, c_last: cuint): boolean <cimport,nodecl> end
@@ -4459,6 +4485,7 @@ global function ImGuiPlatformImeData_ImGuiPlatformImeData(): *ImGuiPlatformImeDa
 global function ImGuiPlatformImeData_destroy(self: *ImGuiPlatformImeData): void <cimport,nodecl> end
 global function igImHashData(data: pointer, data_size: csize, seed: ImGuiID): ImGuiID <cimport,nodecl> end
 global function igImHashStr(data: cstring, data_size: csize, seed: ImGuiID): ImGuiID <cimport,nodecl> end
+global function igImHashSkipUncontributingPrefix(label: cstring): cstring <cimport,nodecl> end
 global function igImQsort(base: pointer, count: csize, size_of_element: csize, compare_func: function(a1: pointer, a2: pointer): cint): void <cimport,nodecl> end
 global function igImAlphaBlendColors(col_a: ImU32, col_b: ImU32): ImU32 <cimport,nodecl> end
 global function igImIsPowerOfTwo_Int(v: cint): boolean <cimport,nodecl> end
@@ -4501,6 +4528,9 @@ global function igImTextCountUtf8BytesFromChar(in_text: cstring, in_text_end: cs
 global function igImTextCountUtf8BytesFromStr(in_text: *ImWchar, in_text_end: *ImWchar): cint <cimport,nodecl> end
 global function igImTextFindPreviousUtf8Codepoint(in_text_start: cstring, in_text_curr: cstring): cstring <cimport,nodecl> end
 global function igImTextCountLines(in_text: cstring, in_text_end: cstring): cint <cimport,nodecl> end
+global function igImFontCalcTextSizeEx(pOut: *ImVec2, font: *ImFont, size: float32, max_width: float32, wrap_width: float32, text_begin: cstring, text_end_display: cstring, text_end: cstring, out_remaining: *cstring, out_offset: *ImVec2, flags: ImDrawTextFlags): void <cimport,nodecl> end
+global function igImFontCalcWordWrapPositionEx(font: *ImFont, size: float32, text: cstring, text_end: cstring, wrap_width: float32, flags: ImDrawTextFlags): cstring <cimport,nodecl> end
+global function igImTextCalcWordWrapNextLineStart(text: cstring, text_end: cstring, flags: ImDrawTextFlags): cstring <cimport,nodecl> end
 global function igImFileOpen(filename: cstring, mode: cstring): ImFileHandle <cimport,nodecl> end
 global function igImFileClose(file: ImFileHandle): boolean <cimport,nodecl> end
 global function igImFileGetSize(file: ImFileHandle): ImU64 <cimport,nodecl> end
@@ -4592,6 +4622,7 @@ global function ImRect_ClipWithFull(self: *ImRect, r: ImRect): void <cimport,nod
 global function ImRect_Floor(self: *ImRect): void <cimport,nodecl> end
 global function ImRect_IsInverted(self: *ImRect): boolean <cimport,nodecl> end
 global function ImRect_ToVec4(pOut: *ImVec4, self: *ImRect): void <cimport,nodecl> end
+global function ImRect_AsVec4(self: *ImRect): *ImVec4 <cimport,nodecl> end
 global function igImBitArrayGetStorageSizeInBytes(bitcount: cint): csize <cimport,nodecl> end
 global function igImBitArrayClearAllBits(arr: *ImU32, bitcount: cint): void <cimport,nodecl> end
 global function igImBitArrayTestBit(arr: *ImU32, n: cint): boolean <cimport,nodecl> end
@@ -4635,6 +4666,7 @@ global function ImGuiInputTextState_ClearText(self: *ImGuiInputTextState): void 
 global function ImGuiInputTextState_ClearFreeMemory(self: *ImGuiInputTextState): void <cimport,nodecl> end
 global function ImGuiInputTextState_OnKeyPressed(self: *ImGuiInputTextState, key: cint): void <cimport,nodecl> end
 global function ImGuiInputTextState_OnCharPressed(self: *ImGuiInputTextState, c: cuint): void <cimport,nodecl> end
+global function ImGuiInputTextState_GetPreferredOffsetX(self: *ImGuiInputTextState): float32 <cimport,nodecl> end
 global function ImGuiInputTextState_CursorAnimReset(self: *ImGuiInputTextState): void <cimport,nodecl> end
 global function ImGuiInputTextState_CursorClamp(self: *ImGuiInputTextState): void <cimport,nodecl> end
 global function ImGuiInputTextState_HasSelection(self: *ImGuiInputTextState): boolean <cimport,nodecl> end
@@ -4871,6 +4903,7 @@ global function igCalcItemSize(pOut: *ImVec2, size: ImVec2, default_w: float32, 
 global function igCalcWrapWidthForPos(pos: ImVec2, wrap_pos_x: float32): float32 <cimport,nodecl> end
 global function igPushMultiItemsWidths(components: cint, width_full: float32): void <cimport,nodecl> end
 global function igShrinkWidths(items: *ImGuiShrinkWidthItem, count: cint, width_excess: float32, width_min: float32): void <cimport,nodecl> end
+global function igCalcClipRectVisibleItemsY(clip_rect: ImRect, pos: ImVec2, items_height: float32, out_visible_start: *cint, out_visible_end: *cint): void <cimport,nodecl> end
 global function igGetStyleVarInfo(idx: ImGuiStyleVar): *ImGuiStyleVarInfo <cimport,nodecl> end
 global function igBeginDisabledOverrideReenable(): void <cimport,nodecl> end
 global function igEndDisabledOverrideReenable(): void <cimport,nodecl> end
@@ -5084,6 +5117,8 @@ global function igTableSettingsAddSettingsHandler(): void <cimport,nodecl> end
 global function igTableSettingsCreate(id: ImGuiID, columns_count: cint): *ImGuiTableSettings <cimport,nodecl> end
 global function igTableSettingsFindByID(id: ImGuiID): *ImGuiTableSettings <cimport,nodecl> end
 global function igGetCurrentTabBar(): *ImGuiTabBar <cimport,nodecl> end
+global function igTabBarFindByID(id: ImGuiID): *ImGuiTabBar <cimport,nodecl> end
+global function igTabBarRemove(tab_bar: *ImGuiTabBar): void <cimport,nodecl> end
 global function igBeginTabBarEx(tab_bar: *ImGuiTabBar, bb: ImRect, flags: ImGuiTabBarFlags): boolean <cimport,nodecl> end
 global function igTabBarFindTabByID(tab_bar: *ImGuiTabBar, tab_id: ImGuiID): *ImGuiTabItem <cimport,nodecl> end
 global function igTabBarFindTabByOrder(tab_bar: *ImGuiTabBar, order: cint): *ImGuiTabItem <cimport,nodecl> end
@@ -5226,7 +5261,7 @@ global function ImFontLoader_ImFontLoader(): *ImFontLoader <cimport,nodecl> end
 global function ImFontLoader_destroy(self: *ImFontLoader): void <cimport,nodecl> end
 global function igImFontAtlasGetFontLoaderForStbTruetype(): *ImFontLoader <cimport,nodecl> end
 global function igImFontAtlasRectId_GetIndex(id: ImFontAtlasRectId): cint <cimport,nodecl> end
-global function igImFontAtlasRectId_GetGeneration(id: ImFontAtlasRectId): cint <cimport,nodecl> end
+global function igImFontAtlasRectId_GetGeneration(id: ImFontAtlasRectId): cuint <cimport,nodecl> end
 global function igImFontAtlasRectId_Make(index_idx: cint, gen_idx: cint): ImFontAtlasRectId <cimport,nodecl> end
 global function ImFontAtlasBuilder_ImFontAtlasBuilder(): *ImFontAtlasBuilder <cimport,nodecl> end
 global function ImFontAtlasBuilder_destroy(self: *ImFontAtlasBuilder): void <cimport,nodecl> end
