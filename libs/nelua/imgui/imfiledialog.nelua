@@ -362,7 +362,7 @@ ImGuiStyle = @record{
   AntiAliasedFill: boolean,
   CurveTessellationTol: float32,
   CircleTessellationMaxError: float32,
-  Colors: [60]ImVec4,
+  Colors: [61]ImVec4,
   HoverStationaryDelay: float32,
   HoverDelayShort: float32,
   HoverDelayNormal: float32,
@@ -410,7 +410,7 @@ ImGuiIO = @record{
   ConfigViewportsNoTaskBarIcon: boolean,
   ConfigViewportsNoDecoration: boolean,
   ConfigViewportsNoDefaultParent: boolean,
-  ConfigViewportPlatformFocusSetsImGuiFocus: boolean,
+  ConfigViewportsPlatformFocusSetsImGuiFocus: boolean,
   ConfigDpiScaleFonts: boolean,
   ConfigDpiScaleViewports: boolean,
   MouseDrawCursor: boolean,
@@ -886,6 +886,7 @@ ImGuiViewport = @record{
   WorkSize: ImVec2,
   DpiScale: float32,
   ParentViewportId: cuint,
+  ParentViewport: *ImGuiViewport,
   DrawData: *ImDrawData,
   RendererUserData: pointer,
   PlatformUserData: pointer,
@@ -1283,8 +1284,8 @@ global ImGuiKeyRoutingData: type <cimport,nodecl,forwarddecl> = @record{}
 ImGuiKeyRoutingData = @record{
   NextEntryIndex: cshort,
   Mods: cushort,
-  RoutingCurrScore: cuchar,
-  RoutingNextScore: cuchar,
+  RoutingCurrScore: cushort,
+  RoutingNextScore: cushort,
   RoutingCurr: cuint,
   RoutingNext: cuint
 }
@@ -1957,6 +1958,7 @@ ImGuiContext = @record{
   DragDropTargetRect: ImRect,
   DragDropTargetClipRect: ImRect,
   DragDropTargetId: cuint,
+  DragDropTargetFullViewport: cuint,
   DragDropAcceptFlags: cint,
   DragDropAcceptIdCurrRectSurface: float32,
   DragDropAcceptIdCurr: cuint,
@@ -2698,4 +2700,4 @@ global function IGFD_RemovePlacesGroup(vContextPtr: *ImGuiFileDialog, vGroupName
 global function IGFD_AddPlace(vContextPtr: *ImGuiFileDialog, vGroupName: cstring, vPlaceName: cstring, vPlacePath: cstring, vCanBeSaved: boolean, vIconText: cstring): boolean <cimport,nodecl> end
 global function IGFD_RemovePlace(vContextPtr: *ImGuiFileDialog, vGroupName: cstring, vPlaceName: cstring): boolean <cimport,nodecl> end
 global IGFD_VERSION: cstring <comptime> = "v0.6.8"
-global IGFD_IMGUI_SUPPORTED_VERSION: cstring <comptime> = "1.90.5 WIP"
+global IGFD_IMGUI_SUPPORTED_VERSION: cstring <comptime> = "1.92.0 WIP"

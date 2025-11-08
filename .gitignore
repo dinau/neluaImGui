@@ -1,3 +1,5 @@
+*.org
+.githubx/
 libs/SDL3/
 delModule.mak
 *.o

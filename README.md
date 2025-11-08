@@ -8,6 +8,7 @@
     - [imGuiToggleDemo](#imguitoggledemo)
     - [imKnobsDemo](#imknobsdemo)
     - [imSpinnerDemo](#imspinnerdemo)
+    - [Raylib + ImGui + rlImGui](#raylib--imgui--rlimgui)
     - [imColorTextEditDemo](#imcolortexteditdemo)
     - [imGuizmoDemo](#imguizmodemo)
     - [imNodesDemo](#imnodesdemo)
@@ -31,7 +32,9 @@
 
 [Dear ImGui](https://github.com/ocornut/imgui) / [CImGui](https://github.com/cimgui/cimgui) wrapper library and some examples with NeLua language
 
-ImGui / CImGui 1.92.3 dock (2025/09) 
+NeluaImGui:  ImGui + CImGui 1.92.4 dock (2025/11)  
+
+(Another binding: [NeluaImGui2](https://github.com/dinau/neluaimgui2): ImGui + Dear Bindings)
 
 #### Prerequisites
 
@@ -100,6 +103,43 @@ GCC / Clang
 [imSpinnerDemo.nelua](examples/imSpinnerDemo/imSpinnerDemo.nelua) 
 
 ![alt](https://github.com/dinau/neluaImGui/raw/main/img/imSpinner.gif)
+
+##### Raylib + ImGui + rlImGui
+
+---
+
+[rlimgui_basic.nelua](examples/rlimgui_basic/rlimgui_basic.nelua) 
+
+![alt](https://github.com/dinau/neluaImGui/raw/main/img/rlimgui.gif)
+
+- Build and run
+   1. Download Raylib binary for Windows: [raylib-5.5_win64_mingw-w64.zip](https://github.com/raysan5/raylib/releases/download/5.5/raylib-5.5_win64_mingw-w64.zip) (for Linux: [raylib-5.5_linux_amd64.tar.gz](https://github.com/raysan5/raylib/releases/download/5.5/raylib-5.5_linux_amd64.tar.gz)) then extracts it.
+   1. Rename the folder name to `raylib` from `raylib-5.5_win64_mingw-w64` (or `raylib-5.5_linux_amd64`).
+   1. `git clone https://github.com/AuzFox/Raylib.nelua`  
+       (git SHA-1: a91ad75074e126679adbe91ab369f4d62d1563b4)
+   1. Deploy them as follows,
+
+      ```sh
+      .
+      |-- neluaImGui
+      |-- raylib
+      `-- Raylib.nelua
+      ```
+
+    1. 
+       ```sh
+       cd neluaImGui/examples/rlimgui_basic
+       make run
+       ```
+
+    1. If you are on Linux,
+
+       ```sh
+       LD_LIBRARY_PATH=../../../raylib/lib make run
+       ```
+
+
+
 
 ##### imColorTextEditDemo
 
@@ -274,3 +314,15 @@ These header files [libs/nelua/glfw](libs/nelua/glfw), [libs/nelua/sdl2](libs/ne
 | **Zig**              | Compiler | SDL3 / SDL2 | [Zig-Platformer](https://github.com/dinau/zig-platformer)                                                                                             |
 
 [^order]: Alphabectial order
+
+
+
+Notes:
+
+- Using ImPlot3D / ImPlot with Nim
+- Nim + ImGui + ImPlot3D / ImPlot demo
+- Build with ImPlot3D / ImPlot
+- ImPlot3D integration example
+- This project builds and runs Dear ImGui + ImPlot3D / ImPlot / ImSpinner / ImGuizmo / ImNodes / ImToggle/ ImGuiFileDialog / ImKnobs / rlImGui/ Raylib/ Naylibusing Nim.
+- ImPlot3D is compiled from source (implot3d.h / implot3d.cpp)
+- ImPlot is compiled from source (implot.h / implot.cpp)

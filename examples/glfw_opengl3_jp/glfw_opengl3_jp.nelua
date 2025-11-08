@@ -11,7 +11,7 @@ require'utils'
 require'IconsFontAwesome6'
 
 --- External functions
-local function setupFonts() <cimport> end                -- from utils/setupFonts.c
+local function setupFonts(): *ImFont <cimport> end                -- from utils/setupFonts.c
 
 --- Initial Window size
 local MainWinWidth <const>  = 1024

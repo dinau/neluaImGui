@@ -43,6 +43,7 @@ char LinuxFontNameTbl[][MAX_FONT_NAME] = {
                            ,"/usr/share/fonts/opentype/ipafont-gothic/ipag.ttf"               // JP Debian
                            ,"/usr/share/fonts/opentype/ipafont-gothic/ipam.ttf"               // JP Debian
                            ,"/usr/share/fonts/truetype/liberation/LiberationMono-Regular.ttf" // English Linux Ubuntu
+                           ,"/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"             // English region standard font
                            };
 /*-----------------
  * getWinFontPath()
@@ -64,7 +65,7 @@ float point2px(float point) { //## Convert point to pixel
 /*--------------
  * setupFonts()
  *-------------*/
-void setupFonts(void) {
+ImFont* setupFonts(void) {
   ImGuiIO* pio = ImGui_GetIO();
   ImFontConfig* config  = ImFontConfig_ImFontConfig();
   ImFont* theFont = NULL;
@@ -101,7 +102,8 @@ void setupFonts(void) {
   }
   // Merge IconFont
   config->MergeMode = true;
-  ImFontAtlas_AddFontFromFileTTF(pio->Fonts, IconFontPath, point2px(11), config , ranges_icon_fonts);
+  theFont = ImFontAtlas_AddFontFromFileTTF(pio->Fonts, IconFontPath, point2px(11), config , ranges_icon_fonts);
+  return theFont;
 }
 
 ImVec2 getMainViewport_WorkSize() {

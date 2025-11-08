@@ -17,7 +17,7 @@ require'IconsFontAwesome6'
 require'imcolortextedit'
 
 --- External functions
-local function setupFonts() <cimport> end                -- from utils/setupFonts.c
+local function setupFonts(): *ImFont <cimport> end                -- from utils/setupFonts.c
 local function point2px(point:float32): float32 <cimport> end
 
 --- Initial Window size

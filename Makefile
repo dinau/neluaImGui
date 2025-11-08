@@ -13,6 +13,7 @@ EXAMPLE_DIRS := \
 							imPlot3DDemo \
 							imPlotDemo \
 							imSpinnerDemo \
+							rlimgui_basic \
 							sdl2_opengl3
 
 ifeq ($(OS),Windows_NT)

@@ -1,0 +1,129 @@
+require'raylib'
+require 'rlimgui'
+--
+require'cimgui'
+require'simple'
+require'IconsFontAwesome6'
+
+local SCREEN_WIDTH: uint16 <comptime> = 1080
+local SCREEN_HEIGHT: uint16 <comptime> = 600
+
+--- External functions
+local function setupFonts(): *ImFont <cimport> end                -- from utils/setupFonts.c
+
+local testDrawRectangle = function()
+  local rec = rl.rectangle{50, 50, 400, 150}
+  rl.drawRectangleRec(rec, rl.color{64,166,217,55})
+end
+
+local testDrawText = function()
+  rl.drawText(string.format("%s",         _VERSION),   70, 70,  20, rl.DARKBLUE)
+  rl.drawText(string.format("Raylib v%s", rl.VERSION), 70, 100, 20, rl.DARKBLUE)
+  rl.drawText("2025/11",                               70, 130, 20, rl.DARKBLUE)
+
+  local font = rl.getFontDefault()
+  local position = rl.vector2{150, 160}
+  rl.drawTextEx(font, "Hello with custom font", position, 24, 2, rl.GRAY)
+end
+
+---------
+--- main
+---------
+local main = function()
+  rl.setConfigFlags(rl.configFlags.VSYNC_HINT | rl.configFlags.WINDOW_RESIZABLE) -- Enable VSYNC
+  rl.initWindow(SCREEN_WIDTH,SCREEN_HEIGHT, "Raylib.nelua + Dear ImGui + rlImGui")
+
+  -- Define our custom camera to look into our 3d world
+  local camera = rl.camera3D{
+    rl.vector3{18, 18, 18}, -- Camera position
+    rl.vector3{0,  0,  0},  -- Camera looking at point
+    rl.vector3{0,  1,  0},  -- Camera up vector (rotation towards target)
+    45,                     -- Camera field-of-view Y
+    PERSPECTIVE             -- Camera projection type
+  }
+
+  local image   = rl.loadImage("istockphoto_com-1209065219-128.png") -- https://www.istockphoto.com  search "grayscale height map"
+  local texture = rl.loadTextureFromImage(image)                     -- Convert image to texture (VRAM)
+  local mesh    = rl.genMeshHeightmap(image, rl.vector3{16, 8, 16})  -- Generate heightmap mesh (RAM and VRAM)
+  local model   = rl.loadModelFromMesh(mesh)                         -- Load model from generated mesh
+  local MATERIAL_MAP_DIFFUSE <const> = rl.materialMapIndex.ALBEDO
+  model.materials.maps.texture = texture                             -- Set map diffuse texture
+
+  local mapPosition = rl.vector3{-8, 0, -8}                          -- Define model position
+  rl.unloadImage(image)                                              -- Unload heightmap image from RAM, already uploaded to VRAM
+
+  rl.setTargetFPS(60)                                                -- Set our game to run at 60 frames-per-second
+  rlImGuiSetup(true)
+  local font = setupFonts()
+
+  local mapColor: [3]cfloat = {(255 - 73)/255, (255 - 113)/255, (255 - 166)/255}
+
+  local pio = igGetIO()
+
+  --------------------
+  --- Main while loop
+  --------------------
+  while not rl.windowShouldClose() do
+    -- Update
+    ----------------------------------------------------------------------------------
+    -- TODO: Update your variables here
+    rl.updateCamera(camera, ORBITAL) -- Set an orbital camera mode
+    ----------------------------------------------------------------------------------
+    -- Draw
+    ----------------------------------------------------------------------------------
+    rl.beginDrawing()
+    rlImGuiBegin()
+
+    ---------------
+    -- ImGui block
+    ---------------
+    pio.FontDefault = font
+    do
+      igPushFont(nilptr, 19.0)
+      defer igPopFont() end
+
+      igShowDemoWindow(nilptr)
+
+      igBegin("Test Window " .. ICON_FA_DOG  , nilptr, 0)
+      igText("%s", ICON_FA_SUN .. " Sun")
+      igText("%s", ICON_FA_CLOUD_RAIN .. " Rain" )
+      igText("Change Color")
+      igColorEdit3("##Change color", &mapColor, 0)
+      igEnd()
+    end
+
+    --------------------
+    -- Raylib draw texts
+    --------------------
+    testDrawRectangle()
+    testDrawText()
+
+    ------------------------
+    -- Raylib draw height map
+    ------------------------
+    rl.clearBackground(rl.BLACK)
+
+    rl.beginMode3D(camera)
+    local color = rl.color{mapColor[0] * 255, mapColor[1] * 255, mapColor[2] * 255,  255}
+    rl.drawModel(model, mapPosition, 1, color)
+    rl.drawGrid(20, 1)
+    rl.endMode3D()
+
+    rl.drawTexture(texture, SCREEN_WIDTH - texture.width - 20, 20, rl.WHITE)
+    rl.drawRectangleLines(SCREEN_WIDTH - texture.width - 20, 20, texture.width, texture.height, rl.WHITE)
+
+    rl.drawText(string.format("%i FPS", rl.getFPS()), 10, 10, 20, rl.GRAY)
+
+    rl.drawText("Dear ImGui + Raylib.nelua + rlImGui", 50, 250, 20, rl.RAYWHITE)
+
+    ------------
+    -- end proc
+    ------------
+    rlImGuiEnd()
+    rl.endDrawing()
+  end -- main while loop end
+
+  rl.closeWindow()       -- Close window and OpenGL context
+end -- main() end
+
+main()

@@ -17,7 +17,7 @@ require'cimplot'
 require'cimplot3d'
 
 --- External functions
-local function setupFonts() <cimport> end                -- from utils/setupFonts.c
+local function setupFonts(): *ImFont <cimport> end                -- from utils/setupFonts.c
 
 --- Initial Window size
 local MainWinWidth <const>  = 1280

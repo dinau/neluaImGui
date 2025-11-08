@@ -633,9 +633,10 @@ global ImGuiBackendFlags_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiBackendFlags_HasSetMousePos = 4,
   ImGuiBackendFlags_RendererHasVtxOffset = 8,
   ImGuiBackendFlags_RendererHasTextures = 16,
-  ImGuiBackendFlags_PlatformHasViewports = 1024,
-  ImGuiBackendFlags_HasMouseHoveredViewport = 2048,
-  ImGuiBackendFlags_RendererHasViewports = 4096
+  ImGuiBackendFlags_RendererHasViewports = 1024,
+  ImGuiBackendFlags_PlatformHasViewports = 2048,
+  ImGuiBackendFlags_HasMouseHoveredViewport = 4096,
+  ImGuiBackendFlags_HasParentViewport = 8192
 }
 global ImGuiCol_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiCol_Text = 0,
@@ -694,11 +695,12 @@ global ImGuiCol_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiCol_TextSelectedBg = 53,
   ImGuiCol_TreeLines = 54,
   ImGuiCol_DragDropTarget = 55,
-  ImGuiCol_NavCursor = 56,
-  ImGuiCol_NavWindowingHighlight = 57,
-  ImGuiCol_NavWindowingDimBg = 58,
-  ImGuiCol_ModalWindowDimBg = 59,
-  ImGuiCol_COUNT = 60
+  ImGuiCol_UnsavedMarker = 56,
+  ImGuiCol_NavCursor = 57,
+  ImGuiCol_NavWindowingHighlight = 58,
+  ImGuiCol_NavWindowingDimBg = 59,
+  ImGuiCol_ModalWindowDimBg = 60,
+  ImGuiCol_COUNT = 61
 }
 global ImGuiStyleVar_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiStyleVar_Alpha = 0,
@@ -982,7 +984,7 @@ ImGuiStyle = @record{
   AntiAliasedFill: boolean,
   CurveTessellationTol: float32,
   CircleTessellationMaxError: float32,
-  Colors: [60]ImVec4,
+  Colors: [61]ImVec4,
   HoverStationaryDelay: float32,
   HoverDelayShort: float32,
   HoverDelayNormal: float32,
@@ -1030,7 +1032,7 @@ ImGuiIO = @record{
   ConfigViewportsNoTaskBarIcon: boolean,
   ConfigViewportsNoDecoration: boolean,
   ConfigViewportsNoDefaultParent: boolean,
-  ConfigViewportPlatformFocusSetsImGuiFocus: boolean,
+  ConfigViewportsPlatformFocusSetsImGuiFocus: boolean,
   ConfigDpiScaleFonts: boolean,
   ConfigDpiScaleViewports: boolean,
   MouseDrawCursor: boolean,
@@ -1646,6 +1648,7 @@ ImGuiViewport = @record{
   WorkSize: ImVec2,
   DpiScale: float32,
   ParentViewportId: ImGuiID,
+  ParentViewport: *ImGuiViewport,
   DrawData: *ImDrawData,
   RendererUserData: pointer,
   PlatformUserData: pointer,
@@ -2244,8 +2247,8 @@ global ImGuiKeyRoutingData: type <cimport,nodecl,forwarddecl> = @record{}
 ImGuiKeyRoutingData = @record{
   NextEntryIndex: ImGuiKeyRoutingIndex,
   Mods: ImU16,
-  RoutingCurrScore: ImU8,
-  RoutingNextScore: ImU8,
+  RoutingCurrScore: ImU16,
+  RoutingNextScore: ImU16,
   RoutingCurr: ImGuiID,
   RoutingNext: ImGuiID
 }
@@ -3093,6 +3096,7 @@ ImGuiContext = @record{
   DragDropTargetRect: ImRect,
   DragDropTargetClipRect: ImRect,
   DragDropTargetId: ImGuiID,
+  DragDropTargetFullViewport: ImGuiID,
   DragDropAcceptFlags: ImGuiDragDropFlags,
   DragDropAcceptIdCurrRectSurface: float32,
   DragDropAcceptIdCurr: ImGuiID,
@@ -4479,6 +4483,8 @@ global function ImGuiViewport_GetCenter(pOut: *ImVec2, self: *ImGuiViewport): vo
 global function ImGuiViewport_GetWorkCenter(pOut: *ImVec2, self: *ImGuiViewport): void <cimport,nodecl> end
 global function ImGuiPlatformIO_ImGuiPlatformIO(): *ImGuiPlatformIO <cimport,nodecl> end
 global function ImGuiPlatformIO_destroy(self: *ImGuiPlatformIO): void <cimport,nodecl> end
+global function ImGuiPlatformIO_ClearPlatformHandlers(self: *ImGuiPlatformIO): void <cimport,nodecl> end
+global function ImGuiPlatformIO_ClearRendererHandlers(self: *ImGuiPlatformIO): void <cimport,nodecl> end
 global function ImGuiPlatformMonitor_ImGuiPlatformMonitor(): *ImGuiPlatformMonitor <cimport,nodecl> end
 global function ImGuiPlatformMonitor_destroy(self: *ImGuiPlatformMonitor): void <cimport,nodecl> end
 global function ImGuiPlatformImeData_ImGuiPlatformImeData(): *ImGuiPlatformImeData <cimport,nodecl> end
@@ -5039,9 +5045,11 @@ global function igPopFocusScope(): void <cimport,nodecl> end
 global function igGetCurrentFocusScope(): ImGuiID <cimport,nodecl> end
 global function igIsDragDropActive(): boolean <cimport,nodecl> end
 global function igBeginDragDropTargetCustom(bb: ImRect, id: ImGuiID): boolean <cimport,nodecl> end
+global function igBeginDragDropTargetViewport(viewport: *ImGuiViewport, p_bb: *ImRect): boolean <cimport,nodecl> end
 global function igClearDragDrop(): void <cimport,nodecl> end
 global function igIsDragDropPayloadBeingAccepted(): boolean <cimport,nodecl> end
-global function igRenderDragDropTargetRect(bb: ImRect, item_clip_rect: ImRect): void <cimport,nodecl> end
+global function igRenderDragDropTargetRectForItem(bb: ImRect): void <cimport,nodecl> end
+global function igRenderDragDropTargetRectEx(draw_list: *ImDrawList, bb: ImRect): void <cimport,nodecl> end
 global function igGetTypingSelectRequest(flags: ImGuiTypingSelectFlags): *ImGuiTypingSelectRequest <cimport,nodecl> end
 global function igTypingSelectFindMatch(req: *ImGuiTypingSelectRequest, items_count: cint, get_item_name_func: function(a1: pointer, a2: cint): cstring, user_data: pointer, nav_item_idx: cint): cint <cimport,nodecl> end
 global function igTypingSelectFindNextSingleCharMatch(req: *ImGuiTypingSelectRequest, items_count: cint, get_item_name_func: function(a1: pointer, a2: cint): cstring, user_data: pointer, nav_item_idx: cint): cint <cimport,nodecl> end
