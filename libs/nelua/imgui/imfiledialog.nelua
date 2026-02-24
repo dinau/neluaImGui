@@ -332,6 +332,7 @@ ImGuiStyle = @record{
   GrabMinSize: float32,
   GrabRounding: float32,
   LogSliderDeadzone: float32,
+  ImageRounding: float32,
   ImageBorderSize: float32,
   TabRounding: float32,
   TabBorderSize: float32,
@@ -346,6 +347,10 @@ ImGuiStyle = @record{
   TreeLinesFlags: cint,
   TreeLinesSize: float32,
   TreeLinesRounding: float32,
+  DragDropTargetRounding: float32,
+  DragDropTargetBorderSize: float32,
+  DragDropTargetPadding: float32,
+  ColorMarkerSize: float32,
   ColorButtonPosition: ImGuiDir,
   ButtonTextAlign: ImVec2,
   SelectableTextAlign: ImVec2,
@@ -362,7 +367,7 @@ ImGuiStyle = @record{
   AntiAliasedFill: boolean,
   CurveTessellationTol: float32,
   CircleTessellationMaxError: float32,
-  Colors: [61]ImVec4,
+  Colors: [62]ImVec4,
   HoverStationaryDelay: float32,
   HoverDelayShort: float32,
   HoverDelayNormal: float32,
@@ -403,6 +408,7 @@ ImGuiIO = @record{
   ConfigNavCursorVisibleAuto: boolean,
   ConfigNavCursorVisibleAlways: boolean,
   ConfigDockingNoSplit: boolean,
+  ConfigDockingNoDockingOver: boolean,
   ConfigDockingWithShift: boolean,
   ConfigDockingAlwaysTabBar: boolean,
   ConfigDockingTransparentPayload: boolean,
@@ -740,7 +746,6 @@ ImFontConfig = @record{
   FontDataOwnedByAtlas: boolean,
   MergeMode: boolean,
   PixelSnapH: boolean,
-  PixelSnapV: boolean,
   OversampleH: cschar,
   OversampleV: cschar,
   EllipsisChar: cushort,
@@ -755,6 +760,7 @@ ImFontConfig = @record{
   FontLoaderFlags: cuint,
   RasterizerMultiply: float32,
   RasterizerDensity: float32,
+  ExtraSizeScale: float32,
   Flags: cint,
   DstFont: *ImFont,
   FontLoader: *ImFontLoader,
@@ -854,7 +860,7 @@ ImFontBaked = @record{
   LoadNoRenderOnLayout: cuint,
   LastUsedFrame: cint,
   BakedId: cuint,
-  ContainerFont: *ImFont,
+  OwnerFont: *ImFont,
   FontLoaderDatas: pointer
 }
 global ImVector_ImFontConfigPtr: type <cimport,nodecl> = @record{
@@ -864,7 +870,7 @@ global ImVector_ImFontConfigPtr: type <cimport,nodecl> = @record{
 }
 ImFont = @record{
   LastBaked: *ImFontBaked,
-  ContainerAtlas: *ImFontAtlas,
+  OwnerAtlas: *ImFontAtlas,
   Flags: cint,
   CurrentRasterizerDensity: float32,
   FontId: cuint,
@@ -1058,6 +1064,7 @@ ImGuiGroupData = @record{
   BackupCurrLineSize: ImVec2,
   BackupCurrLineTextBaseOffset: float32,
   BackupActiveIdIsAlive: cuint,
+  BackupActiveIdHasBeenEditedThisFrame: boolean,
   BackupDeactivatedIdIsAlive: boolean,
   BackupHoveredIdIsAlive: boolean,
   BackupIsSameLine: boolean,
@@ -1138,7 +1145,8 @@ ImGuiNextItemData = @record{
   OpenVal: boolean,
   OpenCond: cuchar,
   RefVal: ImGuiDataTypeStorage,
-  StorageId: cuint
+  StorageId: cuint,
+  ColorMarker: cuint
 }
 ImGuiLastItemData = @record{
   ID: cuint,
@@ -1208,7 +1216,7 @@ ImGuiPopupData = @record{
   OpenMousePos: ImVec2
 }
 global ImBitArrayForNamedKeys: type <cimport,nodecl> = @record{
-  Storage: [5]cuint
+  Data: [5]cuint
 }
 global ImGuiInputEventType: type <cimport,nodecl,using> = @enum(cint){
   ImGuiInputEventType_None = 0,
@@ -1496,7 +1504,7 @@ ImGuiDockNode = @record{
   WantHiddenTabBarToggle: boolean
 }
 ImGuiWindowDockStyle = @record{
-  Colors: [8]cuint
+  Colors: [9]cuint
 }
 global ImVector_ImGuiDockRequest: type <cimport,nodecl> = @record{
   Size: cint,
@@ -1589,23 +1597,27 @@ ImGuiStackLevelInfo = @record{
   DataType: cschar,
   DescOffset: cint
 }
-global ImGuiIDStackTool: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiDebugItemPathQuery: type <cimport,nodecl,forwarddecl> = @record{}
 global ImVector_ImGuiStackLevelInfo: type <cimport,nodecl> = @record{
   Size: cint,
   Capacity: cint,
   Data: *ImGuiStackLevelInfo
 }
-ImGuiIDStackTool = @record{
-  LastActiveFrame: cint,
-  StackLevel: cint,
-  QueryMainId: cuint,
+ImGuiDebugItemPathQuery = @record{
+  MainID: cuint,
+  Active: boolean,
+  Complete: boolean,
+  Step: cschar,
   Results: ImVector_ImGuiStackLevelInfo,
-  QueryHookActive: boolean,
+  ResultsDescBuf: ImGuiTextBuffer,
+  ResultPathBuf: ImGuiTextBuffer
+}
+global ImGuiIDStackTool: type <cimport,nodecl,forwarddecl> = @record{}
+ImGuiIDStackTool = @record{
   OptHexEncodeNonAsciiChars: boolean,
   OptCopyToClipboardOnCtrlC: boolean,
-  CopyToClipboardLastTime: float32,
-  ResultPathsBuf: ImGuiTextBuffer,
-  ResultTempBuf: ImGuiTextBuffer
+  LastActiveFrame: cint,
+  CopyToClipboardLastTime: float32
 }
 global ImGuiContextHookType: type <cimport,nodecl,using> = @enum(cint){
   ImGuiContextHookType_NewFramePre = 0,
@@ -1770,6 +1782,15 @@ global ImVector_ImGuiContextHook: type <cimport,nodecl> = @record{
 }
 ImGuiContext = @record{
   Initialized: boolean,
+  WithinFrameScope: boolean,
+  WithinFrameScopeWithImplicitWindow: boolean,
+  TestEngineHookItems: boolean,
+  FrameCount: cint,
+  FrameCountEnded: cint,
+  FrameCountPlatformEnded: cint,
+  FrameCountRendered: cint,
+  Time: float64,
+  ContextName: [16]cchar,
   IO: ImGuiIO,
   PlatformIO: ImGuiPlatformIO,
   Style: ImGuiStyle,
@@ -1784,18 +1805,8 @@ ImGuiContext = @record{
   FontRasterizerDensity: float32,
   CurrentDpiScale: float32,
   DrawListSharedData: ImDrawListSharedData,
-  Time: float64,
-  FrameCount: cint,
-  FrameCountEnded: cint,
-  FrameCountPlatformEnded: cint,
-  FrameCountRendered: cint,
   WithinEndChildID: cuint,
-  WithinFrameScope: boolean,
-  WithinFrameScopeWithImplicitWindow: boolean,
-  GcCompactAll: boolean,
-  TestEngineHookItems: boolean,
   TestEngine: pointer,
-  ContextName: [16]cchar,
   InputEventsQueue: ImVector_ImGuiInputEvent,
   InputEventsTrail: ImVector_ImGuiInputEvent,
   InputEventsNextMouseSource: ImGuiMouseSource,
@@ -1840,11 +1851,11 @@ ImGuiContext = @record{
   ActiveIdHasBeenEditedBefore: boolean,
   ActiveIdHasBeenEditedThisFrame: boolean,
   ActiveIdFromShortcut: boolean,
+  ActiveIdMouseButton: cschar,
   ActiveIdDisabledId: cuint,
-  ActiveIdMouseButton: cint,
   ActiveIdClickOffset: ImVec2,
-  ActiveIdWindow: *ImGuiWindow,
   ActiveIdSource: ImGuiInputSource,
+  ActiveIdWindow: *ImGuiWindow,
   ActiveIdPreviousFrame: cuint,
   DeactivatedItemData: ImGuiDeactivatedItemData,
   ActiveIdValueOnActivation: ImGuiDataTypeStorage,
@@ -1866,6 +1877,7 @@ ImGuiContext = @record{
   LastItemData: ImGuiLastItemData,
   NextWindowData: ImGuiNextWindowData,
   DebugShowGroupRects: boolean,
+  GcCompactAll: boolean,
   DebugFlashStyleColorIdx: cint,
   ColorStack: ImVector_ImGuiColorMod,
   StyleVarStack: ImVector_ImGuiStyleMod,
@@ -1934,6 +1946,7 @@ ImGuiContext = @record{
   NavJustMovedToKeyMods: cint,
   NavJustMovedToIsTabbing: boolean,
   NavJustMovedToHasSelectionData: boolean,
+  ConfigNavEnableTabbing: boolean,
   ConfigNavWindowingWithGamepad: boolean,
   ConfigNavWindowingKeyNext: cint,
   ConfigNavWindowingKeyPrev: cint,
@@ -1959,7 +1972,8 @@ ImGuiContext = @record{
   DragDropTargetClipRect: ImRect,
   DragDropTargetId: cuint,
   DragDropTargetFullViewport: cuint,
-  DragDropAcceptFlags: cint,
+  DragDropAcceptFlagsCurr: cint,
+  DragDropAcceptFlagsPrev: cint,
   DragDropAcceptIdCurrRectSurface: float32,
   DragDropAcceptIdCurr: cuint,
   DragDropAcceptIdPrev: cuint,
@@ -2043,6 +2057,7 @@ ImGuiContext = @record{
   HookIdNext: cuint,
   LocalizationTable: [13]cstring,
   LogEnabled: boolean,
+  LogLineFirstItem: boolean,
   LogFlags: cint,
   LogWindow: *ImGuiWindow,
   LogFile: *FILE,
@@ -2050,7 +2065,6 @@ ImGuiContext = @record{
   LogNextPrefix: cstring,
   LogNextSuffix: cstring,
   LogLinePosY: float32,
-  LogLineFirstItem: boolean,
   LogDepthRef: cint,
   LogDepthToExpand: cint,
   LogDepthToExpandDefault: cint,
@@ -2078,6 +2092,7 @@ ImGuiContext = @record{
   DebugFlashStyleColorTime: float32,
   DebugFlashStyleColorBackup: ImVec4,
   DebugMetricsConfig: ImGuiMetricsConfig,
+  DebugItemPathQuery: ImGuiDebugItemPathQuery,
   DebugIDStackTool: ImGuiIDStackTool,
   DebugAllocInfo: ImGuiDebugAllocInfo,
   DebugHoveredDockNode: *ImGuiDockNode,
@@ -2131,6 +2146,7 @@ ImGuiWindowTempData = @record{
   DockTabItemStatusFlags: cint,
   DockTabItemRect: ImRect,
   ItemWidth: float32,
+  ItemWidthDefault: float32,
   TextWrapPos: float32,
   ItemWidthStack: ImVector_float,
   TextWrapPosStack: ImVector_float
@@ -2204,14 +2220,15 @@ ImGuiWindow = @record{
   BeginOrderWithinParent: cshort,
   BeginOrderWithinContext: cshort,
   FocusOrder: cshort,
+  AutoPosLastDirection: ImGuiDir,
   AutoFitFramesX: cschar,
   AutoFitFramesY: cschar,
   AutoFitOnlyGrows: boolean,
-  AutoPosLastDirection: ImGuiDir,
   HiddenFramesCanSkipItems: cschar,
   HiddenFramesCannotSkipItems: cschar,
   HiddenFramesForRenderOnly: cschar,
   DisableInputsFrames: cschar,
+  BgClickFlags: cint,
   SetWindowPosAllowFlags: cint,
   SetWindowSizeAllowFlags: cint,
   SetWindowCollapsedAllowFlags: cint,
@@ -2232,7 +2249,6 @@ ImGuiWindow = @record{
   LastFrameActive: cint,
   LastFrameJustFocused: cint,
   LastTimeActive: float32,
-  ItemWidthDefault: float32,
   StateStorage: ImGuiStorage,
   ColumnsStorage: ImVector_ImGuiOldColumns,
   FontWindowScale: float32,
@@ -2294,6 +2310,7 @@ ImGuiTabBar = @record{
   ID: cuint,
   SelectedTabId: cuint,
   NextSelectedTabId: cuint,
+  NextScrollToTabId: cuint,
   VisibleTabId: cuint,
   CurrFrameVisible: cint,
   PrevFrameVisible: cint,
@@ -2531,6 +2548,7 @@ global ImVector_ImGuiTableHeaderData: type <cimport,nodecl> = @record{
   Data: *ImGuiTableHeaderData
 }
 ImGuiTableTempData = @record{
+  WindowID: cuint,
   TableIndex: cint,
   LastTimeActive: float32,
   AngledHeadersExtraWidth: float32,
@@ -2637,6 +2655,7 @@ global ImGuiFileDialogFlags_: type <cimport,nodecl,using,ctypedef'ImGuiFileDialo
   ImGuiFileDialogFlags_DisableQuickPathSelection = 4096,
   ImGuiFileDialogFlags_ShowDevicesButton = 8192,
   ImGuiFileDialogFlags_NaturalSorting = 16384,
+  ImGuiFileDialogFlags_OptionalFileName = 32768,
   ImGuiFileDialogFlags_Default = 521
 }
 global IGFD_ResultMode: type <cimport,nodecl> = @cint
@@ -2699,5 +2718,5 @@ global function IGFD_AddPlacesGroup(vContextPtr: *ImGuiFileDialog, vGroupName: c
 global function IGFD_RemovePlacesGroup(vContextPtr: *ImGuiFileDialog, vGroupName: cstring): boolean <cimport,nodecl> end
 global function IGFD_AddPlace(vContextPtr: *ImGuiFileDialog, vGroupName: cstring, vPlaceName: cstring, vPlacePath: cstring, vCanBeSaved: boolean, vIconText: cstring): boolean <cimport,nodecl> end
 global function IGFD_RemovePlace(vContextPtr: *ImGuiFileDialog, vGroupName: cstring, vPlaceName: cstring): boolean <cimport,nodecl> end
-global IGFD_VERSION: cstring <comptime> = "v0.6.8"
-global IGFD_IMGUI_SUPPORTED_VERSION: cstring <comptime> = "1.92.0 WIP"
+global IGFD_VERSION: cstring <comptime> = "v0.6.9 WIP"
+global IGFD_IMGUI_SUPPORTED_VERSION: cstring <comptime> = "1.92.3"

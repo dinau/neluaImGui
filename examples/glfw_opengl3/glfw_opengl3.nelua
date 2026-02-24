@@ -221,12 +221,10 @@ local main = function()
       local size = ImVec2{textureWidth, textureHeight}
       local uv0  = ImVec2{0, 0}
       local uv1  = ImVec2{1, 1}
-      local imageBoxPosTop:ImVec2
-      local imageBoxPosEnd:ImVec2
-      igGetCursorScreenPos(&imageBoxPosTop) -- # Get absolute pos.
+      local imageBoxPosTop = igGetCursorScreenPos() -- # Get absolute pos.
       local texRef = ImTextureRef{nilptr, textureId}
       igImage(texRef, size, uv0, uv1)
-      igGetCursorScreenPos(&imageBoxPosEnd) -- # Get absolute pos.
+      local imageBoxPosEnd = igGetCursorScreenPos() -- # Get absolute pos.
       -- #
       if igIsItemHovered(ImGuiHoveredFlags_DelayNone) then
         zoomGlass(&zoomTextureID, textureWidth, imageBoxPosTop, imageBoxPosEnd)

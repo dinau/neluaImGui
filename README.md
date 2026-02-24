@@ -32,7 +32,7 @@
 
 [Dear ImGui](https://github.com/ocornut/imgui) / [CImGui](https://github.com/cimgui/cimgui) wrapper library and some examples with NeLua language
 
-NeluaImGui:  ImGui + CImGui 1.92.4 dock (2025/11)  
+NeluaImGui:  ImGui + CImGui 1.92.6 dock (2026/02)
 
 (Another binding: [NeluaImGui2](https://github.com/dinau/neluaimgui2): ImGui + Dear Bindings)
 
@@ -42,14 +42,14 @@ NeluaImGui:  ImGui + CImGui 1.92.4 dock (2025/11)
 
 - Install [MSys2/MinGW](https://www.msys2.org/) (Windows OS)
 - Install [NeLua](https://nelua.io/installing/)
-- Windows OS 10 or later
+- Windows OS 11 or later
    1. Install libraries
    
       ```sh
-      pacman -S mingw-w64-x86_64-{gcc,clang,glfw,pkgconf,SDL2,SDL2_image} make
+      pacman -S mingw-w64-ucrt-x86_64-{gcc,clang,glfw,pkgconf,SDL2,SDL2_image} make
       ```
 
-- Linux: Debian13 Trixie faimilies  
+- Linux: Ubuntu / Debian faimilies  
    1. Install libraries
 
       ```sh

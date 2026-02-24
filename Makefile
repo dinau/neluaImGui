@@ -130,6 +130,13 @@ NELUA_IMGUI_DIR = libs/nelua/imgui
 # To update libs
 #    1. make copylib
 #    2. make gen
+#
+# Notice:
+#   Needs patches:
+#     * libs/cimnodes/cimnodes.h: Comment out these lines
+#              typedef struct ImGuiContext ImGuiContext;
+#              typedef struct ImVec2 ImVec2;
+#
 gen: imspinner_patch
 	@cp -f $(ORG_H) $(SAVE_H)
 	@(echo "#include \"cimgui.h\"" > $(TMP_H); cat $(ORG_H) >> $(TMP_H); mv -f $(TMP_H) $(ORG_H) )

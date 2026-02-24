@@ -152,8 +152,7 @@ local main = function()
         if igIsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows) and imnodes_IsEditorHovered() and igIsKeyReleased_Nil(ImGuiKey_A) then
           obj.current_id = obj.current_id + 1
           local node_id = obj.current_id
-          local pos: ImVec2
-          igGetMousePos(&pos)
+          local pos =  igGetMousePos()
           imnodes_SetNodeScreenSpacePos(node_id, pos)
           obj.nodes:insert(#obj.nodes, Node{node_id, 0})
         end
@@ -176,10 +175,8 @@ local main = function()
             end
             do imnodes_BeginOutputAttribute(node.id << 24, ImNodesPinShape_CircleFilled)
               defer imnodes_EndOutputAttribute() end
-              local wOut: ImVec2
-              local wVal: ImVec2
-              igCalcTextSize(&wOut, "output", nilptr, false, -1.0)
-              igCalcTextSize(&wVal, "value" , nilptr, false, -1.0)
+              local wOut = igCalcTextSize("output", nilptr, false, -1.0)
+              local wVal = igCalcTextSize("value" , nilptr, false, -1.0)
               igIndent(120 + wVal.x - wOut.x)
               igTextUnformatted("output", nilptr)
             end

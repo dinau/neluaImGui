@@ -25,7 +25,7 @@ global ImFontGlyphRangesBuilder: type <cimport,nodecl,forwarddecl> = @record{}
 global ImFontLoader: type <cimport,nodecl,forwarddecl> = @record{}
 global ImTextureData: type <cimport,nodecl,forwarddecl> = @record{}
 global ImTextureRect: type <cimport,nodecl,forwarddecl> = @record{}
-global ImColor: type <cimport,nodecl,forwarddecl> = @record{}
+global ImColor_c: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiContext: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiIO: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiInputTextCallbackData: type <cimport,nodecl,forwarddecl> = @record{}
@@ -51,7 +51,7 @@ global ImGuiTextFilter: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiViewport: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiWindowClass: type <cimport,nodecl,forwarddecl> = @record{}
 global ImBitVector: type <cimport,nodecl,forwarddecl> = @record{}
-global ImRect: type <cimport,nodecl,forwarddecl> = @record{}
+global ImRect_c: type <cimport,nodecl,forwarddecl> = @record{}
 global ImGuiTextIndex: type <cimport,nodecl,forwarddecl> = @record{}
 global ImDrawDataBuilder: type <cimport,nodecl,forwarddecl> = @record{}
 global ImFontAtlasPostProcessData: type <cimport,nodecl,forwarddecl> = @record{}
@@ -163,21 +163,21 @@ global ImGuiInputTextCallback: type <cimport,nodecl> = @function(data: *ImGuiInp
 global ImGuiSizeCallback: type <cimport,nodecl> = @function(data: *ImGuiSizeCallbackData): void
 global ImGuiMemAllocFunc: type <cimport,nodecl> = @function(sz: csize, user_data: pointer): pointer
 global ImGuiMemFreeFunc: type <cimport,nodecl> = @function(ptr: pointer, user_data: pointer): void
-global ImVec2: type <cimport,nodecl,forwarddecl> = @record{}
-ImVec2 = @record{
+global ImVec2_c: type <cimport,nodecl,forwarddecl> = @record{}
+ImVec2_c = @record{
   x: float32,
   y: float32
 }
-global ImVec4: type <cimport,nodecl,forwarddecl> = @record{}
-ImVec4 = @record{
+global ImVec4_c: type <cimport,nodecl,forwarddecl> = @record{}
+ImVec4_c = @record{
   x: float32,
   y: float32,
   z: float32,
   w: float32
 }
 global ImTextureID: type <cimport,nodecl> = @ImU64
-global ImTextureRef: type <cimport,nodecl,forwarddecl> = @record{}
-ImTextureRef = @record{
+global ImTextureRef_c: type <cimport,nodecl,forwarddecl> = @record{}
+ImTextureRef_c = @record{
   _TexData: *ImTextureData,
   _TexID: ImTextureID
 }
@@ -232,7 +232,8 @@ global ImGuiItemFlags_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiItemFlags_NoNavDefaultFocus = 4,
   ImGuiItemFlags_ButtonRepeat = 8,
   ImGuiItemFlags_AutoClosePopups = 16,
-  ImGuiItemFlags_AllowDuplicateId = 32
+  ImGuiItemFlags_AllowDuplicateId = 32,
+  ImGuiItemFlags_Disabled = 64
 }
 global ImGuiInputTextFlags_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiInputTextFlags_None = 0,
@@ -288,17 +289,18 @@ global ImGuiTreeNodeFlags_: type <cimport,nodecl,using> = @enum(cint){
 }
 global ImGuiPopupFlags_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiPopupFlags_None = 0,
-  ImGuiPopupFlags_MouseButtonLeft = 0,
-  ImGuiPopupFlags_MouseButtonRight = 1,
-  ImGuiPopupFlags_MouseButtonMiddle = 2,
-  ImGuiPopupFlags_MouseButtonMask_ = 31,
-  ImGuiPopupFlags_MouseButtonDefault_ = 1,
+  ImGuiPopupFlags_MouseButtonLeft = 4,
+  ImGuiPopupFlags_MouseButtonRight = 8,
+  ImGuiPopupFlags_MouseButtonMiddle = 12,
   ImGuiPopupFlags_NoReopen = 32,
   ImGuiPopupFlags_NoOpenOverExistingPopup = 128,
   ImGuiPopupFlags_NoOpenOverItems = 256,
   ImGuiPopupFlags_AnyPopupId = 1024,
   ImGuiPopupFlags_AnyPopupLevel = 2048,
-  ImGuiPopupFlags_AnyPopup = 3072
+  ImGuiPopupFlags_AnyPopup = 3072,
+  ImGuiPopupFlags_MouseButtonShift_ = 2,
+  ImGuiPopupFlags_MouseButtonMask_ = 12,
+  ImGuiPopupFlags_InvalidMask_ = 3
 }
 global ImGuiSelectableFlags_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiSelectableFlags_None = 0,
@@ -404,6 +406,7 @@ global ImGuiDragDropFlags_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiDragDropFlags_AcceptBeforeDelivery = 1024,
   ImGuiDragDropFlags_AcceptNoDrawDefaultRect = 2048,
   ImGuiDragDropFlags_AcceptNoPreviewTooltip = 4096,
+  ImGuiDragDropFlags_AcceptDrawAsHovered = 8192,
   ImGuiDragDropFlags_AcceptPeekOnly = 3072
 }
 global ImGuiDataType_: type <cimport,nodecl,using> = @enum(cint){
@@ -695,12 +698,13 @@ global ImGuiCol_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiCol_TextSelectedBg = 53,
   ImGuiCol_TreeLines = 54,
   ImGuiCol_DragDropTarget = 55,
-  ImGuiCol_UnsavedMarker = 56,
-  ImGuiCol_NavCursor = 57,
-  ImGuiCol_NavWindowingHighlight = 58,
-  ImGuiCol_NavWindowingDimBg = 59,
-  ImGuiCol_ModalWindowDimBg = 60,
-  ImGuiCol_COUNT = 61
+  ImGuiCol_DragDropTargetBg = 56,
+  ImGuiCol_UnsavedMarker = 57,
+  ImGuiCol_NavCursor = 58,
+  ImGuiCol_NavWindowingHighlight = 59,
+  ImGuiCol_NavWindowingDimBg = 60,
+  ImGuiCol_ModalWindowDimBg = 61,
+  ImGuiCol_COUNT = 62
 }
 global ImGuiStyleVar_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiStyleVar_Alpha = 0,
@@ -726,24 +730,25 @@ global ImGuiStyleVar_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiStyleVar_ScrollbarPadding = 20,
   ImGuiStyleVar_GrabMinSize = 21,
   ImGuiStyleVar_GrabRounding = 22,
-  ImGuiStyleVar_ImageBorderSize = 23,
-  ImGuiStyleVar_TabRounding = 24,
-  ImGuiStyleVar_TabBorderSize = 25,
-  ImGuiStyleVar_TabMinWidthBase = 26,
-  ImGuiStyleVar_TabMinWidthShrink = 27,
-  ImGuiStyleVar_TabBarBorderSize = 28,
-  ImGuiStyleVar_TabBarOverlineSize = 29,
-  ImGuiStyleVar_TableAngledHeadersAngle = 30,
-  ImGuiStyleVar_TableAngledHeadersTextAlign = 31,
-  ImGuiStyleVar_TreeLinesSize = 32,
-  ImGuiStyleVar_TreeLinesRounding = 33,
-  ImGuiStyleVar_ButtonTextAlign = 34,
-  ImGuiStyleVar_SelectableTextAlign = 35,
-  ImGuiStyleVar_SeparatorTextBorderSize = 36,
-  ImGuiStyleVar_SeparatorTextAlign = 37,
-  ImGuiStyleVar_SeparatorTextPadding = 38,
-  ImGuiStyleVar_DockingSeparatorSize = 39,
-  ImGuiStyleVar_COUNT = 40
+  ImGuiStyleVar_ImageRounding = 23,
+  ImGuiStyleVar_ImageBorderSize = 24,
+  ImGuiStyleVar_TabRounding = 25,
+  ImGuiStyleVar_TabBorderSize = 26,
+  ImGuiStyleVar_TabMinWidthBase = 27,
+  ImGuiStyleVar_TabMinWidthShrink = 28,
+  ImGuiStyleVar_TabBarBorderSize = 29,
+  ImGuiStyleVar_TabBarOverlineSize = 30,
+  ImGuiStyleVar_TableAngledHeadersAngle = 31,
+  ImGuiStyleVar_TableAngledHeadersTextAlign = 32,
+  ImGuiStyleVar_TreeLinesSize = 33,
+  ImGuiStyleVar_TreeLinesRounding = 34,
+  ImGuiStyleVar_ButtonTextAlign = 35,
+  ImGuiStyleVar_SelectableTextAlign = 36,
+  ImGuiStyleVar_SeparatorTextBorderSize = 37,
+  ImGuiStyleVar_SeparatorTextAlign = 38,
+  ImGuiStyleVar_SeparatorTextPadding = 39,
+  ImGuiStyleVar_DockingSeparatorSize = 40,
+  ImGuiStyleVar_COUNT = 41
 }
 global ImGuiButtonFlags_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiButtonFlags_None = 0,
@@ -765,10 +770,11 @@ global ImGuiColorEditFlags_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiColorEditFlags_NoSidePreview = 256,
   ImGuiColorEditFlags_NoDragDrop = 512,
   ImGuiColorEditFlags_NoBorder = 1024,
-  ImGuiColorEditFlags_AlphaOpaque = 2048,
-  ImGuiColorEditFlags_AlphaNoBg = 4096,
-  ImGuiColorEditFlags_AlphaPreviewHalf = 8192,
-  ImGuiColorEditFlags_AlphaBar = 65536,
+  ImGuiColorEditFlags_NoColorMarkers = 2048,
+  ImGuiColorEditFlags_AlphaOpaque = 4096,
+  ImGuiColorEditFlags_AlphaNoBg = 8192,
+  ImGuiColorEditFlags_AlphaPreviewHalf = 16384,
+  ImGuiColorEditFlags_AlphaBar = 262144,
   ImGuiColorEditFlags_HDR = 524288,
   ImGuiColorEditFlags_DisplayRGB = 1048576,
   ImGuiColorEditFlags_DisplayHSV = 2097152,
@@ -780,7 +786,7 @@ global ImGuiColorEditFlags_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiColorEditFlags_InputRGB = 134217728,
   ImGuiColorEditFlags_InputHSV = 268435456,
   ImGuiColorEditFlags_DefaultOptions_ = 177209344,
-  ImGuiColorEditFlags_AlphaMask_ = 14338,
+  ImGuiColorEditFlags_AlphaMask_ = 28674,
   ImGuiColorEditFlags_DisplayMask_ = 7340032,
   ImGuiColorEditFlags_DataTypeMask_ = 25165824,
   ImGuiColorEditFlags_PickerMask_ = 100663296,
@@ -795,6 +801,7 @@ global ImGuiSliderFlags_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiSliderFlags_ClampOnInput = 512,
   ImGuiSliderFlags_ClampZeroRange = 1024,
   ImGuiSliderFlags_NoSpeedTweaks = 2048,
+  ImGuiSliderFlags_ColorMarkers = 4096,
   ImGuiSliderFlags_AlwaysClamp = 1536,
   ImGuiSliderFlags_InvalidMask_ = 1879048207
 }
@@ -928,24 +935,24 @@ ImGuiStyle = @record{
   FontScaleDpi: float32,
   Alpha: float32,
   DisabledAlpha: float32,
-  WindowPadding: ImVec2,
+  WindowPadding: ImVec2_c,
   WindowRounding: float32,
   WindowBorderSize: float32,
   WindowBorderHoverPadding: float32,
-  WindowMinSize: ImVec2,
-  WindowTitleAlign: ImVec2,
+  WindowMinSize: ImVec2_c,
+  WindowTitleAlign: ImVec2_c,
   WindowMenuButtonPosition: ImGuiDir,
   ChildRounding: float32,
   ChildBorderSize: float32,
   PopupRounding: float32,
   PopupBorderSize: float32,
-  FramePadding: ImVec2,
+  FramePadding: ImVec2_c,
   FrameRounding: float32,
   FrameBorderSize: float32,
-  ItemSpacing: ImVec2,
-  ItemInnerSpacing: ImVec2,
-  CellPadding: ImVec2,
-  TouchExtraPadding: ImVec2,
+  ItemSpacing: ImVec2_c,
+  ItemInnerSpacing: ImVec2_c,
+  CellPadding: ImVec2_c,
+  TouchExtraPadding: ImVec2_c,
   IndentSpacing: float32,
   ColumnsMinSpacing: float32,
   ScrollbarSize: float32,
@@ -954,6 +961,7 @@ ImGuiStyle = @record{
   GrabMinSize: float32,
   GrabRounding: float32,
   LogSliderDeadzone: float32,
+  ImageRounding: float32,
   ImageBorderSize: float32,
   TabRounding: float32,
   TabBorderSize: float32,
@@ -964,18 +972,22 @@ ImGuiStyle = @record{
   TabBarBorderSize: float32,
   TabBarOverlineSize: float32,
   TableAngledHeadersAngle: float32,
-  TableAngledHeadersTextAlign: ImVec2,
+  TableAngledHeadersTextAlign: ImVec2_c,
   TreeLinesFlags: ImGuiTreeNodeFlags,
   TreeLinesSize: float32,
   TreeLinesRounding: float32,
+  DragDropTargetRounding: float32,
+  DragDropTargetBorderSize: float32,
+  DragDropTargetPadding: float32,
+  ColorMarkerSize: float32,
   ColorButtonPosition: ImGuiDir,
-  ButtonTextAlign: ImVec2,
-  SelectableTextAlign: ImVec2,
+  ButtonTextAlign: ImVec2_c,
+  SelectableTextAlign: ImVec2_c,
   SeparatorTextBorderSize: float32,
-  SeparatorTextAlign: ImVec2,
-  SeparatorTextPadding: ImVec2,
-  DisplayWindowPadding: ImVec2,
-  DisplaySafeAreaPadding: ImVec2,
+  SeparatorTextAlign: ImVec2_c,
+  SeparatorTextPadding: ImVec2_c,
+  DisplayWindowPadding: ImVec2_c,
+  DisplaySafeAreaPadding: ImVec2_c,
   DockingNodeHasCloseButton: boolean,
   DockingSeparatorSize: float32,
   MouseCursorScale: float32,
@@ -984,7 +996,7 @@ ImGuiStyle = @record{
   AntiAliasedFill: boolean,
   CurveTessellationTol: float32,
   CircleTessellationMaxError: float32,
-  Colors: [61]ImVec4,
+  Colors: [62]ImVec4_c,
   HoverStationaryDelay: float32,
   HoverDelayShort: float32,
   HoverDelayNormal: float32,
@@ -1007,8 +1019,8 @@ global ImVector_ImWchar: type <cimport,nodecl> = @record{
 ImGuiIO = @record{
   ConfigFlags: ImGuiConfigFlags,
   BackendFlags: ImGuiBackendFlags,
-  DisplaySize: ImVec2,
-  DisplayFramebufferScale: ImVec2,
+  DisplaySize: ImVec2_c,
+  DisplayFramebufferScale: ImVec2_c,
   DeltaTime: float32,
   IniSavingRate: float32,
   IniFilename: cstring,
@@ -1025,6 +1037,7 @@ ImGuiIO = @record{
   ConfigNavCursorVisibleAuto: boolean,
   ConfigNavCursorVisibleAlways: boolean,
   ConfigDockingNoSplit: boolean,
+  ConfigDockingNoDockingOver: boolean,
   ConfigDockingWithShift: boolean,
   ConfigDockingAlwaysTabBar: boolean,
   ConfigDockingTransparentPayload: boolean,
@@ -1079,9 +1092,9 @@ ImGuiIO = @record{
   MetricsRenderIndices: cint,
   MetricsRenderWindows: cint,
   MetricsActiveWindows: cint,
-  MouseDelta: ImVec2,
+  MouseDelta: ImVec2_c,
   Ctx: *ImGuiContext,
-  MousePos: ImVec2,
+  MousePos: ImVec2_c,
   MouseDown: [5]boolean,
   MouseWheel: float32,
   MouseWheelH: float32,
@@ -1094,8 +1107,8 @@ ImGuiIO = @record{
   KeyMods: ImGuiKeyChord,
   KeysData: [155]ImGuiKeyData,
   WantCaptureMouseUnlessPopupClose: boolean,
-  MousePosPrev: ImVec2,
-  MouseClickedPos: [5]ImVec2,
+  MousePosPrev: ImVec2_c,
+  MouseClickedPos: [5]ImVec2_c,
   MouseClickedTime: [5]float64,
   MouseClicked: [5]boolean,
   MouseDoubleClicked: [5]boolean,
@@ -1109,7 +1122,7 @@ ImGuiIO = @record{
   MouseCtrlLeftAsRightClick: boolean,
   MouseDownDuration: [5]float32,
   MouseDownDurationPrev: [5]float32,
-  MouseDragMaxDistanceAbs: [5]ImVec2,
+  MouseDragMaxDistanceAbs: [5]ImVec2_c,
   MouseDragMaxDistanceSqr: [5]float32,
   PenPressure: float32,
   AppFocusLost: boolean,
@@ -1122,21 +1135,23 @@ ImGuiInputTextCallbackData = @record{
   EventFlag: ImGuiInputTextFlags,
   Flags: ImGuiInputTextFlags,
   UserData: pointer,
-  EventChar: ImWchar,
+  ID: ImGuiID,
   EventKey: ImGuiKey,
+  EventChar: ImWchar,
+  EventActivated: boolean,
+  BufDirty: boolean,
   Buf: cstring,
   BufTextLen: cint,
   BufSize: cint,
-  BufDirty: boolean,
   CursorPos: cint,
   SelectionStart: cint,
   SelectionEnd: cint
 }
 ImGuiSizeCallbackData = @record{
   UserData: pointer,
-  Pos: ImVec2,
-  CurrentSize: ImVec2,
-  DesiredSize: ImVec2
+  Pos: ImVec2_c,
+  CurrentSize: ImVec2_c,
+  DesiredSize: ImVec2_c
 }
 ImGuiWindowClass = @record{
   ClassId: ImGuiID,
@@ -1215,8 +1230,8 @@ ImGuiListClipper = @record{
   TempData: pointer,
   Flags: ImGuiListClipperFlags
 }
-ImColor = @record{
-  Value: ImVec4
+ImColor_c = @record{
+  Value: ImVec4_c
 }
 global ImGuiMultiSelectFlags_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiMultiSelectFlags_None = 0,
@@ -1235,7 +1250,8 @@ global ImGuiMultiSelectFlags_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiMultiSelectFlags_ScopeRect = 4096,
   ImGuiMultiSelectFlags_SelectOnClick = 8192,
   ImGuiMultiSelectFlags_SelectOnClickRelease = 16384,
-  ImGuiMultiSelectFlags_NavWrapX = 65536
+  ImGuiMultiSelectFlags_NavWrapX = 65536,
+  ImGuiMultiSelectFlags_NoSelectOnRightClick = 131072
 }
 global ImVector_ImGuiSelectionRequest: type <cimport,nodecl> = @record{
   Size: cint,
@@ -1276,8 +1292,8 @@ ImGuiSelectionExternalStorage = @record{
 }
 global ImDrawCallback: type <cimport,nodecl> = @function(parent_list: *ImDrawList, cmd: *ImDrawCmd): void
 ImDrawCmd = @record{
-  ClipRect: ImVec4,
-  TexRef: ImTextureRef,
+  ClipRect: ImVec4_c,
+  TexRef: ImTextureRef_c,
   VtxOffset: cuint,
   IdxOffset: cuint,
   ElemCount: cuint,
@@ -1287,14 +1303,14 @@ ImDrawCmd = @record{
   UserCallbackDataOffset: cint
 }
 ImDrawVert = @record{
-  pos: ImVec2,
-  uv: ImVec2,
+  pos: ImVec2_c,
+  uv: ImVec2_c,
   col: ImU32
 }
 global ImDrawCmdHeader: type <cimport,nodecl,forwarddecl> = @record{}
 ImDrawCmdHeader = @record{
-  ClipRect: ImVec4,
-  TexRef: ImTextureRef,
+  ClipRect: ImVec4_c,
+  TexRef: ImTextureRef_c,
   VtxOffset: cuint
 }
 global ImVector_ImDrawCmd: type <cimport,nodecl> = @record{
@@ -1352,17 +1368,17 @@ global ImVector_ImDrawVert: type <cimport,nodecl> = @record{
 global ImVector_ImVec2: type <cimport,nodecl> = @record{
   Size: cint,
   Capacity: cint,
-  Data: *ImVec2
+  Data: *ImVec2_c
 }
 global ImVector_ImVec4: type <cimport,nodecl> = @record{
   Size: cint,
   Capacity: cint,
-  Data: *ImVec4
+  Data: *ImVec4_c
 }
 global ImVector_ImTextureRef: type <cimport,nodecl> = @record{
   Size: cint,
   Capacity: cint,
-  Data: *ImTextureRef
+  Data: *ImTextureRef_c
 }
 global ImVector_ImU8: type <cimport,nodecl> = @record{
   Size: cint,
@@ -1403,9 +1419,9 @@ ImDrawData = @record{
   TotalIdxCount: cint,
   TotalVtxCount: cint,
   CmdLists: ImVector_ImDrawListPtr,
-  DisplayPos: ImVec2,
-  DisplaySize: ImVec2,
-  FramebufferScale: ImVec2,
+  DisplayPos: ImVec2_c,
+  DisplaySize: ImVec2_c,
+  FramebufferScale: ImVec2_c,
   OwnerViewport: *ImGuiViewport,
   Textures: *ImVector_ImTextureDataPtr
 }
@@ -1456,14 +1472,13 @@ ImFontConfig = @record{
   FontDataOwnedByAtlas: boolean,
   MergeMode: boolean,
   PixelSnapH: boolean,
-  PixelSnapV: boolean,
   OversampleH: ImS8,
   OversampleV: ImS8,
   EllipsisChar: ImWchar,
   SizePixels: float32,
   GlyphRanges: *ImWchar,
   GlyphExcludeRanges: *ImWchar,
-  GlyphOffset: ImVec2,
+  GlyphOffset: ImVec2_c,
   GlyphMinAdvanceX: float32,
   GlyphMaxAdvanceX: float32,
   GlyphExtraAdvanceX: float32,
@@ -1471,6 +1486,7 @@ ImFontConfig = @record{
   FontLoaderFlags: cuint,
   RasterizerMultiply: float32,
   RasterizerDensity: float32,
+  ExtraSizeScale: float32,
   Flags: ImFontFlags,
   DstFont: *ImFont,
   FontLoader: *ImFontLoader,
@@ -1506,8 +1522,8 @@ ImFontAtlasRect = @record{
   y: cushort,
   w: cushort,
   h: cushort,
-  uv0: ImVec2,
-  uv1: ImVec2
+  uv0: ImVec2_c,
+  uv1: ImVec2_c
 }
 global ImFontAtlasFlags_: type <cimport,nodecl,using> = @enum(cint){
   ImFontAtlasFlags_None = 0,
@@ -1539,18 +1555,18 @@ ImFontAtlas = @record{
   TexMaxWidth: cint,
   TexMaxHeight: cint,
   UserData: pointer,
-  TexRef: ImTextureRef,
+  TexRef: ImTextureRef_c,
   TexData: *ImTextureData,
   TexList: ImVector_ImTextureDataPtr,
   Locked: boolean,
   RendererHasTextures: boolean,
   TexIsBuilt: boolean,
   TexPixelsUseColors: boolean,
-  TexUvScale: ImVec2,
-  TexUvWhitePixel: ImVec2,
+  TexUvScale: ImVec2_c,
+  TexUvWhitePixel: ImVec2_c,
   Fonts: ImVector_ImFontPtr,
   Sources: ImVector_ImFontConfig,
-  TexUvLines: [33]ImVec4,
+  TexUvLines: [33]ImVec4_c,
   TexNextUniqueID: cint,
   FontNextUniqueID: cint,
   DrawListSharedDatas: ImVector_ImDrawListSharedDataPtr,
@@ -1593,7 +1609,7 @@ ImFontBaked = @record{
   LoadNoRenderOnLayout: cuint,
   LastUsedFrame: cint,
   BakedId: ImGuiID,
-  ContainerFont: *ImFont,
+  OwnerFont: *ImFont,
   FontLoaderDatas: pointer
 }
 global ImFontFlags_: type <cimport,nodecl,using> = @enum(cint){
@@ -1609,7 +1625,7 @@ global ImVector_ImFontConfigPtr: type <cimport,nodecl> = @record{
 }
 ImFont = @record{
   LastBaked: *ImFontBaked,
-  ContainerAtlas: *ImFontAtlas,
+  OwnerAtlas: *ImFontAtlas,
   Flags: ImFontFlags,
   CurrentRasterizerDensity: float32,
   FontId: ImGuiID,
@@ -1641,11 +1657,11 @@ global ImGuiViewportFlags_: type <cimport,nodecl,using> = @enum(cint){
 ImGuiViewport = @record{
   ID: ImGuiID,
   Flags: ImGuiViewportFlags,
-  Pos: ImVec2,
-  Size: ImVec2,
-  FramebufferScale: ImVec2,
-  WorkPos: ImVec2,
-  WorkSize: ImVec2,
+  Pos: ImVec2_c,
+  Size: ImVec2_c,
+  FramebufferScale: ImVec2_c,
+  WorkPos: ImVec2_c,
+  WorkSize: ImVec2_c,
   DpiScale: float32,
   ParentViewportId: ImGuiID,
   ParentViewport: *ImGuiViewport,
@@ -1684,11 +1700,11 @@ ImGuiPlatformIO = @record{
   Platform_CreateWindow: function(vp: *ImGuiViewport): void,
   Platform_DestroyWindow: function(vp: *ImGuiViewport): void,
   Platform_ShowWindow: function(vp: *ImGuiViewport): void,
-  Platform_SetWindowPos: function(vp: *ImGuiViewport, pos: ImVec2): void,
-  Platform_GetWindowPos: function(vp: *ImGuiViewport): ImVec2,
-  Platform_SetWindowSize: function(vp: *ImGuiViewport, size: ImVec2): void,
-  Platform_GetWindowSize: function(vp: *ImGuiViewport): ImVec2,
-  Platform_GetWindowFramebufferScale: function(vp: *ImGuiViewport): ImVec2,
+  Platform_SetWindowPos: function(vp: *ImGuiViewport, pos: ImVec2_c): void,
+  Platform_GetWindowPos: function(vp: *ImGuiViewport): ImVec2_c,
+  Platform_SetWindowSize: function(vp: *ImGuiViewport, size: ImVec2_c): void,
+  Platform_GetWindowSize: function(vp: *ImGuiViewport): ImVec2_c,
+  Platform_GetWindowFramebufferScale: function(vp: *ImGuiViewport): ImVec2_c,
   Platform_SetWindowFocus: function(vp: *ImGuiViewport): void,
   Platform_GetWindowFocus: function(vp: *ImGuiViewport): boolean,
   Platform_GetWindowMinimized: function(vp: *ImGuiViewport): boolean,
@@ -1699,11 +1715,11 @@ ImGuiPlatformIO = @record{
   Platform_SwapBuffers: function(vp: *ImGuiViewport, render_arg: pointer): void,
   Platform_GetWindowDpiScale: function(vp: *ImGuiViewport): float32,
   Platform_OnChangedViewport: function(vp: *ImGuiViewport): void,
-  Platform_GetWindowWorkAreaInsets: function(vp: *ImGuiViewport): ImVec4,
+  Platform_GetWindowWorkAreaInsets: function(vp: *ImGuiViewport): ImVec4_c,
   Platform_CreateVkSurface: function(vp: *ImGuiViewport, vk_inst: ImU64, vk_allocators: pointer, out_vk_surface: *ImU64): cint,
   Renderer_CreateWindow: function(vp: *ImGuiViewport): void,
   Renderer_DestroyWindow: function(vp: *ImGuiViewport): void,
-  Renderer_SetWindowSize: function(vp: *ImGuiViewport, size: ImVec2): void,
+  Renderer_SetWindowSize: function(vp: *ImGuiViewport, size: ImVec2_c): void,
   Renderer_RenderWindow: function(vp: *ImGuiViewport, render_arg: pointer): void,
   Renderer_SwapBuffers: function(vp: *ImGuiViewport, render_arg: pointer): void,
   Monitors: ImVector_ImGuiPlatformMonitor,
@@ -1711,17 +1727,17 @@ ImGuiPlatformIO = @record{
   Viewports: ImVector_ImGuiViewportPtr
 }
 ImGuiPlatformMonitor = @record{
-  MainPos: ImVec2,
-  MainSize: ImVec2,
-  WorkPos: ImVec2,
-  WorkSize: ImVec2,
+  MainPos: ImVec2_c,
+  MainSize: ImVec2_c,
+  WorkPos: ImVec2_c,
+  WorkSize: ImVec2_c,
   DpiScale: float32,
   PlatformHandle: pointer
 }
 ImGuiPlatformImeData = @record{
   WantVisible: boolean,
   WantTextInput: boolean,
-  InputPos: ImVec2,
+  InputPos: ImVec2_c,
   InputLineHeight: float32,
   ViewportId: ImGuiID
 }
@@ -1742,6 +1758,7 @@ global ImGuiSeparatorFlags: type <cimport,nodecl> = @cint
 global ImGuiTextFlags: type <cimport,nodecl> = @cint
 global ImGuiTooltipFlags: type <cimport,nodecl> = @cint
 global ImGuiTypingSelectFlags: type <cimport,nodecl> = @cint
+global ImGuiWindowBgClickFlags: type <cimport,nodecl> = @cint
 global ImGuiWindowRefreshFlags: type <cimport,nodecl> = @cint
 global ImGuiTableColumnIdx: type <cimport,nodecl> = @ImS16
 global ImGuiTableDrawChannelIdx: type <cimport,nodecl> = @ImU16
@@ -1751,13 +1768,18 @@ global ImDrawTextFlags_: type <cimport,nodecl,using> = @enum(cint){
   ImDrawTextFlags_WrapKeepBlanks = 2,
   ImDrawTextFlags_StopOnNewLine = 4
 }
+global ImWcharClass: type <cimport,nodecl,using> = @enum(cint){
+  ImWcharClass_Blank = 0,
+  ImWcharClass_Punct = 1,
+  ImWcharClass_Other = 2
+}
 global ImFileHandle: type <cimport,nodecl> = @*FILE
 global ImVec1: type <cimport,nodecl,forwarddecl> = @record{}
 ImVec1 = @record{
   x: float32
 }
-global ImVec2i: type <cimport,nodecl,forwarddecl> = @record{}
-ImVec2i = @record{
+global ImVec2i_c: type <cimport,nodecl,forwarddecl> = @record{}
+ImVec2i_c = @record{
   x: cint,
   y: cint
 }
@@ -1766,9 +1788,9 @@ ImVec2ih = @record{
   x: cshort,
   y: cshort
 }
-ImRect = @record{
-  Min: ImVec2,
-  Max: ImVec2
+ImRect_c = @record{
+  Min: ImVec2_c,
+  Max: ImVec2_c
 }
 global ImBitArrayPtr: type <cimport,nodecl> = @*ImU32
 ImBitVector = @record{
@@ -1785,8 +1807,8 @@ ImGuiTextIndex = @record{
   EndOffset: cint
 }
 ImDrawListSharedData = @record{
-  TexUvWhitePixel: ImVec2,
-  TexUvLines: *ImVec4,
+  TexUvWhitePixel: ImVec2_c,
+  TexUvLines: *ImVec4_c,
   FontAtlas: *ImFontAtlas,
   Font: *ImFont,
   FontSize: float32,
@@ -1795,11 +1817,11 @@ ImDrawListSharedData = @record{
   CircleSegmentMaxError: float32,
   InitialFringeScale: float32,
   InitialFlags: ImDrawListFlags,
-  ClipRectFullscreen: ImVec4,
+  ClipRectFullscreen: ImVec4_c,
   TempBuffer: ImVector_ImVec2,
   DrawLists: ImVector_ImDrawListPtr,
   Context: *ImGuiContext,
-  ArcFastVtx: [48]ImVec2,
+  ArcFastVtx: [48]ImVec2_c,
   ArcFastRadiusCutoff: float32,
   CircleSegmentCounts: [64]ImU8
 }
@@ -1820,7 +1842,7 @@ ImGuiStyleVarInfo = @record{
 }
 ImGuiColorMod = @record{
   Col: ImGuiCol,
-  BackupValue: ImVec4
+  BackupValue: ImVec4_c
 }
 ImGuiStyleMod = @record{
   VarIdx: ImGuiStyleVar,
@@ -1844,7 +1866,6 @@ global ImGuiDataTypePrivate_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiDataType_ID = 13
 }
 global ImGuiItemFlagsPrivate_: type <cimport,nodecl,using> = @enum(cint){
-  ImGuiItemFlags_Disabled = 1024,
   ImGuiItemFlags_ReadOnly = 2048,
   ImGuiItemFlags_MixedValue = 4096,
   ImGuiItemFlags_NoWindowHoverableCheck = 8192,
@@ -1966,23 +1987,24 @@ global ImGuiPlotType: type <cimport,nodecl,using> = @enum(cint){
 }
 global ImGuiComboPreviewData: type <cimport,nodecl,forwarddecl> = @record{}
 ImGuiComboPreviewData = @record{
-  PreviewRect: ImRect,
-  BackupCursorPos: ImVec2,
-  BackupCursorMaxPos: ImVec2,
-  BackupCursorPosPrevLine: ImVec2,
+  PreviewRect: ImRect_c,
+  BackupCursorPos: ImVec2_c,
+  BackupCursorMaxPos: ImVec2_c,
+  BackupCursorPosPrevLine: ImVec2_c,
   BackupPrevLineTextBaseOffset: float32,
   BackupLayout: ImGuiLayoutType
 }
 ImGuiGroupData = @record{
   WindowID: ImGuiID,
-  BackupCursorPos: ImVec2,
-  BackupCursorMaxPos: ImVec2,
-  BackupCursorPosPrevLine: ImVec2,
+  BackupCursorPos: ImVec2_c,
+  BackupCursorMaxPos: ImVec2_c,
+  BackupCursorPosPrevLine: ImVec2_c,
   BackupIndent: ImVec1,
   BackupGroupOffset: ImVec1,
-  BackupCurrLineSize: ImVec2,
+  BackupCurrLineSize: ImVec2_c,
   BackupCurrLineTextBaseOffset: float32,
   BackupActiveIdIsAlive: ImGuiID,
+  BackupActiveIdHasBeenEditedThisFrame: boolean,
   BackupDeactivatedIdIsAlive: boolean,
   BackupHoveredIdIsAlive: boolean,
   BackupIsSameLine: boolean,
@@ -2014,7 +2036,7 @@ ImGuiInputTextState = @record{
   TextToRevertTo: ImVector_char,
   CallbackTextBackup: ImVector_char,
   BufCapacity: cint,
-  Scroll: ImVec2,
+  Scroll: ImVec2_c,
   LineCount: cint,
   WrapWidth: float32,
   CursorAnim: float32,
@@ -2032,6 +2054,10 @@ global ImGuiWindowRefreshFlags_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiWindowRefreshFlags_TryToAvoidRefresh = 1,
   ImGuiWindowRefreshFlags_RefreshOnHover = 2,
   ImGuiWindowRefreshFlags_RefreshOnFocus = 4
+}
+global ImGuiWindowBgClickFlags_: type <cimport,nodecl,using> = @enum(cint){
+  ImGuiWindowBgClickFlags_None = 0,
+  ImGuiWindowBgClickFlags_Move = 1
 }
 global ImGuiNextWindowDataFlags_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiNextWindowDataFlags_None = 0,
@@ -2056,23 +2082,23 @@ ImGuiNextWindowData = @record{
   SizeCond: ImGuiCond,
   CollapsedCond: ImGuiCond,
   DockCond: ImGuiCond,
-  PosVal: ImVec2,
-  PosPivotVal: ImVec2,
-  SizeVal: ImVec2,
-  ContentSizeVal: ImVec2,
-  ScrollVal: ImVec2,
+  PosVal: ImVec2_c,
+  PosPivotVal: ImVec2_c,
+  SizeVal: ImVec2_c,
+  ContentSizeVal: ImVec2_c,
+  ScrollVal: ImVec2_c,
   WindowFlags: ImGuiWindowFlags,
   ChildFlags: ImGuiChildFlags,
   PosUndock: boolean,
   CollapsedVal: boolean,
-  SizeConstraintRect: ImRect,
+  SizeConstraintRect: ImRect_c,
   SizeCallback: ImGuiSizeCallback,
   SizeCallbackUserData: pointer,
   BgAlphaVal: float32,
   ViewportId: ImGuiID,
   DockId: ImGuiID,
   WindowClass: ImGuiWindowClass,
-  MenuBarOffsetMinVal: ImVec2,
+  MenuBarOffsetMinVal: ImVec2_c,
   RefreshFlagsVal: ImGuiWindowRefreshFlags
 }
 global ImGuiNextItemDataFlags_: type <cimport,nodecl,using> = @enum(cint){
@@ -2081,7 +2107,8 @@ global ImGuiNextItemDataFlags_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiNextItemDataFlags_HasOpen = 2,
   ImGuiNextItemDataFlags_HasShortcut = 4,
   ImGuiNextItemDataFlags_HasRefVal = 8,
-  ImGuiNextItemDataFlags_HasStorageID = 16
+  ImGuiNextItemDataFlags_HasStorageID = 16,
+  ImGuiNextItemDataFlags_HasColorMarker = 32
 }
 ImGuiNextItemData = @record{
   HasFlags: ImGuiNextItemDataFlags,
@@ -2094,23 +2121,24 @@ ImGuiNextItemData = @record{
   OpenVal: boolean,
   OpenCond: ImU8,
   RefVal: ImGuiDataTypeStorage,
-  StorageId: ImGuiID
+  StorageId: ImGuiID,
+  ColorMarker: ImU32
 }
 ImGuiLastItemData = @record{
   ID: ImGuiID,
   ItemFlags: ImGuiItemFlags,
   StatusFlags: ImGuiItemStatusFlags,
-  Rect: ImRect,
-  NavRect: ImRect,
-  DisplayRect: ImRect,
-  ClipRect: ImRect,
+  Rect: ImRect_c,
+  NavRect: ImRect_c,
+  DisplayRect: ImRect_c,
+  ClipRect: ImRect_c,
   Shortcut: ImGuiKeyChord
 }
 ImGuiTreeNodeStackData = @record{
   ID: ImGuiID,
   TreeFlags: ImGuiTreeNodeFlags,
   ItemFlags: ImGuiItemFlags,
-  NavRect: ImRect,
+  NavRect: ImRect_c,
   DrawLinesX1: float32,
   DrawLinesToNodesY2: float32,
   DrawLinesTableColumn: ImGuiTableColumnIdx
@@ -2165,11 +2193,11 @@ ImGuiPopupData = @record{
   ParentNavLayer: cint,
   OpenFrameCount: cint,
   OpenParentId: ImGuiID,
-  OpenPopupPos: ImVec2,
-  OpenMousePos: ImVec2
+  OpenPopupPos: ImVec2_c,
+  OpenMousePos: ImVec2_c
 }
 global ImBitArray_ImGuiKey_NamedKey_COUNT__lessImGuiKey_NamedKey_BEGIN: type <cimport,nodecl> = @record{
-  Storage: [5]ImU32
+  Data: [5]ImU32
 }
 global ImBitArrayForNamedKeys: type <cimport,nodecl> = @ImBitArray_ImGuiKey_NamedKey_COUNT__lessImGuiKey_NamedKey_BEGIN
 global ImGuiInputEventType: type <cimport,nodecl,using> = @enum(cint){
@@ -2373,7 +2401,7 @@ ImGuiNavItemData = @record{
   Window: *ImGuiWindow,
   ID: ImGuiID,
   FocusScopeId: ImGuiID,
-  RectRel: ImRect,
+  RectRel: ImRect_c,
   ItemFlags: ImGuiItemFlags,
   DistBox: float32,
   DistCenter: float32,
@@ -2418,7 +2446,7 @@ ImGuiOldColumnData = @record{
   OffsetNorm: float32,
   OffsetNormBeforeResize: float32,
   Flags: ImGuiOldColumnFlags,
-  ClipRect: ImRect
+  ClipRect: ImRect_c
 }
 global ImVector_ImGuiOldColumnData: type <cimport,nodecl> = @record{
   Size: cint,
@@ -2438,9 +2466,9 @@ ImGuiOldColumns = @record{
   LineMaxY: float32,
   HostCursorPosY: float32,
   HostCursorMaxPosX: float32,
-  HostInitialClipRect: ImRect,
-  HostBackupClipRect: ImRect,
-  HostBackupParentWorkRect: ImRect,
+  HostInitialClipRect: ImRect_c,
+  HostBackupClipRect: ImRect_c,
+  HostBackupParentWorkRect: ImRect_c,
   Columns: ImVector_ImGuiOldColumnData,
   Splitter: ImDrawListSplitter
 }
@@ -2452,22 +2480,22 @@ ImGuiBoxSelectState = @record{
   IsStartedSetNavIdOnce: boolean,
   RequestClear: boolean,
   KeyMods: ImGuiKeyChord,
-  StartPosRel: ImVec2,
-  EndPosRel: ImVec2,
-  ScrollAccum: ImVec2,
+  StartPosRel: ImVec2_c,
+  EndPosRel: ImVec2_c,
+  ScrollAccum: ImVec2_c,
   Window: *ImGuiWindow,
   UnclipMode: boolean,
-  UnclipRect: ImRect,
-  BoxSelectRectPrev: ImRect,
-  BoxSelectRectCurr: ImRect
+  UnclipRect: ImRect_c,
+  BoxSelectRectPrev: ImRect_c,
+  BoxSelectRectCurr: ImRect_c
 }
 ImGuiMultiSelectTempData = @record{
   IO: ImGuiMultiSelectIO,
   Storage: *ImGuiMultiSelectState,
   FocusScopeId: ImGuiID,
   Flags: ImGuiMultiSelectFlags,
-  ScopeRectMin: ImVec2,
-  BackupCursorMaxPos: ImVec2,
+  ScopeRectMin: ImVec2_c,
+  BackupCursorMaxPos: ImVec2_c,
   LastSubmittedItem: ImGuiSelectionUserData,
   BoxSelectId: ImGuiID,
   KeyMods: ImGuiKeyChord,
@@ -2535,9 +2563,9 @@ ImGuiDockNode = @record{
   ChildNodes: [2]*ImGuiDockNode,
   Windows: ImVector_ImGuiWindowPtr,
   TabBar: *ImGuiTabBar,
-  Pos: ImVec2,
-  Size: ImVec2,
-  SizeRef: ImVec2,
+  Pos: ImVec2_c,
+  Size: ImVec2_c,
+  SizeRef: ImVec2_c,
   SplitAxis: ImGuiAxis,
   WindowClass: ImGuiWindowClass,
   LastBgColor: ImU32,
@@ -2577,10 +2605,11 @@ global ImGuiWindowDockStyleCol: type <cimport,nodecl,using> = @enum(cint){
   ImGuiWindowDockStyleCol_TabDimmed = 5,
   ImGuiWindowDockStyleCol_TabDimmedSelected = 6,
   ImGuiWindowDockStyleCol_TabDimmedSelectedOverline = 7,
-  ImGuiWindowDockStyleCol_COUNT = 8
+  ImGuiWindowDockStyleCol_UnsavedMarker = 8,
+  ImGuiWindowDockStyleCol_COUNT = 9
 }
 ImGuiWindowDockStyle = @record{
-  Colors: [8]ImU32
+  Colors: [9]ImU32
 }
 global ImVector_ImGuiDockRequest: type <cimport,nodecl> = @record{
   Size: cint,
@@ -2606,8 +2635,8 @@ ImGuiViewportP = @record{
   LastFrameActive: cint,
   LastFocusedStampCount: cint,
   LastNameHash: ImGuiID,
-  LastPos: ImVec2,
-  LastSize: ImVec2,
+  LastPos: ImVec2_c,
+  LastSize: ImVec2_c,
   Alpha: float32,
   LastAlpha: float32,
   LastFocusedHadNavWindow: boolean,
@@ -2616,13 +2645,13 @@ ImGuiViewportP = @record{
   BgFgDrawLists: [2]*ImDrawList,
   DrawDataP: ImDrawData,
   DrawDataBuilder: ImDrawDataBuilder,
-  LastPlatformPos: ImVec2,
-  LastPlatformSize: ImVec2,
-  LastRendererSize: ImVec2,
-  WorkInsetMin: ImVec2,
-  WorkInsetMax: ImVec2,
-  BuildWorkInsetMin: ImVec2,
-  BuildWorkInsetMax: ImVec2
+  LastPlatformPos: ImVec2_c,
+  LastPlatformSize: ImVec2_c,
+  LastRendererSize: ImVec2_c,
+  WorkInsetMin: ImVec2_c,
+  WorkInsetMax: ImVec2_c,
+  BuildWorkInsetMin: ImVec2_c,
+  BuildWorkInsetMax: ImVec2_c
 }
 ImGuiWindowSettings = @record{
   ID: ImGuiID,
@@ -2686,7 +2715,8 @@ global ImGuiDebugLogFlags_: type <cimport,nodecl,using> = @enum(cint){
   ImGuiDebugLogFlags_EventViewport = 2048,
   ImGuiDebugLogFlags_EventMask_ = 4095,
   ImGuiDebugLogFlags_OutputToTTY = 1048576,
-  ImGuiDebugLogFlags_OutputToTestEngine = 2097152
+  ImGuiDebugLogFlags_OutputToDebugger = 2097152,
+  ImGuiDebugLogFlags_OutputToTestEngine = 4194304
 }
 global ImGuiDebugAllocEntry: type <cimport,nodecl,forwarddecl> = @record{}
 ImGuiDebugAllocEntry = @record{
@@ -2726,23 +2756,27 @@ ImGuiStackLevelInfo = @record{
   DataType: ImS8,
   DescOffset: cint
 }
-global ImGuiIDStackTool: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiDebugItemPathQuery: type <cimport,nodecl,forwarddecl> = @record{}
 global ImVector_ImGuiStackLevelInfo: type <cimport,nodecl> = @record{
   Size: cint,
   Capacity: cint,
   Data: *ImGuiStackLevelInfo
 }
-ImGuiIDStackTool = @record{
-  LastActiveFrame: cint,
-  StackLevel: cint,
-  QueryMainId: ImGuiID,
+ImGuiDebugItemPathQuery = @record{
+  MainID: ImGuiID,
+  Active: boolean,
+  Complete: boolean,
+  Step: ImS8,
   Results: ImVector_ImGuiStackLevelInfo,
-  QueryHookActive: boolean,
+  ResultsDescBuf: ImGuiTextBuffer,
+  ResultPathBuf: ImGuiTextBuffer
+}
+global ImGuiIDStackTool: type <cimport,nodecl,forwarddecl> = @record{}
+ImGuiIDStackTool = @record{
   OptHexEncodeNonAsciiChars: boolean,
   OptCopyToClipboardOnCtrlC: boolean,
-  CopyToClipboardLastTime: float32,
-  ResultPathsBuf: ImGuiTextBuffer,
-  ResultTempBuf: ImGuiTextBuffer
+  LastActiveFrame: cint,
+  CopyToClipboardLastTime: float32
 }
 global ImGuiContextHookCallback: type <cimport,nodecl> = @function(ctx: *ImGuiContext, hook: *ImGuiContextHook): void
 global ImGuiContextHookType: type <cimport,nodecl,using> = @enum(cint){
@@ -2908,6 +2942,15 @@ global ImVector_ImGuiContextHook: type <cimport,nodecl> = @record{
 }
 ImGuiContext = @record{
   Initialized: boolean,
+  WithinFrameScope: boolean,
+  WithinFrameScopeWithImplicitWindow: boolean,
+  TestEngineHookItems: boolean,
+  FrameCount: cint,
+  FrameCountEnded: cint,
+  FrameCountPlatformEnded: cint,
+  FrameCountRendered: cint,
+  Time: float64,
+  ContextName: [16]cchar,
   IO: ImGuiIO,
   PlatformIO: ImGuiPlatformIO,
   Style: ImGuiStyle,
@@ -2922,18 +2965,8 @@ ImGuiContext = @record{
   FontRasterizerDensity: float32,
   CurrentDpiScale: float32,
   DrawListSharedData: ImDrawListSharedData,
-  Time: float64,
-  FrameCount: cint,
-  FrameCountEnded: cint,
-  FrameCountPlatformEnded: cint,
-  FrameCountRendered: cint,
   WithinEndChildID: ImGuiID,
-  WithinFrameScope: boolean,
-  WithinFrameScopeWithImplicitWindow: boolean,
-  GcCompactAll: boolean,
-  TestEngineHookItems: boolean,
   TestEngine: pointer,
-  ContextName: [16]cchar,
   InputEventsQueue: ImVector_ImGuiInputEvent,
   InputEventsTrail: ImVector_ImGuiInputEvent,
   InputEventsNextMouseSource: ImGuiMouseSource,
@@ -2952,12 +2985,12 @@ ImGuiContext = @record{
   HoveredWindowBeforeClear: *ImGuiWindow,
   MovingWindow: *ImGuiWindow,
   WheelingWindow: *ImGuiWindow,
-  WheelingWindowRefMousePos: ImVec2,
+  WheelingWindowRefMousePos: ImVec2_c,
   WheelingWindowStartFrame: cint,
   WheelingWindowScrolledFrame: cint,
   WheelingWindowReleaseTimer: float32,
-  WheelingWindowWheelRemainder: ImVec2,
-  WheelingAxisAvg: ImVec2,
+  WheelingWindowWheelRemainder: ImVec2_c,
+  WheelingAxisAvg: ImVec2_c,
   DebugDrawIdConflictsId: ImGuiID,
   DebugHookIdInfoId: ImGuiID,
   HoveredId: ImGuiID,
@@ -2978,11 +3011,11 @@ ImGuiContext = @record{
   ActiveIdHasBeenEditedBefore: boolean,
   ActiveIdHasBeenEditedThisFrame: boolean,
   ActiveIdFromShortcut: boolean,
+  ActiveIdMouseButton: ImS8,
   ActiveIdDisabledId: ImGuiID,
-  ActiveIdMouseButton: cint,
-  ActiveIdClickOffset: ImVec2,
-  ActiveIdWindow: *ImGuiWindow,
+  ActiveIdClickOffset: ImVec2_c,
   ActiveIdSource: ImGuiInputSource,
+  ActiveIdWindow: *ImGuiWindow,
   ActiveIdPreviousFrame: ImGuiID,
   DeactivatedItemData: ImGuiDeactivatedItemData,
   ActiveIdValueOnActivation: ImGuiDataTypeStorage,
@@ -3004,6 +3037,7 @@ ImGuiContext = @record{
   LastItemData: ImGuiLastItemData,
   NextWindowData: ImGuiNextWindowData,
   DebugShowGroupRects: boolean,
+  GcCompactAll: boolean,
   DebugFlashStyleColorIdx: ImGuiCol,
   ColorStack: ImVector_ImGuiColorMod,
   StyleVarStack: ImVector_ImGuiStyleMod,
@@ -3020,7 +3054,7 @@ ImGuiContext = @record{
   MouseLastHoveredViewport: *ImGuiViewportP,
   PlatformLastFocusedViewportId: ImGuiID,
   FallbackMonitor: ImGuiPlatformMonitor,
-  PlatformMonitorsFullWorkRect: ImRect,
+  PlatformMonitorsFullWorkRect: ImRect_c,
   ViewportCreatedCount: cint,
   PlatformWindowsCreatedCount: cint,
   ViewportFocusedStampCount: cint,
@@ -3057,8 +3091,8 @@ ImGuiContext = @record{
   NavMoveDir: ImGuiDir,
   NavMoveDirForDebug: ImGuiDir,
   NavMoveClipDir: ImGuiDir,
-  NavScoringRect: ImRect,
-  NavScoringNoClipRect: ImRect,
+  NavScoringRect: ImRect_c,
+  NavScoringNoClipRect: ImRect_c,
   NavScoringDebugCount: cint,
   NavTabbingDir: cint,
   NavTabbingCounter: cint,
@@ -3072,6 +3106,7 @@ ImGuiContext = @record{
   NavJustMovedToKeyMods: ImGuiKeyChord,
   NavJustMovedToIsTabbing: boolean,
   NavJustMovedToHasSelectionData: boolean,
+  ConfigNavEnableTabbing: boolean,
   ConfigNavWindowingWithGamepad: boolean,
   ConfigNavWindowingKeyNext: ImGuiKeyChord,
   ConfigNavWindowingKeyPrev: ImGuiKeyChord,
@@ -3083,8 +3118,8 @@ ImGuiContext = @record{
   NavWindowingInputSource: ImGuiInputSource,
   NavWindowingToggleLayer: boolean,
   NavWindowingToggleKey: ImGuiKey,
-  NavWindowingAccumDeltaPos: ImVec2,
-  NavWindowingAccumDeltaSize: ImVec2,
+  NavWindowingAccumDeltaPos: ImVec2_c,
+  NavWindowingAccumDeltaSize: ImVec2_c,
   DimBgRatio: float32,
   DragDropActive: boolean,
   DragDropWithinSource: boolean,
@@ -3093,11 +3128,12 @@ ImGuiContext = @record{
   DragDropSourceFrameCount: cint,
   DragDropMouseButton: cint,
   DragDropPayload: ImGuiPayload,
-  DragDropTargetRect: ImRect,
-  DragDropTargetClipRect: ImRect,
+  DragDropTargetRect: ImRect_c,
+  DragDropTargetClipRect: ImRect_c,
   DragDropTargetId: ImGuiID,
   DragDropTargetFullViewport: ImGuiID,
-  DragDropAcceptFlags: ImGuiDragDropFlags,
+  DragDropAcceptFlagsCurr: ImGuiDragDropFlags,
+  DragDropAcceptFlagsPrev: ImGuiDragDropFlags,
   DragDropAcceptIdCurrRectSurface: float32,
   DragDropAcceptIdCurr: ImGuiID,
   DragDropAcceptIdPrev: ImGuiID,
@@ -3131,7 +3167,7 @@ ImGuiContext = @record{
   HoverWindowUnlockedStationaryId: ImGuiID,
   MouseCursor: ImGuiMouseCursor,
   MouseStationaryTimer: float32,
-  MouseLastValidPos: ImVec2,
+  MouseLastValidPos: ImVec2_c,
   InputTextState: ImGuiInputTextState,
   InputTextLineIndex: ImGuiTextIndex,
   InputTextDeactivatedState: ImGuiInputTextDeactivatedState,
@@ -3147,9 +3183,9 @@ ImGuiContext = @record{
   ColorEditSavedHue: float32,
   ColorEditSavedSat: float32,
   ColorEditSavedColor: ImU32,
-  ColorPickerRef: ImVec4,
+  ColorPickerRef: ImVec4_c,
   ComboPreviewData: ImGuiComboPreviewData,
-  WindowResizeBorderExpectedRect: ImRect,
+  WindowResizeBorderExpectedRect: ImRect_c,
   WindowResizeRelativeMode: boolean,
   ScrollbarSeekMode: cshort,
   ScrollbarClickDeltaToGrabCenter: float32,
@@ -3181,6 +3217,7 @@ ImGuiContext = @record{
   HookIdNext: ImGuiID,
   LocalizationTable: [13]cstring,
   LogEnabled: boolean,
+  LogLineFirstItem: boolean,
   LogFlags: ImGuiLogFlags,
   LogWindow: *ImGuiWindow,
   LogFile: ImFileHandle,
@@ -3188,13 +3225,12 @@ ImGuiContext = @record{
   LogNextPrefix: cstring,
   LogNextSuffix: cstring,
   LogLinePosY: float32,
-  LogLineFirstItem: boolean,
   LogDepthRef: cint,
   LogDepthToExpand: cint,
   LogDepthToExpandDefault: cint,
   ErrorCallback: ImGuiErrorCallback,
   ErrorCallbackUserData: pointer,
-  ErrorTooltipLockedPos: ImVec2,
+  ErrorTooltipLockedPos: ImVec2_c,
   ErrorFirst: boolean,
   ErrorCountCurrentFrame: cint,
   StackSizesInNewFrame: ImGuiErrorRecoveryState,
@@ -3214,8 +3250,9 @@ ImGuiContext = @record{
   DebugItemPickerMouseButton: ImU8,
   DebugItemPickerBreakId: ImGuiID,
   DebugFlashStyleColorTime: float32,
-  DebugFlashStyleColorBackup: ImVec4,
+  DebugFlashStyleColorBackup: ImVec4_c,
   DebugMetricsConfig: ImGuiMetricsConfig,
+  DebugItemPathQuery: ImGuiDebugItemPathQuery,
   DebugIDStackTool: ImGuiIDStackTool,
   DebugAllocInfo: ImGuiDebugAllocInfo,
   DebugHoveredDockNode: *ImGuiDockNode,
@@ -3230,13 +3267,13 @@ ImGuiContext = @record{
   TempKeychordName: [64]cchar
 }
 ImGuiWindowTempData = @record{
-  CursorPos: ImVec2,
-  CursorPosPrevLine: ImVec2,
-  CursorStartPos: ImVec2,
-  CursorMaxPos: ImVec2,
-  IdealMaxPos: ImVec2,
-  CurrLineSize: ImVec2,
-  PrevLineSize: ImVec2,
+  CursorPos: ImVec2_c,
+  CursorPosPrevLine: ImVec2_c,
+  CursorStartPos: ImVec2_c,
+  CursorMaxPos: ImVec2_c,
+  IdealMaxPos: ImVec2_c,
+  CurrLineSize: ImVec2_c,
+  PrevLineSize: ImVec2_c,
   CurrLineTextBaseOffset: float32,
   PrevLineTextBaseOffset: float32,
   IsSameLine: boolean,
@@ -3244,7 +3281,7 @@ ImGuiWindowTempData = @record{
   Indent: ImVec1,
   ColumnsOffset: ImVec1,
   GroupOffset: ImVec1,
-  CursorStartPosLossyness: ImVec2,
+  CursorStartPosLossyness: ImVec2_c,
   NavLayerCurrent: ImGuiNavLayer,
   NavLayersActiveMask: cshort,
   NavLayersActiveMaskNext: cshort,
@@ -3252,7 +3289,7 @@ ImGuiWindowTempData = @record{
   NavHideHighlightOneFrame: boolean,
   NavWindowHasScrollY: boolean,
   MenuBarAppending: boolean,
-  MenuBarOffset: ImVec2,
+  MenuBarOffset: ImVec2_c,
   MenuColumns: ImGuiMenuColumns,
   TreeDepth: cint,
   TreeHasStackDataDepthMask: ImU32,
@@ -3267,8 +3304,9 @@ ImGuiWindowTempData = @record{
   WindowItemStatusFlags: ImGuiItemStatusFlags,
   ChildItemStatusFlags: ImGuiItemStatusFlags,
   DockTabItemStatusFlags: ImGuiItemStatusFlags,
-  DockTabItemRect: ImRect,
+  DockTabItemRect: ImRect_c,
   ItemWidth: float32,
+  ItemWidthDefault: float32,
   TextWrapPos: float32,
   ItemWidthStack: ImVector_float,
   TextWrapPosStack: ImVector_float
@@ -3288,15 +3326,15 @@ ImGuiWindow = @record{
   WindowClass: ImGuiWindowClass,
   Viewport: *ImGuiViewportP,
   ViewportId: ImGuiID,
-  ViewportPos: ImVec2,
+  ViewportPos: ImVec2_c,
   ViewportAllowPlatformMonitorExtend: cint,
-  Pos: ImVec2,
-  Size: ImVec2,
-  SizeFull: ImVec2,
-  ContentSize: ImVec2,
-  ContentSizeIdeal: ImVec2,
-  ContentSizeExplicit: ImVec2,
-  WindowPadding: ImVec2,
+  Pos: ImVec2_c,
+  Size: ImVec2_c,
+  SizeFull: ImVec2_c,
+  ContentSize: ImVec2_c,
+  ContentSizeIdeal: ImVec2_c,
+  ContentSizeExplicit: ImVec2_c,
+  WindowPadding: ImVec2_c,
   WindowRounding: float32,
   WindowBorderSize: float32,
   TitleBarHeight: float32,
@@ -3312,12 +3350,12 @@ ImGuiWindow = @record{
   TabId: ImGuiID,
   ChildId: ImGuiID,
   PopupId: ImGuiID,
-  Scroll: ImVec2,
-  ScrollMax: ImVec2,
-  ScrollTarget: ImVec2,
-  ScrollTargetCenterRatio: ImVec2,
-  ScrollTargetEdgeSnapDist: ImVec2,
-  ScrollbarSizes: ImVec2,
+  Scroll: ImVec2_c,
+  ScrollMax: ImVec2_c,
+  ScrollTarget: ImVec2_c,
+  ScrollTargetCenterRatio: ImVec2_c,
+  ScrollTargetEdgeSnapDist: ImVec2_c,
+  ScrollbarSizes: ImVec2_c,
   ScrollbarX: boolean,
   ScrollbarY: boolean,
   ScrollbarXStabilizeEnabled: boolean,
@@ -3342,35 +3380,35 @@ ImGuiWindow = @record{
   BeginOrderWithinParent: cshort,
   BeginOrderWithinContext: cshort,
   FocusOrder: cshort,
+  AutoPosLastDirection: ImGuiDir,
   AutoFitFramesX: ImS8,
   AutoFitFramesY: ImS8,
   AutoFitOnlyGrows: boolean,
-  AutoPosLastDirection: ImGuiDir,
   HiddenFramesCanSkipItems: ImS8,
   HiddenFramesCannotSkipItems: ImS8,
   HiddenFramesForRenderOnly: ImS8,
   DisableInputsFrames: ImS8,
+  BgClickFlags: ImGuiWindowBgClickFlags,
   SetWindowPosAllowFlags: ImGuiCond,
   SetWindowSizeAllowFlags: ImGuiCond,
   SetWindowCollapsedAllowFlags: ImGuiCond,
   SetWindowDockAllowFlags: ImGuiCond,
-  SetWindowPosVal: ImVec2,
-  SetWindowPosPivot: ImVec2,
+  SetWindowPosVal: ImVec2_c,
+  SetWindowPosPivot: ImVec2_c,
   IDStack: ImVector_ImGuiID,
   DC: ImGuiWindowTempData,
-  OuterRectClipped: ImRect,
-  InnerRect: ImRect,
-  InnerClipRect: ImRect,
-  WorkRect: ImRect,
-  ParentWorkRect: ImRect,
-  ClipRect: ImRect,
-  ContentRegionRect: ImRect,
+  OuterRectClipped: ImRect_c,
+  InnerRect: ImRect_c,
+  InnerClipRect: ImRect_c,
+  WorkRect: ImRect_c,
+  ParentWorkRect: ImRect_c,
+  ClipRect: ImRect_c,
+  ContentRegionRect: ImRect_c,
   HitTestHoleSize: ImVec2ih,
   HitTestHoleOffset: ImVec2ih,
   LastFrameActive: cint,
   LastFrameJustFocused: cint,
   LastTimeActive: float32,
-  ItemWidthDefault: float32,
   StateStorage: ImGuiStorage,
   ColumnsStorage: ImVector_ImGuiOldColumns,
   FontWindowScale: float32,
@@ -3389,8 +3427,8 @@ ImGuiWindow = @record{
   ParentWindowForFocusRoute: *ImGuiWindow,
   NavLastChildNavWindow: *ImGuiWindow,
   NavLastIds: [2]ImGuiID,
-  NavRectRel: [2]ImRect,
-  NavPreferredScoringPosRel: [2]ImVec2,
+  NavRectRel: [2]ImRect_c,
+  NavPreferredScoringPosRel: [2]ImVec2_c,
   NavRootFocusScopeId: ImGuiID,
   MemoryDrawListIdxCapacity: cint,
   MemoryDrawListVtxCapacity: cint,
@@ -3444,10 +3482,11 @@ ImGuiTabBar = @record{
   ID: ImGuiID,
   SelectedTabId: ImGuiID,
   NextSelectedTabId: ImGuiID,
+  NextScrollToTabId: ImGuiID,
   VisibleTabId: ImGuiID,
   CurrFrameVisible: cint,
   PrevFrameVisible: cint,
-  BarRect: ImRect,
+  BarRect: ImRect_c,
   BarRectPrevWidth: float32,
   CurrTabsContentsHeight: float32,
   PrevTabsContentsHeight: float32,
@@ -3471,8 +3510,8 @@ ImGuiTabBar = @record{
   TabsActiveCount: ImS16,
   LastTabItemIdx: ImS16,
   ItemSpacingY: float32,
-  FramePadding: ImVec2,
-  BackupCursorPos: ImVec2,
+  FramePadding: ImVec2_c,
+  BackupCursorPos: ImVec2_c,
   TabsNames: ImGuiTextBuffer
 }
 ImGuiTableColumn = @record{
@@ -3485,7 +3524,7 @@ ImGuiTableColumn = @record{
   WidthMax: float32,
   StretchWeight: float32,
   InitStretchWeightOrWidth: float32,
-  ClipRect: ImRect,
+  ClipRect: ImRect_c,
   UserID: ImGuiID,
   WorkMinX: float32,
   WorkMaxX: float32,
@@ -3608,15 +3647,15 @@ ImGuiTable = @record{
   RefScale: float32,
   AngledHeadersHeight: float32,
   AngledHeadersSlope: float32,
-  OuterRect: ImRect,
-  InnerRect: ImRect,
-  WorkRect: ImRect,
-  InnerClipRect: ImRect,
-  BgClipRect: ImRect,
-  Bg0ClipRectForDrawCmd: ImRect,
-  Bg2ClipRectForDrawCmd: ImRect,
-  HostClipRect: ImRect,
-  HostBackupInnerClipRect: ImRect,
+  OuterRect: ImRect_c,
+  InnerRect: ImRect_c,
+  WorkRect: ImRect_c,
+  InnerClipRect: ImRect_c,
+  BgClipRect: ImRect_c,
+  Bg0ClipRectForDrawCmd: ImRect_c,
+  Bg2ClipRectForDrawCmd: ImRect_c,
+  HostClipRect: ImRect_c,
+  HostBackupInnerClipRect: ImRect_c,
   OuterWindow: *ImGuiWindow,
   InnerWindow: *ImGuiWindow,
   ColumnsNames: ImGuiTextBuffer,
@@ -3681,17 +3720,18 @@ global ImVector_ImGuiTableHeaderData: type <cimport,nodecl> = @record{
   Data: *ImGuiTableHeaderData
 }
 ImGuiTableTempData = @record{
+  WindowID: ImGuiID,
   TableIndex: cint,
   LastTimeActive: float32,
   AngledHeadersExtraWidth: float32,
   AngledHeadersRequests: ImVector_ImGuiTableHeaderData,
-  UserOuterSize: ImVec2,
+  UserOuterSize: ImVec2_c,
   DrawSplitter: ImDrawListSplitter,
-  HostBackupWorkRect: ImRect,
-  HostBackupParentWorkRect: ImRect,
-  HostBackupPrevLineSize: ImVec2,
-  HostBackupCurrLineSize: ImVec2,
-  HostBackupCursorMaxPos: ImVec2,
+  HostBackupWorkRect: ImRect_c,
+  HostBackupParentWorkRect: ImRect_c,
+  HostBackupPrevLineSize: ImVec2_c,
+  HostBackupCurrLineSize: ImVec2_c,
+  HostBackupCursorMaxPos: ImVec2_c,
   HostBackupColumnsOffset: ImVec1,
   HostBackupItemWidth: float32,
   HostBackupItemWidthStackSize: cint
@@ -3780,8 +3820,8 @@ ImFontAtlasBuilder = @record{
   RectsDiscardedCount: cint,
   RectsDiscardedSurface: cint,
   FrameCount: cint,
-  MaxRectSize: ImVec2i,
-  MaxRectBounds: ImVec2i,
+  MaxRectSize: ImVec2i_c,
+  MaxRectBounds: ImVec2i_c,
   LockDisableResize: boolean,
   PreloadedAllGlyphsRanges: boolean,
   BakedPool: ImStableVector_ImFontBaked__32,
@@ -3790,6 +3830,12 @@ ImFontAtlasBuilder = @record{
   PackIdMouseCursors: ImFontAtlasRectId,
   PackIdLinesTexData: ImFontAtlasRectId
 }
+global ImTextureRef: type <cimport,nodecl> = @ImTextureRef_c
+global ImVec2: type <cimport,nodecl> = @ImVec2_c
+global ImVec2i: type <cimport,nodecl> = @ImVec2i_c
+global ImVec4: type <cimport,nodecl> = @ImVec4_c
+global ImColor: type <cimport,nodecl> = @ImColor_c
+global ImRect: type <cimport,nodecl> = @ImRect_c
 global function ImVec2_ImVec2_Nil(): *ImVec2 <cimport,nodecl> end
 global function ImVec2_destroy(self: *ImVec2): void <cimport,nodecl> end
 global function ImVec2_ImVec2_Float(_x: float32, _y: float32): *ImVec2 <cimport,nodecl> end
@@ -3826,8 +3872,8 @@ global function igStyleColorsLight(dst: *ImGuiStyle): void <cimport,nodecl> end
 global function igStyleColorsClassic(dst: *ImGuiStyle): void <cimport,nodecl> end
 global function igBegin(name: cstring, p_open: *boolean, flags: ImGuiWindowFlags): boolean <cimport,nodecl> end
 global function igEnd(): void <cimport,nodecl> end
-global function igBeginChild_Str(str_id: cstring, size: ImVec2, child_flags: ImGuiChildFlags, window_flags: ImGuiWindowFlags): boolean <cimport,nodecl> end
-global function igBeginChild_ID(id: ImGuiID, size: ImVec2, child_flags: ImGuiChildFlags, window_flags: ImGuiWindowFlags): boolean <cimport,nodecl> end
+global function igBeginChild_Str(str_id: cstring, size: ImVec2_c, child_flags: ImGuiChildFlags, window_flags: ImGuiWindowFlags): boolean <cimport,nodecl> end
+global function igBeginChild_ID(id: ImGuiID, size: ImVec2_c, child_flags: ImGuiChildFlags, window_flags: ImGuiWindowFlags): boolean <cimport,nodecl> end
 global function igEndChild(): void <cimport,nodecl> end
 global function igIsWindowAppearing(): boolean <cimport,nodecl> end
 global function igIsWindowCollapsed(): boolean <cimport,nodecl> end
@@ -3835,26 +3881,26 @@ global function igIsWindowFocused(flags: ImGuiFocusedFlags): boolean <cimport,no
 global function igIsWindowHovered(flags: ImGuiHoveredFlags): boolean <cimport,nodecl> end
 global function igGetWindowDrawList(): *ImDrawList <cimport,nodecl> end
 global function igGetWindowDpiScale(): float32 <cimport,nodecl> end
-global function igGetWindowPos(pOut: *ImVec2): void <cimport,nodecl> end
-global function igGetWindowSize(pOut: *ImVec2): void <cimport,nodecl> end
+global function igGetWindowPos(): ImVec2_c <cimport,nodecl> end
+global function igGetWindowSize(): ImVec2_c <cimport,nodecl> end
 global function igGetWindowWidth(): float32 <cimport,nodecl> end
 global function igGetWindowHeight(): float32 <cimport,nodecl> end
 global function igGetWindowViewport(): *ImGuiViewport <cimport,nodecl> end
-global function igSetNextWindowPos(pos: ImVec2, cond: ImGuiCond, pivot: ImVec2): void <cimport,nodecl> end
-global function igSetNextWindowSize(size: ImVec2, cond: ImGuiCond): void <cimport,nodecl> end
-global function igSetNextWindowSizeConstraints(size_min: ImVec2, size_max: ImVec2, custom_callback: ImGuiSizeCallback, custom_callback_data: pointer): void <cimport,nodecl> end
-global function igSetNextWindowContentSize(size: ImVec2): void <cimport,nodecl> end
+global function igSetNextWindowPos(pos: ImVec2_c, cond: ImGuiCond, pivot: ImVec2_c): void <cimport,nodecl> end
+global function igSetNextWindowSize(size: ImVec2_c, cond: ImGuiCond): void <cimport,nodecl> end
+global function igSetNextWindowSizeConstraints(size_min: ImVec2_c, size_max: ImVec2_c, custom_callback: ImGuiSizeCallback, custom_callback_data: pointer): void <cimport,nodecl> end
+global function igSetNextWindowContentSize(size: ImVec2_c): void <cimport,nodecl> end
 global function igSetNextWindowCollapsed(collapsed: boolean, cond: ImGuiCond): void <cimport,nodecl> end
 global function igSetNextWindowFocus(): void <cimport,nodecl> end
-global function igSetNextWindowScroll(scroll: ImVec2): void <cimport,nodecl> end
+global function igSetNextWindowScroll(scroll: ImVec2_c): void <cimport,nodecl> end
 global function igSetNextWindowBgAlpha(alpha: float32): void <cimport,nodecl> end
 global function igSetNextWindowViewport(viewport_id: ImGuiID): void <cimport,nodecl> end
-global function igSetWindowPos_Vec2(pos: ImVec2, cond: ImGuiCond): void <cimport,nodecl> end
-global function igSetWindowSize_Vec2(size: ImVec2, cond: ImGuiCond): void <cimport,nodecl> end
+global function igSetWindowPos_Vec2(pos: ImVec2_c, cond: ImGuiCond): void <cimport,nodecl> end
+global function igSetWindowSize_Vec2(size: ImVec2_c, cond: ImGuiCond): void <cimport,nodecl> end
 global function igSetWindowCollapsed_Bool(collapsed: boolean, cond: ImGuiCond): void <cimport,nodecl> end
 global function igSetWindowFocus_Nil(): void <cimport,nodecl> end
-global function igSetWindowPos_Str(name: cstring, pos: ImVec2, cond: ImGuiCond): void <cimport,nodecl> end
-global function igSetWindowSize_Str(name: cstring, size: ImVec2, cond: ImGuiCond): void <cimport,nodecl> end
+global function igSetWindowPos_Str(name: cstring, pos: ImVec2_c, cond: ImGuiCond): void <cimport,nodecl> end
+global function igSetWindowSize_Str(name: cstring, size: ImVec2_c, cond: ImGuiCond): void <cimport,nodecl> end
 global function igSetWindowCollapsed_Str(name: cstring, collapsed: boolean, cond: ImGuiCond): void <cimport,nodecl> end
 global function igSetWindowFocus_Str(name: cstring): void <cimport,nodecl> end
 global function igGetScrollX(): float32 <cimport,nodecl> end
@@ -3873,10 +3919,10 @@ global function igGetFont(): *ImFont <cimport,nodecl> end
 global function igGetFontSize(): float32 <cimport,nodecl> end
 global function igGetFontBaked(): *ImFontBaked <cimport,nodecl> end
 global function igPushStyleColor_U32(idx: ImGuiCol, col: ImU32): void <cimport,nodecl> end
-global function igPushStyleColor_Vec4(idx: ImGuiCol, col: ImVec4): void <cimport,nodecl> end
+global function igPushStyleColor_Vec4(idx: ImGuiCol, col: ImVec4_c): void <cimport,nodecl> end
 global function igPopStyleColor(count: cint): void <cimport,nodecl> end
 global function igPushStyleVar_Float(idx: ImGuiStyleVar, val: float32): void <cimport,nodecl> end
-global function igPushStyleVar_Vec2(idx: ImGuiStyleVar, val: ImVec2): void <cimport,nodecl> end
+global function igPushStyleVar_Vec2(idx: ImGuiStyleVar, val: ImVec2_c): void <cimport,nodecl> end
 global function igPushStyleVarX(idx: ImGuiStyleVar, val_x: float32): void <cimport,nodecl> end
 global function igPushStyleVarY(idx: ImGuiStyleVar, val_y: float32): void <cimport,nodecl> end
 global function igPopStyleVar(count: cint): void <cimport,nodecl> end
@@ -3888,26 +3934,26 @@ global function igSetNextItemWidth(item_width: float32): void <cimport,nodecl> e
 global function igCalcItemWidth(): float32 <cimport,nodecl> end
 global function igPushTextWrapPos(wrap_local_pos_x: float32): void <cimport,nodecl> end
 global function igPopTextWrapPos(): void <cimport,nodecl> end
-global function igGetFontTexUvWhitePixel(pOut: *ImVec2): void <cimport,nodecl> end
+global function igGetFontTexUvWhitePixel(): ImVec2_c <cimport,nodecl> end
 global function igGetColorU32_Col(idx: ImGuiCol, alpha_mul: float32): ImU32 <cimport,nodecl> end
-global function igGetColorU32_Vec4(col: ImVec4): ImU32 <cimport,nodecl> end
+global function igGetColorU32_Vec4(col: ImVec4_c): ImU32 <cimport,nodecl> end
 global function igGetColorU32_U32(col: ImU32, alpha_mul: float32): ImU32 <cimport,nodecl> end
-global function igGetStyleColorVec4(idx: ImGuiCol): *ImVec4 <cimport,nodecl> end
-global function igGetCursorScreenPos(pOut: *ImVec2): void <cimport,nodecl> end
-global function igSetCursorScreenPos(pos: ImVec2): void <cimport,nodecl> end
-global function igGetContentRegionAvail(pOut: *ImVec2): void <cimport,nodecl> end
-global function igGetCursorPos(pOut: *ImVec2): void <cimport,nodecl> end
+global function igGetStyleColorVec4(idx: ImGuiCol): *ImVec4_c <cimport,nodecl> end
+global function igGetCursorScreenPos(): ImVec2_c <cimport,nodecl> end
+global function igSetCursorScreenPos(pos: ImVec2_c): void <cimport,nodecl> end
+global function igGetContentRegionAvail(): ImVec2_c <cimport,nodecl> end
+global function igGetCursorPos(): ImVec2_c <cimport,nodecl> end
 global function igGetCursorPosX(): float32 <cimport,nodecl> end
 global function igGetCursorPosY(): float32 <cimport,nodecl> end
-global function igSetCursorPos(local_pos: ImVec2): void <cimport,nodecl> end
+global function igSetCursorPos(local_pos: ImVec2_c): void <cimport,nodecl> end
 global function igSetCursorPosX(local_x: float32): void <cimport,nodecl> end
 global function igSetCursorPosY(local_y: float32): void <cimport,nodecl> end
-global function igGetCursorStartPos(pOut: *ImVec2): void <cimport,nodecl> end
+global function igGetCursorStartPos(): ImVec2_c <cimport,nodecl> end
 global function igSeparator(): void <cimport,nodecl> end
 global function igSameLine(offset_from_start_x: float32, spacing: float32): void <cimport,nodecl> end
 global function igNewLine(): void <cimport,nodecl> end
 global function igSpacing(): void <cimport,nodecl> end
-global function igDummy(size: ImVec2): void <cimport,nodecl> end
+global function igDummy(size: ImVec2_c): void <cimport,nodecl> end
 global function igIndent(indent_w: float32): void <cimport,nodecl> end
 global function igUnindent(indent_w: float32): void <cimport,nodecl> end
 global function igBeginGroup(): void <cimport,nodecl> end
@@ -3929,8 +3975,8 @@ global function igGetID_Int(int_id: cint): ImGuiID <cimport,nodecl> end
 global function igTextUnformatted(text: cstring, text_end: cstring): void <cimport,nodecl> end
 global function igText(fmt: cstring, ...: cvarargs): void <cimport,nodecl> end
 global function igTextV(fmt: cstring, args: cvalist): void <cimport,nodecl> end
-global function igTextColored(col: ImVec4, fmt: cstring, ...: cvarargs): void <cimport,nodecl> end
-global function igTextColoredV(col: ImVec4, fmt: cstring, args: cvalist): void <cimport,nodecl> end
+global function igTextColored(col: ImVec4_c, fmt: cstring, ...: cvarargs): void <cimport,nodecl> end
+global function igTextColoredV(col: ImVec4_c, fmt: cstring, args: cvalist): void <cimport,nodecl> end
 global function igTextDisabled(fmt: cstring, ...: cvarargs): void <cimport,nodecl> end
 global function igTextDisabledV(fmt: cstring, args: cvalist): void <cimport,nodecl> end
 global function igTextWrapped(fmt: cstring, ...: cvarargs): void <cimport,nodecl> end
@@ -3940,22 +3986,22 @@ global function igLabelTextV(label: cstring, fmt: cstring, args: cvalist): void 
 global function igBulletText(fmt: cstring, ...: cvarargs): void <cimport,nodecl> end
 global function igBulletTextV(fmt: cstring, args: cvalist): void <cimport,nodecl> end
 global function igSeparatorText(label: cstring): void <cimport,nodecl> end
-global function igButton(label: cstring, size: ImVec2): boolean <cimport,nodecl> end
+global function igButton(label: cstring, size: ImVec2_c): boolean <cimport,nodecl> end
 global function igSmallButton(label: cstring): boolean <cimport,nodecl> end
-global function igInvisibleButton(str_id: cstring, size: ImVec2, flags: ImGuiButtonFlags): boolean <cimport,nodecl> end
+global function igInvisibleButton(str_id: cstring, size: ImVec2_c, flags: ImGuiButtonFlags): boolean <cimport,nodecl> end
 global function igArrowButton(str_id: cstring, dir: ImGuiDir): boolean <cimport,nodecl> end
 global function igCheckbox(label: cstring, v: *boolean): boolean <cimport,nodecl> end
 global function igCheckboxFlags_IntPtr(label: cstring, flags: *cint, flags_value: cint): boolean <cimport,nodecl> end
 global function igCheckboxFlags_UintPtr(label: cstring, flags: *cuint, flags_value: cuint): boolean <cimport,nodecl> end
 global function igRadioButton_Bool(label: cstring, active: boolean): boolean <cimport,nodecl> end
 global function igRadioButton_IntPtr(label: cstring, v: *cint, v_button: cint): boolean <cimport,nodecl> end
-global function igProgressBar(fraction: float32, size_arg: ImVec2, overlay: cstring): void <cimport,nodecl> end
+global function igProgressBar(fraction: float32, size_arg: ImVec2_c, overlay: cstring): void <cimport,nodecl> end
 global function igBullet(): void <cimport,nodecl> end
 global function igTextLink(label: cstring): boolean <cimport,nodecl> end
 global function igTextLinkOpenURL(label: cstring, url: cstring): boolean <cimport,nodecl> end
-global function igImage(tex_ref: ImTextureRef, image_size: ImVec2, uv0: ImVec2, uv1: ImVec2): void <cimport,nodecl> end
-global function igImageWithBg(tex_ref: ImTextureRef, image_size: ImVec2, uv0: ImVec2, uv1: ImVec2, bg_col: ImVec4, tint_col: ImVec4): void <cimport,nodecl> end
-global function igImageButton(str_id: cstring, tex_ref: ImTextureRef, image_size: ImVec2, uv0: ImVec2, uv1: ImVec2, bg_col: ImVec4, tint_col: ImVec4): boolean <cimport,nodecl> end
+global function igImage(tex_ref: ImTextureRef_c, image_size: ImVec2_c, uv0: ImVec2_c, uv1: ImVec2_c): void <cimport,nodecl> end
+global function igImageWithBg(tex_ref: ImTextureRef_c, image_size: ImVec2_c, uv0: ImVec2_c, uv1: ImVec2_c, bg_col: ImVec4_c, tint_col: ImVec4_c): void <cimport,nodecl> end
+global function igImageButton(str_id: cstring, tex_ref: ImTextureRef_c, image_size: ImVec2_c, uv0: ImVec2_c, uv1: ImVec2_c, bg_col: ImVec4_c, tint_col: ImVec4_c): boolean <cimport,nodecl> end
 global function igBeginCombo(label: cstring, preview_value: cstring, flags: ImGuiComboFlags): boolean <cimport,nodecl> end
 global function igEndCombo(): void <cimport,nodecl> end
 global function igCombo_Str_arr(label: cstring, current_item: *cint, items: *[0]cstring, items_count: cint, popup_max_height_in_items: cint): boolean <cimport,nodecl> end
@@ -3984,11 +4030,11 @@ global function igSliderInt3(label: cstring, v: *[3]cint, v_min: cint, v_max: ci
 global function igSliderInt4(label: cstring, v: *[4]cint, v_min: cint, v_max: cint, format: cstring, flags: ImGuiSliderFlags): boolean <cimport,nodecl> end
 global function igSliderScalar(label: cstring, data_type: ImGuiDataType, p_data: pointer, p_min: pointer, p_max: pointer, format: cstring, flags: ImGuiSliderFlags): boolean <cimport,nodecl> end
 global function igSliderScalarN(label: cstring, data_type: ImGuiDataType, p_data: pointer, components: cint, p_min: pointer, p_max: pointer, format: cstring, flags: ImGuiSliderFlags): boolean <cimport,nodecl> end
-global function igVSliderFloat(label: cstring, size: ImVec2, v: *float32, v_min: float32, v_max: float32, format: cstring, flags: ImGuiSliderFlags): boolean <cimport,nodecl> end
-global function igVSliderInt(label: cstring, size: ImVec2, v: *cint, v_min: cint, v_max: cint, format: cstring, flags: ImGuiSliderFlags): boolean <cimport,nodecl> end
-global function igVSliderScalar(label: cstring, size: ImVec2, data_type: ImGuiDataType, p_data: pointer, p_min: pointer, p_max: pointer, format: cstring, flags: ImGuiSliderFlags): boolean <cimport,nodecl> end
+global function igVSliderFloat(label: cstring, size: ImVec2_c, v: *float32, v_min: float32, v_max: float32, format: cstring, flags: ImGuiSliderFlags): boolean <cimport,nodecl> end
+global function igVSliderInt(label: cstring, size: ImVec2_c, v: *cint, v_min: cint, v_max: cint, format: cstring, flags: ImGuiSliderFlags): boolean <cimport,nodecl> end
+global function igVSliderScalar(label: cstring, size: ImVec2_c, data_type: ImGuiDataType, p_data: pointer, p_min: pointer, p_max: pointer, format: cstring, flags: ImGuiSliderFlags): boolean <cimport,nodecl> end
 global function igInputText(label: cstring, buf: cstring, buf_size: csize, flags: ImGuiInputTextFlags, callback: ImGuiInputTextCallback, user_data: pointer): boolean <cimport,nodecl> end
-global function igInputTextMultiline(label: cstring, buf: cstring, buf_size: csize, size: ImVec2, flags: ImGuiInputTextFlags, callback: ImGuiInputTextCallback, user_data: pointer): boolean <cimport,nodecl> end
+global function igInputTextMultiline(label: cstring, buf: cstring, buf_size: csize, size: ImVec2_c, flags: ImGuiInputTextFlags, callback: ImGuiInputTextCallback, user_data: pointer): boolean <cimport,nodecl> end
 global function igInputTextWithHint(label: cstring, hint: cstring, buf: cstring, buf_size: csize, flags: ImGuiInputTextFlags, callback: ImGuiInputTextCallback, user_data: pointer): boolean <cimport,nodecl> end
 global function igInputFloat(label: cstring, v: *float32, step: float32, step_fast: float32, format: cstring, flags: ImGuiInputTextFlags): boolean <cimport,nodecl> end
 global function igInputFloat2(label: cstring, v: *[2]float32, format: cstring, flags: ImGuiInputTextFlags): boolean <cimport,nodecl> end
@@ -4005,7 +4051,7 @@ global function igColorEdit3(label: cstring, col: *[3]float32, flags: ImGuiColor
 global function igColorEdit4(label: cstring, col: *[4]float32, flags: ImGuiColorEditFlags): boolean <cimport,nodecl> end
 global function igColorPicker3(label: cstring, col: *[3]float32, flags: ImGuiColorEditFlags): boolean <cimport,nodecl> end
 global function igColorPicker4(label: cstring, col: *[4]float32, flags: ImGuiColorEditFlags, ref_col: *float32): boolean <cimport,nodecl> end
-global function igColorButton(desc_id: cstring, col: ImVec4, flags: ImGuiColorEditFlags, size: ImVec2): boolean <cimport,nodecl> end
+global function igColorButton(desc_id: cstring, col: ImVec4_c, flags: ImGuiColorEditFlags, size: ImVec2_c): boolean <cimport,nodecl> end
 global function igSetColorEditOptions(flags: ImGuiColorEditFlags): void <cimport,nodecl> end
 global function igTreeNode_Str(label: cstring): boolean <cimport,nodecl> end
 global function igTreeNode_StrStr(str_id: cstring, fmt: cstring, ...: cvarargs): boolean <cimport,nodecl> end
@@ -4025,20 +4071,20 @@ global function igCollapsingHeader_TreeNodeFlags(label: cstring, flags: ImGuiTre
 global function igCollapsingHeader_BoolPtr(label: cstring, p_visible: *boolean, flags: ImGuiTreeNodeFlags): boolean <cimport,nodecl> end
 global function igSetNextItemOpen(is_open: boolean, cond: ImGuiCond): void <cimport,nodecl> end
 global function igSetNextItemStorageID(storage_id: ImGuiID): void <cimport,nodecl> end
-global function igSelectable_Bool(label: cstring, selected: boolean, flags: ImGuiSelectableFlags, size: ImVec2): boolean <cimport,nodecl> end
-global function igSelectable_BoolPtr(label: cstring, p_selected: *boolean, flags: ImGuiSelectableFlags, size: ImVec2): boolean <cimport,nodecl> end
+global function igSelectable_Bool(label: cstring, selected: boolean, flags: ImGuiSelectableFlags, size: ImVec2_c): boolean <cimport,nodecl> end
+global function igSelectable_BoolPtr(label: cstring, p_selected: *boolean, flags: ImGuiSelectableFlags, size: ImVec2_c): boolean <cimport,nodecl> end
 global function igBeginMultiSelect(flags: ImGuiMultiSelectFlags, selection_size: cint, items_count: cint): *ImGuiMultiSelectIO <cimport,nodecl> end
 global function igEndMultiSelect(): *ImGuiMultiSelectIO <cimport,nodecl> end
 global function igSetNextItemSelectionUserData(selection_user_data: ImGuiSelectionUserData): void <cimport,nodecl> end
 global function igIsItemToggledSelection(): boolean <cimport,nodecl> end
-global function igBeginListBox(label: cstring, size: ImVec2): boolean <cimport,nodecl> end
+global function igBeginListBox(label: cstring, size: ImVec2_c): boolean <cimport,nodecl> end
 global function igEndListBox(): void <cimport,nodecl> end
 global function igListBox_Str_arr(label: cstring, current_item: *cint, items: *[0]cstring, items_count: cint, height_in_items: cint): boolean <cimport,nodecl> end
 global function igListBox_FnStrPtr(label: cstring, current_item: *cint, getter: function(user_data: pointer, idx: cint): cstring, user_data: pointer, items_count: cint, height_in_items: cint): boolean <cimport,nodecl> end
-global function igPlotLines_FloatPtr(label: cstring, values: *float32, values_count: cint, values_offset: cint, overlay_text: cstring, scale_min: float32, scale_max: float32, graph_size: ImVec2, stride: cint): void <cimport,nodecl> end
-global function igPlotLines_FnFloatPtr(label: cstring, values_getter: function(data: pointer, idx: cint): float32, data: pointer, values_count: cint, values_offset: cint, overlay_text: cstring, scale_min: float32, scale_max: float32, graph_size: ImVec2): void <cimport,nodecl> end
-global function igPlotHistogram_FloatPtr(label: cstring, values: *float32, values_count: cint, values_offset: cint, overlay_text: cstring, scale_min: float32, scale_max: float32, graph_size: ImVec2, stride: cint): void <cimport,nodecl> end
-global function igPlotHistogram_FnFloatPtr(label: cstring, values_getter: function(data: pointer, idx: cint): float32, data: pointer, values_count: cint, values_offset: cint, overlay_text: cstring, scale_min: float32, scale_max: float32, graph_size: ImVec2): void <cimport,nodecl> end
+global function igPlotLines_FloatPtr(label: cstring, values: *float32, values_count: cint, values_offset: cint, overlay_text: cstring, scale_min: float32, scale_max: float32, graph_size: ImVec2_c, stride: cint): void <cimport,nodecl> end
+global function igPlotLines_FnFloatPtr(label: cstring, values_getter: function(data: pointer, idx: cint): float32, data: pointer, values_count: cint, values_offset: cint, overlay_text: cstring, scale_min: float32, scale_max: float32, graph_size: ImVec2_c): void <cimport,nodecl> end
+global function igPlotHistogram_FloatPtr(label: cstring, values: *float32, values_count: cint, values_offset: cint, overlay_text: cstring, scale_min: float32, scale_max: float32, graph_size: ImVec2_c, stride: cint): void <cimport,nodecl> end
+global function igPlotHistogram_FnFloatPtr(label: cstring, values_getter: function(data: pointer, idx: cint): float32, data: pointer, values_count: cint, values_offset: cint, overlay_text: cstring, scale_min: float32, scale_max: float32, graph_size: ImVec2_c): void <cimport,nodecl> end
 global function igValue_Bool(prefix: cstring, b: boolean): void <cimport,nodecl> end
 global function igValue_Int(prefix: cstring, v: cint): void <cimport,nodecl> end
 global function igValue_Uint(prefix: cstring, v: cuint): void <cimport,nodecl> end
@@ -4069,7 +4115,7 @@ global function igBeginPopupContextItem(str_id: cstring, popup_flags: ImGuiPopup
 global function igBeginPopupContextWindow(str_id: cstring, popup_flags: ImGuiPopupFlags): boolean <cimport,nodecl> end
 global function igBeginPopupContextVoid(str_id: cstring, popup_flags: ImGuiPopupFlags): boolean <cimport,nodecl> end
 global function igIsPopupOpen_Str(str_id: cstring, flags: ImGuiPopupFlags): boolean <cimport,nodecl> end
-global function igBeginTable(str_id: cstring, columns: cint, flags: ImGuiTableFlags, outer_size: ImVec2, inner_width: float32): boolean <cimport,nodecl> end
+global function igBeginTable(str_id: cstring, columns: cint, flags: ImGuiTableFlags, outer_size: ImVec2_c, inner_width: float32): boolean <cimport,nodecl> end
 global function igEndTable(): void <cimport,nodecl> end
 global function igTableNextRow(row_flags: ImGuiTableRowFlags, min_row_height: float32): void <cimport,nodecl> end
 global function igTableNextColumn(): boolean <cimport,nodecl> end
@@ -4102,7 +4148,7 @@ global function igBeginTabItem(label: cstring, p_open: *boolean, flags: ImGuiTab
 global function igEndTabItem(): void <cimport,nodecl> end
 global function igTabItemButton(label: cstring, flags: ImGuiTabItemFlags): boolean <cimport,nodecl> end
 global function igSetTabItemClosed(tab_or_docked_window_label: cstring): void <cimport,nodecl> end
-global function igDockSpace(dockspace_id: ImGuiID, size: ImVec2, flags: ImGuiDockNodeFlags, window_class: *ImGuiWindowClass): ImGuiID <cimport,nodecl> end
+global function igDockSpace(dockspace_id: ImGuiID, size: ImVec2_c, flags: ImGuiDockNodeFlags, window_class: *ImGuiWindowClass): ImGuiID <cimport,nodecl> end
 global function igDockSpaceOverViewport(dockspace_id: ImGuiID, viewport: *ImGuiViewport, flags: ImGuiDockNodeFlags, window_class: *ImGuiWindowClass): ImGuiID <cimport,nodecl> end
 global function igSetNextWindowDockID(dock_id: ImGuiID, cond: ImGuiCond): void <cimport,nodecl> end
 global function igSetNextWindowClass(window_class: *ImGuiWindowClass): void <cimport,nodecl> end
@@ -4124,7 +4170,7 @@ global function igEndDragDropTarget(): void <cimport,nodecl> end
 global function igGetDragDropPayload(): *ImGuiPayload <cimport,nodecl> end
 global function igBeginDisabled(disabled: boolean): void <cimport,nodecl> end
 global function igEndDisabled(): void <cimport,nodecl> end
-global function igPushClipRect(clip_rect_min: ImVec2, clip_rect_max: ImVec2, intersect_with_current_clip_rect: boolean): void <cimport,nodecl> end
+global function igPushClipRect(clip_rect_min: ImVec2_c, clip_rect_max: ImVec2_c, intersect_with_current_clip_rect: boolean): void <cimport,nodecl> end
 global function igPopClipRect(): void <cimport,nodecl> end
 global function igSetItemDefaultFocus(): void <cimport,nodecl> end
 global function igSetKeyboardFocusHere(offset: cint): void <cimport,nodecl> end
@@ -4144,23 +4190,24 @@ global function igIsAnyItemHovered(): boolean <cimport,nodecl> end
 global function igIsAnyItemActive(): boolean <cimport,nodecl> end
 global function igIsAnyItemFocused(): boolean <cimport,nodecl> end
 global function igGetItemID(): ImGuiID <cimport,nodecl> end
-global function igGetItemRectMin(pOut: *ImVec2): void <cimport,nodecl> end
-global function igGetItemRectMax(pOut: *ImVec2): void <cimport,nodecl> end
-global function igGetItemRectSize(pOut: *ImVec2): void <cimport,nodecl> end
+global function igGetItemRectMin(): ImVec2_c <cimport,nodecl> end
+global function igGetItemRectMax(): ImVec2_c <cimport,nodecl> end
+global function igGetItemRectSize(): ImVec2_c <cimport,nodecl> end
+global function igGetItemFlags(): ImGuiItemFlags <cimport,nodecl> end
 global function igGetMainViewport(): *ImGuiViewport <cimport,nodecl> end
 global function igGetBackgroundDrawList(viewport: *ImGuiViewport): *ImDrawList <cimport,nodecl> end
 global function igGetForegroundDrawList_ViewportPtr(viewport: *ImGuiViewport): *ImDrawList <cimport,nodecl> end
-global function igIsRectVisible_Nil(size: ImVec2): boolean <cimport,nodecl> end
-global function igIsRectVisible_Vec2(rect_min: ImVec2, rect_max: ImVec2): boolean <cimport,nodecl> end
+global function igIsRectVisible_Nil(size: ImVec2_c): boolean <cimport,nodecl> end
+global function igIsRectVisible_Vec2(rect_min: ImVec2_c, rect_max: ImVec2_c): boolean <cimport,nodecl> end
 global function igGetTime(): float64 <cimport,nodecl> end
 global function igGetFrameCount(): cint <cimport,nodecl> end
 global function igGetDrawListSharedData(): *ImDrawListSharedData <cimport,nodecl> end
 global function igGetStyleColorName(idx: ImGuiCol): cstring <cimport,nodecl> end
 global function igSetStateStorage(storage: *ImGuiStorage): void <cimport,nodecl> end
 global function igGetStateStorage(): *ImGuiStorage <cimport,nodecl> end
-global function igCalcTextSize(pOut: *ImVec2, text: cstring, text_end: cstring, hide_text_after_double_hash: boolean, wrap_width: float32): void <cimport,nodecl> end
-global function igColorConvertU32ToFloat4(pOut: *ImVec4, in_: ImU32): void <cimport,nodecl> end
-global function igColorConvertFloat4ToU32(in_: ImVec4): ImU32 <cimport,nodecl> end
+global function igCalcTextSize(text: cstring, text_end: cstring, hide_text_after_double_hash: boolean, wrap_width: float32): ImVec2_c <cimport,nodecl> end
+global function igColorConvertU32ToFloat4(in_: ImU32): ImVec4_c <cimport,nodecl> end
+global function igColorConvertFloat4ToU32(in_: ImVec4_c): ImU32 <cimport,nodecl> end
 global function igColorConvertRGBtoHSV(r: float32, g: float32, b: float32, out_h: *float32, out_s: *float32, out_v: *float32): void <cimport,nodecl> end
 global function igColorConvertHSVtoRGB(h: float32, s: float32, v: float32, out_r: *float32, out_g: *float32, out_b: *float32): void <cimport,nodecl> end
 global function igIsKeyDown_Nil(key: ImGuiKey): boolean <cimport,nodecl> end
@@ -4179,13 +4226,13 @@ global function igIsMouseReleased_Nil(button: ImGuiMouseButton): boolean <cimpor
 global function igIsMouseDoubleClicked_Nil(button: ImGuiMouseButton): boolean <cimport,nodecl> end
 global function igIsMouseReleasedWithDelay(button: ImGuiMouseButton, delay: float32): boolean <cimport,nodecl> end
 global function igGetMouseClickedCount(button: ImGuiMouseButton): cint <cimport,nodecl> end
-global function igIsMouseHoveringRect(r_min: ImVec2, r_max: ImVec2, clip: boolean): boolean <cimport,nodecl> end
-global function igIsMousePosValid(mouse_pos: *ImVec2): boolean <cimport,nodecl> end
+global function igIsMouseHoveringRect(r_min: ImVec2_c, r_max: ImVec2_c, clip: boolean): boolean <cimport,nodecl> end
+global function igIsMousePosValid(mouse_pos: *ImVec2_c): boolean <cimport,nodecl> end
 global function igIsAnyMouseDown(): boolean <cimport,nodecl> end
-global function igGetMousePos(pOut: *ImVec2): void <cimport,nodecl> end
-global function igGetMousePosOnOpeningCurrentPopup(pOut: *ImVec2): void <cimport,nodecl> end
+global function igGetMousePos(): ImVec2_c <cimport,nodecl> end
+global function igGetMousePosOnOpeningCurrentPopup(): ImVec2_c <cimport,nodecl> end
 global function igIsMouseDragging(button: ImGuiMouseButton, lock_threshold: float32): boolean <cimport,nodecl> end
-global function igGetMouseDragDelta(pOut: *ImVec2, button: ImGuiMouseButton, lock_threshold: float32): void <cimport,nodecl> end
+global function igGetMouseDragDelta(button: ImGuiMouseButton, lock_threshold: float32): ImVec2_c <cimport,nodecl> end
 global function igResetMouseDragDelta(button: ImGuiMouseButton): void <cimport,nodecl> end
 global function igGetMouseCursor(): ImGuiMouseCursor <cimport,nodecl> end
 global function igSetMouseCursor(cursor_type: ImGuiMouseCursor): void <cimport,nodecl> end
@@ -4209,7 +4256,7 @@ global function igMemFree(ptr: pointer): void <cimport,nodecl> end
 global function igUpdatePlatformWindows(): void <cimport,nodecl> end
 global function igRenderPlatformWindowsDefault(platform_render_arg: pointer, renderer_render_arg: pointer): void <cimport,nodecl> end
 global function igDestroyPlatformWindows(): void <cimport,nodecl> end
-global function igFindViewportByID(id: ImGuiID): *ImGuiViewport <cimport,nodecl> end
+global function igFindViewportByID(viewport_id: ImGuiID): *ImGuiViewport <cimport,nodecl> end
 global function igFindViewportByPlatformHandle(platform_handle: pointer): *ImGuiViewport <cimport,nodecl> end
 global function ImGuiTableSortSpecs_ImGuiTableSortSpecs(): *ImGuiTableSortSpecs <cimport,nodecl> end
 global function ImGuiTableSortSpecs_destroy(self: *ImGuiTableSortSpecs): void <cimport,nodecl> end
@@ -4241,6 +4288,7 @@ global function ImGuiInputTextCallbackData_destroy(self: *ImGuiInputTextCallback
 global function ImGuiInputTextCallbackData_DeleteChars(self: *ImGuiInputTextCallbackData, pos: cint, bytes_count: cint): void <cimport,nodecl> end
 global function ImGuiInputTextCallbackData_InsertChars(self: *ImGuiInputTextCallbackData, pos: cint, text: cstring, text_end: cstring): void <cimport,nodecl> end
 global function ImGuiInputTextCallbackData_SelectAll(self: *ImGuiInputTextCallbackData): void <cimport,nodecl> end
+global function ImGuiInputTextCallbackData_SetSelection(self: *ImGuiInputTextCallbackData, s: cint, e: cint): void <cimport,nodecl> end
 global function ImGuiInputTextCallbackData_ClearSelection(self: *ImGuiInputTextCallbackData): void <cimport,nodecl> end
 global function ImGuiInputTextCallbackData_HasSelection(self: *ImGuiInputTextCallbackData): boolean <cimport,nodecl> end
 global function ImGuiWindowClass_ImGuiWindowClass(): *ImGuiWindowClass <cimport,nodecl> end
@@ -4307,11 +4355,11 @@ global function ImGuiListClipper_SeekCursorForItem(self: *ImGuiListClipper, item
 global function ImColor_ImColor_Nil(): *ImColor <cimport,nodecl> end
 global function ImColor_destroy(self: *ImColor): void <cimport,nodecl> end
 global function ImColor_ImColor_Float(r: float32, g: float32, b: float32, a: float32): *ImColor <cimport,nodecl> end
-global function ImColor_ImColor_Vec4(col: ImVec4): *ImColor <cimport,nodecl> end
+global function ImColor_ImColor_Vec4(col: ImVec4_c): *ImColor <cimport,nodecl> end
 global function ImColor_ImColor_Int(r: cint, g: cint, b: cint, a: cint): *ImColor <cimport,nodecl> end
 global function ImColor_ImColor_U32(rgba: ImU32): *ImColor <cimport,nodecl> end
 global function ImColor_SetHSV(self: *ImColor, h: float32, s: float32, v: float32, a: float32): void <cimport,nodecl> end
-global function ImColor_HSV(pOut: *ImColor, h: float32, s: float32, v: float32, a: float32): void <cimport,nodecl> end
+global function ImColor_HSV(h: float32, s: float32, v: float32, a: float32): ImColor_c <cimport,nodecl> end
 global function ImGuiSelectionBasicStorage_ImGuiSelectionBasicStorage(): *ImGuiSelectionBasicStorage <cimport,nodecl> end
 global function ImGuiSelectionBasicStorage_destroy(self: *ImGuiSelectionBasicStorage): void <cimport,nodecl> end
 global function ImGuiSelectionBasicStorage_ApplyRequests(self: *ImGuiSelectionBasicStorage, ms_io: *ImGuiMultiSelectIO): void <cimport,nodecl> end
@@ -4336,49 +4384,49 @@ global function ImDrawListSplitter_Merge(self: *ImDrawListSplitter, draw_list: *
 global function ImDrawListSplitter_SetCurrentChannel(self: *ImDrawListSplitter, draw_list: *ImDrawList, channel_idx: cint): void <cimport,nodecl> end
 global function ImDrawList_ImDrawList(shared_data: *ImDrawListSharedData): *ImDrawList <cimport,nodecl> end
 global function ImDrawList_destroy(self: *ImDrawList): void <cimport,nodecl> end
-global function ImDrawList_PushClipRect(self: *ImDrawList, clip_rect_min: ImVec2, clip_rect_max: ImVec2, intersect_with_current_clip_rect: boolean): void <cimport,nodecl> end
+global function ImDrawList_PushClipRect(self: *ImDrawList, clip_rect_min: ImVec2_c, clip_rect_max: ImVec2_c, intersect_with_current_clip_rect: boolean): void <cimport,nodecl> end
 global function ImDrawList_PushClipRectFullScreen(self: *ImDrawList): void <cimport,nodecl> end
 global function ImDrawList_PopClipRect(self: *ImDrawList): void <cimport,nodecl> end
-global function ImDrawList_PushTexture(self: *ImDrawList, tex_ref: ImTextureRef): void <cimport,nodecl> end
+global function ImDrawList_PushTexture(self: *ImDrawList, tex_ref: ImTextureRef_c): void <cimport,nodecl> end
 global function ImDrawList_PopTexture(self: *ImDrawList): void <cimport,nodecl> end
-global function ImDrawList_GetClipRectMin(pOut: *ImVec2, self: *ImDrawList): void <cimport,nodecl> end
-global function ImDrawList_GetClipRectMax(pOut: *ImVec2, self: *ImDrawList): void <cimport,nodecl> end
-global function ImDrawList_AddLine(self: *ImDrawList, p1: ImVec2, p2: ImVec2, col: ImU32, thickness: float32): void <cimport,nodecl> end
-global function ImDrawList_AddRect(self: *ImDrawList, p_min: ImVec2, p_max: ImVec2, col: ImU32, rounding: float32, flags: ImDrawFlags, thickness: float32): void <cimport,nodecl> end
-global function ImDrawList_AddRectFilled(self: *ImDrawList, p_min: ImVec2, p_max: ImVec2, col: ImU32, rounding: float32, flags: ImDrawFlags): void <cimport,nodecl> end
-global function ImDrawList_AddRectFilledMultiColor(self: *ImDrawList, p_min: ImVec2, p_max: ImVec2, col_upr_left: ImU32, col_upr_right: ImU32, col_bot_right: ImU32, col_bot_left: ImU32): void <cimport,nodecl> end
-global function ImDrawList_AddQuad(self: *ImDrawList, p1: ImVec2, p2: ImVec2, p3: ImVec2, p4: ImVec2, col: ImU32, thickness: float32): void <cimport,nodecl> end
-global function ImDrawList_AddQuadFilled(self: *ImDrawList, p1: ImVec2, p2: ImVec2, p3: ImVec2, p4: ImVec2, col: ImU32): void <cimport,nodecl> end
-global function ImDrawList_AddTriangle(self: *ImDrawList, p1: ImVec2, p2: ImVec2, p3: ImVec2, col: ImU32, thickness: float32): void <cimport,nodecl> end
-global function ImDrawList_AddTriangleFilled(self: *ImDrawList, p1: ImVec2, p2: ImVec2, p3: ImVec2, col: ImU32): void <cimport,nodecl> end
-global function ImDrawList_AddCircle(self: *ImDrawList, center: ImVec2, radius: float32, col: ImU32, num_segments: cint, thickness: float32): void <cimport,nodecl> end
-global function ImDrawList_AddCircleFilled(self: *ImDrawList, center: ImVec2, radius: float32, col: ImU32, num_segments: cint): void <cimport,nodecl> end
-global function ImDrawList_AddNgon(self: *ImDrawList, center: ImVec2, radius: float32, col: ImU32, num_segments: cint, thickness: float32): void <cimport,nodecl> end
-global function ImDrawList_AddNgonFilled(self: *ImDrawList, center: ImVec2, radius: float32, col: ImU32, num_segments: cint): void <cimport,nodecl> end
-global function ImDrawList_AddEllipse(self: *ImDrawList, center: ImVec2, radius: ImVec2, col: ImU32, rot: float32, num_segments: cint, thickness: float32): void <cimport,nodecl> end
-global function ImDrawList_AddEllipseFilled(self: *ImDrawList, center: ImVec2, radius: ImVec2, col: ImU32, rot: float32, num_segments: cint): void <cimport,nodecl> end
-global function ImDrawList_AddText_Vec2(self: *ImDrawList, pos: ImVec2, col: ImU32, text_begin: cstring, text_end: cstring): void <cimport,nodecl> end
-global function ImDrawList_AddText_FontPtr(self: *ImDrawList, font: *ImFont, font_size: float32, pos: ImVec2, col: ImU32, text_begin: cstring, text_end: cstring, wrap_width: float32, cpu_fine_clip_rect: *ImVec4): void <cimport,nodecl> end
-global function ImDrawList_AddBezierCubic(self: *ImDrawList, p1: ImVec2, p2: ImVec2, p3: ImVec2, p4: ImVec2, col: ImU32, thickness: float32, num_segments: cint): void <cimport,nodecl> end
-global function ImDrawList_AddBezierQuadratic(self: *ImDrawList, p1: ImVec2, p2: ImVec2, p3: ImVec2, col: ImU32, thickness: float32, num_segments: cint): void <cimport,nodecl> end
-global function ImDrawList_AddPolyline(self: *ImDrawList, points: *ImVec2, num_points: cint, col: ImU32, flags: ImDrawFlags, thickness: float32): void <cimport,nodecl> end
-global function ImDrawList_AddConvexPolyFilled(self: *ImDrawList, points: *ImVec2, num_points: cint, col: ImU32): void <cimport,nodecl> end
-global function ImDrawList_AddConcavePolyFilled(self: *ImDrawList, points: *ImVec2, num_points: cint, col: ImU32): void <cimport,nodecl> end
-global function ImDrawList_AddImage(self: *ImDrawList, tex_ref: ImTextureRef, p_min: ImVec2, p_max: ImVec2, uv_min: ImVec2, uv_max: ImVec2, col: ImU32): void <cimport,nodecl> end
-global function ImDrawList_AddImageQuad(self: *ImDrawList, tex_ref: ImTextureRef, p1: ImVec2, p2: ImVec2, p3: ImVec2, p4: ImVec2, uv1: ImVec2, uv2: ImVec2, uv3: ImVec2, uv4: ImVec2, col: ImU32): void <cimport,nodecl> end
-global function ImDrawList_AddImageRounded(self: *ImDrawList, tex_ref: ImTextureRef, p_min: ImVec2, p_max: ImVec2, uv_min: ImVec2, uv_max: ImVec2, col: ImU32, rounding: float32, flags: ImDrawFlags): void <cimport,nodecl> end
+global function ImDrawList_GetClipRectMin(self: *ImDrawList): ImVec2_c <cimport,nodecl> end
+global function ImDrawList_GetClipRectMax(self: *ImDrawList): ImVec2_c <cimport,nodecl> end
+global function ImDrawList_AddLine(self: *ImDrawList, p1: ImVec2_c, p2: ImVec2_c, col: ImU32, thickness: float32): void <cimport,nodecl> end
+global function ImDrawList_AddRect(self: *ImDrawList, p_min: ImVec2_c, p_max: ImVec2_c, col: ImU32, rounding: float32, flags: ImDrawFlags, thickness: float32): void <cimport,nodecl> end
+global function ImDrawList_AddRectFilled(self: *ImDrawList, p_min: ImVec2_c, p_max: ImVec2_c, col: ImU32, rounding: float32, flags: ImDrawFlags): void <cimport,nodecl> end
+global function ImDrawList_AddRectFilledMultiColor(self: *ImDrawList, p_min: ImVec2_c, p_max: ImVec2_c, col_upr_left: ImU32, col_upr_right: ImU32, col_bot_right: ImU32, col_bot_left: ImU32): void <cimport,nodecl> end
+global function ImDrawList_AddQuad(self: *ImDrawList, p1: ImVec2_c, p2: ImVec2_c, p3: ImVec2_c, p4: ImVec2_c, col: ImU32, thickness: float32): void <cimport,nodecl> end
+global function ImDrawList_AddQuadFilled(self: *ImDrawList, p1: ImVec2_c, p2: ImVec2_c, p3: ImVec2_c, p4: ImVec2_c, col: ImU32): void <cimport,nodecl> end
+global function ImDrawList_AddTriangle(self: *ImDrawList, p1: ImVec2_c, p2: ImVec2_c, p3: ImVec2_c, col: ImU32, thickness: float32): void <cimport,nodecl> end
+global function ImDrawList_AddTriangleFilled(self: *ImDrawList, p1: ImVec2_c, p2: ImVec2_c, p3: ImVec2_c, col: ImU32): void <cimport,nodecl> end
+global function ImDrawList_AddCircle(self: *ImDrawList, center: ImVec2_c, radius: float32, col: ImU32, num_segments: cint, thickness: float32): void <cimport,nodecl> end
+global function ImDrawList_AddCircleFilled(self: *ImDrawList, center: ImVec2_c, radius: float32, col: ImU32, num_segments: cint): void <cimport,nodecl> end
+global function ImDrawList_AddNgon(self: *ImDrawList, center: ImVec2_c, radius: float32, col: ImU32, num_segments: cint, thickness: float32): void <cimport,nodecl> end
+global function ImDrawList_AddNgonFilled(self: *ImDrawList, center: ImVec2_c, radius: float32, col: ImU32, num_segments: cint): void <cimport,nodecl> end
+global function ImDrawList_AddEllipse(self: *ImDrawList, center: ImVec2_c, radius: ImVec2_c, col: ImU32, rot: float32, num_segments: cint, thickness: float32): void <cimport,nodecl> end
+global function ImDrawList_AddEllipseFilled(self: *ImDrawList, center: ImVec2_c, radius: ImVec2_c, col: ImU32, rot: float32, num_segments: cint): void <cimport,nodecl> end
+global function ImDrawList_AddText_Vec2(self: *ImDrawList, pos: ImVec2_c, col: ImU32, text_begin: cstring, text_end: cstring): void <cimport,nodecl> end
+global function ImDrawList_AddText_FontPtr(self: *ImDrawList, font: *ImFont, font_size: float32, pos: ImVec2_c, col: ImU32, text_begin: cstring, text_end: cstring, wrap_width: float32, cpu_fine_clip_rect: *ImVec4): void <cimport,nodecl> end
+global function ImDrawList_AddBezierCubic(self: *ImDrawList, p1: ImVec2_c, p2: ImVec2_c, p3: ImVec2_c, p4: ImVec2_c, col: ImU32, thickness: float32, num_segments: cint): void <cimport,nodecl> end
+global function ImDrawList_AddBezierQuadratic(self: *ImDrawList, p1: ImVec2_c, p2: ImVec2_c, p3: ImVec2_c, col: ImU32, thickness: float32, num_segments: cint): void <cimport,nodecl> end
+global function ImDrawList_AddPolyline(self: *ImDrawList, points: *ImVec2_c, num_points: cint, col: ImU32, flags: ImDrawFlags, thickness: float32): void <cimport,nodecl> end
+global function ImDrawList_AddConvexPolyFilled(self: *ImDrawList, points: *ImVec2_c, num_points: cint, col: ImU32): void <cimport,nodecl> end
+global function ImDrawList_AddConcavePolyFilled(self: *ImDrawList, points: *ImVec2_c, num_points: cint, col: ImU32): void <cimport,nodecl> end
+global function ImDrawList_AddImage(self: *ImDrawList, tex_ref: ImTextureRef_c, p_min: ImVec2_c, p_max: ImVec2_c, uv_min: ImVec2_c, uv_max: ImVec2_c, col: ImU32): void <cimport,nodecl> end
+global function ImDrawList_AddImageQuad(self: *ImDrawList, tex_ref: ImTextureRef_c, p1: ImVec2_c, p2: ImVec2_c, p3: ImVec2_c, p4: ImVec2_c, uv1: ImVec2_c, uv2: ImVec2_c, uv3: ImVec2_c, uv4: ImVec2_c, col: ImU32): void <cimport,nodecl> end
+global function ImDrawList_AddImageRounded(self: *ImDrawList, tex_ref: ImTextureRef_c, p_min: ImVec2_c, p_max: ImVec2_c, uv_min: ImVec2_c, uv_max: ImVec2_c, col: ImU32, rounding: float32, flags: ImDrawFlags): void <cimport,nodecl> end
 global function ImDrawList_PathClear(self: *ImDrawList): void <cimport,nodecl> end
-global function ImDrawList_PathLineTo(self: *ImDrawList, pos: ImVec2): void <cimport,nodecl> end
-global function ImDrawList_PathLineToMergeDuplicate(self: *ImDrawList, pos: ImVec2): void <cimport,nodecl> end
+global function ImDrawList_PathLineTo(self: *ImDrawList, pos: ImVec2_c): void <cimport,nodecl> end
+global function ImDrawList_PathLineToMergeDuplicate(self: *ImDrawList, pos: ImVec2_c): void <cimport,nodecl> end
 global function ImDrawList_PathFillConvex(self: *ImDrawList, col: ImU32): void <cimport,nodecl> end
 global function ImDrawList_PathFillConcave(self: *ImDrawList, col: ImU32): void <cimport,nodecl> end
 global function ImDrawList_PathStroke(self: *ImDrawList, col: ImU32, flags: ImDrawFlags, thickness: float32): void <cimport,nodecl> end
-global function ImDrawList_PathArcTo(self: *ImDrawList, center: ImVec2, radius: float32, a_min: float32, a_max: float32, num_segments: cint): void <cimport,nodecl> end
-global function ImDrawList_PathArcToFast(self: *ImDrawList, center: ImVec2, radius: float32, a_min_of_12: cint, a_max_of_12: cint): void <cimport,nodecl> end
-global function ImDrawList_PathEllipticalArcTo(self: *ImDrawList, center: ImVec2, radius: ImVec2, rot: float32, a_min: float32, a_max: float32, num_segments: cint): void <cimport,nodecl> end
-global function ImDrawList_PathBezierCubicCurveTo(self: *ImDrawList, p2: ImVec2, p3: ImVec2, p4: ImVec2, num_segments: cint): void <cimport,nodecl> end
-global function ImDrawList_PathBezierQuadraticCurveTo(self: *ImDrawList, p2: ImVec2, p3: ImVec2, num_segments: cint): void <cimport,nodecl> end
-global function ImDrawList_PathRect(self: *ImDrawList, rect_min: ImVec2, rect_max: ImVec2, rounding: float32, flags: ImDrawFlags): void <cimport,nodecl> end
+global function ImDrawList_PathArcTo(self: *ImDrawList, center: ImVec2_c, radius: float32, a_min: float32, a_max: float32, num_segments: cint): void <cimport,nodecl> end
+global function ImDrawList_PathArcToFast(self: *ImDrawList, center: ImVec2_c, radius: float32, a_min_of_12: cint, a_max_of_12: cint): void <cimport,nodecl> end
+global function ImDrawList_PathEllipticalArcTo(self: *ImDrawList, center: ImVec2_c, radius: ImVec2_c, rot: float32, a_min: float32, a_max: float32, num_segments: cint): void <cimport,nodecl> end
+global function ImDrawList_PathBezierCubicCurveTo(self: *ImDrawList, p2: ImVec2_c, p3: ImVec2_c, p4: ImVec2_c, num_segments: cint): void <cimport,nodecl> end
+global function ImDrawList_PathBezierQuadraticCurveTo(self: *ImDrawList, p2: ImVec2_c, p3: ImVec2_c, num_segments: cint): void <cimport,nodecl> end
+global function ImDrawList_PathRect(self: *ImDrawList, rect_min: ImVec2_c, rect_max: ImVec2_c, rounding: float32, flags: ImDrawFlags): void <cimport,nodecl> end
 global function ImDrawList_AddCallback(self: *ImDrawList, callback: ImDrawCallback, userdata: pointer, userdata_size: csize): void <cimport,nodecl> end
 global function ImDrawList_AddDrawCmd(self: *ImDrawList): void <cimport,nodecl> end
 global function ImDrawList_CloneOutput(self: *ImDrawList): *ImDrawList <cimport,nodecl> end
@@ -4387,12 +4435,12 @@ global function ImDrawList_ChannelsMerge(self: *ImDrawList): void <cimport,nodec
 global function ImDrawList_ChannelsSetCurrent(self: *ImDrawList, n: cint): void <cimport,nodecl> end
 global function ImDrawList_PrimReserve(self: *ImDrawList, idx_count: cint, vtx_count: cint): void <cimport,nodecl> end
 global function ImDrawList_PrimUnreserve(self: *ImDrawList, idx_count: cint, vtx_count: cint): void <cimport,nodecl> end
-global function ImDrawList_PrimRect(self: *ImDrawList, a: ImVec2, b: ImVec2, col: ImU32): void <cimport,nodecl> end
-global function ImDrawList_PrimRectUV(self: *ImDrawList, a: ImVec2, b: ImVec2, uv_a: ImVec2, uv_b: ImVec2, col: ImU32): void <cimport,nodecl> end
-global function ImDrawList_PrimQuadUV(self: *ImDrawList, a: ImVec2, b: ImVec2, c: ImVec2, d: ImVec2, uv_a: ImVec2, uv_b: ImVec2, uv_c: ImVec2, uv_d: ImVec2, col: ImU32): void <cimport,nodecl> end
-global function ImDrawList_PrimWriteVtx(self: *ImDrawList, pos: ImVec2, uv: ImVec2, col: ImU32): void <cimport,nodecl> end
+global function ImDrawList_PrimRect(self: *ImDrawList, a: ImVec2_c, b: ImVec2_c, col: ImU32): void <cimport,nodecl> end
+global function ImDrawList_PrimRectUV(self: *ImDrawList, a: ImVec2_c, b: ImVec2_c, uv_a: ImVec2_c, uv_b: ImVec2_c, col: ImU32): void <cimport,nodecl> end
+global function ImDrawList_PrimQuadUV(self: *ImDrawList, a: ImVec2_c, b: ImVec2_c, c: ImVec2_c, d: ImVec2_c, uv_a: ImVec2_c, uv_b: ImVec2_c, uv_c: ImVec2_c, uv_d: ImVec2_c, col: ImU32): void <cimport,nodecl> end
+global function ImDrawList_PrimWriteVtx(self: *ImDrawList, pos: ImVec2_c, uv: ImVec2_c, col: ImU32): void <cimport,nodecl> end
 global function ImDrawList_PrimWriteIdx(self: *ImDrawList, idx: cuint): void <cimport,nodecl> end
-global function ImDrawList_PrimVtx(self: *ImDrawList, pos: ImVec2, uv: ImVec2, col: ImU32): void <cimport,nodecl> end
+global function ImDrawList_PrimVtx(self: *ImDrawList, pos: ImVec2_c, uv: ImVec2_c, col: ImU32): void <cimport,nodecl> end
 global function ImDrawList__SetDrawListSharedData(self: *ImDrawList, data: *ImDrawListSharedData): void <cimport,nodecl> end
 global function ImDrawList__ResetForNewFrame(self: *ImDrawList): void <cimport,nodecl> end
 global function ImDrawList__ClearFreeMemory(self: *ImDrawList): void <cimport,nodecl> end
@@ -4401,16 +4449,16 @@ global function ImDrawList__TryMergeDrawCmds(self: *ImDrawList): void <cimport,n
 global function ImDrawList__OnChangedClipRect(self: *ImDrawList): void <cimport,nodecl> end
 global function ImDrawList__OnChangedTexture(self: *ImDrawList): void <cimport,nodecl> end
 global function ImDrawList__OnChangedVtxOffset(self: *ImDrawList): void <cimport,nodecl> end
-global function ImDrawList__SetTexture(self: *ImDrawList, tex_ref: ImTextureRef): void <cimport,nodecl> end
+global function ImDrawList__SetTexture(self: *ImDrawList, tex_ref: ImTextureRef_c): void <cimport,nodecl> end
 global function ImDrawList__CalcCircleAutoSegmentCount(self: *ImDrawList, radius: float32): cint <cimport,nodecl> end
-global function ImDrawList__PathArcToFastEx(self: *ImDrawList, center: ImVec2, radius: float32, a_min_sample: cint, a_max_sample: cint, a_step: cint): void <cimport,nodecl> end
-global function ImDrawList__PathArcToN(self: *ImDrawList, center: ImVec2, radius: float32, a_min: float32, a_max: float32, num_segments: cint): void <cimport,nodecl> end
+global function ImDrawList__PathArcToFastEx(self: *ImDrawList, center: ImVec2_c, radius: float32, a_min_sample: cint, a_max_sample: cint, a_step: cint): void <cimport,nodecl> end
+global function ImDrawList__PathArcToN(self: *ImDrawList, center: ImVec2_c, radius: float32, a_min: float32, a_max: float32, num_segments: cint): void <cimport,nodecl> end
 global function ImDrawData_ImDrawData(): *ImDrawData <cimport,nodecl> end
 global function ImDrawData_destroy(self: *ImDrawData): void <cimport,nodecl> end
 global function ImDrawData_Clear(self: *ImDrawData): void <cimport,nodecl> end
 global function ImDrawData_AddDrawList(self: *ImDrawData, draw_list: *ImDrawList): void <cimport,nodecl> end
 global function ImDrawData_DeIndexAllBuffers(self: *ImDrawData): void <cimport,nodecl> end
-global function ImDrawData_ScaleClipRects(self: *ImDrawData, fb_scale: ImVec2): void <cimport,nodecl> end
+global function ImDrawData_ScaleClipRects(self: *ImDrawData, fb_scale: ImVec2_c): void <cimport,nodecl> end
 global function ImTextureData_ImTextureData(): *ImTextureData <cimport,nodecl> end
 global function ImTextureData_destroy(self: *ImTextureData): void <cimport,nodecl> end
 global function ImTextureData_Create(self: *ImTextureData, format: ImTextureFormat, w: cint, h: cint): void <cimport,nodecl> end
@@ -4419,7 +4467,7 @@ global function ImTextureData_GetPixels(self: *ImTextureData): pointer <cimport,
 global function ImTextureData_GetPixelsAt(self: *ImTextureData, x: cint, y: cint): pointer <cimport,nodecl> end
 global function ImTextureData_GetSizeInBytes(self: *ImTextureData): cint <cimport,nodecl> end
 global function ImTextureData_GetPitch(self: *ImTextureData): cint <cimport,nodecl> end
-global function ImTextureData_GetTexRef(pOut: *ImTextureRef, self: *ImTextureData): void <cimport,nodecl> end
+global function ImTextureData_GetTexRef(self: *ImTextureData): ImTextureRef_c <cimport,nodecl> end
 global function ImTextureData_GetTexID(self: *ImTextureData): ImTextureID <cimport,nodecl> end
 global function ImTextureData_SetTexID(self: *ImTextureData, tex_id: ImTextureID): void <cimport,nodecl> end
 global function ImTextureData_SetStatus(self: *ImTextureData, status: ImTextureStatus): void <cimport,nodecl> end
@@ -4442,6 +4490,8 @@ global function ImFontAtlas_ImFontAtlas(): *ImFontAtlas <cimport,nodecl> end
 global function ImFontAtlas_destroy(self: *ImFontAtlas): void <cimport,nodecl> end
 global function ImFontAtlas_AddFont(self: *ImFontAtlas, font_cfg: *ImFontConfig): *ImFont <cimport,nodecl> end
 global function ImFontAtlas_AddFontDefault(self: *ImFontAtlas, font_cfg: *ImFontConfig): *ImFont <cimport,nodecl> end
+global function ImFontAtlas_AddFontDefaultVector(self: *ImFontAtlas, font_cfg: *ImFontConfig): *ImFont <cimport,nodecl> end
+global function ImFontAtlas_AddFontDefaultBitmap(self: *ImFontAtlas, font_cfg: *ImFontConfig): *ImFont <cimport,nodecl> end
 global function ImFontAtlas_AddFontFromFileTTF(self: *ImFontAtlas, filename: cstring, size_pixels: float32, font_cfg: *ImFontConfig, glyph_ranges: *ImWchar): *ImFont <cimport,nodecl> end
 global function ImFontAtlas_AddFontFromMemoryTTF(self: *ImFontAtlas, font_data: pointer, font_data_size: cint, size_pixels: float32, font_cfg: *ImFontConfig, glyph_ranges: *ImWchar): *ImFont <cimport,nodecl> end
 global function ImFontAtlas_AddFontFromMemoryCompressedTTF(self: *ImFontAtlas, compressed_font_data: pointer, compressed_font_data_size: cint, size_pixels: float32, font_cfg: *ImFontConfig, glyph_ranges: *ImWchar): *ImFont <cimport,nodecl> end
@@ -4470,17 +4520,17 @@ global function ImFont_IsGlyphInFont(self: *ImFont, c: ImWchar): boolean <cimpor
 global function ImFont_IsLoaded(self: *ImFont): boolean <cimport,nodecl> end
 global function ImFont_GetDebugName(self: *ImFont): cstring <cimport,nodecl> end
 global function ImFont_GetFontBaked(self: *ImFont, font_size: float32, density: float32): *ImFontBaked <cimport,nodecl> end
-global function ImFont_CalcTextSizeA(pOut: *ImVec2, self: *ImFont, size: float32, max_width: float32, wrap_width: float32, text_begin: cstring, text_end: cstring, out_remaining: *cstring): void <cimport,nodecl> end
+global function ImFont_CalcTextSizeA(self: *ImFont, size: float32, max_width: float32, wrap_width: float32, text_begin: cstring, text_end: cstring, out_remaining: *cstring): ImVec2_c <cimport,nodecl> end
 global function ImFont_CalcWordWrapPosition(self: *ImFont, size: float32, text: cstring, text_end: cstring, wrap_width: float32): cstring <cimport,nodecl> end
-global function ImFont_RenderChar(self: *ImFont, draw_list: *ImDrawList, size: float32, pos: ImVec2, col: ImU32, c: ImWchar, cpu_fine_clip: *ImVec4): void <cimport,nodecl> end
-global function ImFont_RenderText(self: *ImFont, draw_list: *ImDrawList, size: float32, pos: ImVec2, col: ImU32, clip_rect: ImVec4, text_begin: cstring, text_end: cstring, wrap_width: float32, flags: ImDrawTextFlags): void <cimport,nodecl> end
+global function ImFont_RenderChar(self: *ImFont, draw_list: *ImDrawList, size: float32, pos: ImVec2_c, col: ImU32, c: ImWchar, cpu_fine_clip: *ImVec4): void <cimport,nodecl> end
+global function ImFont_RenderText(self: *ImFont, draw_list: *ImDrawList, size: float32, pos: ImVec2_c, col: ImU32, clip_rect: ImVec4_c, text_begin: cstring, text_end: cstring, wrap_width: float32, flags: ImDrawTextFlags): void <cimport,nodecl> end
 global function ImFont_ClearOutputData(self: *ImFont): void <cimport,nodecl> end
 global function ImFont_AddRemapChar(self: *ImFont, from_codepoint: ImWchar, to_codepoint: ImWchar): void <cimport,nodecl> end
 global function ImFont_IsGlyphRangeUnused(self: *ImFont, c_begin: cuint, c_last: cuint): boolean <cimport,nodecl> end
 global function ImGuiViewport_ImGuiViewport(): *ImGuiViewport <cimport,nodecl> end
 global function ImGuiViewport_destroy(self: *ImGuiViewport): void <cimport,nodecl> end
-global function ImGuiViewport_GetCenter(pOut: *ImVec2, self: *ImGuiViewport): void <cimport,nodecl> end
-global function ImGuiViewport_GetWorkCenter(pOut: *ImVec2, self: *ImGuiViewport): void <cimport,nodecl> end
+global function ImGuiViewport_GetCenter(self: *ImGuiViewport): ImVec2_c <cimport,nodecl> end
+global function ImGuiViewport_GetWorkCenter(self: *ImGuiViewport): ImVec2_c <cimport,nodecl> end
 global function ImGuiPlatformIO_ImGuiPlatformIO(): *ImGuiPlatformIO <cimport,nodecl> end
 global function ImGuiPlatformIO_destroy(self: *ImGuiPlatformIO): void <cimport,nodecl> end
 global function ImGuiPlatformIO_ClearPlatformHandlers(self: *ImGuiPlatformIO): void <cimport,nodecl> end
@@ -4532,11 +4582,16 @@ global function igImTextStrFromUtf8(out_buf: *ImWchar, out_buf_size: cint, in_te
 global function igImTextCountCharsFromUtf8(in_text: cstring, in_text_end: cstring): cint <cimport,nodecl> end
 global function igImTextCountUtf8BytesFromChar(in_text: cstring, in_text_end: cstring): cint <cimport,nodecl> end
 global function igImTextCountUtf8BytesFromStr(in_text: *ImWchar, in_text_end: *ImWchar): cint <cimport,nodecl> end
-global function igImTextFindPreviousUtf8Codepoint(in_text_start: cstring, in_text_curr: cstring): cstring <cimport,nodecl> end
+global function igImTextFindPreviousUtf8Codepoint(in_text_start: cstring, in_p: cstring): cstring <cimport,nodecl> end
+global function igImTextFindValidUtf8CodepointEnd(in_text_start: cstring, in_text_end: cstring, in_p: cstring): cstring <cimport,nodecl> end
 global function igImTextCountLines(in_text: cstring, in_text_end: cstring): cint <cimport,nodecl> end
-global function igImFontCalcTextSizeEx(pOut: *ImVec2, font: *ImFont, size: float32, max_width: float32, wrap_width: float32, text_begin: cstring, text_end_display: cstring, text_end: cstring, out_remaining: *cstring, out_offset: *ImVec2, flags: ImDrawTextFlags): void <cimport,nodecl> end
+global function igImFontCalcTextSizeEx(font: *ImFont, size: float32, max_width: float32, wrap_width: float32, text_begin: cstring, text_end_display: cstring, text_end: cstring, out_remaining: *cstring, out_offset: *ImVec2_c, flags: ImDrawTextFlags): ImVec2_c <cimport,nodecl> end
 global function igImFontCalcWordWrapPositionEx(font: *ImFont, size: float32, text: cstring, text_end: cstring, wrap_width: float32, flags: ImDrawTextFlags): cstring <cimport,nodecl> end
 global function igImTextCalcWordWrapNextLineStart(text: cstring, text_end: cstring, flags: ImDrawTextFlags): cstring <cimport,nodecl> end
+global function igImTextInitClassifiers(): void <cimport,nodecl> end
+global function igImTextClassifierClear(bits: *ImU32, codepoint_min: cuint, codepoint_end: cuint, char_class: ImWcharClass): void <cimport,nodecl> end
+global function igImTextClassifierSetCharClass(bits: *ImU32, codepoint_min: cuint, codepoint_end: cuint, char_class: ImWcharClass, c: cuint): void <cimport,nodecl> end
+global function igImTextClassifierSetCharClassFromStr(bits: *ImU32, codepoint_min: cuint, codepoint_end: cuint, char_class: ImWcharClass, s: cstring): void <cimport,nodecl> end
 global function igImFileOpen(filename: cstring, mode: cstring): ImFileHandle <cimport,nodecl> end
 global function igImFileClose(file: ImFileHandle): boolean <cimport,nodecl> end
 global function igImFileGetSize(file: ImFileHandle): ImU64 <cimport,nodecl> end
@@ -4554,40 +4609,40 @@ global function igImSign_Float(x: float32): float32 <cimport,nodecl> end
 global function igImSign_double(x: float64): float64 <cimport,nodecl> end
 global function igImRsqrt_Float(x: float32): float32 <cimport,nodecl> end
 global function igImRsqrt_double(x: float64): float64 <cimport,nodecl> end
-global function igImMin(pOut: *ImVec2, lhs: ImVec2, rhs: ImVec2): void <cimport,nodecl> end
-global function igImMax(pOut: *ImVec2, lhs: ImVec2, rhs: ImVec2): void <cimport,nodecl> end
-global function igImClamp(pOut: *ImVec2, v: ImVec2, mn: ImVec2, mx: ImVec2): void <cimport,nodecl> end
-global function igImLerp_Vec2Float(pOut: *ImVec2, a: ImVec2, b: ImVec2, t: float32): void <cimport,nodecl> end
-global function igImLerp_Vec2Vec2(pOut: *ImVec2, a: ImVec2, b: ImVec2, t: ImVec2): void <cimport,nodecl> end
-global function igImLerp_Vec4(pOut: *ImVec4, a: ImVec4, b: ImVec4, t: float32): void <cimport,nodecl> end
+global function igImMin(lhs: ImVec2_c, rhs: ImVec2_c): ImVec2_c <cimport,nodecl> end
+global function igImMax(lhs: ImVec2_c, rhs: ImVec2_c): ImVec2_c <cimport,nodecl> end
+global function igImClamp(v: ImVec2_c, mn: ImVec2_c, mx: ImVec2_c): ImVec2_c <cimport,nodecl> end
+global function igImLerp_Vec2Float(a: ImVec2_c, b: ImVec2_c, t: float32): ImVec2_c <cimport,nodecl> end
+global function igImLerp_Vec2Vec2(a: ImVec2_c, b: ImVec2_c, t: ImVec2_c): ImVec2_c <cimport,nodecl> end
+global function igImLerp_Vec4(a: ImVec4_c, b: ImVec4_c, t: float32): ImVec4_c <cimport,nodecl> end
 global function igImSaturate(f: float32): float32 <cimport,nodecl> end
-global function igImLengthSqr_Vec2(lhs: ImVec2): float32 <cimport,nodecl> end
-global function igImLengthSqr_Vec4(lhs: ImVec4): float32 <cimport,nodecl> end
-global function igImInvLength(lhs: ImVec2, fail_value: float32): float32 <cimport,nodecl> end
+global function igImLengthSqr_Vec2(lhs: ImVec2_c): float32 <cimport,nodecl> end
+global function igImLengthSqr_Vec4(lhs: ImVec4_c): float32 <cimport,nodecl> end
+global function igImInvLength(lhs: ImVec2_c, fail_value: float32): float32 <cimport,nodecl> end
 global function igImTrunc_Float(f: float32): float32 <cimport,nodecl> end
-global function igImTrunc_Vec2(pOut: *ImVec2, v: ImVec2): void <cimport,nodecl> end
+global function igImTrunc_Vec2(v: ImVec2_c): ImVec2_c <cimport,nodecl> end
 global function igImFloor_Float(f: float32): float32 <cimport,nodecl> end
-global function igImFloor_Vec2(pOut: *ImVec2, v: ImVec2): void <cimport,nodecl> end
+global function igImFloor_Vec2(v: ImVec2_c): ImVec2_c <cimport,nodecl> end
 global function igImTrunc64(f: float32): float32 <cimport,nodecl> end
 global function igImRound64(f: float32): float32 <cimport,nodecl> end
 global function igImModPositive(a: cint, b: cint): cint <cimport,nodecl> end
-global function igImDot(a: ImVec2, b: ImVec2): float32 <cimport,nodecl> end
-global function igImRotate(pOut: *ImVec2, v: ImVec2, cos_a: float32, sin_a: float32): void <cimport,nodecl> end
+global function igImDot(a: ImVec2_c, b: ImVec2_c): float32 <cimport,nodecl> end
+global function igImRotate(v: ImVec2_c, cos_a: float32, sin_a: float32): ImVec2_c <cimport,nodecl> end
 global function igImLinearSweep(current: float32, target: float32, speed: float32): float32 <cimport,nodecl> end
 global function igImLinearRemapClamp(s0: float32, s1: float32, d0: float32, d1: float32, x: float32): float32 <cimport,nodecl> end
-global function igImMul(pOut: *ImVec2, lhs: ImVec2, rhs: ImVec2): void <cimport,nodecl> end
+global function igImMul(lhs: ImVec2_c, rhs: ImVec2_c): ImVec2_c <cimport,nodecl> end
 global function igImIsFloatAboveGuaranteedIntegerPrecision(f: float32): boolean <cimport,nodecl> end
 global function igImExponentialMovingAverage(avg: float32, sample: float32, n: cint): float32 <cimport,nodecl> end
-global function igImBezierCubicCalc(pOut: *ImVec2, p1: ImVec2, p2: ImVec2, p3: ImVec2, p4: ImVec2, t: float32): void <cimport,nodecl> end
-global function igImBezierCubicClosestPoint(pOut: *ImVec2, p1: ImVec2, p2: ImVec2, p3: ImVec2, p4: ImVec2, p: ImVec2, num_segments: cint): void <cimport,nodecl> end
-global function igImBezierCubicClosestPointCasteljau(pOut: *ImVec2, p1: ImVec2, p2: ImVec2, p3: ImVec2, p4: ImVec2, p: ImVec2, tess_tol: float32): void <cimport,nodecl> end
-global function igImBezierQuadraticCalc(pOut: *ImVec2, p1: ImVec2, p2: ImVec2, p3: ImVec2, t: float32): void <cimport,nodecl> end
-global function igImLineClosestPoint(pOut: *ImVec2, a: ImVec2, b: ImVec2, p: ImVec2): void <cimport,nodecl> end
-global function igImTriangleContainsPoint(a: ImVec2, b: ImVec2, c: ImVec2, p: ImVec2): boolean <cimport,nodecl> end
-global function igImTriangleClosestPoint(pOut: *ImVec2, a: ImVec2, b: ImVec2, c: ImVec2, p: ImVec2): void <cimport,nodecl> end
-global function igImTriangleBarycentricCoords(a: ImVec2, b: ImVec2, c: ImVec2, p: ImVec2, out_u: *float32, out_v: *float32, out_w: *float32): void <cimport,nodecl> end
-global function igImTriangleArea(a: ImVec2, b: ImVec2, c: ImVec2): float32 <cimport,nodecl> end
-global function igImTriangleIsClockwise(a: ImVec2, b: ImVec2, c: ImVec2): boolean <cimport,nodecl> end
+global function igImBezierCubicCalc(p1: ImVec2_c, p2: ImVec2_c, p3: ImVec2_c, p4: ImVec2_c, t: float32): ImVec2_c <cimport,nodecl> end
+global function igImBezierCubicClosestPoint(p1: ImVec2_c, p2: ImVec2_c, p3: ImVec2_c, p4: ImVec2_c, p: ImVec2_c, num_segments: cint): ImVec2_c <cimport,nodecl> end
+global function igImBezierCubicClosestPointCasteljau(p1: ImVec2_c, p2: ImVec2_c, p3: ImVec2_c, p4: ImVec2_c, p: ImVec2_c, tess_tol: float32): ImVec2_c <cimport,nodecl> end
+global function igImBezierQuadraticCalc(p1: ImVec2_c, p2: ImVec2_c, p3: ImVec2_c, t: float32): ImVec2_c <cimport,nodecl> end
+global function igImLineClosestPoint(a: ImVec2_c, b: ImVec2_c, p: ImVec2_c): ImVec2_c <cimport,nodecl> end
+global function igImTriangleContainsPoint(a: ImVec2_c, b: ImVec2_c, c: ImVec2_c, p: ImVec2_c): boolean <cimport,nodecl> end
+global function igImTriangleClosestPoint(a: ImVec2_c, b: ImVec2_c, c: ImVec2_c, p: ImVec2_c): ImVec2_c <cimport,nodecl> end
+global function igImTriangleBarycentricCoords(a: ImVec2_c, b: ImVec2_c, c: ImVec2_c, p: ImVec2_c, out_u: *float32, out_v: *float32, out_w: *float32): void <cimport,nodecl> end
+global function igImTriangleArea(a: ImVec2_c, b: ImVec2_c, c: ImVec2_c): float32 <cimport,nodecl> end
+global function igImTriangleIsClockwise(a: ImVec2_c, b: ImVec2_c, c: ImVec2_c): boolean <cimport,nodecl> end
 global function ImVec1_ImVec1_Nil(): *ImVec1 <cimport,nodecl> end
 global function ImVec1_destroy(self: *ImVec1): void <cimport,nodecl> end
 global function ImVec1_ImVec1_Float(_x: float32): *ImVec1 <cimport,nodecl> end
@@ -4597,38 +4652,37 @@ global function ImVec2i_ImVec2i_Int(_x: cint, _y: cint): *ImVec2i <cimport,nodec
 global function ImVec2ih_ImVec2ih_Nil(): *ImVec2ih <cimport,nodecl> end
 global function ImVec2ih_destroy(self: *ImVec2ih): void <cimport,nodecl> end
 global function ImVec2ih_ImVec2ih_short(_x: cshort, _y: cshort): *ImVec2ih <cimport,nodecl> end
-global function ImVec2ih_ImVec2ih_Vec2(rhs: ImVec2): *ImVec2ih <cimport,nodecl> end
+global function ImVec2ih_ImVec2ih_Vec2(rhs: ImVec2_c): *ImVec2ih <cimport,nodecl> end
 global function ImRect_ImRect_Nil(): *ImRect <cimport,nodecl> end
 global function ImRect_destroy(self: *ImRect): void <cimport,nodecl> end
-global function ImRect_ImRect_Vec2(min: ImVec2, max: ImVec2): *ImRect <cimport,nodecl> end
-global function ImRect_ImRect_Vec4(v: ImVec4): *ImRect <cimport,nodecl> end
+global function ImRect_ImRect_Vec2(min: ImVec2_c, max: ImVec2_c): *ImRect <cimport,nodecl> end
+global function ImRect_ImRect_Vec4(v: ImVec4_c): *ImRect <cimport,nodecl> end
 global function ImRect_ImRect_Float(x1: float32, y1: float32, x2: float32, y2: float32): *ImRect <cimport,nodecl> end
-global function ImRect_GetCenter(pOut: *ImVec2, self: *ImRect): void <cimport,nodecl> end
-global function ImRect_GetSize(pOut: *ImVec2, self: *ImRect): void <cimport,nodecl> end
+global function ImRect_GetCenter(self: *ImRect): ImVec2_c <cimport,nodecl> end
+global function ImRect_GetSize(self: *ImRect): ImVec2_c <cimport,nodecl> end
 global function ImRect_GetWidth(self: *ImRect): float32 <cimport,nodecl> end
 global function ImRect_GetHeight(self: *ImRect): float32 <cimport,nodecl> end
 global function ImRect_GetArea(self: *ImRect): float32 <cimport,nodecl> end
-global function ImRect_GetTL(pOut: *ImVec2, self: *ImRect): void <cimport,nodecl> end
-global function ImRect_GetTR(pOut: *ImVec2, self: *ImRect): void <cimport,nodecl> end
-global function ImRect_GetBL(pOut: *ImVec2, self: *ImRect): void <cimport,nodecl> end
-global function ImRect_GetBR(pOut: *ImVec2, self: *ImRect): void <cimport,nodecl> end
-global function ImRect_Contains_Vec2(self: *ImRect, p: ImVec2): boolean <cimport,nodecl> end
-global function ImRect_Contains_Rect(self: *ImRect, r: ImRect): boolean <cimport,nodecl> end
-global function ImRect_ContainsWithPad(self: *ImRect, p: ImVec2, pad: ImVec2): boolean <cimport,nodecl> end
-global function ImRect_Overlaps(self: *ImRect, r: ImRect): boolean <cimport,nodecl> end
-global function ImRect_Add_Vec2(self: *ImRect, p: ImVec2): void <cimport,nodecl> end
-global function ImRect_Add_Rect(self: *ImRect, r: ImRect): void <cimport,nodecl> end
+global function ImRect_GetTL(self: *ImRect): ImVec2_c <cimport,nodecl> end
+global function ImRect_GetTR(self: *ImRect): ImVec2_c <cimport,nodecl> end
+global function ImRect_GetBL(self: *ImRect): ImVec2_c <cimport,nodecl> end
+global function ImRect_GetBR(self: *ImRect): ImVec2_c <cimport,nodecl> end
+global function ImRect_Contains_Vec2(self: *ImRect, p: ImVec2_c): boolean <cimport,nodecl> end
+global function ImRect_Contains_Rect(self: *ImRect, r: ImRect_c): boolean <cimport,nodecl> end
+global function ImRect_ContainsWithPad(self: *ImRect, p: ImVec2_c, pad: ImVec2_c): boolean <cimport,nodecl> end
+global function ImRect_Overlaps(self: *ImRect, r: ImRect_c): boolean <cimport,nodecl> end
+global function ImRect_Add_Vec2(self: *ImRect, p: ImVec2_c): void <cimport,nodecl> end
+global function ImRect_Add_Rect(self: *ImRect, r: ImRect_c): void <cimport,nodecl> end
 global function ImRect_Expand_Float(self: *ImRect, amount: float32): void <cimport,nodecl> end
-global function ImRect_Expand_Vec2(self: *ImRect, amount: ImVec2): void <cimport,nodecl> end
-global function ImRect_Translate(self: *ImRect, d: ImVec2): void <cimport,nodecl> end
+global function ImRect_Expand_Vec2(self: *ImRect, amount: ImVec2_c): void <cimport,nodecl> end
+global function ImRect_Translate(self: *ImRect, d: ImVec2_c): void <cimport,nodecl> end
 global function ImRect_TranslateX(self: *ImRect, dx: float32): void <cimport,nodecl> end
 global function ImRect_TranslateY(self: *ImRect, dy: float32): void <cimport,nodecl> end
-global function ImRect_ClipWith(self: *ImRect, r: ImRect): void <cimport,nodecl> end
-global function ImRect_ClipWithFull(self: *ImRect, r: ImRect): void <cimport,nodecl> end
-global function ImRect_Floor(self: *ImRect): void <cimport,nodecl> end
+global function ImRect_ClipWith(self: *ImRect, r: ImRect_c): void <cimport,nodecl> end
+global function ImRect_ClipWithFull(self: *ImRect, r: ImRect_c): void <cimport,nodecl> end
 global function ImRect_IsInverted(self: *ImRect): boolean <cimport,nodecl> end
-global function ImRect_ToVec4(pOut: *ImVec4, self: *ImRect): void <cimport,nodecl> end
-global function ImRect_AsVec4(self: *ImRect): *ImVec4 <cimport,nodecl> end
+global function ImRect_ToVec4(self: *ImRect): ImVec4_c <cimport,nodecl> end
+global function ImRect_AsVec4(self: *ImRect): *ImVec4_c <cimport,nodecl> end
 global function igImBitArrayGetStorageSizeInBytes(bitcount: cint): csize <cimport,nodecl> end
 global function igImBitArrayClearAllBits(arr: *ImU32, bitcount: cint): void <cimport,nodecl> end
 global function igImBitArrayTestBit(arr: *ImU32, n: cint): boolean <cimport,nodecl> end
@@ -4655,7 +4709,7 @@ global function ImGuiStyleVarInfo_GetVarPtr(self: *ImGuiStyleVarInfo, parent: po
 global function ImGuiStyleMod_ImGuiStyleMod_Int(idx: ImGuiStyleVar, v: cint): *ImGuiStyleMod <cimport,nodecl> end
 global function ImGuiStyleMod_destroy(self: *ImGuiStyleMod): void <cimport,nodecl> end
 global function ImGuiStyleMod_ImGuiStyleMod_Float(idx: ImGuiStyleVar, v: float32): *ImGuiStyleMod <cimport,nodecl> end
-global function ImGuiStyleMod_ImGuiStyleMod_Vec2(idx: ImGuiStyleVar, v: ImVec2): *ImGuiStyleMod <cimport,nodecl> end
+global function ImGuiStyleMod_ImGuiStyleMod_Vec2(idx: ImGuiStyleVar, v: ImVec2_c): *ImGuiStyleMod <cimport,nodecl> end
 global function ImGuiComboPreviewData_ImGuiComboPreviewData(): *ImGuiComboPreviewData <cimport,nodecl> end
 global function ImGuiComboPreviewData_destroy(self: *ImGuiComboPreviewData): void <cimport,nodecl> end
 global function ImGuiMenuColumns_ImGuiMenuColumns(): *ImGuiMenuColumns <cimport,nodecl> end
@@ -4680,6 +4734,7 @@ global function ImGuiInputTextState_ClearSelection(self: *ImGuiInputTextState): 
 global function ImGuiInputTextState_GetCursorPos(self: *ImGuiInputTextState): cint <cimport,nodecl> end
 global function ImGuiInputTextState_GetSelectionStart(self: *ImGuiInputTextState): cint <cimport,nodecl> end
 global function ImGuiInputTextState_GetSelectionEnd(self: *ImGuiInputTextState): cint <cimport,nodecl> end
+global function ImGuiInputTextState_SetSelection(self: *ImGuiInputTextState, start: cint, end_: cint): void <cimport,nodecl> end
 global function ImGuiInputTextState_SelectAll(self: *ImGuiInputTextState): void <cimport,nodecl> end
 global function ImGuiInputTextState_ReloadUserBufAndSelectAll(self: *ImGuiInputTextState): void <cimport,nodecl> end
 global function ImGuiInputTextState_ReloadUserBufAndKeepSelection(self: *ImGuiInputTextState): void <cimport,nodecl> end
@@ -4742,7 +4797,7 @@ global function ImGuiDockNode_IsNoTabBar(self: *ImGuiDockNode): boolean <cimport
 global function ImGuiDockNode_IsSplitNode(self: *ImGuiDockNode): boolean <cimport,nodecl> end
 global function ImGuiDockNode_IsLeafNode(self: *ImGuiDockNode): boolean <cimport,nodecl> end
 global function ImGuiDockNode_IsEmpty(self: *ImGuiDockNode): boolean <cimport,nodecl> end
-global function ImGuiDockNode_Rect(pOut: *ImRect, self: *ImGuiDockNode): void <cimport,nodecl> end
+global function ImGuiDockNode_Rect(self: *ImGuiDockNode): ImRect_c <cimport,nodecl> end
 global function ImGuiDockNode_SetLocalFlags(self: *ImGuiDockNode, flags: ImGuiDockNodeFlags): void <cimport,nodecl> end
 global function ImGuiDockNode_UpdateMergedFlags(self: *ImGuiDockNode): void <cimport,nodecl> end
 global function ImGuiDockContext_ImGuiDockContext(): *ImGuiDockContext <cimport,nodecl> end
@@ -4750,12 +4805,12 @@ global function ImGuiDockContext_destroy(self: *ImGuiDockContext): void <cimport
 global function ImGuiViewportP_ImGuiViewportP(): *ImGuiViewportP <cimport,nodecl> end
 global function ImGuiViewportP_destroy(self: *ImGuiViewportP): void <cimport,nodecl> end
 global function ImGuiViewportP_ClearRequestFlags(self: *ImGuiViewportP): void <cimport,nodecl> end
-global function ImGuiViewportP_CalcWorkRectPos(pOut: *ImVec2, self: *ImGuiViewportP, inset_min: ImVec2): void <cimport,nodecl> end
-global function ImGuiViewportP_CalcWorkRectSize(pOut: *ImVec2, self: *ImGuiViewportP, inset_min: ImVec2, inset_max: ImVec2): void <cimport,nodecl> end
+global function ImGuiViewportP_CalcWorkRectPos(self: *ImGuiViewportP, inset_min: ImVec2_c): ImVec2_c <cimport,nodecl> end
+global function ImGuiViewportP_CalcWorkRectSize(self: *ImGuiViewportP, inset_min: ImVec2_c, inset_max: ImVec2_c): ImVec2_c <cimport,nodecl> end
 global function ImGuiViewportP_UpdateWorkRect(self: *ImGuiViewportP): void <cimport,nodecl> end
-global function ImGuiViewportP_GetMainRect(pOut: *ImRect, self: *ImGuiViewportP): void <cimport,nodecl> end
-global function ImGuiViewportP_GetWorkRect(pOut: *ImRect, self: *ImGuiViewportP): void <cimport,nodecl> end
-global function ImGuiViewportP_GetBuildWorkRect(pOut: *ImRect, self: *ImGuiViewportP): void <cimport,nodecl> end
+global function ImGuiViewportP_GetMainRect(self: *ImGuiViewportP): ImRect_c <cimport,nodecl> end
+global function ImGuiViewportP_GetWorkRect(self: *ImGuiViewportP): ImRect_c <cimport,nodecl> end
+global function ImGuiViewportP_GetBuildWorkRect(self: *ImGuiViewportP): ImRect_c <cimport,nodecl> end
 global function ImGuiWindowSettings_ImGuiWindowSettings(): *ImGuiWindowSettings <cimport,nodecl> end
 global function ImGuiWindowSettings_destroy(self: *ImGuiWindowSettings): void <cimport,nodecl> end
 global function ImGuiWindowSettings_GetName(self: *ImGuiWindowSettings): cstring <cimport,nodecl> end
@@ -4765,6 +4820,8 @@ global function ImGuiDebugAllocInfo_ImGuiDebugAllocInfo(): *ImGuiDebugAllocInfo 
 global function ImGuiDebugAllocInfo_destroy(self: *ImGuiDebugAllocInfo): void <cimport,nodecl> end
 global function ImGuiStackLevelInfo_ImGuiStackLevelInfo(): *ImGuiStackLevelInfo <cimport,nodecl> end
 global function ImGuiStackLevelInfo_destroy(self: *ImGuiStackLevelInfo): void <cimport,nodecl> end
+global function ImGuiDebugItemPathQuery_ImGuiDebugItemPathQuery(): *ImGuiDebugItemPathQuery <cimport,nodecl> end
+global function ImGuiDebugItemPathQuery_destroy(self: *ImGuiDebugItemPathQuery): void <cimport,nodecl> end
 global function ImGuiIDStackTool_ImGuiIDStackTool(): *ImGuiIDStackTool <cimport,nodecl> end
 global function ImGuiIDStackTool_destroy(self: *ImGuiIDStackTool): void <cimport,nodecl> end
 global function ImGuiContextHook_ImGuiContextHook(): *ImGuiContextHook <cimport,nodecl> end
@@ -4776,11 +4833,11 @@ global function ImGuiWindow_destroy(self: *ImGuiWindow): void <cimport,nodecl> e
 global function ImGuiWindow_GetID_Str(self: *ImGuiWindow, str: cstring, str_end: cstring): ImGuiID <cimport,nodecl> end
 global function ImGuiWindow_GetID_Ptr(self: *ImGuiWindow, ptr: pointer): ImGuiID <cimport,nodecl> end
 global function ImGuiWindow_GetID_Int(self: *ImGuiWindow, n: cint): ImGuiID <cimport,nodecl> end
-global function ImGuiWindow_GetIDFromPos(self: *ImGuiWindow, p_abs: ImVec2): ImGuiID <cimport,nodecl> end
-global function ImGuiWindow_GetIDFromRectangle(self: *ImGuiWindow, r_abs: ImRect): ImGuiID <cimport,nodecl> end
-global function ImGuiWindow_Rect(pOut: *ImRect, self: *ImGuiWindow): void <cimport,nodecl> end
-global function ImGuiWindow_TitleBarRect(pOut: *ImRect, self: *ImGuiWindow): void <cimport,nodecl> end
-global function ImGuiWindow_MenuBarRect(pOut: *ImRect, self: *ImGuiWindow): void <cimport,nodecl> end
+global function ImGuiWindow_GetIDFromPos(self: *ImGuiWindow, p_abs: ImVec2_c): ImGuiID <cimport,nodecl> end
+global function ImGuiWindow_GetIDFromRectangle(self: *ImGuiWindow, r_abs: ImRect_c): ImGuiID <cimport,nodecl> end
+global function ImGuiWindow_Rect(self: *ImGuiWindow): ImRect_c <cimport,nodecl> end
+global function ImGuiWindow_TitleBarRect(self: *ImGuiWindow): ImRect_c <cimport,nodecl> end
+global function ImGuiWindow_MenuBarRect(self: *ImGuiWindow): ImRect_c <cimport,nodecl> end
 global function ImGuiTabItem_ImGuiTabItem(): *ImGuiTabItem <cimport,nodecl> end
 global function ImGuiTabItem_destroy(self: *ImGuiTabItem): void <cimport,nodecl> end
 global function ImGuiTabBar_ImGuiTabBar(): *ImGuiTabBar <cimport,nodecl> end
@@ -4800,27 +4857,29 @@ global function ImGuiTableSettings_destroy(self: *ImGuiTableSettings): void <cim
 global function ImGuiTableSettings_GetColumnSettings(self: *ImGuiTableSettings): *ImGuiTableColumnSettings <cimport,nodecl> end
 global function igGetIO_ContextPtr(ctx: *ImGuiContext): *ImGuiIO <cimport,nodecl> end
 global function igGetPlatformIO_ContextPtr(ctx: *ImGuiContext): *ImGuiPlatformIO <cimport,nodecl> end
+global function igGetScale(): float32 <cimport,nodecl> end
 global function igGetCurrentWindowRead(): *ImGuiWindow <cimport,nodecl> end
 global function igGetCurrentWindow(): *ImGuiWindow <cimport,nodecl> end
 global function igFindWindowByID(id: ImGuiID): *ImGuiWindow <cimport,nodecl> end
 global function igFindWindowByName(name: cstring): *ImGuiWindow <cimport,nodecl> end
 global function igUpdateWindowParentAndRootLinks(window: *ImGuiWindow, flags: ImGuiWindowFlags, parent_window: *ImGuiWindow): void <cimport,nodecl> end
 global function igUpdateWindowSkipRefresh(window: *ImGuiWindow): void <cimport,nodecl> end
-global function igCalcWindowNextAutoFitSize(pOut: *ImVec2, window: *ImGuiWindow): void <cimport,nodecl> end
+global function igCalcWindowNextAutoFitSize(window: *ImGuiWindow): ImVec2_c <cimport,nodecl> end
 global function igIsWindowChildOf(window: *ImGuiWindow, potential_parent: *ImGuiWindow, popup_hierarchy: boolean, dock_hierarchy: boolean): boolean <cimport,nodecl> end
+global function igIsWindowInBeginStack(window: *ImGuiWindow): boolean <cimport,nodecl> end
 global function igIsWindowWithinBeginStackOf(window: *ImGuiWindow, potential_parent: *ImGuiWindow): boolean <cimport,nodecl> end
 global function igIsWindowAbove(potential_above: *ImGuiWindow, potential_below: *ImGuiWindow): boolean <cimport,nodecl> end
 global function igIsWindowNavFocusable(window: *ImGuiWindow): boolean <cimport,nodecl> end
-global function igSetWindowPos_WindowPtr(window: *ImGuiWindow, pos: ImVec2, cond: ImGuiCond): void <cimport,nodecl> end
-global function igSetWindowSize_WindowPtr(window: *ImGuiWindow, size: ImVec2, cond: ImGuiCond): void <cimport,nodecl> end
+global function igSetWindowPos_WindowPtr(window: *ImGuiWindow, pos: ImVec2_c, cond: ImGuiCond): void <cimport,nodecl> end
+global function igSetWindowSize_WindowPtr(window: *ImGuiWindow, size: ImVec2_c, cond: ImGuiCond): void <cimport,nodecl> end
 global function igSetWindowCollapsed_WindowPtr(window: *ImGuiWindow, collapsed: boolean, cond: ImGuiCond): void <cimport,nodecl> end
-global function igSetWindowHitTestHole(window: *ImGuiWindow, pos: ImVec2, size: ImVec2): void <cimport,nodecl> end
+global function igSetWindowHitTestHole(window: *ImGuiWindow, pos: ImVec2_c, size: ImVec2_c): void <cimport,nodecl> end
 global function igSetWindowHiddenAndSkipItemsForCurrentFrame(window: *ImGuiWindow): void <cimport,nodecl> end
 global function igSetWindowParentWindowForFocusRoute(window: *ImGuiWindow, parent_window: *ImGuiWindow): void <cimport,nodecl> end
-global function igWindowRectAbsToRel(pOut: *ImRect, window: *ImGuiWindow, r: ImRect): void <cimport,nodecl> end
-global function igWindowRectRelToAbs(pOut: *ImRect, window: *ImGuiWindow, r: ImRect): void <cimport,nodecl> end
-global function igWindowPosAbsToRel(pOut: *ImVec2, window: *ImGuiWindow, p: ImVec2): void <cimport,nodecl> end
-global function igWindowPosRelToAbs(pOut: *ImVec2, window: *ImGuiWindow, p: ImVec2): void <cimport,nodecl> end
+global function igWindowRectAbsToRel(window: *ImGuiWindow, r: ImRect_c): ImRect_c <cimport,nodecl> end
+global function igWindowRectRelToAbs(window: *ImGuiWindow, r: ImRect_c): ImRect_c <cimport,nodecl> end
+global function igWindowPosAbsToRel(window: *ImGuiWindow, p: ImVec2_c): ImVec2_c <cimport,nodecl> end
+global function igWindowPosRelToAbs(window: *ImGuiWindow, p: ImVec2_c): ImVec2_c <cimport,nodecl> end
 global function igFocusWindow(window: *ImGuiWindow, flags: ImGuiFocusRequestFlags): void <cimport,nodecl> end
 global function igFocusTopMostWindowUnderOne(under_this_window: *ImGuiWindow, ignore_window: *ImGuiWindow, filter_viewport: *ImGuiViewport, flags: ImGuiFocusRequestFlags): void <cimport,nodecl> end
 global function igBringWindowToFocusFront(window: *ImGuiWindow): void <cimport,nodecl> end
@@ -4846,24 +4905,25 @@ global function igGetForegroundDrawList_WindowPtr(window: *ImGuiWindow): *ImDraw
 global function igAddDrawListToDrawDataEx(draw_data: *ImDrawData, out_list: *ImVector_ImDrawListPtr, draw_list: *ImDrawList): void <cimport,nodecl> end
 global function igInitialize(): void <cimport,nodecl> end
 global function igShutdown(): void <cimport,nodecl> end
+global function igSetContextName(ctx: *ImGuiContext, name: cstring): void <cimport,nodecl> end
+global function igAddContextHook(ctx: *ImGuiContext, hook: *ImGuiContextHook): ImGuiID <cimport,nodecl> end
+global function igRemoveContextHook(ctx: *ImGuiContext, hook_to_remove: ImGuiID): void <cimport,nodecl> end
+global function igCallContextHooks(ctx: *ImGuiContext, type: ImGuiContextHookType): void <cimport,nodecl> end
 global function igUpdateInputEvents(trickle_fast_inputs: boolean): void <cimport,nodecl> end
-global function igUpdateHoveredWindowAndCaptureFlags(mouse_pos: ImVec2): void <cimport,nodecl> end
-global function igFindHoveredWindowEx(pos: ImVec2, find_first_and_in_any_viewport: boolean, out_hovered_window: **ImGuiWindow, out_hovered_window_under_moving_window: **ImGuiWindow): void <cimport,nodecl> end
+global function igUpdateHoveredWindowAndCaptureFlags(mouse_pos: ImVec2_c): void <cimport,nodecl> end
+global function igFindHoveredWindowEx(pos: ImVec2_c, find_first_and_in_any_viewport: boolean, out_hovered_window: **ImGuiWindow, out_hovered_window_under_moving_window: **ImGuiWindow): void <cimport,nodecl> end
 global function igStartMouseMovingWindow(window: *ImGuiWindow): void <cimport,nodecl> end
 global function igStartMouseMovingWindowOrNode(window: *ImGuiWindow, node: *ImGuiDockNode, undock: boolean): void <cimport,nodecl> end
 global function igStopMouseMovingWindow(): void <cimport,nodecl> end
 global function igUpdateMouseMovingWindowNewFrame(): void <cimport,nodecl> end
 global function igUpdateMouseMovingWindowEndFrame(): void <cimport,nodecl> end
-global function igAddContextHook(context: *ImGuiContext, hook: *ImGuiContextHook): ImGuiID <cimport,nodecl> end
-global function igRemoveContextHook(context: *ImGuiContext, hook_to_remove: ImGuiID): void <cimport,nodecl> end
-global function igCallContextHooks(context: *ImGuiContext, type: ImGuiContextHookType): void <cimport,nodecl> end
-global function igTranslateWindowsInViewport(viewport: *ImGuiViewportP, old_pos: ImVec2, new_pos: ImVec2, old_size: ImVec2, new_size: ImVec2): void <cimport,nodecl> end
+global function igTranslateWindowsInViewport(viewport: *ImGuiViewportP, old_pos: ImVec2_c, new_pos: ImVec2_c, old_size: ImVec2_c, new_size: ImVec2_c): void <cimport,nodecl> end
 global function igScaleWindowsInViewport(viewport: *ImGuiViewportP, scale: float32): void <cimport,nodecl> end
 global function igDestroyPlatformWindow(viewport: *ImGuiViewportP): void <cimport,nodecl> end
 global function igSetWindowViewport(window: *ImGuiWindow, viewport: *ImGuiViewportP): void <cimport,nodecl> end
 global function igSetCurrentViewport(window: *ImGuiWindow, viewport: *ImGuiViewportP): void <cimport,nodecl> end
 global function igGetViewportPlatformMonitor(viewport: *ImGuiViewport): *ImGuiPlatformMonitor <cimport,nodecl> end
-global function igFindHoveredViewportFromPlatformWindowStack(mouse_platform_pos: ImVec2): *ImGuiViewportP <cimport,nodecl> end
+global function igFindHoveredViewportFromPlatformWindowStack(mouse_platform_pos: ImVec2_c): *ImGuiViewportP <cimport,nodecl> end
 global function igMarkIniSettingsDirty_Nil(): void <cimport,nodecl> end
 global function igMarkIniSettingsDirty_WindowPtr(window: *ImGuiWindow): void <cimport,nodecl> end
 global function igClearIniSettings(): void <cimport,nodecl> end
@@ -4881,11 +4941,10 @@ global function igSetScrollY_WindowPtr(window: *ImGuiWindow, scroll_y: float32):
 global function igSetScrollFromPosX_WindowPtr(window: *ImGuiWindow, local_x: float32, center_x_ratio: float32): void <cimport,nodecl> end
 global function igSetScrollFromPosY_WindowPtr(window: *ImGuiWindow, local_y: float32, center_y_ratio: float32): void <cimport,nodecl> end
 global function igScrollToItem(flags: ImGuiScrollFlags): void <cimport,nodecl> end
-global function igScrollToRect(window: *ImGuiWindow, rect: ImRect, flags: ImGuiScrollFlags): void <cimport,nodecl> end
-global function igScrollToRectEx(pOut: *ImVec2, window: *ImGuiWindow, rect: ImRect, flags: ImGuiScrollFlags): void <cimport,nodecl> end
-global function igScrollToBringRectIntoView(window: *ImGuiWindow, rect: ImRect): void <cimport,nodecl> end
+global function igScrollToRect(window: *ImGuiWindow, rect: ImRect_c, flags: ImGuiScrollFlags): void <cimport,nodecl> end
+global function igScrollToRectEx(window: *ImGuiWindow, rect: ImRect_c, flags: ImGuiScrollFlags): ImVec2_c <cimport,nodecl> end
+global function igScrollToBringRectIntoView(window: *ImGuiWindow, rect: ImRect_c): void <cimport,nodecl> end
 global function igGetItemStatusFlags(): ImGuiItemStatusFlags <cimport,nodecl> end
-global function igGetItemFlags(): ImGuiItemFlags <cimport,nodecl> end
 global function igGetActiveID(): ImGuiID <cimport,nodecl> end
 global function igGetFocusID(): ImGuiID <cimport,nodecl> end
 global function igSetActiveID(id: ImGuiID, window: *ImGuiWindow): void <cimport,nodecl> end
@@ -4898,26 +4957,26 @@ global function igMarkItemEdited(id: ImGuiID): void <cimport,nodecl> end
 global function igPushOverrideID(id: ImGuiID): void <cimport,nodecl> end
 global function igGetIDWithSeed_Str(str_id_begin: cstring, str_id_end: cstring, seed: ImGuiID): ImGuiID <cimport,nodecl> end
 global function igGetIDWithSeed_Int(n: cint, seed: ImGuiID): ImGuiID <cimport,nodecl> end
-global function igItemSize_Vec2(size: ImVec2, text_baseline_y: float32): void <cimport,nodecl> end
-global function igItemSize_Rect(bb: ImRect, text_baseline_y: float32): void <cimport,nodecl> end
-global function igItemAdd(bb: ImRect, id: ImGuiID, nav_bb: *ImRect, extra_flags: ImGuiItemFlags): boolean <cimport,nodecl> end
-global function igItemHoverable(bb: ImRect, id: ImGuiID, item_flags: ImGuiItemFlags): boolean <cimport,nodecl> end
+global function igItemSize_Vec2(size: ImVec2_c, text_baseline_y: float32): void <cimport,nodecl> end
+global function igItemSize_Rect(bb: ImRect_c, text_baseline_y: float32): void <cimport,nodecl> end
+global function igItemAdd(bb: ImRect_c, id: ImGuiID, nav_bb: *ImRect, extra_flags: ImGuiItemFlags): boolean <cimport,nodecl> end
+global function igItemHoverable(bb: ImRect_c, id: ImGuiID, item_flags: ImGuiItemFlags): boolean <cimport,nodecl> end
 global function igIsWindowContentHoverable(window: *ImGuiWindow, flags: ImGuiHoveredFlags): boolean <cimport,nodecl> end
-global function igIsClippedEx(bb: ImRect, id: ImGuiID): boolean <cimport,nodecl> end
-global function igSetLastItemData(item_id: ImGuiID, item_flags: ImGuiItemFlags, status_flags: ImGuiItemStatusFlags, item_rect: ImRect): void <cimport,nodecl> end
-global function igCalcItemSize(pOut: *ImVec2, size: ImVec2, default_w: float32, default_h: float32): void <cimport,nodecl> end
-global function igCalcWrapWidthForPos(pos: ImVec2, wrap_pos_x: float32): float32 <cimport,nodecl> end
+global function igIsClippedEx(bb: ImRect_c, id: ImGuiID): boolean <cimport,nodecl> end
+global function igSetLastItemData(item_id: ImGuiID, item_flags: ImGuiItemFlags, status_flags: ImGuiItemStatusFlags, item_rect: ImRect_c): void <cimport,nodecl> end
+global function igCalcItemSize(size: ImVec2_c, default_w: float32, default_h: float32): ImVec2_c <cimport,nodecl> end
+global function igCalcWrapWidthForPos(pos: ImVec2_c, wrap_pos_x: float32): float32 <cimport,nodecl> end
 global function igPushMultiItemsWidths(components: cint, width_full: float32): void <cimport,nodecl> end
 global function igShrinkWidths(items: *ImGuiShrinkWidthItem, count: cint, width_excess: float32, width_min: float32): void <cimport,nodecl> end
-global function igCalcClipRectVisibleItemsY(clip_rect: ImRect, pos: ImVec2, items_height: float32, out_visible_start: *cint, out_visible_end: *cint): void <cimport,nodecl> end
+global function igCalcClipRectVisibleItemsY(clip_rect: ImRect_c, pos: ImVec2_c, items_height: float32, out_visible_start: *cint, out_visible_end: *cint): void <cimport,nodecl> end
 global function igGetStyleVarInfo(idx: ImGuiStyleVar): *ImGuiStyleVarInfo <cimport,nodecl> end
 global function igBeginDisabledOverrideReenable(): void <cimport,nodecl> end
 global function igEndDisabledOverrideReenable(): void <cimport,nodecl> end
 global function igLogBegin(flags: ImGuiLogFlags, auto_open_depth: cint): void <cimport,nodecl> end
 global function igLogToBuffer(auto_open_depth: cint): void <cimport,nodecl> end
-global function igLogRenderedText(ref_pos: *ImVec2, text: cstring, text_end: cstring): void <cimport,nodecl> end
+global function igLogRenderedText(ref_pos: *ImVec2_c, text: cstring, text_end: cstring): void <cimport,nodecl> end
 global function igLogSetNextTextDecoration(prefix: cstring, suffix: cstring): void <cimport,nodecl> end
-global function igBeginChildEx(name: cstring, id: ImGuiID, size_arg: ImVec2, child_flags: ImGuiChildFlags, window_flags: ImGuiWindowFlags): boolean <cimport,nodecl> end
+global function igBeginChildEx(name: cstring, id: ImGuiID, size_arg: ImVec2_c, child_flags: ImGuiChildFlags, window_flags: ImGuiWindowFlags): boolean <cimport,nodecl> end
 global function igBeginPopupEx(id: ImGuiID, extra_window_flags: ImGuiWindowFlags): boolean <cimport,nodecl> end
 global function igBeginPopupMenuEx(id: ImGuiID, label: cstring, extra_window_flags: ImGuiWindowFlags): boolean <cimport,nodecl> end
 global function igOpenPopupEx(id: ImGuiID, popup_flags: ImGuiPopupFlags): void <cimport,nodecl> end
@@ -4925,18 +4984,19 @@ global function igClosePopupToLevel(remaining: cint, restore_focus_to_window_und
 global function igClosePopupsOverWindow(ref_window: *ImGuiWindow, restore_focus_to_window_under_popup: boolean): void <cimport,nodecl> end
 global function igClosePopupsExceptModals(): void <cimport,nodecl> end
 global function igIsPopupOpen_ID(id: ImGuiID, popup_flags: ImGuiPopupFlags): boolean <cimport,nodecl> end
-global function igGetPopupAllowedExtentRect(pOut: *ImRect, window: *ImGuiWindow): void <cimport,nodecl> end
+global function igGetPopupAllowedExtentRect(window: *ImGuiWindow): ImRect_c <cimport,nodecl> end
 global function igGetTopMostPopupModal(): *ImGuiWindow <cimport,nodecl> end
 global function igGetTopMostAndVisiblePopupModal(): *ImGuiWindow <cimport,nodecl> end
 global function igFindBlockingModal(window: *ImGuiWindow): *ImGuiWindow <cimport,nodecl> end
-global function igFindBestWindowPosForPopup(pOut: *ImVec2, window: *ImGuiWindow): void <cimport,nodecl> end
-global function igFindBestWindowPosForPopupEx(pOut: *ImVec2, ref_pos: ImVec2, size: ImVec2, last_dir: *ImGuiDir, r_outer: ImRect, r_avoid: ImRect, policy: ImGuiPopupPositionPolicy): void <cimport,nodecl> end
+global function igFindBestWindowPosForPopup(window: *ImGuiWindow): ImVec2_c <cimport,nodecl> end
+global function igFindBestWindowPosForPopupEx(ref_pos: ImVec2_c, size: ImVec2_c, last_dir: *ImGuiDir, r_outer: ImRect_c, r_avoid: ImRect_c, policy: ImGuiPopupPositionPolicy): ImVec2_c <cimport,nodecl> end
+global function igGetMouseButtonFromPopupFlags(flags: ImGuiPopupFlags): ImGuiMouseButton <cimport,nodecl> end
 global function igBeginTooltipEx(tooltip_flags: ImGuiTooltipFlags, extra_window_flags: ImGuiWindowFlags): boolean <cimport,nodecl> end
 global function igBeginTooltipHidden(): boolean <cimport,nodecl> end
 global function igBeginViewportSideBar(name: cstring, viewport: *ImGuiViewport, dir: ImGuiDir, size: float32, window_flags: ImGuiWindowFlags): boolean <cimport,nodecl> end
 global function igBeginMenuEx(label: cstring, icon: cstring, enabled: boolean): boolean <cimport,nodecl> end
 global function igMenuItemEx(label: cstring, icon: cstring, shortcut: cstring, selected: boolean, enabled: boolean): boolean <cimport,nodecl> end
-global function igBeginComboPopup(popup_id: ImGuiID, bb: ImRect, flags: ImGuiComboFlags): boolean <cimport,nodecl> end
+global function igBeginComboPopup(popup_id: ImGuiID, bb: ImRect_c, flags: ImGuiComboFlags): boolean <cimport,nodecl> end
 global function igBeginComboPreview(): boolean <cimport,nodecl> end
 global function igEndComboPreview(): void <cimport,nodecl> end
 global function igNavInitWindow(window: *ImGuiWindow, force_reinit: boolean): void <cimport,nodecl> end
@@ -4954,7 +5014,7 @@ global function igNavClearPreferredPosForAxis(axis: ImGuiAxis): void <cimport,no
 global function igSetNavCursorVisibleAfterMove(): void <cimport,nodecl> end
 global function igNavUpdateCurrentWindowIsScrollPushableX(): void <cimport,nodecl> end
 global function igSetNavWindow(window: *ImGuiWindow): void <cimport,nodecl> end
-global function igSetNavID(id: ImGuiID, nav_layer: ImGuiNavLayer, focus_scope_id: ImGuiID, rect_rel: ImRect): void <cimport,nodecl> end
+global function igSetNavID(id: ImGuiID, nav_layer: ImGuiNavLayer, focus_scope_id: ImGuiID, rect_rel: ImRect_c): void <cimport,nodecl> end
 global function igSetNavFocusScope(focus_scope_id: ImGuiID): void <cimport,nodecl> end
 global function igFocusItem(): void <cimport,nodecl> end
 global function igActivateItemByID(id: ImGuiID): void <cimport,nodecl> end
@@ -4973,11 +5033,11 @@ global function igGetKeyData_Key(key: ImGuiKey): *ImGuiKeyData <cimport,nodecl> 
 global function igGetKeyChordName(key_chord: ImGuiKeyChord): cstring <cimport,nodecl> end
 global function igMouseButtonToKey(button: ImGuiMouseButton): ImGuiKey <cimport,nodecl> end
 global function igIsMouseDragPastThreshold(button: ImGuiMouseButton, lock_threshold: float32): boolean <cimport,nodecl> end
-global function igGetKeyMagnitude2d(pOut: *ImVec2, key_left: ImGuiKey, key_right: ImGuiKey, key_up: ImGuiKey, key_down: ImGuiKey): void <cimport,nodecl> end
+global function igGetKeyMagnitude2d(key_left: ImGuiKey, key_right: ImGuiKey, key_up: ImGuiKey, key_down: ImGuiKey): ImVec2_c <cimport,nodecl> end
 global function igGetNavTweakPressedAmount(axis: ImGuiAxis): float32 <cimport,nodecl> end
 global function igCalcTypematicRepeatAmount(t0: float32, t1: float32, repeat_delay: float32, repeat_rate: float32): cint <cimport,nodecl> end
 global function igGetTypematicRepeatRate(flags: ImGuiInputFlags, repeat_delay: *float32, repeat_rate: *float32): void <cimport,nodecl> end
-global function igTeleportMousePos(pos: ImVec2): void <cimport,nodecl> end
+global function igTeleportMousePos(pos: ImVec2_c): void <cimport,nodecl> end
 global function igSetActiveIdUsingAllKeyboardKeys(): void <cimport,nodecl> end
 global function igIsActiveIdUsingNavDir(dir: ImGuiDir): boolean <cimport,nodecl> end
 global function igGetKeyOwner(key: ImGuiKey): ImGuiID <cimport,nodecl> end
@@ -5011,7 +5071,7 @@ global function igDockContextQueueUndockWindow(ctx: *ImGuiContext, window: *ImGu
 global function igDockContextQueueUndockNode(ctx: *ImGuiContext, node: *ImGuiDockNode): void <cimport,nodecl> end
 global function igDockContextProcessUndockWindow(ctx: *ImGuiContext, window: *ImGuiWindow, clear_persistent_docking_ref: boolean): void <cimport,nodecl> end
 global function igDockContextProcessUndockNode(ctx: *ImGuiContext, node: *ImGuiDockNode): void <cimport,nodecl> end
-global function igDockContextCalcDropPosForDocking(target: *ImGuiWindow, target_node: *ImGuiDockNode, payload_window: *ImGuiWindow, payload_node: *ImGuiDockNode, split_dir: ImGuiDir, split_outer: boolean, out_pos: *ImVec2): boolean <cimport,nodecl> end
+global function igDockContextCalcDropPosForDocking(target: *ImGuiWindow, target_node: *ImGuiDockNode, payload_window: *ImGuiWindow, payload_node: *ImGuiDockNode, split_dir: ImGuiDir, split_outer: boolean, out_pos: *ImVec2_c): boolean <cimport,nodecl> end
 global function igDockContextFindNodeByID(ctx: *ImGuiContext, id: ImGuiID): *ImGuiDockNode <cimport,nodecl> end
 global function igDockNodeWindowMenuHandler_Default(ctx: *ImGuiContext, node: *ImGuiDockNode, tab_bar: *ImGuiTabBar): void <cimport,nodecl> end
 global function igDockNodeBeginAmendTabBar(node: *ImGuiDockNode): boolean <cimport,nodecl> end
@@ -5033,8 +5093,8 @@ global function igDockBuilderAddNode(node_id: ImGuiID, flags: ImGuiDockNodeFlags
 global function igDockBuilderRemoveNode(node_id: ImGuiID): void <cimport,nodecl> end
 global function igDockBuilderRemoveNodeDockedWindows(node_id: ImGuiID, clear_settings_refs: boolean): void <cimport,nodecl> end
 global function igDockBuilderRemoveNodeChildNodes(node_id: ImGuiID): void <cimport,nodecl> end
-global function igDockBuilderSetNodePos(node_id: ImGuiID, pos: ImVec2): void <cimport,nodecl> end
-global function igDockBuilderSetNodeSize(node_id: ImGuiID, size: ImVec2): void <cimport,nodecl> end
+global function igDockBuilderSetNodePos(node_id: ImGuiID, pos: ImVec2_c): void <cimport,nodecl> end
+global function igDockBuilderSetNodeSize(node_id: ImGuiID, size: ImVec2_c): void <cimport,nodecl> end
 global function igDockBuilderSplitNode(node_id: ImGuiID, split_dir: ImGuiDir, size_ratio_for_node_at_dir: float32, out_id_at_dir: *ImGuiID, out_id_at_opposite_dir: *ImGuiID): ImGuiID <cimport,nodecl> end
 global function igDockBuilderCopyDockSpace(src_dockspace_id: ImGuiID, dst_dockspace_id: ImGuiID, in_window_remap_pairs: *ImVector_const_charPtr): void <cimport,nodecl> end
 global function igDockBuilderCopyNode(src_node_id: ImGuiID, dst_node_id: ImGuiID, out_node_remap_pairs: *ImVector_ImGuiID): void <cimport,nodecl> end
@@ -5044,25 +5104,25 @@ global function igPushFocusScope(id: ImGuiID): void <cimport,nodecl> end
 global function igPopFocusScope(): void <cimport,nodecl> end
 global function igGetCurrentFocusScope(): ImGuiID <cimport,nodecl> end
 global function igIsDragDropActive(): boolean <cimport,nodecl> end
-global function igBeginDragDropTargetCustom(bb: ImRect, id: ImGuiID): boolean <cimport,nodecl> end
+global function igBeginDragDropTargetCustom(bb: ImRect_c, id: ImGuiID): boolean <cimport,nodecl> end
 global function igBeginDragDropTargetViewport(viewport: *ImGuiViewport, p_bb: *ImRect): boolean <cimport,nodecl> end
 global function igClearDragDrop(): void <cimport,nodecl> end
 global function igIsDragDropPayloadBeingAccepted(): boolean <cimport,nodecl> end
-global function igRenderDragDropTargetRectForItem(bb: ImRect): void <cimport,nodecl> end
-global function igRenderDragDropTargetRectEx(draw_list: *ImDrawList, bb: ImRect): void <cimport,nodecl> end
+global function igRenderDragDropTargetRectForItem(bb: ImRect_c): void <cimport,nodecl> end
+global function igRenderDragDropTargetRectEx(draw_list: *ImDrawList, bb: ImRect_c): void <cimport,nodecl> end
 global function igGetTypingSelectRequest(flags: ImGuiTypingSelectFlags): *ImGuiTypingSelectRequest <cimport,nodecl> end
 global function igTypingSelectFindMatch(req: *ImGuiTypingSelectRequest, items_count: cint, get_item_name_func: function(a1: pointer, a2: cint): cstring, user_data: pointer, nav_item_idx: cint): cint <cimport,nodecl> end
 global function igTypingSelectFindNextSingleCharMatch(req: *ImGuiTypingSelectRequest, items_count: cint, get_item_name_func: function(a1: pointer, a2: cint): cstring, user_data: pointer, nav_item_idx: cint): cint <cimport,nodecl> end
 global function igTypingSelectFindBestLeadingMatch(req: *ImGuiTypingSelectRequest, items_count: cint, get_item_name_func: function(a1: pointer, a2: cint): cstring, user_data: pointer): cint <cimport,nodecl> end
-global function igBeginBoxSelect(scope_rect: ImRect, window: *ImGuiWindow, box_select_id: ImGuiID, ms_flags: ImGuiMultiSelectFlags): boolean <cimport,nodecl> end
-global function igEndBoxSelect(scope_rect: ImRect, ms_flags: ImGuiMultiSelectFlags): void <cimport,nodecl> end
+global function igBeginBoxSelect(scope_rect: ImRect_c, window: *ImGuiWindow, box_select_id: ImGuiID, ms_flags: ImGuiMultiSelectFlags): boolean <cimport,nodecl> end
+global function igEndBoxSelect(scope_rect: ImRect_c, ms_flags: ImGuiMultiSelectFlags): void <cimport,nodecl> end
 global function igMultiSelectItemHeader(id: ImGuiID, p_selected: *boolean, p_button_flags: *ImGuiButtonFlags): void <cimport,nodecl> end
 global function igMultiSelectItemFooter(id: ImGuiID, p_selected: *boolean, p_pressed: *boolean): void <cimport,nodecl> end
 global function igMultiSelectAddSetAll(ms: *ImGuiMultiSelectTempData, selected: boolean): void <cimport,nodecl> end
 global function igMultiSelectAddSetRange(ms: *ImGuiMultiSelectTempData, selected: boolean, range_dir: cint, first_item: ImGuiSelectionUserData, last_item: ImGuiSelectionUserData): void <cimport,nodecl> end
 global function igGetBoxSelectState(id: ImGuiID): *ImGuiBoxSelectState <cimport,nodecl> end
 global function igGetMultiSelectState(id: ImGuiID): *ImGuiMultiSelectState <cimport,nodecl> end
-global function igSetWindowClipRectBeforeSetChannel(window: *ImGuiWindow, clip_rect: ImRect): void <cimport,nodecl> end
+global function igSetWindowClipRectBeforeSetChannel(window: *ImGuiWindow, clip_rect: ImRect_c): void <cimport,nodecl> end
 global function igBeginColumns(str_id: cstring, count: cint, flags: ImGuiOldColumnFlags): void <cimport,nodecl> end
 global function igEndColumns(): void <cimport,nodecl> end
 global function igPushColumnClipRect(column_index: cint): void <cimport,nodecl> end
@@ -5085,7 +5145,7 @@ global function igTablePopColumnChannel(): void <cimport,nodecl> end
 global function igTableAngledHeadersRowEx(row_id: ImGuiID, angle: float32, max_label_width: float32, data: *ImGuiTableHeaderData, data_count: cint): void <cimport,nodecl> end
 global function igGetCurrentTable(): *ImGuiTable <cimport,nodecl> end
 global function igTableFindByID(id: ImGuiID): *ImGuiTable <cimport,nodecl> end
-global function igBeginTableEx(name: cstring, id: ImGuiID, columns_count: cint, flags: ImGuiTableFlags, outer_size: ImVec2, inner_width: float32): boolean <cimport,nodecl> end
+global function igBeginTableEx(name: cstring, id: ImGuiID, columns_count: cint, flags: ImGuiTableFlags, outer_size: ImVec2_c, inner_width: float32): boolean <cimport,nodecl> end
 global function igTableBeginInitMemory(table: *ImGuiTable, columns_count: cint): void <cimport,nodecl> end
 global function igTableBeginApplyRequests(table: *ImGuiTable): void <cimport,nodecl> end
 global function igTableSetupDrawChannels(table: *ImGuiTable): void <cimport,nodecl> end
@@ -5098,6 +5158,7 @@ global function igTableBeginContextMenuPopup(table: *ImGuiTable): boolean <cimpo
 global function igTableMergeDrawChannels(table: *ImGuiTable): void <cimport,nodecl> end
 global function igTableGetInstanceData(table: *ImGuiTable, instance_no: cint): *ImGuiTableInstanceData <cimport,nodecl> end
 global function igTableGetInstanceID(table: *ImGuiTable, instance_no: cint): ImGuiID <cimport,nodecl> end
+global function igTableFixDisplayOrder(table: *ImGuiTable): void <cimport,nodecl> end
 global function igTableSortSpecsSanitize(table: *ImGuiTable): void <cimport,nodecl> end
 global function igTableSortSpecsBuild(table: *ImGuiTable): void <cimport,nodecl> end
 global function igTableGetColumnNextSortDirection(column: *ImGuiTableColumn): ImGuiSortDirection <cimport,nodecl> end
@@ -5107,12 +5168,13 @@ global function igTableBeginRow(table: *ImGuiTable): void <cimport,nodecl> end
 global function igTableEndRow(table: *ImGuiTable): void <cimport,nodecl> end
 global function igTableBeginCell(table: *ImGuiTable, column_n: cint): void <cimport,nodecl> end
 global function igTableEndCell(table: *ImGuiTable): void <cimport,nodecl> end
-global function igTableGetCellBgRect(pOut: *ImRect, table: *ImGuiTable, column_n: cint): void <cimport,nodecl> end
+global function igTableGetCellBgRect(table: *ImGuiTable, column_n: cint): ImRect_c <cimport,nodecl> end
 global function igTableGetColumnName_TablePtr(table: *ImGuiTable, column_n: cint): cstring <cimport,nodecl> end
 global function igTableGetColumnResizeID(table: *ImGuiTable, column_n: cint, instance_no: cint): ImGuiID <cimport,nodecl> end
 global function igTableCalcMaxColumnWidth(table: *ImGuiTable, column_n: cint): float32 <cimport,nodecl> end
 global function igTableSetColumnWidthAutoSingle(table: *ImGuiTable, column_n: cint): void <cimport,nodecl> end
 global function igTableSetColumnWidthAutoAll(table: *ImGuiTable): void <cimport,nodecl> end
+global function igTableSetColumnDisplayOrder(table: *ImGuiTable, column_n: cint, dst_order: cint): void <cimport,nodecl> end
 global function igTableRemove(table: *ImGuiTable): void <cimport,nodecl> end
 global function igTableGcCompactTransientBuffers_TablePtr(table: *ImGuiTable): void <cimport,nodecl> end
 global function igTableGcCompactTransientBuffers_TableTempDataPtr(table: *ImGuiTableTempData): void <cimport,nodecl> end
@@ -5127,7 +5189,7 @@ global function igTableSettingsFindByID(id: ImGuiID): *ImGuiTableSettings <cimpo
 global function igGetCurrentTabBar(): *ImGuiTabBar <cimport,nodecl> end
 global function igTabBarFindByID(id: ImGuiID): *ImGuiTabBar <cimport,nodecl> end
 global function igTabBarRemove(tab_bar: *ImGuiTabBar): void <cimport,nodecl> end
-global function igBeginTabBarEx(tab_bar: *ImGuiTabBar, bb: ImRect, flags: ImGuiTabBarFlags): boolean <cimport,nodecl> end
+global function igBeginTabBarEx(tab_bar: *ImGuiTabBar, bb: ImRect_c, flags: ImGuiTabBarFlags): boolean <cimport,nodecl> end
 global function igTabBarFindTabByID(tab_bar: *ImGuiTabBar, tab_id: ImGuiID): *ImGuiTabItem <cimport,nodecl> end
 global function igTabBarFindTabByOrder(tab_bar: *ImGuiTabBar, order: cint): *ImGuiTabItem <cimport,nodecl> end
 global function igTabBarFindMostRecentlySelectedTabForActiveWindow(tab_bar: *ImGuiTabBar): *ImGuiTabItem <cimport,nodecl> end
@@ -5140,57 +5202,58 @@ global function igTabBarCloseTab(tab_bar: *ImGuiTabBar, tab: *ImGuiTabItem): voi
 global function igTabBarQueueFocus_TabItemPtr(tab_bar: *ImGuiTabBar, tab: *ImGuiTabItem): void <cimport,nodecl> end
 global function igTabBarQueueFocus_Str(tab_bar: *ImGuiTabBar, tab_name: cstring): void <cimport,nodecl> end
 global function igTabBarQueueReorder(tab_bar: *ImGuiTabBar, tab: *ImGuiTabItem, offset: cint): void <cimport,nodecl> end
-global function igTabBarQueueReorderFromMousePos(tab_bar: *ImGuiTabBar, tab: *ImGuiTabItem, mouse_pos: ImVec2): void <cimport,nodecl> end
+global function igTabBarQueueReorderFromMousePos(tab_bar: *ImGuiTabBar, tab: *ImGuiTabItem, mouse_pos: ImVec2_c): void <cimport,nodecl> end
 global function igTabBarProcessReorder(tab_bar: *ImGuiTabBar): boolean <cimport,nodecl> end
 global function igTabItemEx(tab_bar: *ImGuiTabBar, label: cstring, p_open: *boolean, flags: ImGuiTabItemFlags, docked_window: *ImGuiWindow): boolean <cimport,nodecl> end
 global function igTabItemSpacing(str_id: cstring, flags: ImGuiTabItemFlags, width: float32): void <cimport,nodecl> end
-global function igTabItemCalcSize_Str(pOut: *ImVec2, label: cstring, has_close_button_or_unsaved_marker: boolean): void <cimport,nodecl> end
-global function igTabItemCalcSize_WindowPtr(pOut: *ImVec2, window: *ImGuiWindow): void <cimport,nodecl> end
-global function igTabItemBackground(draw_list: *ImDrawList, bb: ImRect, flags: ImGuiTabItemFlags, col: ImU32): void <cimport,nodecl> end
-global function igTabItemLabelAndCloseButton(draw_list: *ImDrawList, bb: ImRect, flags: ImGuiTabItemFlags, frame_padding: ImVec2, label: cstring, tab_id: ImGuiID, close_button_id: ImGuiID, is_contents_visible: boolean, out_just_closed: *boolean, out_text_clipped: *boolean): void <cimport,nodecl> end
-global function igRenderText(pos: ImVec2, text: cstring, text_end: cstring, hide_text_after_hash: boolean): void <cimport,nodecl> end
-global function igRenderTextWrapped(pos: ImVec2, text: cstring, text_end: cstring, wrap_width: float32): void <cimport,nodecl> end
-global function igRenderTextClipped(pos_min: ImVec2, pos_max: ImVec2, text: cstring, text_end: cstring, text_size_if_known: *ImVec2, align: ImVec2, clip_rect: *ImRect): void <cimport,nodecl> end
-global function igRenderTextClippedEx(draw_list: *ImDrawList, pos_min: ImVec2, pos_max: ImVec2, text: cstring, text_end: cstring, text_size_if_known: *ImVec2, align: ImVec2, clip_rect: *ImRect): void <cimport,nodecl> end
-global function igRenderTextEllipsis(draw_list: *ImDrawList, pos_min: ImVec2, pos_max: ImVec2, ellipsis_max_x: float32, text: cstring, text_end: cstring, text_size_if_known: *ImVec2): void <cimport,nodecl> end
-global function igRenderFrame(p_min: ImVec2, p_max: ImVec2, fill_col: ImU32, borders: boolean, rounding: float32): void <cimport,nodecl> end
-global function igRenderFrameBorder(p_min: ImVec2, p_max: ImVec2, rounding: float32): void <cimport,nodecl> end
-global function igRenderColorRectWithAlphaCheckerboard(draw_list: *ImDrawList, p_min: ImVec2, p_max: ImVec2, fill_col: ImU32, grid_step: float32, grid_off: ImVec2, rounding: float32, flags: ImDrawFlags): void <cimport,nodecl> end
-global function igRenderNavCursor(bb: ImRect, id: ImGuiID, flags: ImGuiNavRenderCursorFlags): void <cimport,nodecl> end
+global function igTabItemCalcSize_Str(label: cstring, has_close_button_or_unsaved_marker: boolean): ImVec2_c <cimport,nodecl> end
+global function igTabItemCalcSize_WindowPtr(window: *ImGuiWindow): ImVec2_c <cimport,nodecl> end
+global function igTabItemBackground(draw_list: *ImDrawList, bb: ImRect_c, flags: ImGuiTabItemFlags, col: ImU32): void <cimport,nodecl> end
+global function igTabItemLabelAndCloseButton(draw_list: *ImDrawList, bb: ImRect_c, flags: ImGuiTabItemFlags, frame_padding: ImVec2_c, label: cstring, tab_id: ImGuiID, close_button_id: ImGuiID, is_contents_visible: boolean, out_just_closed: *boolean, out_text_clipped: *boolean): void <cimport,nodecl> end
+global function igRenderText(pos: ImVec2_c, text: cstring, text_end: cstring, hide_text_after_hash: boolean): void <cimport,nodecl> end
+global function igRenderTextWrapped(pos: ImVec2_c, text: cstring, text_end: cstring, wrap_width: float32): void <cimport,nodecl> end
+global function igRenderTextClipped(pos_min: ImVec2_c, pos_max: ImVec2_c, text: cstring, text_end: cstring, text_size_if_known: *ImVec2_c, align: ImVec2_c, clip_rect: *ImRect): void <cimport,nodecl> end
+global function igRenderTextClippedEx(draw_list: *ImDrawList, pos_min: ImVec2_c, pos_max: ImVec2_c, text: cstring, text_end: cstring, text_size_if_known: *ImVec2_c, align: ImVec2_c, clip_rect: *ImRect): void <cimport,nodecl> end
+global function igRenderTextEllipsis(draw_list: *ImDrawList, pos_min: ImVec2_c, pos_max: ImVec2_c, ellipsis_max_x: float32, text: cstring, text_end: cstring, text_size_if_known: *ImVec2_c): void <cimport,nodecl> end
+global function igRenderFrame(p_min: ImVec2_c, p_max: ImVec2_c, fill_col: ImU32, borders: boolean, rounding: float32): void <cimport,nodecl> end
+global function igRenderFrameBorder(p_min: ImVec2_c, p_max: ImVec2_c, rounding: float32): void <cimport,nodecl> end
+global function igRenderColorComponentMarker(bb: ImRect_c, col: ImU32, rounding: float32): void <cimport,nodecl> end
+global function igRenderColorRectWithAlphaCheckerboard(draw_list: *ImDrawList, p_min: ImVec2_c, p_max: ImVec2_c, fill_col: ImU32, grid_step: float32, grid_off: ImVec2_c, rounding: float32, flags: ImDrawFlags): void <cimport,nodecl> end
+global function igRenderNavCursor(bb: ImRect_c, id: ImGuiID, flags: ImGuiNavRenderCursorFlags): void <cimport,nodecl> end
 global function igFindRenderedTextEnd(text: cstring, text_end: cstring): cstring <cimport,nodecl> end
-global function igRenderMouseCursor(pos: ImVec2, scale: float32, mouse_cursor: ImGuiMouseCursor, col_fill: ImU32, col_border: ImU32, col_shadow: ImU32): void <cimport,nodecl> end
-global function igRenderArrow(draw_list: *ImDrawList, pos: ImVec2, col: ImU32, dir: ImGuiDir, scale: float32): void <cimport,nodecl> end
-global function igRenderBullet(draw_list: *ImDrawList, pos: ImVec2, col: ImU32): void <cimport,nodecl> end
-global function igRenderCheckMark(draw_list: *ImDrawList, pos: ImVec2, col: ImU32, sz: float32): void <cimport,nodecl> end
-global function igRenderArrowPointingAt(draw_list: *ImDrawList, pos: ImVec2, half_sz: ImVec2, direction: ImGuiDir, col: ImU32): void <cimport,nodecl> end
-global function igRenderArrowDockMenu(draw_list: *ImDrawList, p_min: ImVec2, sz: float32, col: ImU32): void <cimport,nodecl> end
-global function igRenderRectFilledRangeH(draw_list: *ImDrawList, rect: ImRect, col: ImU32, x_start_norm: float32, x_end_norm: float32, rounding: float32): void <cimport,nodecl> end
-global function igRenderRectFilledWithHole(draw_list: *ImDrawList, outer: ImRect, inner: ImRect, col: ImU32, rounding: float32): void <cimport,nodecl> end
-global function igCalcRoundingFlagsForRectInRect(r_in: ImRect, r_outer: ImRect, threshold: float32): ImDrawFlags <cimport,nodecl> end
+global function igRenderMouseCursor(pos: ImVec2_c, scale: float32, mouse_cursor: ImGuiMouseCursor, col_fill: ImU32, col_border: ImU32, col_shadow: ImU32): void <cimport,nodecl> end
+global function igRenderArrow(draw_list: *ImDrawList, pos: ImVec2_c, col: ImU32, dir: ImGuiDir, scale: float32): void <cimport,nodecl> end
+global function igRenderBullet(draw_list: *ImDrawList, pos: ImVec2_c, col: ImU32): void <cimport,nodecl> end
+global function igRenderCheckMark(draw_list: *ImDrawList, pos: ImVec2_c, col: ImU32, sz: float32): void <cimport,nodecl> end
+global function igRenderArrowPointingAt(draw_list: *ImDrawList, pos: ImVec2_c, half_sz: ImVec2_c, direction: ImGuiDir, col: ImU32): void <cimport,nodecl> end
+global function igRenderArrowDockMenu(draw_list: *ImDrawList, p_min: ImVec2_c, sz: float32, col: ImU32): void <cimport,nodecl> end
+global function igRenderRectFilledInRangeH(draw_list: *ImDrawList, rect: ImRect_c, col: ImU32, fill_x0: float32, fill_x1: float32, rounding: float32): void <cimport,nodecl> end
+global function igRenderRectFilledWithHole(draw_list: *ImDrawList, outer: ImRect_c, inner: ImRect_c, col: ImU32, rounding: float32): void <cimport,nodecl> end
+global function igCalcRoundingFlagsForRectInRect(r_in: ImRect_c, r_outer: ImRect_c, threshold: float32): ImDrawFlags <cimport,nodecl> end
 global function igTextEx(text: cstring, text_end: cstring, flags: ImGuiTextFlags): void <cimport,nodecl> end
 global function igTextAligned(align_x: float32, size_x: float32, fmt: cstring, ...: cvarargs): void <cimport,nodecl> end
 global function igTextAlignedV(align_x: float32, size_x: float32, fmt: cstring, args: cvalist): void <cimport,nodecl> end
-global function igButtonEx(label: cstring, size_arg: ImVec2, flags: ImGuiButtonFlags): boolean <cimport,nodecl> end
-global function igArrowButtonEx(str_id: cstring, dir: ImGuiDir, size_arg: ImVec2, flags: ImGuiButtonFlags): boolean <cimport,nodecl> end
-global function igImageButtonEx(id: ImGuiID, tex_ref: ImTextureRef, image_size: ImVec2, uv0: ImVec2, uv1: ImVec2, bg_col: ImVec4, tint_col: ImVec4, flags: ImGuiButtonFlags): boolean <cimport,nodecl> end
+global function igButtonEx(label: cstring, size_arg: ImVec2_c, flags: ImGuiButtonFlags): boolean <cimport,nodecl> end
+global function igArrowButtonEx(str_id: cstring, dir: ImGuiDir, size_arg: ImVec2_c, flags: ImGuiButtonFlags): boolean <cimport,nodecl> end
+global function igImageButtonEx(id: ImGuiID, tex_ref: ImTextureRef_c, image_size: ImVec2_c, uv0: ImVec2_c, uv1: ImVec2_c, bg_col: ImVec4_c, tint_col: ImVec4_c, flags: ImGuiButtonFlags): boolean <cimport,nodecl> end
 global function igSeparatorEx(flags: ImGuiSeparatorFlags, thickness: float32): void <cimport,nodecl> end
 global function igSeparatorTextEx(id: ImGuiID, label: cstring, label_end: cstring, extra_width: float32): void <cimport,nodecl> end
 global function igCheckboxFlags_S64Ptr(label: cstring, flags: *ImS64, flags_value: ImS64): boolean <cimport,nodecl> end
 global function igCheckboxFlags_U64Ptr(label: cstring, flags: *ImU64, flags_value: ImU64): boolean <cimport,nodecl> end
-global function igCloseButton(id: ImGuiID, pos: ImVec2): boolean <cimport,nodecl> end
-global function igCollapseButton(id: ImGuiID, pos: ImVec2, dock_node: *ImGuiDockNode): boolean <cimport,nodecl> end
+global function igCloseButton(id: ImGuiID, pos: ImVec2_c): boolean <cimport,nodecl> end
+global function igCollapseButton(id: ImGuiID, pos: ImVec2_c, dock_node: *ImGuiDockNode): boolean <cimport,nodecl> end
 global function igScrollbar(axis: ImGuiAxis): void <cimport,nodecl> end
-global function igScrollbarEx(bb: ImRect, id: ImGuiID, axis: ImGuiAxis, p_scroll_v: *ImS64, avail_v: ImS64, contents_v: ImS64, draw_rounding_flags: ImDrawFlags): boolean <cimport,nodecl> end
-global function igGetWindowScrollbarRect(pOut: *ImRect, window: *ImGuiWindow, axis: ImGuiAxis): void <cimport,nodecl> end
+global function igScrollbarEx(bb: ImRect_c, id: ImGuiID, axis: ImGuiAxis, p_scroll_v: *ImS64, avail_v: ImS64, contents_v: ImS64, draw_rounding_flags: ImDrawFlags): boolean <cimport,nodecl> end
+global function igGetWindowScrollbarRect(window: *ImGuiWindow, axis: ImGuiAxis): ImRect_c <cimport,nodecl> end
 global function igGetWindowScrollbarID(window: *ImGuiWindow, axis: ImGuiAxis): ImGuiID <cimport,nodecl> end
 global function igGetWindowResizeCornerID(window: *ImGuiWindow, n: cint): ImGuiID <cimport,nodecl> end
 global function igGetWindowResizeBorderID(window: *ImGuiWindow, dir: ImGuiDir): ImGuiID <cimport,nodecl> end
-global function igButtonBehavior(bb: ImRect, id: ImGuiID, out_hovered: *boolean, out_held: *boolean, flags: ImGuiButtonFlags): boolean <cimport,nodecl> end
+global function igButtonBehavior(bb: ImRect_c, id: ImGuiID, out_hovered: *boolean, out_held: *boolean, flags: ImGuiButtonFlags): boolean <cimport,nodecl> end
 global function igDragBehavior(id: ImGuiID, data_type: ImGuiDataType, p_v: pointer, v_speed: float32, p_min: pointer, p_max: pointer, format: cstring, flags: ImGuiSliderFlags): boolean <cimport,nodecl> end
-global function igSliderBehavior(bb: ImRect, id: ImGuiID, data_type: ImGuiDataType, p_v: pointer, p_min: pointer, p_max: pointer, format: cstring, flags: ImGuiSliderFlags, out_grab_bb: *ImRect): boolean <cimport,nodecl> end
-global function igSplitterBehavior(bb: ImRect, id: ImGuiID, axis: ImGuiAxis, size1: *float32, size2: *float32, min_size1: float32, min_size2: float32, hover_extend: float32, hover_visibility_delay: float32, bg_col: ImU32): boolean <cimport,nodecl> end
+global function igSliderBehavior(bb: ImRect_c, id: ImGuiID, data_type: ImGuiDataType, p_v: pointer, p_min: pointer, p_max: pointer, format: cstring, flags: ImGuiSliderFlags, out_grab_bb: *ImRect): boolean <cimport,nodecl> end
+global function igSplitterBehavior(bb: ImRect_c, id: ImGuiID, axis: ImGuiAxis, size1: *float32, size2: *float32, min_size1: float32, min_size2: float32, hover_extend: float32, hover_visibility_delay: float32, bg_col: ImU32): boolean <cimport,nodecl> end
 global function igTreeNodeBehavior(id: ImGuiID, flags: ImGuiTreeNodeFlags, label: cstring, label_end: cstring): boolean <cimport,nodecl> end
-global function igTreeNodeDrawLineToChildNode(target_pos: ImVec2): void <cimport,nodecl> end
+global function igTreeNodeDrawLineToChildNode(target_pos: ImVec2_c): void <cimport,nodecl> end
 global function igTreeNodeDrawLineToTreePop(data: *ImGuiTreeNodeStackData): void <cimport,nodecl> end
 global function igTreePushOverrideID(id: ImGuiID): void <cimport,nodecl> end
 global function igTreeNodeGetOpen(storage_id: ImGuiID): boolean <cimport,nodecl> end
@@ -5203,10 +5266,10 @@ global function igDataTypeApplyFromText(buf: cstring, data_type: ImGuiDataType, 
 global function igDataTypeCompare(data_type: ImGuiDataType, arg_1: pointer, arg_2: pointer): cint <cimport,nodecl> end
 global function igDataTypeClamp(data_type: ImGuiDataType, p_data: pointer, p_min: pointer, p_max: pointer): boolean <cimport,nodecl> end
 global function igDataTypeIsZero(data_type: ImGuiDataType, p_data: pointer): boolean <cimport,nodecl> end
-global function igInputTextEx(label: cstring, hint: cstring, buf: cstring, buf_size: cint, size_arg: ImVec2, flags: ImGuiInputTextFlags, callback: ImGuiInputTextCallback, user_data: pointer): boolean <cimport,nodecl> end
+global function igInputTextEx(label: cstring, hint: cstring, buf: cstring, buf_size: cint, size_arg: ImVec2_c, flags: ImGuiInputTextFlags, callback: ImGuiInputTextCallback, user_data: pointer): boolean <cimport,nodecl> end
 global function igInputTextDeactivateHook(id: ImGuiID): void <cimport,nodecl> end
-global function igTempInputText(bb: ImRect, id: ImGuiID, label: cstring, buf: cstring, buf_size: cint, flags: ImGuiInputTextFlags): boolean <cimport,nodecl> end
-global function igTempInputScalar(bb: ImRect, id: ImGuiID, label: cstring, data_type: ImGuiDataType, p_data: pointer, format: cstring, p_clamp_min: pointer, p_clamp_max: pointer): boolean <cimport,nodecl> end
+global function igTempInputText(bb: ImRect_c, id: ImGuiID, label: cstring, buf: cstring, buf_size: cint, flags: ImGuiInputTextFlags): boolean <cimport,nodecl> end
+global function igTempInputScalar(bb: ImRect_c, id: ImGuiID, label: cstring, data_type: ImGuiDataType, p_data: pointer, format: cstring, p_clamp_min: pointer, p_clamp_max: pointer): boolean <cimport,nodecl> end
 global function igTempInputIsActive(id: ImGuiID): boolean <cimport,nodecl> end
 global function igGetInputTextState(id: ImGuiID): *ImGuiInputTextState <cimport,nodecl> end
 global function igSetNextItemRefVal(data_type: ImGuiDataType, p_data: pointer): void <cimport,nodecl> end
@@ -5214,10 +5277,11 @@ global function igIsItemActiveAsInputText(): boolean <cimport,nodecl> end
 global function igColorTooltip(text: cstring, col: *float32, flags: ImGuiColorEditFlags): void <cimport,nodecl> end
 global function igColorEditOptionsPopup(col: *float32, flags: ImGuiColorEditFlags): void <cimport,nodecl> end
 global function igColorPickerOptionsPopup(ref_col: *float32, flags: ImGuiColorEditFlags): void <cimport,nodecl> end
-global function igPlotEx(plot_type: ImGuiPlotType, label: cstring, values_getter: function(data: pointer, idx: cint): float32, data: pointer, values_count: cint, values_offset: cint, overlay_text: cstring, scale_min: float32, scale_max: float32, size_arg: ImVec2): cint <cimport,nodecl> end
-global function igShadeVertsLinearColorGradientKeepAlpha(draw_list: *ImDrawList, vert_start_idx: cint, vert_end_idx: cint, gradient_p0: ImVec2, gradient_p1: ImVec2, col0: ImU32, col1: ImU32): void <cimport,nodecl> end
-global function igShadeVertsLinearUV(draw_list: *ImDrawList, vert_start_idx: cint, vert_end_idx: cint, a: ImVec2, b: ImVec2, uv_a: ImVec2, uv_b: ImVec2, clamp: boolean): void <cimport,nodecl> end
-global function igShadeVertsTransformPos(draw_list: *ImDrawList, vert_start_idx: cint, vert_end_idx: cint, pivot_in: ImVec2, cos_a: float32, sin_a: float32, pivot_out: ImVec2): void <cimport,nodecl> end
+global function igSetNextItemColorMarker(col: ImU32): void <cimport,nodecl> end
+global function igPlotEx(plot_type: ImGuiPlotType, label: cstring, values_getter: function(data: pointer, idx: cint): float32, data: pointer, values_count: cint, values_offset: cint, overlay_text: cstring, scale_min: float32, scale_max: float32, size_arg: ImVec2_c): cint <cimport,nodecl> end
+global function igShadeVertsLinearColorGradientKeepAlpha(draw_list: *ImDrawList, vert_start_idx: cint, vert_end_idx: cint, gradient_p0: ImVec2_c, gradient_p1: ImVec2_c, col0: ImU32, col1: ImU32): void <cimport,nodecl> end
+global function igShadeVertsLinearUV(draw_list: *ImDrawList, vert_start_idx: cint, vert_end_idx: cint, a: ImVec2_c, b: ImVec2_c, uv_a: ImVec2_c, uv_b: ImVec2_c, clamp: boolean): void <cimport,nodecl> end
+global function igShadeVertsTransformPos(draw_list: *ImDrawList, vert_start_idx: cint, vert_end_idx: cint, pivot_in: ImVec2_c, cos_a: float32, sin_a: float32, pivot_out: ImVec2_c): void <cimport,nodecl> end
 global function igGcCompactTransientMiscBuffers(): void <cimport,nodecl> end
 global function igGcCompactTransientWindowBuffers(window: *ImGuiWindow): void <cimport,nodecl> end
 global function igGcAwakeTransientWindowBuffers(window: *ImGuiWindow): void <cimport,nodecl> end
@@ -5241,6 +5305,7 @@ global function igDebugBreakClearData(): void <cimport,nodecl> end
 global function igDebugBreakButton(label: cstring, description_of_location: cstring): boolean <cimport,nodecl> end
 global function igDebugBreakButtonTooltip(keyboard_only: boolean, description_of_location: cstring): void <cimport,nodecl> end
 global function igShowFontAtlas(atlas: *ImFontAtlas): void <cimport,nodecl> end
+global function igDebugTextureIDToU64(tex_id: ImTextureID): ImU64 <cimport,nodecl> end
 global function igDebugHookIdInfo(id: ImGuiID, data_type: ImGuiDataType, data_id: pointer, data_id_end: pointer): void <cimport,nodecl> end
 global function igDebugNodeColumns(columns: *ImGuiOldColumns): void <cimport,nodecl> end
 global function igDebugNodeDockNode(node: *ImGuiDockNode, label: cstring): void <cimport,nodecl> end
@@ -5264,7 +5329,7 @@ global function igDebugNodeWindowsListByBeginStackParent(windows: **ImGuiWindow,
 global function igDebugNodeViewport(viewport: *ImGuiViewportP): void <cimport,nodecl> end
 global function igDebugNodePlatformMonitor(monitor: *ImGuiPlatformMonitor, label: cstring, idx: cint): void <cimport,nodecl> end
 global function igDebugRenderKeyboardPreview(draw_list: *ImDrawList): void <cimport,nodecl> end
-global function igDebugRenderViewportThumbnail(draw_list: *ImDrawList, viewport: *ImGuiViewportP, bb: ImRect): void <cimport,nodecl> end
+global function igDebugRenderViewportThumbnail(draw_list: *ImDrawList, viewport: *ImGuiViewportP, bb: ImRect_c): void <cimport,nodecl> end
 global function ImFontLoader_ImFontLoader(): *ImFontLoader <cimport,nodecl> end
 global function ImFontLoader_destroy(self: *ImFontLoader): void <cimport,nodecl> end
 global function igImFontAtlasGetFontLoaderForStbTruetype(): *ImFontLoader <cimport,nodecl> end
@@ -5277,6 +5342,7 @@ global function igImFontAtlasBuildInit(atlas: *ImFontAtlas): void <cimport,nodec
 global function igImFontAtlasBuildDestroy(atlas: *ImFontAtlas): void <cimport,nodecl> end
 global function igImFontAtlasBuildMain(atlas: *ImFontAtlas): void <cimport,nodecl> end
 global function igImFontAtlasBuildSetupFontLoader(atlas: *ImFontAtlas, font_loader: *ImFontLoader): void <cimport,nodecl> end
+global function igImFontAtlasBuildNotifySetFont(atlas: *ImFontAtlas, old_font: *ImFont, new_font: *ImFont): void <cimport,nodecl> end
 global function igImFontAtlasBuildUpdatePointers(atlas: *ImFontAtlas): void <cimport,nodecl> end
 global function igImFontAtlasBuildRenderBitmapFromString(atlas: *ImFontAtlas, x: cint, y: cint, w: cint, h: cint, in_str: cstring, in_marker_char: cchar): void <cimport,nodecl> end
 global function igImFontAtlasBuildClear(atlas: *ImFontAtlas): void <cimport,nodecl> end
@@ -5285,7 +5351,7 @@ global function igImFontAtlasTextureMakeSpace(atlas: *ImFontAtlas): void <cimpor
 global function igImFontAtlasTextureRepack(atlas: *ImFontAtlas, w: cint, h: cint): void <cimport,nodecl> end
 global function igImFontAtlasTextureGrow(atlas: *ImFontAtlas, old_w: cint, old_h: cint): void <cimport,nodecl> end
 global function igImFontAtlasTextureCompact(atlas: *ImFontAtlas): void <cimport,nodecl> end
-global function igImFontAtlasTextureGetSizeEstimate(pOut: *ImVec2i, atlas: *ImFontAtlas): void <cimport,nodecl> end
+global function igImFontAtlasTextureGetSizeEstimate(atlas: *ImFontAtlas): ImVec2i_c <cimport,nodecl> end
 global function igImFontAtlasBuildSetupFontSpecialGlyphs(atlas: *ImFontAtlas, font: *ImFont, src: *ImFontConfig): void <cimport,nodecl> end
 global function igImFontAtlasBuildLegacyPreloadAllGlyphRanges(atlas: *ImFontAtlas): void <cimport,nodecl> end
 global function igImFontAtlasBuildGetOversampleFactors(src: *ImFontConfig, baked: *ImFontBaked, out_oversample_h: *cint, out_oversample_v: *cint): void <cimport,nodecl> end
@@ -5295,6 +5361,7 @@ global function igImFontAtlasFontSourceAddToFont(atlas: *ImFontAtlas, font: *ImF
 global function igImFontAtlasFontDestroySourceData(atlas: *ImFontAtlas, src: *ImFontConfig): void <cimport,nodecl> end
 global function igImFontAtlasFontInitOutput(atlas: *ImFontAtlas, font: *ImFont): boolean <cimport,nodecl> end
 global function igImFontAtlasFontDestroyOutput(atlas: *ImFontAtlas, font: *ImFont): void <cimport,nodecl> end
+global function igImFontAtlasFontRebuildOutput(atlas: *ImFontAtlas, font: *ImFont): void <cimport,nodecl> end
 global function igImFontAtlasFontDiscardBakes(atlas: *ImFontAtlas, font: *ImFont, unused_frames: cint): void <cimport,nodecl> end
 global function igImFontAtlasBakedGetId(font_id: ImGuiID, baked_size: float32, rasterizer_density: float32): ImGuiID <cimport,nodecl> end
 global function igImFontAtlasBakedGetOrAdd(atlas: *ImFontAtlas, font: *ImFont, font_size: float32, font_rasterizer_density: float32): *ImFontBaked <cimport,nodecl> end
@@ -5313,7 +5380,7 @@ global function igImFontAtlasPackDiscardRect(atlas: *ImFontAtlas, id: ImFontAtla
 global function igImFontAtlasUpdateNewFrame(atlas: *ImFontAtlas, frame_count: cint, renderer_has_textures: boolean): void <cimport,nodecl> end
 global function igImFontAtlasAddDrawListSharedData(atlas: *ImFontAtlas, data: *ImDrawListSharedData): void <cimport,nodecl> end
 global function igImFontAtlasRemoveDrawListSharedData(atlas: *ImFontAtlas, data: *ImDrawListSharedData): void <cimport,nodecl> end
-global function igImFontAtlasUpdateDrawListsTextures(atlas: *ImFontAtlas, old_tex: ImTextureRef, new_tex: ImTextureRef): void <cimport,nodecl> end
+global function igImFontAtlasUpdateDrawListsTextures(atlas: *ImFontAtlas, old_tex: ImTextureRef_c, new_tex: ImTextureRef_c): void <cimport,nodecl> end
 global function igImFontAtlasUpdateDrawListsSharedData(atlas: *ImFontAtlas): void <cimport,nodecl> end
 global function igImFontAtlasTextureBlockConvert(src_pixels: *cuchar, src_fmt: ImTextureFormat, src_pitch: cint, dst_pixels: *cuchar, dst_fmt: ImTextureFormat, dst_pitch: cint, w: cint, h: cint): void <cimport,nodecl> end
 global function igImFontAtlasTextureBlockPostProcess(data: *ImFontAtlasPostProcessData): void <cimport,nodecl> end
@@ -5325,7 +5392,7 @@ global function igImTextureDataGetFormatBytesPerPixel(format: ImTextureFormat): 
 global function igImTextureDataGetStatusName(status: ImTextureStatus): cstring <cimport,nodecl> end
 global function igImTextureDataGetFormatName(format: ImTextureFormat): cstring <cimport,nodecl> end
 global function igImFontAtlasDebugLogTextureRequests(atlas: *ImFontAtlas): void <cimport,nodecl> end
-global function igImFontAtlasGetMouseCursorTexData(atlas: *ImFontAtlas, cursor_type: ImGuiMouseCursor, out_offset: *ImVec2, out_size: *ImVec2, out_uv_border: *[2]ImVec2, out_uv_fill: *[2]ImVec2): boolean <cimport,nodecl> end
+global function igImFontAtlasGetMouseCursorTexData(atlas: *ImFontAtlas, cursor_type: ImGuiMouseCursor, out_offset: *ImVec2_c, out_size: *ImVec2_c, out_uv_border: *[2]ImVec2, out_uv_fill: *[2]ImVec2): boolean <cimport,nodecl> end
 global function ImGuiTextBuffer_appendf(self: *ImGuiTextBuffer, fmt: cstring, ...: cvarargs): void <cimport,nodecl> end
 global function igGET_FLT_MAX(): float32 <cimport,nodecl> end
 global function igGET_FLT_MIN(): float32 <cimport,nodecl> end
@@ -5336,3 +5403,4 @@ global function ImVector_ImWchar_UnInit(p: *ImVector_ImWchar): void <cimport,nod
 global function ImGuiPlatformIO_Set_Platform_GetWindowPos(platform_io: *ImGuiPlatformIO, user_callback: function(vp: *ImGuiViewport, out_pos: *ImVec2): void): void <cimport,nodecl> end
 global function ImGuiPlatformIO_Set_Platform_GetWindowSize(platform_io: *ImGuiPlatformIO, user_callback: function(vp: *ImGuiViewport, out_size: *ImVec2): void): void <cimport,nodecl> end
 global ImDrawIdx: type = cuint
+global ImTextureID_Invalid: ImTextureID <cimport,nodecl,const>

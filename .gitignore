@@ -1,3 +1,4 @@
+imgui_impl_null.*
 *.org
 .githubx/
 libs/SDL3/

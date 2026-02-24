@@ -164,17 +164,15 @@ local main = function()
       igInputText("##inputtext1", sBuf, #sBuf, ImGuiTextFlags_None, nilptr, nilptr)
 
       -- Show ListBox main
-      local listBoxPosTop:ImVec2
-      local listBoxPosEnd:ImVec2
       igNewLine()
-      igGetCursorScreenPos(&listBoxPosTop) -- Get absolute pos.
+      local listBoxPosTop =  igGetCursorScreenPos() -- Get absolute pos.
       igSetNextItemWidth(listBoxWidth)
 
       igListBox_Str_arr("##listbox1"
                         , &item_current
                         , &iconFontTbl[0]
                         , #iconFontTbl, 34)
-      igGetCursorScreenPos(&listBoxPosEnd) -- Get absolute pos.
+      local listBoxPosEnd =  igGetCursorScreenPos() -- Get absolute pos.
 
       -- Show magnifying glass (Zoom in Toolchip)
       if igIsItemHovered(ImGuiHoveredFlags_DelayNone) then

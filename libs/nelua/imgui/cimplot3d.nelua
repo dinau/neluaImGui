@@ -331,6 +331,7 @@ ImGuiStyle = @record{
   GrabMinSize: float32,
   GrabRounding: float32,
   LogSliderDeadzone: float32,
+  ImageRounding: float32,
   ImageBorderSize: float32,
   TabRounding: float32,
   TabBorderSize: float32,
@@ -345,6 +346,10 @@ ImGuiStyle = @record{
   TreeLinesFlags: cint,
   TreeLinesSize: float32,
   TreeLinesRounding: float32,
+  DragDropTargetRounding: float32,
+  DragDropTargetBorderSize: float32,
+  DragDropTargetPadding: float32,
+  ColorMarkerSize: float32,
   ColorButtonPosition: ImGuiDir,
   ButtonTextAlign: ImVec2,
   SelectableTextAlign: ImVec2,
@@ -361,7 +366,7 @@ ImGuiStyle = @record{
   AntiAliasedFill: boolean,
   CurveTessellationTol: float32,
   CircleTessellationMaxError: float32,
-  Colors: [61]ImVec4,
+  Colors: [62]ImVec4,
   HoverStationaryDelay: float32,
   HoverDelayShort: float32,
   HoverDelayNormal: float32,
@@ -402,6 +407,7 @@ ImGuiIO = @record{
   ConfigNavCursorVisibleAuto: boolean,
   ConfigNavCursorVisibleAlways: boolean,
   ConfigDockingNoSplit: boolean,
+  ConfigDockingNoDockingOver: boolean,
   ConfigDockingWithShift: boolean,
   ConfigDockingAlwaysTabBar: boolean,
   ConfigDockingTransparentPayload: boolean,
@@ -739,7 +745,6 @@ ImFontConfig = @record{
   FontDataOwnedByAtlas: boolean,
   MergeMode: boolean,
   PixelSnapH: boolean,
-  PixelSnapV: boolean,
   OversampleH: cschar,
   OversampleV: cschar,
   EllipsisChar: cushort,
@@ -754,6 +759,7 @@ ImFontConfig = @record{
   FontLoaderFlags: cuint,
   RasterizerMultiply: float32,
   RasterizerDensity: float32,
+  ExtraSizeScale: float32,
   Flags: cint,
   DstFont: *ImFont,
   FontLoader: *ImFontLoader,
@@ -853,7 +859,7 @@ ImFontBaked = @record{
   LoadNoRenderOnLayout: cuint,
   LastUsedFrame: cint,
   BakedId: cuint,
-  ContainerFont: *ImFont,
+  OwnerFont: *ImFont,
   FontLoaderDatas: pointer
 }
 global ImVector_ImFontConfigPtr: type <cimport,nodecl> = @record{
@@ -863,7 +869,7 @@ global ImVector_ImFontConfigPtr: type <cimport,nodecl> = @record{
 }
 ImFont = @record{
   LastBaked: *ImFontBaked,
-  ContainerAtlas: *ImFontAtlas,
+  OwnerAtlas: *ImFontAtlas,
   Flags: cint,
   CurrentRasterizerDensity: float32,
   FontId: cuint,
@@ -1057,6 +1063,7 @@ ImGuiGroupData = @record{
   BackupCurrLineSize: ImVec2,
   BackupCurrLineTextBaseOffset: float32,
   BackupActiveIdIsAlive: cuint,
+  BackupActiveIdHasBeenEditedThisFrame: boolean,
   BackupDeactivatedIdIsAlive: boolean,
   BackupHoveredIdIsAlive: boolean,
   BackupIsSameLine: boolean,
@@ -1137,7 +1144,8 @@ ImGuiNextItemData = @record{
   OpenVal: boolean,
   OpenCond: cuchar,
   RefVal: ImGuiDataTypeStorage,
-  StorageId: cuint
+  StorageId: cuint,
+  ColorMarker: cuint
 }
 ImGuiLastItemData = @record{
   ID: cuint,
@@ -1207,7 +1215,7 @@ ImGuiPopupData = @record{
   OpenMousePos: ImVec2
 }
 global ImBitArrayForNamedKeys: type <cimport,nodecl> = @record{
-  Storage: [5]cuint
+  Data: [5]cuint
 }
 global ImGuiInputEventType: type <cimport,nodecl,using> = @enum(cint){
   ImGuiInputEventType_None = 0,
@@ -1495,7 +1503,7 @@ ImGuiDockNode = @record{
   WantHiddenTabBarToggle: boolean
 }
 ImGuiWindowDockStyle = @record{
-  Colors: [8]cuint
+  Colors: [9]cuint
 }
 global ImVector_ImGuiDockRequest: type <cimport,nodecl> = @record{
   Size: cint,
@@ -1588,23 +1596,27 @@ ImGuiStackLevelInfo = @record{
   DataType: cschar,
   DescOffset: cint
 }
-global ImGuiIDStackTool: type <cimport,nodecl,forwarddecl> = @record{}
+global ImGuiDebugItemPathQuery: type <cimport,nodecl,forwarddecl> = @record{}
 global ImVector_ImGuiStackLevelInfo: type <cimport,nodecl> = @record{
   Size: cint,
   Capacity: cint,
   Data: *ImGuiStackLevelInfo
 }
-ImGuiIDStackTool = @record{
-  LastActiveFrame: cint,
-  StackLevel: cint,
-  QueryMainId: cuint,
+ImGuiDebugItemPathQuery = @record{
+  MainID: cuint,
+  Active: boolean,
+  Complete: boolean,
+  Step: cschar,
   Results: ImVector_ImGuiStackLevelInfo,
-  QueryHookActive: boolean,
+  ResultsDescBuf: ImGuiTextBuffer,
+  ResultPathBuf: ImGuiTextBuffer
+}
+global ImGuiIDStackTool: type <cimport,nodecl,forwarddecl> = @record{}
+ImGuiIDStackTool = @record{
   OptHexEncodeNonAsciiChars: boolean,
   OptCopyToClipboardOnCtrlC: boolean,
-  CopyToClipboardLastTime: float32,
-  ResultPathsBuf: ImGuiTextBuffer,
-  ResultTempBuf: ImGuiTextBuffer
+  LastActiveFrame: cint,
+  CopyToClipboardLastTime: float32
 }
 global ImGuiContextHookType: type <cimport,nodecl,using> = @enum(cint){
   ImGuiContextHookType_NewFramePre = 0,
@@ -1769,6 +1781,15 @@ global ImVector_ImGuiContextHook: type <cimport,nodecl> = @record{
 }
 ImGuiContext = @record{
   Initialized: boolean,
+  WithinFrameScope: boolean,
+  WithinFrameScopeWithImplicitWindow: boolean,
+  TestEngineHookItems: boolean,
+  FrameCount: cint,
+  FrameCountEnded: cint,
+  FrameCountPlatformEnded: cint,
+  FrameCountRendered: cint,
+  Time: float64,
+  ContextName: [16]cchar,
   IO: ImGuiIO,
   PlatformIO: ImGuiPlatformIO,
   Style: ImGuiStyle,
@@ -1783,18 +1804,8 @@ ImGuiContext = @record{
   FontRasterizerDensity: float32,
   CurrentDpiScale: float32,
   DrawListSharedData: ImDrawListSharedData,
-  Time: float64,
-  FrameCount: cint,
-  FrameCountEnded: cint,
-  FrameCountPlatformEnded: cint,
-  FrameCountRendered: cint,
   WithinEndChildID: cuint,
-  WithinFrameScope: boolean,
-  WithinFrameScopeWithImplicitWindow: boolean,
-  GcCompactAll: boolean,
-  TestEngineHookItems: boolean,
   TestEngine: pointer,
-  ContextName: [16]cchar,
   InputEventsQueue: ImVector_ImGuiInputEvent,
   InputEventsTrail: ImVector_ImGuiInputEvent,
   InputEventsNextMouseSource: ImGuiMouseSource,
@@ -1839,11 +1850,11 @@ ImGuiContext = @record{
   ActiveIdHasBeenEditedBefore: boolean,
   ActiveIdHasBeenEditedThisFrame: boolean,
   ActiveIdFromShortcut: boolean,
+  ActiveIdMouseButton: cschar,
   ActiveIdDisabledId: cuint,
-  ActiveIdMouseButton: cint,
   ActiveIdClickOffset: ImVec2,
-  ActiveIdWindow: *ImGuiWindow,
   ActiveIdSource: ImGuiInputSource,
+  ActiveIdWindow: *ImGuiWindow,
   ActiveIdPreviousFrame: cuint,
   DeactivatedItemData: ImGuiDeactivatedItemData,
   ActiveIdValueOnActivation: ImGuiDataTypeStorage,
@@ -1865,6 +1876,7 @@ ImGuiContext = @record{
   LastItemData: ImGuiLastItemData,
   NextWindowData: ImGuiNextWindowData,
   DebugShowGroupRects: boolean,
+  GcCompactAll: boolean,
   DebugFlashStyleColorIdx: cint,
   ColorStack: ImVector_ImGuiColorMod,
   StyleVarStack: ImVector_ImGuiStyleMod,
@@ -1933,6 +1945,7 @@ ImGuiContext = @record{
   NavJustMovedToKeyMods: cint,
   NavJustMovedToIsTabbing: boolean,
   NavJustMovedToHasSelectionData: boolean,
+  ConfigNavEnableTabbing: boolean,
   ConfigNavWindowingWithGamepad: boolean,
   ConfigNavWindowingKeyNext: cint,
   ConfigNavWindowingKeyPrev: cint,
@@ -1958,7 +1971,8 @@ ImGuiContext = @record{
   DragDropTargetClipRect: ImRect,
   DragDropTargetId: cuint,
   DragDropTargetFullViewport: cuint,
-  DragDropAcceptFlags: cint,
+  DragDropAcceptFlagsCurr: cint,
+  DragDropAcceptFlagsPrev: cint,
   DragDropAcceptIdCurrRectSurface: float32,
   DragDropAcceptIdCurr: cuint,
   DragDropAcceptIdPrev: cuint,
@@ -2042,6 +2056,7 @@ ImGuiContext = @record{
   HookIdNext: cuint,
   LocalizationTable: [13]cstring,
   LogEnabled: boolean,
+  LogLineFirstItem: boolean,
   LogFlags: cint,
   LogWindow: *ImGuiWindow,
   LogFile: *FILE,
@@ -2049,7 +2064,6 @@ ImGuiContext = @record{
   LogNextPrefix: cstring,
   LogNextSuffix: cstring,
   LogLinePosY: float32,
-  LogLineFirstItem: boolean,
   LogDepthRef: cint,
   LogDepthToExpand: cint,
   LogDepthToExpandDefault: cint,
@@ -2077,6 +2091,7 @@ ImGuiContext = @record{
   DebugFlashStyleColorTime: float32,
   DebugFlashStyleColorBackup: ImVec4,
   DebugMetricsConfig: ImGuiMetricsConfig,
+  DebugItemPathQuery: ImGuiDebugItemPathQuery,
   DebugIDStackTool: ImGuiIDStackTool,
   DebugAllocInfo: ImGuiDebugAllocInfo,
   DebugHoveredDockNode: *ImGuiDockNode,
@@ -2130,6 +2145,7 @@ ImGuiWindowTempData = @record{
   DockTabItemStatusFlags: cint,
   DockTabItemRect: ImRect,
   ItemWidth: float32,
+  ItemWidthDefault: float32,
   TextWrapPos: float32,
   ItemWidthStack: ImVector_float,
   TextWrapPosStack: ImVector_float
@@ -2203,14 +2219,15 @@ ImGuiWindow = @record{
   BeginOrderWithinParent: cshort,
   BeginOrderWithinContext: cshort,
   FocusOrder: cshort,
+  AutoPosLastDirection: ImGuiDir,
   AutoFitFramesX: cschar,
   AutoFitFramesY: cschar,
   AutoFitOnlyGrows: boolean,
-  AutoPosLastDirection: ImGuiDir,
   HiddenFramesCanSkipItems: cschar,
   HiddenFramesCannotSkipItems: cschar,
   HiddenFramesForRenderOnly: cschar,
   DisableInputsFrames: cschar,
+  BgClickFlags: cint,
   SetWindowPosAllowFlags: cint,
   SetWindowSizeAllowFlags: cint,
   SetWindowCollapsedAllowFlags: cint,
@@ -2231,7 +2248,6 @@ ImGuiWindow = @record{
   LastFrameActive: cint,
   LastFrameJustFocused: cint,
   LastTimeActive: float32,
-  ItemWidthDefault: float32,
   StateStorage: ImGuiStorage,
   ColumnsStorage: ImVector_ImGuiOldColumns,
   FontWindowScale: float32,
@@ -2293,6 +2309,7 @@ ImGuiTabBar = @record{
   ID: cuint,
   SelectedTabId: cuint,
   NextSelectedTabId: cuint,
+  NextScrollToTabId: cuint,
   VisibleTabId: cuint,
   CurrFrameVisible: cint,
   PrevFrameVisible: cint,
@@ -2530,6 +2547,7 @@ global ImVector_ImGuiTableHeaderData: type <cimport,nodecl> = @record{
   Data: *ImGuiTableHeaderData
 }
 ImGuiTableTempData = @record{
+  WindowID: cuint,
   TableIndex: cint,
   LastTimeActive: float32,
   AngledHeadersExtraWidth: float32,
@@ -2609,19 +2627,20 @@ ImFontAtlasBuilder = @record{
   PackIdLinesTexData: cint
 }
 global ImPlot3DContext: type <cimport,nodecl,forwarddecl> = @record{}
-global ImPlot3DStyle: type <cimport,nodecl,forwarddecl> = @record{}
-global ImPlot3DPoint: type <cimport,nodecl,forwarddecl> = @record{}
+global ImPlot3DStyle_c: type <cimport,nodecl,forwarddecl> = @record{}
+global ImPlot3DPoint_c: type <cimport,nodecl,forwarddecl> = @record{}
 global ImPlot3DRay: type <cimport,nodecl,forwarddecl> = @record{}
 global ImPlot3DPlane: type <cimport,nodecl,forwarddecl> = @record{}
 global ImPlot3DBox: type <cimport,nodecl,forwarddecl> = @record{}
 global ImPlot3DRange: type <cimport,nodecl,forwarddecl> = @record{}
-global ImPlot3DQuat: type <cimport,nodecl,forwarddecl> = @record{}
+global ImPlot3DQuat_c: type <cimport,nodecl,forwarddecl> = @record{}
 global ImPlot3DCond: type <cimport,nodecl> = @cint
 global ImPlot3DCol: type <cimport,nodecl> = @cint
 global ImPlot3DStyleVar: type <cimport,nodecl> = @cint
 global ImPlot3DMarker: type <cimport,nodecl> = @cint
 global ImPlot3DLocation: type <cimport,nodecl> = @cint
 global ImAxis3D: type <cimport,nodecl> = @cint
+global ImPlot3DScale: type <cimport,nodecl> = @cint
 global ImPlot3DColormap: type <cimport,nodecl> = @cint
 global ImPlot3DFlags: type <cimport,nodecl> = @cint
 global ImPlot3DItemFlags: type <cimport,nodecl> = @cint
@@ -2632,6 +2651,7 @@ global ImPlot3DQuadFlags: type <cimport,nodecl> = @cint
 global ImPlot3DSurfaceFlags: type <cimport,nodecl> = @cint
 global ImPlot3DMeshFlags: type <cimport,nodecl> = @cint
 global ImPlot3DImageFlags: type <cimport,nodecl> = @cint
+global ImPlot3DDummyFlags: type <cimport,nodecl> = @cint
 global ImPlot3DLegendFlags: type <cimport,nodecl> = @cint
 global ImPlot3DAxisFlags: type <cimport,nodecl> = @cint
 global ImPlot3DFlags_: type <cimport,nodecl,using> = @enum(cint){
@@ -2641,6 +2661,11 @@ global ImPlot3DFlags_: type <cimport,nodecl,using> = @enum(cint){
   ImPlot3DFlags_NoMouseText = 4,
   ImPlot3DFlags_NoClip = 8,
   ImPlot3DFlags_NoMenus = 16,
+  ImPlot3DFlags_Equal = 32,
+  ImPlot3DFlags_NoRotate = 64,
+  ImPlot3DFlags_NoPan = 128,
+  ImPlot3DFlags_NoZoom = 256,
+  ImPlot3DFlags_NoInputs = 512,
   ImPlot3DFlags_CanvasOnly = 7
 }
 global ImPlot3DCond_: type <cimport,nodecl,using> = @enum(cint){
@@ -2676,10 +2701,11 @@ global ImPlot3DStyleVar_: type <cimport,nodecl,using> = @enum(cint){
   ImPlot3DStyleVar_PlotMinSize = 6,
   ImPlot3DStyleVar_PlotPadding = 7,
   ImPlot3DStyleVar_LabelPadding = 8,
-  ImPlot3DStyleVar_LegendPadding = 9,
-  ImPlot3DStyleVar_LegendInnerPadding = 10,
-  ImPlot3DStyleVar_LegendSpacing = 11,
-  ImPlot3DStyleVar_COUNT = 12
+  ImPlot3DStyleVar_ViewScaleFactor = 9,
+  ImPlot3DStyleVar_LegendPadding = 10,
+  ImPlot3DStyleVar_LegendInnerPadding = 11,
+  ImPlot3DStyleVar_LegendSpacing = 12,
+  ImPlot3DStyleVar_COUNT = 13
 }
 global ImPlot3DMarker_: type <cimport,nodecl,using> = @enum(cint){
   ImPlot3DMarker_None = -1,
@@ -2750,6 +2776,9 @@ global ImPlot3DImageFlags_: type <cimport,nodecl,using> = @enum(cint){
   ImPlot3DImageFlags_NoLegend = 1,
   ImPlot3DImageFlags_NoFit = 2
 }
+global ImPlot3DDummyFlags_: type <cimport,nodecl,using> = @enum(cint){
+  ImPlot3DDummyFlags_None = 0
+}
 global ImPlot3DLegendFlags_: type <cimport,nodecl,using> = @enum(cint){
   ImPlot3DLegendFlags_None = 0,
   ImPlot3DLegendFlags_NoButtons = 1,
@@ -2787,6 +2816,11 @@ global ImAxis3D_: type <cimport,nodecl,using> = @enum(cint){
   ImAxis3D_Z = 2,
   ImAxis3D_COUNT = 3
 }
+global ImPlot3DScale_: type <cimport,nodecl,using> = @enum(cint){
+  ImPlot3DScale_Linear = 0,
+  ImPlot3DScale_Log10 = 1,
+  ImPlot3DScale_SymLog = 2
+}
 global ImPlot3DColormap_: type <cimport,nodecl,using> = @enum(cint){
   ImPlot3DColormap_Deep = 0,
   ImPlot3DColormap_Dark = 1,
@@ -2805,35 +2839,36 @@ global ImPlot3DColormap_: type <cimport,nodecl,using> = @enum(cint){
   ImPlot3DColormap_Spectral = 14,
   ImPlot3DColormap_Greys = 15
 }
-global ImPlot3DFormatter: type <cimport,nodecl> = @function(value: float32, buff: cstring, size: cint, user_data: pointer): cint
-ImPlot3DPoint = @record{
-  x: float32,
-  y: float32,
-  z: float32
+global ImPlot3DFormatter: type <cimport,nodecl> = @function(value: float64, buff: cstring, size: cint, user_data: pointer): cint
+global ImPlot3DTransform: type <cimport,nodecl> = @function(value: float64, user_data: pointer): float64
+ImPlot3DPoint_c = @record{
+  x: float64,
+  y: float64,
+  z: float64
 }
 ImPlot3DRay = @record{
-  Origin: ImPlot3DPoint,
-  Direction: ImPlot3DPoint
+  Origin: ImPlot3DPoint_c,
+  Direction: ImPlot3DPoint_c
 }
 ImPlot3DPlane = @record{
-  Point: ImPlot3DPoint,
-  Normal: ImPlot3DPoint
+  Point: ImPlot3DPoint_c,
+  Normal: ImPlot3DPoint_c
 }
 ImPlot3DBox = @record{
-  Min: ImPlot3DPoint,
-  Max: ImPlot3DPoint
+  Min: ImPlot3DPoint_c,
+  Max: ImPlot3DPoint_c
 }
 ImPlot3DRange = @record{
-  Min: float32,
-  Max: float32
+  Min: float64,
+  Max: float64
 }
-ImPlot3DQuat = @record{
-  x: float32,
-  y: float32,
-  z: float32,
-  w: float32
+ImPlot3DQuat_c = @record{
+  x: float64,
+  y: float64,
+  z: float64,
+  w: float64
 }
-ImPlot3DStyle = @record{
+ImPlot3DStyle_c = @record{
   LineWeight: float32,
   Marker: cint,
   MarkerSize: float32,
@@ -2843,12 +2878,16 @@ ImPlot3DStyle = @record{
   PlotMinSize: ImVec2,
   PlotPadding: ImVec2,
   LabelPadding: ImVec2,
+  ViewScaleFactor: float32,
   LegendPadding: ImVec2,
   LegendInnerPadding: ImVec2,
   LegendSpacing: ImVec2,
   Colors: [15]ImVec4,
   Colormap: ImPlot3DColormap
 }
+global ImPlot3DPoint: type <cimport,nodecl> = @ImPlot3DPoint_c
+global ImPlot3DQuat: type <cimport,nodecl> = @ImPlot3DQuat_c
+global ImPlot3DStyle: type <cimport,nodecl> = @ImPlot3DStyle_c
 global function ImPlot3D_CreateContext(): *ImPlot3DContext <cimport,nodecl> end
 global function ImPlot3D_DestroyContext(ctx: *ImPlot3DContext): void <cimport,nodecl> end
 global function ImPlot3D_GetCurrentContext(): *ImPlot3DContext <cimport,nodecl> end
@@ -2860,15 +2899,17 @@ global function ImPlot3D_SetupAxisLimits(axis: ImAxis3D, v_min: float64, v_max: 
 global function ImPlot3D_SetupAxisFormat(axis: ImAxis3D, formatter: ImPlot3DFormatter, data: pointer): void <cimport,nodecl> end
 global function ImPlot3D_SetupAxisTicks_doublePtr(axis: ImAxis3D, values: *float64, n_ticks: cint, labels: *[0]cstring, keep_default: boolean): void <cimport,nodecl> end
 global function ImPlot3D_SetupAxisTicks_double(axis: ImAxis3D, v_min: float64, v_max: float64, n_ticks: cint, labels: *[0]cstring, keep_default: boolean): void <cimport,nodecl> end
+global function ImPlot3D_SetupAxisScale_Plot3DScale(axis: ImAxis3D, scale: ImPlot3DScale): void <cimport,nodecl> end
+global function ImPlot3D_SetupAxisScale_Plot3DTransform(axis: ImAxis3D, forward: ImPlot3DTransform, inverse: ImPlot3DTransform, data: pointer): void <cimport,nodecl> end
 global function ImPlot3D_SetupAxisLimitsConstraints(axis: ImAxis3D, v_min: float64, v_max: float64): void <cimport,nodecl> end
-global function ImPlot3D_SetupAxisZoomConstraints(axis: ImAxis3D, z_min: float64, z_max: float64): void <cimport,nodecl> end
+global function ImPlot3D_SetupAxisZoomConstraints(axis: ImAxis3D, zoom_min: float64, zoom_max: float64): void <cimport,nodecl> end
 global function ImPlot3D_SetupAxes(x_label: cstring, y_label: cstring, z_label: cstring, x_flags: ImPlot3DAxisFlags, y_flags: ImPlot3DAxisFlags, z_flags: ImPlot3DAxisFlags): void <cimport,nodecl> end
 global function ImPlot3D_SetupAxesLimits(x_min: float64, x_max: float64, y_min: float64, y_max: float64, z_min: float64, z_max: float64, cond: ImPlot3DCond): void <cimport,nodecl> end
-global function ImPlot3D_SetupBoxRotation_Float(elevation: float32, azimuth: float32, animate: boolean, cond: ImPlot3DCond): void <cimport,nodecl> end
-global function ImPlot3D_SetupBoxRotation_Plot3DQuat(rotation: ImPlot3DQuat, animate: boolean, cond: ImPlot3DCond): void <cimport,nodecl> end
-global function ImPlot3D_SetupBoxInitialRotation_Float(elevation: float32, azimuth: float32): void <cimport,nodecl> end
-global function ImPlot3D_SetupBoxInitialRotation_Plot3DQuat(rotation: ImPlot3DQuat): void <cimport,nodecl> end
-global function ImPlot3D_SetupBoxScale(x: float32, y: float32, z: float32): void <cimport,nodecl> end
+global function ImPlot3D_SetupBoxRotation_double(elevation: float64, azimuth: float64, animate: boolean, cond: ImPlot3DCond): void <cimport,nodecl> end
+global function ImPlot3D_SetupBoxRotation_Plot3DQuat(rotation: ImPlot3DQuat_c, animate: boolean, cond: ImPlot3DCond): void <cimport,nodecl> end
+global function ImPlot3D_SetupBoxInitialRotation_double(elevation: float64, azimuth: float64): void <cimport,nodecl> end
+global function ImPlot3D_SetupBoxInitialRotation_Plot3DQuat(rotation: ImPlot3DQuat_c): void <cimport,nodecl> end
+global function ImPlot3D_SetupBoxScale(x: float64, y: float64, z: float64): void <cimport,nodecl> end
 global function ImPlot3D_SetupLegend(location: ImPlot3DLocation, flags: ImPlot3DLegendFlags): void <cimport,nodecl> end
 global function ImPlot3D_PlotScatter_FloatPtr(label_id: cstring, xs: *float32, ys: *float32, zs: *float32, count: cint, flags: ImPlot3DScatterFlags, offset: cint, stride: cint): void <cimport,nodecl> end
 global function ImPlot3D_PlotScatter_doublePtr(label_id: cstring, xs: *float64, ys: *float64, zs: *float64, count: cint, flags: ImPlot3DScatterFlags, offset: cint, stride: cint): void <cimport,nodecl> end
@@ -2921,20 +2962,21 @@ global function ImPlot3D_PlotSurface_U32Ptr(label_id: cstring, xs: *cuint, ys: *
 global function ImPlot3D_PlotSurface_S64Ptr(label_id: cstring, xs: *clonglong, ys: *clonglong, zs: *clonglong, x_count: cint, y_count: cint, scale_min: float64, scale_max: float64, flags: ImPlot3DSurfaceFlags, offset: cint, stride: cint): void <cimport,nodecl> end
 global function ImPlot3D_PlotSurface_U64Ptr(label_id: cstring, xs: *culonglong, ys: *culonglong, zs: *culonglong, x_count: cint, y_count: cint, scale_min: float64, scale_max: float64, flags: ImPlot3DSurfaceFlags, offset: cint, stride: cint): void <cimport,nodecl> end
 global function ImPlot3D_PlotMesh(label_id: cstring, vtx: *ImPlot3DPoint, idx: *cuint, vtx_count: cint, idx_count: cint, flags: ImPlot3DMeshFlags): void <cimport,nodecl> end
-global function ImPlot3D_PlotImage_Vec2(label_id: cstring, tex_ref: ImTextureRef, center: ImPlot3DPoint, axis_u: ImPlot3DPoint, axis_v: ImPlot3DPoint, uv0: ImVec2, uv1: ImVec2, tint_col: ImVec4, flags: ImPlot3DImageFlags): void <cimport,nodecl> end
-global function ImPlot3D_PlotImage_Plot3DPoInt(label_id: cstring, tex_ref: ImTextureRef, p0: ImPlot3DPoint, p1: ImPlot3DPoint, p2: ImPlot3DPoint, p3: ImPlot3DPoint, uv0: ImVec2, uv1: ImVec2, uv2: ImVec2, uv3: ImVec2, tint_col: ImVec4, flags: ImPlot3DImageFlags): void <cimport,nodecl> end
-global function ImPlot3D_PlotText(text: cstring, x: float32, y: float32, z: float32, angle: float32, pix_offset: ImVec2): void <cimport,nodecl> end
-global function ImPlot3D_PlotToPixels_Plot3DPoInt(pOut: *ImVec2, point: ImPlot3DPoint): void <cimport,nodecl> end
-global function ImPlot3D_PlotToPixels_double(pOut: *ImVec2, x: float64, y: float64, z: float64): void <cimport,nodecl> end
+global function ImPlot3D_PlotImage_Vec2(label_id: cstring, tex_ref: ImTextureRef, center: ImPlot3DPoint_c, axis_u: ImPlot3DPoint_c, axis_v: ImPlot3DPoint_c, uv0: ImVec2, uv1: ImVec2, tint_col: ImVec4, flags: ImPlot3DImageFlags): void <cimport,nodecl> end
+global function ImPlot3D_PlotImage_Plot3DPoInt(label_id: cstring, tex_ref: ImTextureRef, p0: ImPlot3DPoint_c, p1: ImPlot3DPoint_c, p2: ImPlot3DPoint_c, p3: ImPlot3DPoint_c, uv0: ImVec2, uv1: ImVec2, uv2: ImVec2, uv3: ImVec2, tint_col: ImVec4, flags: ImPlot3DImageFlags): void <cimport,nodecl> end
+global function ImPlot3D_PlotText(text: cstring, x: float64, y: float64, z: float64, angle: float64, pix_offset: ImVec2): void <cimport,nodecl> end
+global function ImPlot3D_PlotDummy(label_id: cstring, flags: ImPlot3DDummyFlags): void <cimport,nodecl> end
+global function ImPlot3D_PlotToPixels_Plot3DPoInt(point: ImPlot3DPoint_c): ImVec2 <cimport,nodecl> end
+global function ImPlot3D_PlotToPixels_double(x: float64, y: float64, z: float64): ImVec2 <cimport,nodecl> end
 global function ImPlot3D_PixelsToPlotRay_Vec2(pix: ImVec2): ImPlot3DRay <cimport,nodecl> end
 global function ImPlot3D_PixelsToPlotRay_double(x: float64, y: float64): ImPlot3DRay <cimport,nodecl> end
-global function ImPlot3D_PixelsToPlotPlane_Vec2(pOut: *ImPlot3DPoint, pix: ImVec2, plane: cint, mask: boolean): void <cimport,nodecl> end
-global function ImPlot3D_PixelsToPlotPlane_double(pOut: *ImPlot3DPoint, x: float64, y: float64, plane: cint, mask: boolean): void <cimport,nodecl> end
-global function ImPlot3D_GetPlotPos(pOut: *ImVec2): void <cimport,nodecl> end
-global function ImPlot3D_GetPlotSize(pOut: *ImVec2): void <cimport,nodecl> end
+global function ImPlot3D_PixelsToPlotPlane_Vec2(pix: ImVec2, plane: cint, mask: boolean): ImPlot3DPoint_c <cimport,nodecl> end
+global function ImPlot3D_PixelsToPlotPlane_double(x: float64, y: float64, plane: cint, mask: boolean): ImPlot3DPoint_c <cimport,nodecl> end
+global function ImPlot3D_GetPlotRectPos(): ImVec2 <cimport,nodecl> end
+global function ImPlot3D_GetPlotRectSize(): ImVec2 <cimport,nodecl> end
 global function ImPlot3D_GetPlotDrawList(): *ImDrawList <cimport,nodecl> end
 global function ImPlot3D_GetStyle(): *ImPlot3DStyle <cimport,nodecl> end
-global function ImPlot3D_SetStyle(style: ImPlot3DStyle): void <cimport,nodecl> end
+global function ImPlot3D_SetStyle(style: ImPlot3DStyle_c): void <cimport,nodecl> end
 global function ImPlot3D_StyleColorsAuto(dst: *ImPlot3DStyle): void <cimport,nodecl> end
 global function ImPlot3D_StyleColorsDark(dst: *ImPlot3DStyle): void <cimport,nodecl> end
 global function ImPlot3D_StyleColorsLight(dst: *ImPlot3DStyle): void <cimport,nodecl> end
@@ -2949,7 +2991,7 @@ global function ImPlot3D_PopStyleVar(count: cint): void <cimport,nodecl> end
 global function ImPlot3D_SetNextLineStyle(col: ImVec4, weight: float32): void <cimport,nodecl> end
 global function ImPlot3D_SetNextFillStyle(col: ImVec4, alpha_mod: float32): void <cimport,nodecl> end
 global function ImPlot3D_SetNextMarkerStyle(marker: ImPlot3DMarker, size: float32, fill: ImVec4, weight: float32, outline: ImVec4): void <cimport,nodecl> end
-global function ImPlot3D_GetStyleColorVec4(pOut: *ImVec4, idx: ImPlot3DCol): void <cimport,nodecl> end
+global function ImPlot3D_GetStyleColorVec4(idx: ImPlot3DCol): ImVec4 <cimport,nodecl> end
 global function ImPlot3D_GetStyleColorU32(idx: ImPlot3DCol): cuint <cimport,nodecl> end
 global function ImPlot3D_AddColormap_Vec4Ptr(name: cstring, cols: *ImVec4, size: cint, qual: boolean): ImPlot3DColormap <cimport,nodecl> end
 global function ImPlot3D_AddColormap_U32Ptr(name: cstring, cols: *cuint, size: cint, qual: boolean): ImPlot3DColormap <cimport,nodecl> end
@@ -2959,51 +3001,54 @@ global function ImPlot3D_GetColormapIndex(name: cstring): ImPlot3DColormap <cimp
 global function ImPlot3D_PushColormap_Plot3DColormap(cmap: ImPlot3DColormap): void <cimport,nodecl> end
 global function ImPlot3D_PushColormap_Str(name: cstring): void <cimport,nodecl> end
 global function ImPlot3D_PopColormap(count: cint): void <cimport,nodecl> end
-global function ImPlot3D_NextColormapColor(pOut: *ImVec4): void <cimport,nodecl> end
+global function ImPlot3D_NextColormapColor(): ImVec4 <cimport,nodecl> end
 global function ImPlot3D_GetColormapSize(cmap: ImPlot3DColormap): cint <cimport,nodecl> end
-global function ImPlot3D_GetColormapColor(pOut: *ImVec4, idx: cint, cmap: ImPlot3DColormap): void <cimport,nodecl> end
-global function ImPlot3D_SampleColormap(pOut: *ImVec4, t: float32, cmap: ImPlot3DColormap): void <cimport,nodecl> end
+global function ImPlot3D_GetColormapColor(idx: cint, cmap: ImPlot3DColormap): ImVec4 <cimport,nodecl> end
+global function ImPlot3D_SampleColormap(t: float32, cmap: ImPlot3DColormap): ImVec4 <cimport,nodecl> end
 global function ImPlot3D_ShowDemoWindow(p_open: *boolean): void <cimport,nodecl> end
 global function ImPlot3D_ShowAllDemos(): void <cimport,nodecl> end
 global function ImPlot3D_ShowStyleEditor(ref: *ImPlot3DStyle): void <cimport,nodecl> end
+global function ImPlot3D_ShowStyleSelector(label: cstring): boolean <cimport,nodecl> end
+global function ImPlot3D_ShowColormapSelector(label: cstring): boolean <cimport,nodecl> end
 global function ImPlot3D_ShowMetricsWindow(p_popen: *boolean): void <cimport,nodecl> end
+global function ImPlot3D_ShowAboutWindow(p_open: *boolean): void <cimport,nodecl> end
 global function ImPlot3DPoint_ImPlot3DPoint_Nil(): *ImPlot3DPoint <cimport,nodecl> end
 global function ImPlot3DPoint_destroy(self: *ImPlot3DPoint): void <cimport,nodecl> end
-global function ImPlot3DPoint_ImPlot3DPoint_Float(_x: float32, _y: float32, _z: float32): *ImPlot3DPoint <cimport,nodecl> end
-global function ImPlot3DPoint_Dot(self: *ImPlot3DPoint, rhs: ImPlot3DPoint): float32 <cimport,nodecl> end
-global function ImPlot3DPoint_Cross(pOut: *ImPlot3DPoint, self: *ImPlot3DPoint, rhs: ImPlot3DPoint): void <cimport,nodecl> end
-global function ImPlot3DPoint_Length(self: *ImPlot3DPoint): float32 <cimport,nodecl> end
-global function ImPlot3DPoint_LengthSquared(self: *ImPlot3DPoint): float32 <cimport,nodecl> end
+global function ImPlot3DPoint_ImPlot3DPoint_double(_x: float64, _y: float64, _z: float64): *ImPlot3DPoint <cimport,nodecl> end
+global function ImPlot3DPoint_Dot(self: *ImPlot3DPoint, rhs: ImPlot3DPoint_c): float64 <cimport,nodecl> end
+global function ImPlot3DPoint_Cross(self: *ImPlot3DPoint, rhs: ImPlot3DPoint_c): ImPlot3DPoint_c <cimport,nodecl> end
+global function ImPlot3DPoint_Length(self: *ImPlot3DPoint): float64 <cimport,nodecl> end
+global function ImPlot3DPoint_LengthSquared(self: *ImPlot3DPoint): float64 <cimport,nodecl> end
 global function ImPlot3DPoint_Normalize(self: *ImPlot3DPoint): void <cimport,nodecl> end
-global function ImPlot3DPoint_Normalized(pOut: *ImPlot3DPoint, self: *ImPlot3DPoint): void <cimport,nodecl> end
+global function ImPlot3DPoint_Normalized(self: *ImPlot3DPoint): ImPlot3DPoint_c <cimport,nodecl> end
 global function ImPlot3DPoint_IsNaN(self: *ImPlot3DPoint): boolean <cimport,nodecl> end
 global function ImPlot3DBox_ImPlot3DBox_Nil(): *ImPlot3DBox <cimport,nodecl> end
 global function ImPlot3DBox_destroy(self: *ImPlot3DBox): void <cimport,nodecl> end
-global function ImPlot3DBox_ImPlot3DBox_Plot3DPoInt(min: ImPlot3DPoint, max: ImPlot3DPoint): *ImPlot3DBox <cimport,nodecl> end
-global function ImPlot3DBox_Expand(self: *ImPlot3DBox, point: ImPlot3DPoint): void <cimport,nodecl> end
-global function ImPlot3DBox_Contains(self: *ImPlot3DBox, point: ImPlot3DPoint): boolean <cimport,nodecl> end
-global function ImPlot3DBox_ClipLineSegment(self: *ImPlot3DBox, p0: ImPlot3DPoint, p1: ImPlot3DPoint, p0_clipped: *ImPlot3DPoint, p1_clipped: *ImPlot3DPoint): boolean <cimport,nodecl> end
+global function ImPlot3DBox_ImPlot3DBox_Plot3DPoInt(min: ImPlot3DPoint_c, max: ImPlot3DPoint_c): *ImPlot3DBox <cimport,nodecl> end
+global function ImPlot3DBox_Expand(self: *ImPlot3DBox, point: ImPlot3DPoint_c): void <cimport,nodecl> end
+global function ImPlot3DBox_Contains(self: *ImPlot3DBox, point: ImPlot3DPoint_c): boolean <cimport,nodecl> end
+global function ImPlot3DBox_ClipLineSegment(self: *ImPlot3DBox, p0: ImPlot3DPoint_c, p1: ImPlot3DPoint_c, p0_clipped: *ImPlot3DPoint, p1_clipped: *ImPlot3DPoint): boolean <cimport,nodecl> end
 global function ImPlot3DRange_ImPlot3DRange_Nil(): *ImPlot3DRange <cimport,nodecl> end
 global function ImPlot3DRange_destroy(self: *ImPlot3DRange): void <cimport,nodecl> end
-global function ImPlot3DRange_ImPlot3DRange_Float(min: float32, max: float32): *ImPlot3DRange <cimport,nodecl> end
-global function ImPlot3DRange_Expand(self: *ImPlot3DRange, value: float32): void <cimport,nodecl> end
-global function ImPlot3DRange_Contains(self: *ImPlot3DRange, value: float32): boolean <cimport,nodecl> end
-global function ImPlot3DRange_Size(self: *ImPlot3DRange): float32 <cimport,nodecl> end
+global function ImPlot3DRange_ImPlot3DRange_double(min: float64, max: float64): *ImPlot3DRange <cimport,nodecl> end
+global function ImPlot3DRange_Expand(self: *ImPlot3DRange, value: float64): void <cimport,nodecl> end
+global function ImPlot3DRange_Contains(self: *ImPlot3DRange, value: float64): boolean <cimport,nodecl> end
+global function ImPlot3DRange_Size(self: *ImPlot3DRange): float64 <cimport,nodecl> end
 global function ImPlot3DQuat_ImPlot3DQuat_Nil(): *ImPlot3DQuat <cimport,nodecl> end
 global function ImPlot3DQuat_destroy(self: *ImPlot3DQuat): void <cimport,nodecl> end
-global function ImPlot3DQuat_ImPlot3DQuat_FloatFloat(_x: float32, _y: float32, _z: float32, _w: float32): *ImPlot3DQuat <cimport,nodecl> end
-global function ImPlot3DQuat_ImPlot3DQuat_FloatPlot3DPoInt(_angle: float32, _axis: ImPlot3DPoint): *ImPlot3DQuat <cimport,nodecl> end
-global function ImPlot3DQuat_FromTwoVectors(pOut: *ImPlot3DQuat, v0: ImPlot3DPoint, v1: ImPlot3DPoint): void <cimport,nodecl> end
-global function ImPlot3DQuat_FromElAz(pOut: *ImPlot3DQuat, elevation: float32, azimuth: float32): void <cimport,nodecl> end
-global function ImPlot3DQuat_Length(self: *ImPlot3DQuat): float32 <cimport,nodecl> end
-global function ImPlot3DQuat_Normalized(pOut: *ImPlot3DQuat, self: *ImPlot3DQuat): void <cimport,nodecl> end
-global function ImPlot3DQuat_Conjugate(pOut: *ImPlot3DQuat, self: *ImPlot3DQuat): void <cimport,nodecl> end
-global function ImPlot3DQuat_Inverse(pOut: *ImPlot3DQuat, self: *ImPlot3DQuat): void <cimport,nodecl> end
-global function ImPlot3DQuat_Normalize(self: *ImPlot3DQuat): *ImPlot3DQuat <cimport,nodecl> end
-global function ImPlot3DQuat_Slerp(pOut: *ImPlot3DQuat, q1: ImPlot3DQuat, q2: ImPlot3DQuat, t: float32): void <cimport,nodecl> end
-global function ImPlot3DQuat_Dot(self: *ImPlot3DQuat, rhs: ImPlot3DQuat): float32 <cimport,nodecl> end
-global function ImPlot3DStyle_GetColor(pOut: *ImVec4, self: *ImPlot3DStyle, idx: ImPlot3DCol): void <cimport,nodecl> end
+global function ImPlot3DQuat_ImPlot3DQuat_doubledouble(_x: float64, _y: float64, _z: float64, _w: float64): *ImPlot3DQuat <cimport,nodecl> end
+global function ImPlot3DQuat_ImPlot3DQuat_doublePlot3DPoInt(_angle: float64, _axis: ImPlot3DPoint_c): *ImPlot3DQuat <cimport,nodecl> end
+global function ImPlot3DQuat_FromTwoVectors(v0: ImPlot3DPoint_c, v1: ImPlot3DPoint_c): ImPlot3DQuat_c <cimport,nodecl> end
+global function ImPlot3DQuat_FromElAz(elevation: float64, azimuth: float64): ImPlot3DQuat_c <cimport,nodecl> end
+global function ImPlot3DQuat_Length(self: *ImPlot3DQuat): float64 <cimport,nodecl> end
+global function ImPlot3DQuat_Normalized(self: *ImPlot3DQuat): ImPlot3DQuat_c <cimport,nodecl> end
+global function ImPlot3DQuat_Conjugate(self: *ImPlot3DQuat): ImPlot3DQuat_c <cimport,nodecl> end
+global function ImPlot3DQuat_Inverse(self: *ImPlot3DQuat): ImPlot3DQuat_c <cimport,nodecl> end
+global function ImPlot3DQuat_Normalize(self: *ImPlot3DQuat): *ImPlot3DQuat_c <cimport,nodecl> end
+global function ImPlot3DQuat_Slerp(q1: ImPlot3DQuat_c, q2: ImPlot3DQuat_c, t: float64): ImPlot3DQuat_c <cimport,nodecl> end
+global function ImPlot3DQuat_Dot(self: *ImPlot3DQuat, rhs: ImPlot3DQuat_c): float64 <cimport,nodecl> end
+global function ImPlot3DStyle_GetColor(self: *ImPlot3DStyle, idx: ImPlot3DCol): ImVec4 <cimport,nodecl> end
 global function ImPlot3DStyle_SetColor(self: *ImPlot3DStyle, idx: ImPlot3DCol, col: ImVec4): void <cimport,nodecl> end
 global function ImPlot3DStyle_ImPlot3DStyle_Nil(): *ImPlot3DStyle <cimport,nodecl> end
 global function ImPlot3DStyle_destroy(self: *ImPlot3DStyle): void <cimport,nodecl> end
-global function ImPlot3DStyle_ImPlot3DStyle_Plot3DStyle(other: ImPlot3DStyle): *ImPlot3DStyle <cimport,nodecl> end
+global function ImPlot3DStyle_ImPlot3DStyle_Plot3DStyle(other: ImPlot3DStyle_c): *ImPlot3DStyle <cimport,nodecl> end

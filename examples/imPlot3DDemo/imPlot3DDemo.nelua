@@ -192,8 +192,7 @@ local main = function()
           ImPlot3D_SetNextFillStyle(solid_color)
         end
         local IMPLOT3D_AUTO <const> =  -1                       -- Deduce variable automatically
-        local vec4:ImVec4
-        ImPlot3D_GetColormapColor(&vec4, 1, IMPLOT3D_AUTO)
+        local vec4 =  ImPlot3D_GetColormapColor(1, IMPLOT3D_AUTO)
         ImPlot3D_SetNextLineStyle(vec4, IMPLOT3D_AUTO)
 
         -- Plot the surface
